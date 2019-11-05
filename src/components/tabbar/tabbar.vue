@@ -39,7 +39,7 @@
     display: flex
     width: 100%
     height:50px
-    background-color:rgba(240,240,240,.8)
+    background-color:rgb(255,255,255)
     &-item
         flex:1
         flex-wrap:nowrap
