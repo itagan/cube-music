@@ -1,10 +1,16 @@
 <template>
-  <div>发现</div>
+  <div>
+    <find-header></find-header>
+  </div>
 </template>
 
 <script>
+    import FindHeader from './header'
     export default {
-        name: "find.vue"
+        name: "find.vue",
+        components: {
+            FindHeader
+        }
     }
 </script>
 
