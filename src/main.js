@@ -3,6 +3,7 @@ import Vue from 'vue'
 import Cube from 'cube-ui'
 import App from './App'
 import router from './router'
+import './common/stylus/index.styl'
 
 Vue.use(Cube)
 
