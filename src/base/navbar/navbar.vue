@@ -35,7 +35,7 @@
     position: relative
     height: 50px
     flex-center()
-    background-color:rgba(240,240,240,.9)
+    background-color:rgb(245,245,245)
     .mine-navbar-left
       position: absolute
       left:0
@@ -43,6 +43,7 @@
     .mine-navbar-center
       flex: 1
       flex-center()
+      margin: 0 50px
     .mine-navbar-right
       position: absolute
       right:0
