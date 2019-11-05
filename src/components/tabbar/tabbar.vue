@@ -1,5 +1,5 @@
 <template>
-  <div>切换</div>
+  <div>tab</div>
 </template>
 
 <script>
