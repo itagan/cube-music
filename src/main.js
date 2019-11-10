@@ -5,12 +5,13 @@ import App from './App'
 import router from './router'
 import store from './store'  //注册store全局使用
 import './common/stylus/index.styl'
+import api from './api/api'
 // import { Toast } from 'cube-ui'
 
 
 Vue.use(Cube); //全局引入注册cube-ui
 // Vue.use(Toast);
-
+Vue.prototype.$api = api; // 将api挂载到vue的原型上.方便全局调用
 
 Vue.config.productionTip = false;
 
@@ -20,4 +21,4 @@ new Vue({
   router,
   store,
   render: h => h(App)
-})
+});
