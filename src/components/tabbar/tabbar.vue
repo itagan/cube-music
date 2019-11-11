@@ -32,7 +32,7 @@
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
   .tabbar
-    position:absolute
+    position:fixed  //绝对定位改固定定位
     bottom:0
     left:0
     font-size: $font-size-small
