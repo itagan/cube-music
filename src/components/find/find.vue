@@ -5,6 +5,7 @@
     <find-nav></find-nav>
     <find-recommend></find-recommend>
     <find-new></find-new>
+    <find-videos></find-videos>
   </div>
 </template>
 
@@ -14,6 +15,7 @@
     import FindNav from './nav'
     import FindRecommend from './recommendsongs'
     import FindNew from './newsong'
+    import FindVideos from './videos'
     export default {
         name: "find.vue",
         components: {
@@ -21,7 +23,8 @@
             FindSlider,
             FindNav,
             FindRecommend,
-            FindNew
+            FindNew,
+            FindVideos
         },
 
     }
