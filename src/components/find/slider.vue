@@ -34,7 +34,7 @@
             getSliders() {
                  this.$api.find.slide().then((res) => {
                      this.items = res.data.banners;
-                     console.log(res)
+                     // console.log(res)
                  });
             }
 
@@ -49,6 +49,7 @@
     border-radius: 5px
     position: absolute
     top:12px
+    margin:0 10px
   .cube-slide-dots
     position:absolute
     bottom: 10px
