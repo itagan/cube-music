@@ -57,7 +57,7 @@
                for(let i=0;i<val.length;i++){
                  val[i].playCount = serializeNumber(val[i].playCount)
               }
-              console.log(this.result)
+              // console.log(this.result)
           }
         }
     }
