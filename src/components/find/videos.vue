@@ -1,12 +1,14 @@
 <template>
   <div>
-    <video-base v-bind:videos="videos"></video-base>
+    <video-base v-bind:videos="videos" @videoEmit="videoemit"></video-base>
 
   </div>
 </template>
 
 <script>
     import videoBase from "../../base/video/videoBase";
+    import {mapActions} from 'vuex'
+
     export default {
         name: "videos.vue",
         components: {
@@ -26,7 +28,15 @@
                 this.videos = res.data.datas;
                   console.log(this.videos)
               })
-            }
+            },
+            //接收子组件传来的数据
+            videoemit(vid) {
+                this.video({vid});
+            },
+            //这里代理actions，mapActions把它包装成类似函数调用的方式
+            ...mapActions([
+                'video'
+            ])
         }
     }
 </script>

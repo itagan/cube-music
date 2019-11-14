@@ -8,6 +8,9 @@ const mutations = {
   },
   [types.SET_LOGIN](state,loginState) {
     state.loginState = loginState
+  },
+  [types.SET_CURRENT_VID](state,currentVid) {
+    state.currentVid = currentVid
   }
 };
 
