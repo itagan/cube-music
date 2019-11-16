@@ -42,6 +42,14 @@ const base = 'http://localhost:3000'; //定义默认基准地址
    async videourl(vid) {
      return await axios.get(`${base}/video/url?id=${vid}`)
    },
+   //获取视频精彩评论
+   async hotcomment(vid,limit=20) {
+     return await axios.get(`${base}/comment/hot?id=${vid}&type=5&limit=${limit}`)
+   },
+   //获取视频最新评论
+   async newcomment(vid) {
+     return await axios.get(`${base}/comment/video?id=${vid}`)
+   },
    //获取全部mv
    async allmvs() {
      return await axios.get(`${base}/mv/all`)

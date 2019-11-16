@@ -1,9 +1,9 @@
 <template>
   <div class="wrap">
     <div class="video">
-      <video :src="videourl" width="375px" :poster="detail.coverUrl" autoplay></video>
+      <video :src="videourl" width="375px" height="210px" :poster="detail.coverUrl" autoplay></video>
     </div>
-      <div class="sticky-view-container">
+      <div class="sticky-view-container" v-show="allshow">
         <cube-sticky :pos="scrollY" :check-top="checkTop">
           <div class="scroll-ele" @scroll="scrollHandler">
             <div class="title">
@@ -64,11 +64,15 @@
               </ul>
             </cube-sticky-ele>
             <recommend-swiper @select="recommendvideo" :detail="detail"></recommend-swiper>
-<!--            <recommend-swiper></recommend-swiper>-->
+            <comment :detail="detail" @allhot="allhotshow"></comment>
+            <new-comment :detail="detail"></new-comment>
           </div>
         </cube-sticky>
       </div>
-    <div class="comment">评论</div>
+
+        <hot-comment :detail="detail" ref="allhotcomment" @parshow="isshow"></hot-comment>
+
+    <div class="comment" v-if="commit">评论</div>
   </div>
 </template>
 
@@ -78,7 +82,9 @@
     import {serializeNumber} from '../../assets/js/number'
     import {timestamp,durationms} from '../../assets/js/timestamp'
     import recommendSwiper from "../../base/swiper/recommendSwiper";
-
+    import Comment from './comment'
+    import newComment from "./newcomment";
+    import hotComment from "./hotcomment";
 
     export default {
         inject:['reload'],
@@ -90,10 +96,15 @@
                 videourl:'',
                 show:true,
                 descshow:false,
+                allshow:true,
+                commit:true
             }
         },
         components: {
-            recommendSwiper
+            recommendSwiper,
+            Comment,
+            newComment,
+            hotComment
         },
         computed:{
             icon(){
@@ -123,7 +134,7 @@
             getvVideoUrl() {
                 this.$api.video.videourl(this.currentVid).then(res => {
                     this.videourl = res.data.urls[0].url;
-                    console.log(this.videourl)
+                    // console.log(this.videourl)
                 })
             },
             //展开还是隐藏视频描述等
@@ -147,7 +158,24 @@
                 this.show = true;
                 this.descshow = false;
                 this.$refs.setHeight.style.height = '35px'
-
+            },
+            //显示全部精彩评论
+            allhotshow() {
+                this.$refs.allhotcomment.show();
+                // setTimeout( ()=>{
+                //     this.$refs.allhotcomment.getHotcomment();
+                // },2000);
+                setTimeout( ()=> {
+                    this.$refs.allhotcomment.getHotcomment();
+                    this.commit = false;
+                    this.allshow = false;
+                },300);
+                // this.allshow = false
+            },
+            //子组件提醒父组件
+            isshow() {
+                this.commit = true;
+                this.allshow = true;
             }
         },
     }
@@ -156,7 +184,8 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-
+  .wrap
+    /*position:absolute*/
     .video
       width:100%
       height:215px
@@ -294,6 +323,7 @@
       bottom:0px
       height:40px
       width:100%
-      background-color:greenyellow
+      background-color:gray
       z-index:101
+      margin-top:40px
 </style>

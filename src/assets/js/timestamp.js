@@ -1,4 +1,4 @@
-//时间戳转年月日
+//时间戳转年-月-日
 export const timestamp = (timestamp) => {
   var date;
   if(timestamp.toString().length === 10) {
@@ -14,7 +14,32 @@ export const timestamp = (timestamp) => {
   // var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
   return Y+M+D;
 };
+//时间戳转年月日等。
+//今年以前的都是xx年xx月xx日
+//昨天之前：xx月xx日
+//昨天的则 显示  昨天 时:分
+//1小时以前的  时:分
+//1小时之内的，xx分钟前
+//1分钟之内的，为刚刚
+export const timestampother = (timestamp) => {
+  var date;
+  if(timestamp.toString().length === 10) {
+    date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  }else {
+    date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  }
+  var Y = date.getFullYear() + '年';
+  var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '月';
+  var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + '日';
+  var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+  var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+  var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+  return Y+M+D;
 
+};
+
+
+//播放时长转换
 export const durationms = (durationms) => {
   // 对时间戳进行转化为分秒
   durationms = durationms / 1000;//转换为多少秒

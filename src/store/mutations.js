@@ -11,6 +11,9 @@ const mutations = {
   },
   [types.SET_CURRENT_VID](state,currentVid) {
     state.currentVid = currentVid
+  },
+  [types.SET_LIMIT](state,limit) {
+    state.limit = limit
   }
 };
 

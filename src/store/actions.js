@@ -11,3 +11,7 @@ export const loginState = function ({commit,state},{loginState}) {
 export const video = function ({commit,state},{vid}) {
   commit(types.SET_CURRENT_VID,vid);
 };
+//评论上拉加载有关
+export const comment = function ({commit,state},{limit}) {
+  commit(types.SET_LIMIT,limit);
+}
