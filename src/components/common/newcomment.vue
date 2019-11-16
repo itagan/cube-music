@@ -25,34 +25,60 @@
             return {
                 comments: [],
                 item: {},
-                total:''
+                total:'',
+                // limits:20
             }
         },
         props: {
             detail: {
                 type: Object,
                 default: {}
+            },
+            limits:{
+                type: Number,
+                default: 20
             }
         },
         created() {
-            this.getHotcomment()
+            this.getNewcomment()
         },
         watch: {
             //监控父组件传递过来的vid变化则重新渲染新相关推荐数据
             detail() {
-                this.getHotcomment();
+                this.getNewcomment();
+            },
+            limits() {
+                //limits改变则调用方法请求数据
+                this.Limits();
             }
         },
         methods: {
-            getHotcomment() {
-                this.$api.video.newcomment(this.detail.vid).then(res => {
+            getNewcomment() {
+                this.$api.video.newcomment(this.detail.vid,this.limits).then(res => {
                     this.comments = res.data.comments;
                     this.total = res.data.total;
                     for (let i = 0; i < this.comments.length; i++) {
                         this.comments[i].time = timestampother(this.comments[i].time);
                     }
-                    // console.log(this.comments)
+                    console.log(this.comments)
                 })
+            },
+            Limits() {
+                setTimeout(() => {
+                    // this.comments = [];// 清空数据，以防重复渲染
+                    this.getNewcomment();
+                    let newPage = this.comments.slice(this.limits,this.limits+10);
+                    if (newPage) {
+                        // 如果有新数据
+                        //获取新数据并渲染出来
+                        this.comments = this.comments.concat(newPage);
+                        this.$emit('Limits',true);
+                    } else {
+                        // 如果没有新数据
+                        //告诉父组件不要显示加载中等操作
+                        this.$emit('Limits',false);
+                    }
+                }, 1000);
             }
         }
     }

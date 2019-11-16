@@ -99,12 +99,9 @@
                 default: {}
             }
         },
-        created() {
-            this.getHotcomment();
-            // setTimeout(()=> {
-            //     this.getHotcomment();
-            // },1000);
-        },
+        // created() {
+        //     this.getHotcomment();
+        // },
         watch: {
             //监控父组件传递过来的vid变化则重新渲染新相关推荐数据
             detail() {
@@ -181,7 +178,6 @@
                 // var result=Limit1();
                 // result();
                 // nAdd();
-                console.log(this.limit + 10);
                 //决定上拉加载效果是否显示出来
                 this.loadisshow =  this.comments.length >= this.limit;
 
@@ -201,9 +197,12 @@
                         //获取新数据并渲染出来
                         this.comments = this.comments.concat(newPage);
                         this.$refs.scroll.forceUpdate();
+                        // this.$refs.scroll.refresh();
+
                     } else {
                         // 如果没有新数据
                         //取消加载中，并刷新下滚动组件
+                        // this.$refs.scroll.refresh();
                         this.$refs.scroll.forceUpdate();
                     }
                 }, 1000);
