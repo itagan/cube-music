@@ -347,18 +347,21 @@
       <video :src="videourl" width="375px" height="210px" :poster="detail.coverUrl" autoplay></video>
     </div>
 
-    <div v-if="!this.detail.videoGroup" class="pullload">
+    <transition name="fade-video" class="fadeVideo">
+
+      <div v-if="!this.detail.videoGroup" class="pullloadtop">
        <span class="load">
           <i class="iconfont iconyinletiaodongzhuangtai"></i>
           <span> 正在加载...</span>
        </span>
-    </div>
+      </div>
 
     <div class="sticky-view-container" v-show="allshow" v-else>
       <cube-sticky :pos="scrollY">
 
         <cube-scroll
           :scroll-events="scrollEvents"
+          @before-scroll-start="scrollStartHandler"
           @scroll="scrollHandler"
           @pulling-up="onPullingUp"
           :options="options"
@@ -367,7 +370,7 @@
         >
 
           <!--          <div class="scroll-ele">-->
-          <div class="title">
+          <div class="title" ref="titleHeight">
             <div class="titleTop">
               <span>{{detail.title}}</span>
               <i class="iconfont" :class="icon" @click.stop="toggle()"></i>
@@ -379,10 +382,8 @@
               <span class="label" v-for="item in detail.videoGroup" :key="detail.videoGroup.id">{{item.name}}</span>
 
             </div>
+
             <div class="titleTime" v-if="descshow">
-              <!--                <div class="labels">-->
-              <!--                  <span class="label" v-for="item in detail.videoGroup" :key="detail.videoGroup">{{item.name}}</span>-->
-              <!--                </div>-->
               <span>发布：{{detail.publishTime}}</span>
               <span class="titledesc">{{detail.description}}</span>
             </div>
@@ -423,8 +424,8 @@
           </cube-sticky-ele>
 
 
-          <recommend-swiper @select="recommendvideo" :detail="detail"></recommend-swiper>
-          <comment :detail="detail" @allhot="allhotshow"></comment>
+          <recommend-swiper @select="recommendvideo" :detail="detail" @swipeNum="swipeNum" ref="getNum"></recommend-swiper>
+          <comment :detail="detail" @allhot="allhotshow" ref="tohere" class="here"></comment>
           <new-comment :detail="detail" @Limits="newlimits" :limits="limits"></new-comment>
 
           <template slot="pullup" slot-scope="props">
@@ -439,14 +440,23 @@
             </div>
           </template>
 
-          <!--          </div>-->
         </cube-scroll>
       </cube-sticky>
     </div>
+    </transition>
 
     <hot-comment :detail="detail" ref="allhotcomment" @parshow="isshow"></hot-comment>
 
-    <div class="comment" v-if="commit">评论</div>
+    <div class="comment" v-if="commit">
+      <input type="text" placeholder="发表评论">
+      <div @click="tagBacktop">
+        <i class="iconfont iconnetease" v-if="totop"></i>
+        <span v-else class="liuyan">
+          <i class="iconfont iconliuyan"></i>
+          <span>{{detail.commentCount}}</span>
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -471,9 +481,10 @@
                 show:true,
                 descshow:false,//是否显示描述
                 allshow:true, //是否显示全部精彩评论
-                commit:true,//是否显示打开全部精彩评论页面按钮
-
-                scrollEvents: ['scroll'],
+                commit:true,//是否显示底部评论功能
+                totop:false, //右下角回到顶部功能
+                scrollEvents: ['scroll','before-scroll-start'],
+                // scrollEvents: ['scroll','scrollStart'],//多个事件的话这里数组写。
 
                 pullUpLoad: true,
                 pullUpLoadThreshold: 0,
@@ -481,7 +492,9 @@
                 pullUpLoadNoMoreTxt: '没有更多数据了~',
 
                 loadisshow:false, //上拉加载是否显示,数据全部加载完则不显示了
-                limits:20 //传给子组件需要显示的评论数量
+                limits:20, //传给子组件需要显示的评论数量
+                swipeHeight:0,//子组件recommentswiper的高度
+                titleHeight:35,//标题高度
             }
         },
         components: {
@@ -514,18 +527,36 @@
                 } : false
             },
         },
+        // beforeCreate() {
+        //     //刚进入新页面应该重置vuex避免获取渲染错误数据
+        //     this.setLimit(20);
+        // },
         created() {
-            this.getVideo();
             this.getvVideoUrl();
+            this.getVideo();
+            // this.$nextTick(() => {
+            //     this.getHeight();
+            // })
         },
         methods: {
             scrollHandler({ y }) {
-                this.scrollY = -y
+                this.scrollY = -y;
+                // console.log(this.scrollY);
+                let heights = this.titleHeight + this.swipeHeight + 45 - 323;
+                this.totop = this.scrollY > heights;
+                // if(this.scrollY){
+                //     this.getHeight();
+                // }
+            },
+            scrollStartHandler() {
+                this.getHeight();
+                // console.log(this.titleHeight);
+                // console.log(this.swipeHeight);
             },
             onPullingUp() {
                 //滚动上拉加载的时候派发事件给子组件：告知limit新数据
                 this.limits = this.limit + +10;
-                console.log(this.limits);
+                // console.log(this.limits);
             },
             newlimits(has) {
                 if(has){
@@ -541,11 +572,13 @@
             },
             getVideo() {
                 this.$api.video.video(this.currentVid).then(res => {
-                    this.detail = res.data.data;
-                    // console.log(this.detail)
-                    this.detail.playTime = serializeNumber(res.data.data.playTime);
-                    this.detail.publishTime = timestamp(this.detail.publishTime);
-                    this.detail.durationms = durationms(this.detail.durationms);
+                    // this.setLimit(20); //重置vuex
+
+                        this.detail = res.data.data;
+                        this.detail.playTime = serializeNumber(res.data.data.playTime);
+                        this.detail.publishTime = timestamp(this.detail.publishTime);
+                        this.detail.durationms = durationms(this.detail.durationms);
+
                 })
             },
             //获取播放地址
@@ -572,6 +605,9 @@
                 this.getvVideoUrl();
                 this.reload(); //刷新本页面
                 // this.$nextTick( this.getVideo())
+                //把vuex的数据还原
+                this.setLimit(20);
+                this.limits = 20;
                 //刷新后重置
                 this.show = true;
                 this.descshow = false;
@@ -594,11 +630,54 @@
                 this.commit = true;
                 this.allshow = true;
             },
+            //评论返回顶部
+            backtop() {
+                this.$refs.scroll.scrollTo(0,0,200);
+                //this.$refs.scroll.scrollToElement('.title', 200);其它方式，除了css还可以ref引用this.$refs.tohere
 
+            },
+            //评论区上升
+            commentTop() {
+                // this.$refs.scroll.scrollTo(0,-515,200);
+                // this.$refs.tohere 测试发现自定义子组件不能用这个方式，而该用css引用dom
+                this.$refs.scroll.scrollToElement('.here', 200,0,-50);
+            },
+            tagBacktop() {
+                let heights = this.titleHeight + this.swipeHeight + 45 - 323;
+                if(this.scrollY > heights) {
+                    this.backtop()
+                    // this.commentTop()
+                }else {
+                    this.commentTop()
+                }
+            },
+            //子组件通知父组件swipe数量并得出该组件高度
+            swipeNum(num) {
+                this.swipeHeight = 15 + num * 60 + num * 10;
+            },
+            //获取高度
+            getHeight() {
+                // let heights = this.$refs.getSwipeHeight.height;
+                // let height= this.$refs.element.offsetHeight
+
+                // console.log(height)
+                this.$refs.getNum.getLength();
+                this.titleHeight = this.$refs.titleHeight.offsetHeight; //标题class.title高度
+                // let num = this.$refs.getNum.offsetHeight; //获取失败
+                // console.log(num)
+            },
             ...mapMutations({
                 setLimit:'SET_LIMIT'
             })
         },
+        // mounted() {
+        //     this.$nextTick(() => {
+        //         //获取dom高度，确定返回按钮出现
+        //         // console.log(this.$refs.titleheight.offsetHeight)
+        //        // console.log( this.$refs.getSwiperHeight.offsetHeight)
+        //         this.getHeight();
+        //     })
+        // }
     }
 </script>
 
@@ -741,19 +820,44 @@
 
     .comment
       position:fixed
-      bottom:0px
+      bottom:0
       height:40px
       width:100%
-      background-color:gray
-      z-index:101
-      margin-top:40px
+      background-color:white
+      z-index:1000
+      border-top:1px solid #dcdcdc
+      font-size:$font-size-medium
+      flex-between()
+      input
+        height 100%
+        flex:1
+        margin-left:10px
+      div
+        height: 100%
+        width:40px
+        flex-center()
+        font-size:$font-size-large-x
+        .liuyan
+          position:relative
+          i
+            flex-center()
+            width:100%
+            height:100%
+          span
+            position:absolute
+            bottom:15px
+            right:-0px
+            font-size:$font-size-small-ss
 
-    //加载中相关样式
+
+    //上拉加载中相关样式
     .pullload
       width:100%
-      height:30px
+      height:50px
       margin-top:1px
       background-color:white
+      position:relative
+      bottom:50px
       flex-center()
       .load
         font-size:$font-size-medium
@@ -761,5 +865,22 @@
           color:red
         span
           color:gray
+
+    //上方加载中相关样式
+    .pullloadtop
+      width:100%
+      height:100%
+      margin-top:50px
+      background-color:white
+      /*position:relative*/
+      /*bottom:50px*/
+      flex-center()
+      .load
+        font-size:$font-size-medium
+        i
+          color:red
+        span
+          color:gray
+
 </style>
 

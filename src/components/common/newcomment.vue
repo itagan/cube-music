@@ -60,7 +60,6 @@
                     for (let i = 0; i < this.comments.length; i++) {
                         this.comments[i].time = timestampother(this.comments[i].time);
                     }
-                    console.log(this.comments)
                 })
             },
             Limits() {
@@ -68,15 +67,34 @@
                     // this.comments = [];// 清空数据，以防重复渲染
                     this.getNewcomment();
                     let newPage = this.comments.slice(this.limits,this.limits+10);
-                    if (newPage) {
-                        // 如果有新数据
-                        //获取新数据并渲染出来
-                        this.comments = this.comments.concat(newPage);
-                        this.$emit('Limits',true);
-                    } else {
+                    // if (newPage) {
+                    //     // 如果有新数据
+                    //     //获取新数据并渲染出来
+                    //     console.log('还有数据');
+                    //     this.comments = this.comments.concat(newPage);
+                    //     this.$emit('Limits',true);
+                    // } else if(this.limits >= this.comments.length){
+                    //     console.log('没数据了');
+                    //     // 如果没有新数据
+                    //     //告诉父组件不要显示加载中等操作
+                    //     this.$emit('Limits',false);
+                    // }
+
+                    //可能由于API的限制，上拉加载也就是连续请求十几次之后，默认limit参数变成20~~数据将被重置
+                    console.log(this.limits);
+                    console.log(this.comments.length);
+
+                    if (this.limits >= this.comments.length+11) {
                         // 如果没有新数据
                         //告诉父组件不要显示加载中等操作
                         this.$emit('Limits',false);
+
+                    } else if(newPage){
+                        // 如果有新数据
+                        //获取新数据并渲染出来
+                        console.log('还有数据');
+                        this.comments = this.comments.concat(newPage);
+                        this.$emit('Limits',true);
                     }
                 }, 1000);
             }
@@ -89,12 +107,15 @@
   @import "../../common/stylus/mixin"
 
   .newcomment
-    margin-top:2px
-    margin-bottom:50px
+    margin-top:40px
+    margin-bottom:2px
+    position:relative
+    bottom:40px
     .new
       height:35px
       line-height:35px
       background-color:white
+      border-top:1px solid #dcdcdc
       span
         font-size:$font-size-small-s
         color:gray

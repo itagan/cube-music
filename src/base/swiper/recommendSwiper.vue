@@ -52,6 +52,7 @@
             //监控父组件传递过来的vid变化则重新渲染新相关推荐数据
             detail() {
                 this.getRecommend();
+                // this.getLength();
             }
         },
         methods:{
@@ -74,17 +75,24 @@
             selectItem(vid) {
               //以下顺序不能变，否则需要点击两次才获取数据刷新。先把vuex数据更改，再派发父组件事件
               this.setPlayvideo(vid);
-                this.$emit('select',vid);
+              // this.setLimit(20);  //重置初始值，避免影响这些组件内容
+              this.$emit('select',vid);
                 // this.getRecommend();
                 // this.reload(); //刷新本页面
               // this.$router.push({
               //     path:`/find`
               // }) //跳转其它页面没事，跳转本页面报错。解决方案交给父组件刷新并重新渲染数据
             },
+
+            getLength() {
+                //告诉父组件数量
+                this.$emit('swipeNum',this.recommend.length);
+            },
+
             ...mapMutations({
-                setPlayvideo:'SET_CURRENT_VID' //语法糖， 将 `this.setSinger()` 映射为 `this.$store.commit('SET_SINGER')`
+                setPlayvideo:'SET_CURRENT_VID', //语法糖， 将 `this.setSinger()` 映射为 `this.$store.commit('SET_xxxx')`
             })
-        }
+        },
 
     }
 </script>

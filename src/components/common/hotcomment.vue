@@ -118,8 +118,6 @@
                     pullUpLoad: this.pullUpLoadObj,
                     scrollbar: true,
                     probeType: 1,
-
-
                 }
             },
             pullUpLoadObj: function() {
@@ -132,13 +130,12 @@
                 } : false
             },
             ...mapGetters([
-                'limit'
+                'hotLimit'
             ])
         },
         methods: {
-            getHotcomment(limit) {
-               // console.log(this.limit);
-                this.$api.video.hotcomment(this.detail.vid,limit).then(res => {
+            getHotcomment(hotLimit) {
+                this.$api.video.hotcomment(this.detail.vid,hotLimit).then(res => {
                     this.total = res.data.total;
                     // this.allcomments = res.data.hotComments;
                     //因评论总数比较少，api未发现符合实际效果的参数。这里模拟分页数据，实现下拉加载中效果。每100条显示加载中
@@ -179,7 +176,7 @@
                 // result();
                 // nAdd();
                 //决定上拉加载效果是否显示出来
-                this.loadisshow =  this.comments.length >= this.limit;
+                this.loadisshow =  this.comments.length >= this.hotLimit;
 
                 //改用vuex方式获取设置上拉加载的索引：实现上拉加载新数据效果
                 // 更新数据
@@ -189,8 +186,8 @@
                     if (this.isPullUpLoad) {
                         this.comments = [] // 清空数据，以防重复渲染
                     };
-                    this.getHotcomment(this.limit + 10);
-                    let newPage = this.comments.slice(this.limit,this.limit+10);
+                    this.getHotcomment(this.hotLimit + 10);
+                    let newPage = this.comments.slice(this.hotLimit,this.hotLimit+10);
 
                     if (newPage) {
                         // 如果有新数据
@@ -207,7 +204,7 @@
                     }
                 }, 1000);
                 //再把新数据设置到vuex
-                this.setLimit(this.limit + 10);
+                this.setHotLimit(this.hotLimit + 10);
             },
             //展开或者隐藏全部评价
             show(){
@@ -220,12 +217,13 @@
                     this.$emit('parshow');
                 },200);
                 //把vuex的数据还原
-                this.setLimit(20);
+                this.setHotLimit(20);
                 //页面数据也清空
                 // this.comments = [];
             },
             ...mapMutations({
-                setLimit:'SET_LIMIT'
+                // setLimit:'SET_LIMIT'
+                setHotLimit:'SET_HOT_LIMIT'
             })
         }
     }

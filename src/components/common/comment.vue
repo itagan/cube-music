@@ -17,7 +17,7 @@
 
 <script>
     import BaseComment from "../../base/basecomment/basecomment";
-    // import {mapGetters} from 'vuex'
+    import {mapMutations} from 'vuex'
     import {timestampother} from '../../assets/js/timestamp'
     export default {
         name: "comment.vue",
@@ -55,6 +55,7 @@
             getHotcomment() {
                 this.$api.video.hotcomment(this.detail.vid).then(res => {
                     //判断是否显示全部评论按钮
+                    // console.log(res.data.hotComments.length);
                     if(res.data.hotComments.length >= 15) {
                         this.showallhot = true;
                         this.comments = res.data.hotComments.slice(0,15);
@@ -74,7 +75,13 @@
             allhotcomment() {
                 //向父组件发送消息，显示全部精彩评论覆盖掉其它
                 this.$emit('allhot');
+                // 把vuex的数据还原
+                this.setHotLimit(20);
             },
+
+            ...mapMutations({
+                setHotLimit:'SET_HOT_LIMIT'
+            })
         }
     }
 </script>
