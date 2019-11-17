@@ -344,7 +344,7 @@
   <div class="wrap">
 
     <div class="video">
-      <video :src="videourl" width="375px" height="210px" :poster="detail.coverUrl" autoplay></video>
+      <video :src="videourl" width="375px" height="210px" :poster="detail.coverUrl" autoplay controls muted=""></video>
     </div>
 
     <transition name="fade-video" class="fadeVideo">
