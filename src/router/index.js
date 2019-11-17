@@ -5,10 +5,15 @@ import Video from '../components/video/video'
 import My from '../components/my/my'
 import Village from '../components/village/village'
 import Account from '../components/account/account'
+import Videoplayer from '../components/common/videoplayer'
 
 
+Vue.use(Router);
 
-Vue.use(Router)
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+};
 
 export default new Router({
   routes: [
@@ -35,6 +40,10 @@ export default new Router({
     {
       path:'/account',
       component:Account
+    },
+    {
+      path:'/videoplayer',
+      component:Videoplayer
     }
 
   ]

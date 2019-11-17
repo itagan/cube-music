@@ -16,13 +16,13 @@ Vue.use(Toast);
  * 提示函数
  * 禁止点击蒙层、显示一秒后关闭
  */
-const tip = msg => {
-  Toast.$createToast({
-    txt: this.msg,
-    type: 'txt',
-    time:1000
-  }).show()
-};
+// const tip = msg => {
+//   Toast.$createToast({
+//     txt: this.msg,
+//     type: 'txt',
+//     time:1000
+//   }).show()
+// };
 
 /**
  * 跳转登录页
@@ -51,7 +51,7 @@ const errorHandle = (status, other) => {
     // 403 token过期
     // 清除token并跳转登录页
     case 403:
-      tip('登录过期，请重新登录');
+      // tip('登录过期，请重新登录');
       localStorage.removeItem('token');
       store.commit('loginState', null);
       // ...mapMutations({
@@ -63,7 +63,7 @@ const errorHandle = (status, other) => {
       break;
     // 404请求不存在
     case 404:
-      tip('请求的资源不存在');
+      // tip('请求的资源不存在');
       break;
     default:
       console.log(other);

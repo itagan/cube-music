@@ -2,7 +2,7 @@
   <div class="flexdiv">
     <div class="container" v-for="item in videos" :key="item.data.vid">
       <div class="wrap">
-        <div class="wrapTop" @click="wonderfulVideo()">
+        <div class="wrapTop" @click="wonderfulVideo(item.data.vid)">
           <div class="wrapper" :style="{backgroundImage:`url( ${item.data.coverUrl} )` }">
             <div class="wrapperLeft">
               <i class="iconfont iconzan1"></i>
@@ -14,13 +14,13 @@
             </div>
           </div>
 
-          <div class="title" @click="details(item.data.vid)">
+          <div class="title">
             <span>{{item.data.title}}</span>
             <img :src="item.data.creator.avatarUrl" @click="avatar()">
           </div>
         </div>
 
-        <div class="wrapBottom">
+        <div class="wrapBottom" @click="details(item.data.vid)">
           <div class="wrapBottomLeft" @click="praisedCount()">
             <i class="iconfont iconzan1"></i>
             <span>{{item.data.praisedCount}}</span>
@@ -40,6 +40,8 @@
 
 <script>
     import {serializeNumber} from '../../assets/js/number'
+    import {durationms} from '../../assets/js/timestamp'
+
 
     export default {
         name: "videoBase.vue",
@@ -50,7 +52,6 @@
         },
         props: {
             videos:{
-                type:Array,
                 required:true
             }
         },
@@ -58,12 +59,16 @@
             videos(val) {
                 for(let i=0;i<val.length;i++){
                     val[i].data.playTime = serializeNumber(val[i].data.playTime)
+                    val[i].data.durationms = durationms(val[i].data.durationms)
                 }
             }
         },
         methods:{
-            wonderfulVideo() {
+            wonderfulVideo(vid) {
                 //去精彩视频页面并自动播放该视频
+                // this.$router.push({
+                //     path:`videoplayer`
+                // })
             },
             avatar() {
                 //去up主页
@@ -73,12 +78,15 @@
             },
             details(vid) {
                 //视频详情页，自动把底部评论提前
-                console.log(vid)
+                this.$router.push({
+                    path:`videoplayer`
+                });
+                //把视频详情id发给父组件
+                this.$emit('videoEmit',vid)
             },
             more() {
                 //更多
-            }
-
+            },
         }
 
     }

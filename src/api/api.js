@@ -31,17 +31,25 @@ const base = 'http://localhost:3000'; //定义默认基准地址
      return await axios.get(`${base}/video/group?id=9102`)
    },
    //相关视频
-   async allvideo() {
-     return await axios.get(`${base}/related/allvideo?id=89ADDE33C0AAE8EC14B99F6750DB954D`)
+   async allvideo(vid) {
+     return await axios.get(`${base}/related/allvideo?id=${vid}`)
    },
    //获取视频详情
-   async video() {
-     return await axios.get(`${base}/video/detail?id=89ADDE33C0AAE8EC14B99F6750DB954D`)
+   async video(vid) {
+     return await axios.get(`${base}/video/detail?id=${vid}`)
    },
    //获取视频播放地址
-   // async video() {
-   //   return await axios.get(`${base}/video/detail?id=89ADDE33C0AAE8EC14B99F6750DB954D`)
-   // },
+   async videourl(vid) {
+     return await axios.get(`${base}/video/url?id=${vid}`)
+   },
+   //获取视频精彩评论
+   async hotcomment(vid,limit=20) {
+     return await axios.get(`${base}/comment/hot?id=${vid}&type=5&limit=${limit}`)
+   },
+   //获取视频最新评论
+   async newcomment(vid,limit=20) {
+     return await axios.get(`${base}/comment/video?id=${vid}&limit=${limit}`)
+   },
    //获取全部mv
    async allmvs() {
      return await axios.get(`${base}/mv/all`)

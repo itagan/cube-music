@@ -8,7 +8,16 @@ const mutations = {
   },
   [types.SET_LOGIN](state,loginState) {
     state.loginState = loginState
-  }
+  },
+  [types.SET_CURRENT_VID](state,currentVid) {
+    state.currentVid = currentVid
+  },
+  [types.SET_LIMIT](state,limit) {
+    state.limit = limit
+  },
+  [types. SET_HOT_LIMIT](state,hotLimit) {
+    state.hotLimit = hotLimit
+  },
 };
 
 export default mutations;
