@@ -509,7 +509,8 @@
             },
             ...mapGetters([
                 'currentVid',
-                'limit'
+                'limit',
+                'back'
             ]),
             options() {
                 return {
@@ -571,14 +572,17 @@
                 }
             },
             getVideo() {
+                if(!this.currentVid) {
+                    this.$router.push(`/find`);
+                    return
+                }
+
                 this.$api.video.video(this.currentVid).then(res => {
                     // this.setLimit(20); //重置vuex
-
                         this.detail = res.data.data;
                         this.detail.playTime = serializeNumber(res.data.data.playTime);
                         this.detail.publishTime = timestamp(this.detail.publishTime);
                         this.detail.durationms = durationms(this.detail.durationms);
-
                 })
             },
             //获取播放地址
@@ -666,6 +670,13 @@
                 // let num = this.$refs.getNum.offsetHeight; //获取失败
                 // console.log(num)
             },
+            //某些时候打开本页面需要评论区提前展示
+            commentBack() {
+                //从vuex拿数据决定是否提前展示
+                if(this.back) {
+                    this.commentTop()
+                }
+            },
             ...mapMutations({
                 setLimit:'SET_LIMIT'
             })
@@ -675,9 +686,23 @@
         //         //获取dom高度，确定返回按钮出现
         //         // console.log(this.$refs.titleheight.offsetHeight)
         //        // console.log( this.$refs.getSwiperHeight.offsetHeight)
-        //         this.getHeight();
+        //        //  this.getHeight();
+        //         this.commentBack();
         //     })
         // }
+        watch:{
+            // 'back': function () {
+            //     //你需要执行的代码
+            //     this.commentBack();
+            //     console.log('有监控')
+            // }
+            back(back){
+                if(back) {
+                    console.log('监控了')
+                }
+            }
+        }
+
     }
 </script>
 

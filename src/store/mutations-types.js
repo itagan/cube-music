@@ -3,3 +3,4 @@ export const SET_LOGIN = 'SET_LOGIN';
 export const SET_CURRENT_VID = 'SET_CURRENT_VID';
 export const SET_LIMIT = 'SET_LIMIT';
 export const SET_HOT_LIMIT = 'SET_HOT_LIMIT' ;
+export const SET_BACK = 'SET_BACK';

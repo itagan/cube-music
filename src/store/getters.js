@@ -5,3 +5,4 @@ export const loginState = state => state.loginState;
 export const currentVid = state => state.currentVid;
 export const limit = state => state.limit;
 export const hotLimit = state => state.hotLimit;
+export const back = state => state.back;
