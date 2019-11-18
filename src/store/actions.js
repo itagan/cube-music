@@ -16,3 +16,7 @@ export const comment = function ({commit,state},{limit,hotLimit}) {
   commit(types.SET_LIMIT,limit);
   commit(types.SET_HOT_LIMIT,hotLimit);
 };
+//评论是否提前展示
+export const commentBack = function ({commit,state},{back}) {
+  commit(types.SET_BACK,back);
+}

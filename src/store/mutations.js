@@ -18,6 +18,9 @@ const mutations = {
   [types. SET_HOT_LIMIT](state,hotLimit) {
     state.hotLimit = hotLimit
   },
+  [types. SET_BACK](state,back) {
+    state.back = back
+  },
 };
 
 export default mutations;
