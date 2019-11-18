@@ -1,10 +1,16 @@
 <template>
-  <div>我的</div>
+  <div>
+    <base-video></base-video>
+  </div>
 </template>
 
 <script>
+    import baseVideo from '../../base/video/videoBase'
     export default {
-        name: "my.vue"
+        name: "my.vue",
+        components: {
+            baseVideo
+        }
     }
 </script>
 
