@@ -1,15 +1,18 @@
 <template>
   <div>
     <video-list :video-group-id="videogroupid"></video-list>
+    <video-header></video-header>
   </div>
 </template>
 
 <script>
     import videoList from "../common/videolist"
+    import videoHeader from "./header"
     export default {
         name: "video.vue",
         components: {
-            videoList
+            videoList,
+            videoHeader
         },
         data() {
            return {

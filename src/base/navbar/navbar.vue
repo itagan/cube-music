@@ -32,8 +32,11 @@
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
   .min-navbar
-    position: relative
+    position: fixed
+    top:0
     height: 50px
+    width:100%
+    z-index:999
     flex-center()
     background-color:rgb(245,245,245)
     .mine-navbar-left
