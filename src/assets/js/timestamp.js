@@ -41,11 +41,22 @@ export const timestampother = (timestamp) => {
 
 //播放时长转换
 export const durationms = (durationms) => {
+  // 进一步对播放时间处理，秒数补零操作，一位秒数的时候是 0x ，两位不需要处理
+  // let _pad = (num, n = 2) =>{
+  //   let len = num.toString().length;
+  //   while (len < n) {
+  //     num = '0' + num;
+  //     len++
+  //   }
+  //   return num
+  // }; ****黄奕老师写法
+
   // 对时间戳进行转化为分秒
   durationms = durationms / 1000;//转换为多少秒
   durationms = durationms | 0; // 互零操作符，一个正数向下取整 相当于Math.floor方法
   let  minute = durationms / 60 | 0;
   minute = minute < 10 ? '0' + minute : minute;
+  // let second = _pad(durationms) % 60;
   let second = durationms % 60;
   second = second < 10 ? '0' + second : second;// 秒数前面补零操作
     return `${minute}:${second}`

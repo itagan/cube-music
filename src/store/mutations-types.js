@@ -4,3 +4,6 @@ export const SET_CURRENT_VID = 'SET_CURRENT_VID';
 export const SET_LIMIT = 'SET_LIMIT';
 export const SET_HOT_LIMIT = 'SET_HOT_LIMIT' ;
 export const SET_BACK = 'SET_BACK';
+export const SET_VIDEO_LIST = 'SET_VIDEO_LIST';
+export const SET_CURRENT_INDEX = 'SET_CURRENT_INDEX';
+export const SET_VIDEO_CURRENT_TIME = 'SET_VIDEO_CURRENT_TIME';

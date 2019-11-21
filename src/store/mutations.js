@@ -15,12 +15,22 @@ const mutations = {
   [types.SET_LIMIT](state,limit) {
     state.limit = limit
   },
-  [types. SET_HOT_LIMIT](state,hotLimit) {
+  [types.SET_HOT_LIMIT](state,hotLimit) {
     state.hotLimit = hotLimit
   },
-  [types. SET_BACK](state,back) {
+  [types.SET_BACK](state,back) {
     state.back = back
   },
+  [types.SET_VIDEO_LIST](state,videoList) {
+    state.videoList = videoList
+  },
+  [types.SET_CURRENT_INDEX](state,index) {
+    state.currentIndex = index
+  },
+  [types.SET_VIDEO_CURRENT_TIME](state,videoCurrentTime) {
+    state.videoCurrentTime = videoCurrentTime
+  },
+
 };
 
 export default mutations;

@@ -23,12 +23,12 @@ const base = 'http://localhost:3000'; //定义默认基准地址
 //视频相关
  const video = {
    //获取视频标签列表
-   async list() {
+   async videoGroupLists() {
      return await axios.get(`${base}/video/group/list`)
    },
    //获取视频标签下的视频
-   async videolist() {
-     return await axios.get(`${base}/video/group?id=9102`)
+   async videolist(id=9102) {
+     return await axios.get(`${base}/video/group?id=${id}`)
    },
    //相关视频
    async allvideo(vid) {
