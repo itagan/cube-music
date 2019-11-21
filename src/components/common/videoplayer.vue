@@ -538,6 +538,7 @@
             // this.$nextTick(() => {
             //     this.getHeight();
             // })
+            // this.commentBack()
         },
         methods: {
             scrollHandler({ y }) {
@@ -612,6 +613,7 @@
                 //把vuex的数据还原
                 this.setLimit(20);
                 this.limits = 20;
+                this.setCommentBack(false);
                 //刷新后重置
                 this.show = true;
                 this.descshow = false;
@@ -672,35 +674,49 @@
             },
             //某些时候打开本页面需要评论区提前展示
             commentBack() {
-                //从vuex拿数据决定是否提前展示
+                // setTimeout(() => {
+                //     //从vuex拿数据决定是否提前展示..延时确保滚动结构正常
+                //     if(this.back) {
+                //         this.commentTop()
+                //     }
+                // },100);
+
+                // 从vuex拿数据决定是否提前展示
                 if(this.back) {
                     this.commentTop()
                 }
             },
             ...mapMutations({
-                setLimit:'SET_LIMIT'
+                setLimit:'SET_LIMIT',
+                setCommentBack:'SET_BACK'
             })
         },
-        // mounted() {
-        //     this.$nextTick(() => {
-        //         //获取dom高度，确定返回按钮出现
-        //         // console.log(this.$refs.titleheight.offsetHeight)
-        //        // console.log( this.$refs.getSwiperHeight.offsetHeight)
-        //        //  this.getHeight();
-        //         this.commentBack();
-        //     })
+        mounted() {
+            //确保DOM结构渲染完成才能滚动。延时确保滚动结构距离正常
+            this.$nextTick(() => {
+                // this.commentBack();
+                setTimeout(() => {
+                    this.commentBack();
+                },1000)
+                // this.setCommentBack(false);
+            })
+        },
+
+        // watch:{
+        //     // 'back': function () {
+        //     //     //你需要执行的代码
+        //     //     this.commentBack();
+        //     //     console.log('有监控')
+        //     // }
+        //     back(back){
+        //         if(back) {
+        //             console.log('监控了')
+        //         }
+        //     }
         // }
-        watch:{
-            // 'back': function () {
-            //     //你需要执行的代码
-            //     this.commentBack();
-            //     console.log('有监控')
-            // }
-            back(back){
-                if(back) {
-                    console.log('监控了')
-                }
-            }
+        destroyed() {
+            //销毁本页面时候，把vuex的一些重置
+            this.setCommentBack(false);
         }
 
     }

@@ -6,3 +6,11 @@ export const currentVid = state => state.currentVid;
 export const limit = state => state.limit;
 export const hotLimit = state => state.hotLimit;
 export const back = state => state.back;
+export const videoList = state => state.videoList;
+export const videoCurrentTime = state => state.videoCurrentTime;
+export const currentIndex = state => state.currentIndex;
+export const currentVideo = (state) => {
+  return state.videoList[state.currentIndex] || {}
+};
+
+
