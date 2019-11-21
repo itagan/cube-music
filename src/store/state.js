@@ -8,5 +8,6 @@ const state = {
   videoList:[], //保存前后视频列表播放进度
   currentIndex:-1,
   videoCurrentTime:[], //保存前后两个视频的播放时间
+  currentUrl:'', //当前的播放地址
 };
 export default state

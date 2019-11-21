@@ -30,7 +30,9 @@ const mutations = {
   [types.SET_VIDEO_CURRENT_TIME](state,videoCurrentTime) {
     state.videoCurrentTime = videoCurrentTime
   },
-
+  [types.SET_CURRENT_URL](state,currentUrl) {
+    state.currentUrl = currentUrl
+  },
 };
 
 export default mutations;

@@ -1,9 +1,45 @@
 <template>
-  <div class="wrap">
+  <div class="wraps">
+    <div class="wrapper" @click.prevent="playVideo()">
+      <video :poster="detail.coverUrl"
+             :src="videourl"
+             class="video"
+             width="375px"
+             height="210px"
+             id="video"
+             ref="video"
+             :moted="true"
+             @timeupdate="updateTime"
+      >
+        <source :src="videourl" type="audio/mpeg">
+      </video>
 
-    <div class="video">
-      <video :src="videourl" width="375px" height="210px" :poster="detail.coverUrl" autoplay controls muted=""></video>
+      <div class="wrap" v-show="wrapShow">
+        <div class="wrapperLeft">
+          <div  v-show="currentshow">
+            {{Durationms(currentTime)}} / {{detail.durationms}}
+          </div>
+        </div>
+
+        <div class="wrapperCenter" v-if="plays">
+          <i class="iconfont iconliuyan" v-if="play"></i>
+          <i class="iconfont iconnetease" v-else></i>
+        </div>
+
+        <div class="wrapperRight" v-show="playTimes">
+          <i class="iconfont iconliuyan" ></i>
+        </div>
+
+      </div>
+
+      <div class="control">
+        <div class="speed"  :style=" {width: speedWidth + 'px'} "></div>
+
+        <div class="controlBtn" ref="setWidth" :style="{left: speedWidth + 'px'} " v-show="controlBtn"></div>
+      </div>
     </div>
+
+
 
     <transition name="fade-video" class="fadeVideo">
 
@@ -153,6 +189,28 @@
                 limits:20, //传给子组件需要显示的评论数量
                 swipeHeight:0,//子组件recommentswiper的高度
                 titleHeight:35,//标题高度
+
+
+                currentshow:true,//视频左下角播放量或者进度是否显示
+                currentTimeShow:true,//播放量跟播放进度转换
+                check:true,//是否显示
+                countTime:true, //视频左下角播放量变成播放时间进度
+                wrapShow:true, //遮罩层显示
+                controlBtn:false, //进度按钮
+                playTime:true, //播放总时间是否变成视频全屏按钮
+                playTimes:true,//播放总时间或者全屏按钮是否会显示
+                plays:true,//播放或暂停按钮显示出来
+                // playss:true,
+                play:true, //播放和暂停按钮切换
+                currentTime:`00:00`, //播放进度时间
+                // _currentTime:`00:00`,//保存进度
+                activeIndex: -1,
+                // duration:'', //视频播放总时间
+                speedWidth:0,
+                durationms:0,//视频播放总时间
+                currentDuration:[{},{}], //存放前后播放视频的播放进度
+                durationHistory:[], //存放本视频流页面前后视频播放进度的历史记录
+
             }
         },
         components: {
@@ -167,7 +225,8 @@
             },
             ...mapGetters([
                 'currentVid',
-                'limit'
+                'limit',
+                'back'
             ]),
             options() {
                 return {
@@ -195,6 +254,7 @@
             // this.$nextTick(() => {
             //     this.getHeight();
             // })
+            // this.commentBack()
         },
         methods: {
             scrollHandler({ y }) {
@@ -229,21 +289,24 @@
                 }
             },
             getVideo() {
+                if(!this.currentVid) {
+                    this.$router.push(`/find`);
+                    return
+                }
                 this.$api.video.video(this.currentVid).then(res => {
+                    console.log(res);
                     // this.setLimit(20); //重置vuex
-
                     this.detail = res.data.data;
                     this.detail.playTime = serializeNumber(res.data.data.playTime);
                     this.detail.publishTime = timestamp(this.detail.publishTime);
                     this.detail.durationms = durationms(this.detail.durationms);
-
                 })
             },
             //获取播放地址
             getvVideoUrl() {
                 this.$api.video.videourl(this.currentVid).then(res => {
                     this.videourl = res.data.urls[0].url;
-                    // console.log(this.videourl)
+                    console.log(res)
                 })
             },
             //展开还是隐藏视频描述等
@@ -266,6 +329,7 @@
                 //把vuex的数据还原
                 this.setLimit(20);
                 this.limits = 20;
+                this.setCommentBack(false);
                 //刷新后重置
                 this.show = true;
                 this.descshow = false;
@@ -324,30 +388,158 @@
                 // let num = this.$refs.getNum.offsetHeight; //获取失败
                 // console.log(num)
             },
+            //某些时候打开本页面需要评论区提前展示
+            commentBack() {
+                // setTimeout(() => {
+                //     //从vuex拿数据决定是否提前展示..延时确保滚动结构正常
+                //     if(this.back) {
+                //         this.commentTop()
+                //     }
+                // },100);
+
+                // 从vuex拿数据决定是否提前展示
+                if(this.back) {
+                    this.commentTop()
+                }
+            },
+
+            //视频播放有关
+            playVideo() {
+
+            },
+            updateTime (e) {
+                this.currentTime = e.target.currentTime; // 播放的时候派发事件，能够获得当前时间 ***注意写法
+
+                this.speedWidth = this.percent * 345;
+            },
+            Durationms(durationms){
+                // 对时间戳进行转化为分秒
+                // durationms = durationms / 1000;//转换为多少秒  本身播放当前时间为秒
+                durationms = durationms | 0; // 互零操作符，一个正数向下取整 相当于Math.floor方法
+                let  minute = durationms / 60 | 0;
+                minute = minute < 10 ? '0' + minute : minute;
+                // let second = _pad(durationms) % 60;
+                let second = durationms % 60;
+                second = second < 10 ? '0' + second : second;// 秒数前面补零操作
+                return `${minute}:${second}`;
+            },
+
             ...mapMutations({
-                setLimit:'SET_LIMIT'
+                setLimit:'SET_LIMIT',
+                setCommentBack:'SET_BACK'
             })
         },
-        // mounted() {
-        //     this.$nextTick(() => {
-        //         //获取dom高度，确定返回按钮出现
-        //         // console.log(this.$refs.titleheight.offsetHeight)
-        //        // console.log( this.$refs.getSwiperHeight.offsetHeight)
-        //         this.getHeight();
-        //     })
+        mounted() {
+            //确保DOM结构渲染完成才能滚动。延时确保滚动结构距离正常
+            this.$nextTick(() => {
+                // this.commentBack();
+                setTimeout(() => {
+                    this.commentBack();
+                },1000)
+                // this.setCommentBack(false);
+            })
+        },
+
+        // watch:{
+        //     // 'back': function () {
+        //     //     //你需要执行的代码
+        //     //     this.commentBack();
+        //     //     console.log('有监控')
+        //     // }
+        //     back(back){
+        //         if(back) {
+        //             console.log('监控了')
+        //         }
+        //     }
         // }
+        destroyed() {
+            //销毁本页面时候，把vuex的一些重置
+            this.setCommentBack(false);
+        }
+
     }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-  .wrap
+  .wraps
     /*position:absolute*/
-    .video
+    /*.video*/
+    /*  width:100%*/
+    /*  height:215px*/
+    /*  background-color:gray*/
+    .wrapper
       width:100%
       height:215px
-      background-color:gray
+      background-color:#dcdcdc
+      border-radius:10px
+      position:relative
+      height:203px
+      font-size:$font-size-small-s
+      .video
+        width:100%
+        height:200px
+        border-radius:10px
+      .wrap
+        position:absolute
+        top:0
+        right:0
+        bottom:0
+        left:0
+        opacity: 0.8
+
+        .grop
+          position:absolute
+          top:10px
+          right:10px
+          border:1px solid gray
+          min-width:25px
+          text-align:center
+          border-radius:6px
+          height:13px
+          line-height:13px
+          padding:2px 8px
+          background-color:greenyellow
+        .wrapperLeft
+          position: absolute
+          left:5px
+          bottom:10px
+          height:10px
+          color:white
+        .wrapperCenter
+          color:white
+          position: absolute
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          font-size:$font-size-large-x
+        .wrapperRight
+          position: absolute
+          right:10px
+          bottom:10px
+          height:10px
+          color:white
+      .control
+        height:2px
+        width:100%
+        background-color:yellow
+        position:absolute
+        bottom:0
+        .speed
+          height:2px
+          background-color:red
+          /*width:0*/
+          margin:0 5px
+        .controlBtn
+          border-radius:50%
+          background-color:red
+          height:10px
+          width:10px
+          position:absolute
+          bottom:-3px
+          left:0
+
     .sticky-view-container
       position: absolute
       /*z-index:100*/

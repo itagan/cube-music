@@ -12,5 +12,6 @@ export const currentIndex = state => state.currentIndex;
 export const currentVideo = (state) => {
   return state.videoList[state.currentIndex] || {}
 };
+export const currentUrl = state => state.currentUrl;
 
 
