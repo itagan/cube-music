@@ -178,7 +178,7 @@
           <i class="iconfont iconzan1"></i>
           <span>11</span>
         </div>
-        <div class="wrapperCenter">
+        <div class="wrapperCenter" v-if="show">
           <i class="iconfont iconnetease"></i>
         </div>
         <div class="wrapperRight">
@@ -209,7 +209,7 @@
           <span>1028</span>
         </div>
 
-        <div class="wrapBottomCenter" @click="messageCount()">
+        <div class="wrapBottomCenter">
           <i class="iconfont iconliuyan"></i>
           <span>124</span>
         </div>
@@ -229,7 +229,8 @@
         name: "videoBase.vue",
         data() {
             return {
-                videos:this.videos
+                videos:this.videos,
+                show:true
             }
         },
         props: {
@@ -246,11 +247,21 @@
             }
         },
         methods:{
+            player() {
+                // if(this.show) {
+                //     this.show = false
+                // }
+                this.show = !this.show
+
+            },
             wonderfulVideo(vid) {
                 //去精彩视频页面并自动播放该视频
                 // this.$router.push({
                 //     path:`videoplayer`
                 // })
+            },
+            toPlayerDetail() {
+
             },
             avatar() {
                 //去up主页

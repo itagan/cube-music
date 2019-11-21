@@ -1,7 +1,22 @@
 <template>
   <div>
-    <video-list :video-group-id="videogroupid"></video-list>
     <video-header></video-header>
+    <video-list :video-group-id="videogroupid"></video-list>
+<!--    <cube-scroll-nav @change="changeHandler">-->
+<!--      <cube-scroll-nav-panel-->
+<!--        v-for="item in data"-->
+<!--        :key="item.name"-->
+<!--        :label="item.name">-->
+<!--        <ul>-->
+<!--          <li v-for="food in item.foods">-->
+<!--            <div>-->
+<!--              <img :src="food.icon">-->
+<!--              <p>{{food.name}}</p>-->
+<!--            </div>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </cube-scroll-nav-panel>-->
+<!--    </cube-scroll-nav>-->
   </div>
 </template>
 
