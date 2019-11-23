@@ -54,10 +54,68 @@ const base = 'http://localhost:3000'; //定义默认基准地址
    async allmvs() {
      return await axios.get(`${base}/mv/all`)
    },
- }
+ };
+
+ //用户有关
+const users = {
+  //刷新登录
+  async refresh() {
+    return await axios.get(`${base}/login/refresh`)
+  },
+  //退出登录
+  async logout() {
+    return await axios.get(`${base}/logout`)
+  },
+  //登录状态
+  async status() {
+    return await axios.get(`${base}/login/status`)
+  },
+  //手机登录
+  async cellphone(phonenumber,password) {
+    return await axios.get(`${base}/login/cellphone?phone=${phonenumber}&password=${password}`)
+  },
+
+  //发送验证码
+  async sendCode(phonenumber) {
+    return await axios.get(`${base}/captcha/sent?phone=${phonenumber}`)
+  },
+  //验证验证码
+  async verifyCode(phonenumber,code) {
+    return await axios.get(`${base}/captcha/verify?phone=${phonenumber}&captcha=${code}`)
+  },
+  //注册(修改密码)
+  async register(phonenumber,password,code,nickname) {
+    return await axios.get(`${base}/register/cellphone?phone=${phonenumber}&password=${password}&captcha=${code}&nickname=${nickname}`)
+  },
+  //检测手机号码是否已注册
+  async existence(phonenumber) {
+    return await axios.get(`${base}/cellphone/existence/check?phone=${phonenumber}`)
+  },
+  //初始化昵称
+  async nickname(nickname) {
+    return await axios.get(`${base}/activate/init/profile?nickname=${nickname}`)
+  },
+  //更换绑定手机
+  async rebind(phonenumber,oldcode,newcode) {
+    return await axios.get(`${base}/rebind?phone=${phonenumber}&oldcaptcha=${oldcode}&captcha=${newcode}`)
+  },
+
+
+  //获取用户详情
+  async userdetail(uid) {
+    return await axios.get(`${base}/user/detail?uid=${uid}`)
+  },
+  //获取用户信息 , 歌单，收藏，mv, dj 数量
+  async usermsg() {
+    return await axios.get(`${base}/user/subcount`)
+  },
+  //更新用户信息
+
+};
 
 export default {
   login,
   find,
-  video
+  video,
+  users,
 }

@@ -7,22 +7,32 @@ import router from '../router';
 import store from '../store/index';
 import Vue from 'vue';
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-
 import { Toast } from 'cube-ui';
 Vue.use(Toast);
-
 
 /**
  * 提示函数
  * 禁止点击蒙层、显示一秒后关闭
  */
-// const tip = msg => {
-//   Toast.$createToast({
-//     txt: this.msg,
-//     type: 'txt',
-//     time:1000
-//   }).show()
-// };
+const toast = msg => {
+  Toast.$create({
+    txt: msg,
+    type: 'txt',
+    time:1000
+  }).show();
+  // Toast.$createToast({
+  //   txt: msg,
+  //   type: 'txt',
+  //   time:1000
+  // }).show()
+};
+
+// const toast =  this.$createToast({
+//   time: 1000,
+//   txt: this.msg,
+//   type: 'txt',
+// });
+// toast.show()
 
 /**
  * 跳转登录页
@@ -51,11 +61,11 @@ const errorHandle = (status, other) => {
     // 403 token过期
     // 清除token并跳转登录页
     case 403:
-      // tip('登录过期，请重新登录');
+      toast('登录过期，请重新登录');
       localStorage.removeItem('token');
       store.commit('loginState', null);
       // ...mapMutations({
-      // loginSuccess:'SET_SINGER'
+      // loginSuccess:'SET_SIR'
       // });
       setTimeout(() => {
         toLogin();
@@ -63,16 +73,20 @@ const errorHandle = (status, other) => {
       break;
     // 404请求不存在
     case 404:
-      // tip('请求的资源不存在');
+      toast('请求的资源不存在');
       break;
     default:
       console.log(other);
   }};
 
 // 创建axios实例
-var instance = axios.create({ timeout: 1000 * 12});
+var instance = axios.create({
+  timeout: 1000 * 12,
+  withCredentials:true  //按api文档要求配置 表示跨域请求时是否需要使用凭证
+});
 // 设置post请求头
 instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
 /**
  * 请求拦截器
  * 每次请求前，如果存在token则在请求头中携带token
