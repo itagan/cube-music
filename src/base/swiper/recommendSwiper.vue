@@ -31,7 +31,8 @@
         name: "recommendSwiper.vue",
         data() {
             return {
-              recommend:[]
+              recommend:[],
+                videourl:''
             }
         },
         props:{
@@ -47,6 +48,7 @@
         },
         created() {
             this.getRecommend();
+            this.getvVideoUrl();
         },
         watch:{
             //监控父组件传递过来的vid变化则重新渲染新相关推荐数据
@@ -72,6 +74,12 @@
                   }
               })
           },
+            //获取播放地址
+            getvVideoUrl() {
+                this.$api.video.videourl(this.detail.vid).then(res => {
+                    this.videourl = res.data.urls[0].url;
+                })
+            },
             selectItem(vid) {
               //以下顺序不能变，否则需要点击两次才获取数据刷新。先把vuex数据更改，再派发父组件事件
               this.setPlayvideo(vid);
@@ -82,6 +90,7 @@
               // this.$router.push({
               //     path:`/find`
               // }) //跳转其它页面没事，跳转本页面报错。解决方案交给父组件刷新并重新渲染数据
+                this.setCurrentUrl(this.videourl);
             },
 
             getLength() {
@@ -90,7 +99,9 @@
             },
 
             ...mapMutations({
-                setPlayvideo:'SET_CURRENT_VID', //语法糖， 将 `this.setSinger()` 映射为 `this.$store.commit('SET_xxxx')`
+                setPlayvideo:'SET_CURRENT_VID',
+                setCurrentUrl:'SET_CURRENT_URL'
+
             })
         },
 

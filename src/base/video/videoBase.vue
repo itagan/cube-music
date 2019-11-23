@@ -227,13 +227,14 @@
 
     export default {
         name: "videoBase.vue",
-        data() {
-            return {
-                videos:this.videos
-            }
-        },
+        // data() {
+        //     return {
+        //         videos:this.videos
+        //     }
+        // },
         props: {
             videos:{
+                type:Array,
                 required:true
             }
         },

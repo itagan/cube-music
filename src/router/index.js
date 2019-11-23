@@ -6,7 +6,10 @@ import My from '../components/my/my'
 import Village from '../components/village/village'
 import Account from '../components/account/account'
 import Videoplayer from '../components/common/videoplayer'
-
+import Login from '../components/user/login'
+import loginPhone from '../components/user/loginphone'
+import Code from '../components/user/code'
+import PassWord from '../components/user/loginpassword'
 
 Vue.use(Router);
 
@@ -20,6 +23,30 @@ export default new Router({
     {
       path: '/',
       redirect: '/Find'
+    },
+    {
+      path:'/login',
+      component:Login,
+    },
+    {
+      path:'/login/phone',
+      component:loginPhone,
+      // children:[
+      //   {
+      //     path:':phone',
+      //     component:Code
+      //   },
+      // ]
+    },
+    //非父子关系组件~把号码通过路由传值。
+    { name:'code',
+      path:'/login/phone/:phone',
+      component:Code
+    },
+    //非父子关系组件~把号码通过路由传值。
+    { name:'password',
+      path:'/login/cellphone/:phone',
+      component:PassWord
     },
     {
       path:'/find',

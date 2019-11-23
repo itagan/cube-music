@@ -50,7 +50,7 @@
               </div>
             </div>
 
-            <div class="title" @click="toPlayerDetail(item.data.vid)">
+            <div class="title" @click="toPlayerDetail(item.data.vid,item.data.urlInfo.url)">
               <span>
                 {{item.data.title}}
               </span>
@@ -68,7 +68,7 @@
                 <span>{{item.data.praisedCount}}</span>
               </div>
 
-              <div class="wrapBottomCenter" @click="details(item.data.vid)">
+              <div class="wrapBottomCenter" @click="details(item.data.vid,item.data.urlInfo.url)">
                 <i class="iconfont iconliuyan"></i>
                 <span>{{item.data.commentCount}}</span>
               </div>
@@ -379,14 +379,14 @@
                 return `${minute}:${second}`;
             },
 
-            toPlayerDetail(vid) {
+            toPlayerDetail(vid,currentUrl) {
                 console.log('去视频页');
                 // 视频详情页，这个不会把底部评论提前
                 this.$router.push({
                     path:`videoplayer`
                 });
                 //给vuex提交vid，确定当前要播放视频id
-                this.video({vid});
+                this.video({vid,currentUrl});
             },
             avatar() {
                 //去up主页
@@ -394,14 +394,17 @@
             praisedCount() {
                 //点赞
             },
-            details(vid) {
+            details(vid,currentUrl) {
                 console.log('去视频页并评论提前');
                 //视频详情页，这个不会把底部评论提前
                 this.$router.push({
                     path:`videoplayer`
                 });
                 //给vuex提交vid，确定当前要播放视频id
-                this.video({vid});
+                this.video({
+                    vid,
+                    currentUrl
+                });
                 this.commentBack({back:true});
             },
             more() {
@@ -417,6 +420,7 @@
                 setVideoList:'SET_VIDEO_LIST',
                 setCurrentIndex: 'SET_CURRENT_INDEX',
                 setVideoCurrentTime:'SET_VIDEO_CURRENT_TIME',
+                setCurrentUrl:'SET_CURRENT_URL'
             })
         }
     }
