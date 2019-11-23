@@ -1,84 +1,79 @@
 <template>
-    <ul>
-      <li v-for="(item,index) in videos" :key="item.data.vid">
-        <div class="flexdiv">
-          <div class="container">
-            <div class="wrapper" @click.prevent="playVideo(item,index)">
-              <video :poster="item.data.coverUrl"
-                     :src="item.data.urlInfo.url"
-                     class="video"
-                     width="375px"
-                     height="200px"
-                     id="video"
-                     ref="video"
-                     :moted="true"
-                     @timeupdate="updateTime"
+  <div class="flexdiv">
+    <div class="container">
+      <div class="wrapper" @click.prevent="playVideo(item,index)" :key="index">
+        <video :poster="item.data.coverUrl"
+               :src="item.data.urlInfo.url"
+               class="video"
+               width="375px"
+               height="200px"
+               id="video"
+               ref="video"
+               :moted="true"
+               @timeupdate="updateTime"
 
-              >
-                <source :src="item.data.urlInfo.url" type="audio/mpeg">
-              </video>
+        >
+          <source :src="item.data.urlInfo.url" type="audio/mpeg">
+        </video>
 
-              <div class="wrap" v-show="wrapShow">
-                <div class="grop" v-if="gropshow">22</div>
-                <div class="wrapperLeft">
-                  <div  v-show="currentshow">
-                    <i class="iconfont iconzan1" v-if="currentTimeShow && activeIndex === index"></i>
-                    <span v-if="currentTimeShow && activeIndex === index">{{item.data.playTime}}</span>
-                    <div v-if="!currentTimeShow && activeIndex === index"> {{Durationms(currentTime)}} / {{item.data.durationms}}</div>
-                  </div>
-                </div>
-<!--                v-show=" playss && activeIndex === index"-->
-                <div class="wrapperCenter" v-if="plays" :key="item.data.vid">
-<!--                  <i class="iconfont iconliuyan" v-if="play && activeIndex === index"></i>-->
-<!--                  <i class="iconfont iconnetease" v-else></i>-->
-                  <i class="iconfont iconliuyan" v-if="play && activeIndex === index"></i>
-                  <i class="iconfont iconnetease" v-else></i>
-                </div>
-
-                <div class="wrapperRight" v-show="playTimes && activeIndex === index">
-                  <i class="iconfont iconzan1"  v-if="playTime && activeIndex === index"></i>
-                  <span  v-if="playTime && activeIndex === index">{{item.data.durationms}}</span>
-                  <i class="iconfont iconliuyan" v-if="!playTime && activeIndex === index"></i>
-                </div>
-
-              </div>
-
-              <div class="control">
-                <div class="speed"  :style="[activeIndex === index ? {width: speedWidth + 'px'} : {width: 0} ]"></div>
-
-                <div class="controlBtn" ref="setWidth" :style="[activeIndex === index ? {left: speedWidth + 'px'} : {left: 0} ]" v-show="controlBtn && activeIndex === index"></div>
-              </div>
+        <div class="wrap" v-show="wrapShow">
+          <div class="grop" v-if="gropshow">22</div>
+          <div class="wrapperLeft">
+            <div  v-show="currentshow">
+              <i class="iconfont iconzan1" v-if="currentTimeShow"></i>
+              <span v-if="currentTimeShow" >{{item.data.playTime}}</span>
+              <div v-if="!currentTimeShow"> {{Durationms(currentTime)}} / {{item.data.durationms}}</div>
             </div>
+          </div>
+          <div class="wrapperCenter" v-if="plays">
+            <!--                  <i class="iconfont iconliuyan" v-if="play && activeIndex === index"></i>-->
+            <!--                  <i class="iconfont iconnetease" v-else></i>-->
+            <i class="iconfont iconnetease" v-if="play"></i>
+            <i class="iconfont iconliuyan" v-else></i>
+          </div>
 
-            <div class="title" @click="toPlayerDetail(item.data.vid,item.data.urlInfo.url)">
+          <div class="wrapperRight" v-show="playTimes">
+            <i class="iconfont iconzan1"  v-if="playTime"></i>
+            <span  v-if="playTime">{{item.data.durationms}}</span>
+            <i class="iconfont iconliuyan" v-if="!playTime"></i>
+          </div>
+
+        </div>
+
+        <div class="control">
+          <div class="speed"  :style="[activeIndex === index ? {width: speedWidth + 'px'} : {width: 0} ]"></div>
+
+          <div class="controlBtn" ref="setWidth" :style="[activeIndex === index ? {left: speedWidth + 'px'} : {left: 0} ]" v-show="controlBtn"></div>
+        </div>
+      </div>
+
+      <div class="title" @click="toPlayerDetail(item.data.vid)">
               <span>
                 {{item.data.title}}
               </span>
-              <img :src="item.data.creator.avatarUrl" >
-            </div>
+        <img :src="item.data.creator.avatarUrl" >
+      </div>
 
-            <div class="wrapBottom">
-              <div class="wrapBottomImg" @click="avatar()">
-                <img :src="item.data.creator.avatarUrl">
-                <span>{{item.data.creator.nickname}}</span>
-              </div>
-
-              <div class="wrapBottomLeft" @click="praisedCount()">
-                <i class="iconfont iconzan1"></i>
-                <span>{{item.data.praisedCount}}</span>
-              </div>
-
-              <div class="wrapBottomCenter" @click="details(item.data.vid,item.data.urlInfo.url)">
-                <i class="iconfont iconliuyan"></i>
-                <span>{{item.data.commentCount}}</span>
-              </div>
-
-              <i class="wrapBottomRight iconfont icon-ellipsis" @click="more()"></i>
-            </div>
-          </div>
+      <div class="wrapBottom">
+        <div class="wrapBottomImg" @click="avatar()">
+          <img :src="item.data.creator.avatarUrl">
+          <span>{{item.data.creator.nickname}}</span>
         </div>
-      </li>
-    </ul>
+
+        <div class="wrapBottomLeft" @click="praisedCount()">
+          <i class="iconfont iconzan1"></i>
+          <span>{{item.data.praisedCount}}</span>
+        </div>
+
+        <div class="wrapBottomCenter" @click="details(item.data.vid)">
+          <i class="iconfont iconliuyan"></i>
+          <span>{{item.data.commentCount}}</span>
+        </div>
+
+        <i class="wrapBottomRight iconfont icon-ellipsis" @click="more()"></i>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -91,7 +86,7 @@
         name: "videoList.vue",
         data() {
             return {
-                videos:this.videos,
+                // videos:this.videos,
                 gropshow:false,
                 videoDom:'',
                 // isPlay:falste, //是否播放
@@ -114,24 +109,43 @@
                 durationms:0,//视频播放总时间
                 currentDuration:[{},{}], //存放前后播放视频的播放进度
                 durationHistory:[], //存放本视频流页面前后视频播放进度的历史记录
+                isPlay:false
 
             }
         },
         props: {
-            videoGroupId:{
+            // videoGroupId:{
+            //     type:Number,
+            //     required:true
+            // },
+            videos:{
+                type:Array,
+                required:true
+            },
+            item: {
+                type:Object,
+                required: true
+            },
+            index:{
                 type:Number,
                 required:true
             }
         },
-        watch: {
-            //videoGroup 的 id 父组件切换时候传过来
-            videoGroupId(id) {
-                this.getVideos(id);
-            }
-        },
-        created() {
-            this.getVideos()
-        },
+        // watch: {
+        //     //videoGroup 的 id 父组件切换时候传过来
+        //     // videoGroupId(id) {
+        //     //     this.getVideos(id);
+        //     // }
+        //     videos(val) {
+        //         for(let i=0;i<val.length;i++){
+        //             val[i].data.playTime = serializeNumber(val[i].data.playTime)
+        //             val[i].data.durationms = durationms(val[i].data.durationms)
+        //         }
+        //     }
+        // },
+        // created() {
+        //     this.getVideos()
+        // },
         computed: {
             percent(){
                 return this.currentTime / this.durationms
@@ -144,23 +158,18 @@
                 'back'
             ]),
         },
-        // mounted() {
-        //
-        //     this.$nextTick(() => {
-        //         this.playVideo();//在mounted()中添加这个方法，就解决了
-        //     })
-        // },
+
         methods:{
-            getVideos(id) {
-                this.$api.video.videolist(id).then((res) => {
-                    this.videos = res.data.datas;
-                    for(let i=0;i<this.videos.length;i++){
-                        this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
-                        this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
-                    }
-                    console.log(this.videos)
-                })
-            },
+            // getVideos(id) {
+            //     this.$api.video.videolist(id).then((res) => {
+            //         this.videos = res.data.datas;
+            //         for(let i=0;i<this.videos.length;i++){
+            //             this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
+            //             this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
+            //         }
+            //         console.log(this.videos)
+            //     })
+            // },
             playVideo(item,index) {
                 //该视频未显示播放进度情况下（非暂停状态），点击容器可播放视频
                 // this.$refs.video.play() ***没有用，报错
@@ -172,10 +181,13 @@
                 if(typeof item.isPlay == 'undefined'){
                     //给对象添加属性
                     this.$set(item,'isPlay',false);
-                    this.isPlay = false;
+                     // this.isPlay = false;
                 }else {
                     item.isPlay = !item.isPlay;
                 }
+                console.log(item.isPlay);
+                console.log(index);
+
                 //隐藏播放量，显示播放进度
                 this.currentTimeShow = false;
                 //播放或暂停的时候进度按钮显示
@@ -183,8 +195,8 @@
                 //播放总长度变成全屏按钮
                 this.playTime = false;
                 // this.playss = true;
-                //中间播放按钮或暂停按钮是否显示
-                this.plays = false;
+                // //中间播放按钮或暂停按钮是否显示
+                // this.plays = false;
                 //播放按钮变暂停按钮
                 this.play = false;
                 //右下角播放总长度变成全屏按钮
@@ -202,18 +214,18 @@
                     return index === parseInt(Object.keys(value)[0]);
                 });
                 // 该视频是否播放
-                if(this.isPlay && this.activeIndex === index) {
+                if( this.isPlay && this.activeIndex === index) {
                     this.videoDom.pause();
                     //标志位
                     this.isPlay =  false;
-                    // this.activeIndex = -1;
+                    this.activeIndex = -1;
                     this.countTime = false;
+                    //中间播放按钮或暂停按钮是否显示
+                    this.plays = true;
                     //暂停按钮变播放按钮
                     this.play = true;
-                    // this.playss = false;
 
-
-
+                    console.log(`${index}` + '暂停了');
 
                     this.currentTime = videoDams[index].currentTime;
 
@@ -232,28 +244,7 @@
                         }
                     }
 
-                    // if(this.currentDuration.length >=  2) {
-                    //     // if(i !== -1){
-                    //     //    //原来就存在的话，那就替换为新播放进度
-                    //     //     this.currentDuration[i][index] = videoDams[index].currentTime;
-                    //     // }
-                    //     this.currentDuration.splice(0,1);//删除第1个
-                    //     this.currentDuration.push(obj);//再把新的推进来
-                    //
-                    // }else {
-                    //     this.currentDuration.splice(0,1);//删除第1个
-                    //     this.currentDuration.push(obj);
-                    // }
 
-                    // //从vuex获取播放进度时间并给对应视频设置播放进度
-                    //把当前视频的播放进度提交vuex
-                    // this.setVideoCurrentTime(this.currentTime);
-                    // let arr = [index + ":" + this.currentTime]
-                    // this.setCurrentTimes({
-                    //     // index,
-                    //     videoCurrentTime:this.currentTime
-                    //     // videoCurrentTime:arr
-                    // });
                     //***不从vuex获取***//
                     //当该视频开启了播放，即使之后暂停。其它视频统统还原状态。仅仅保存上一条播放的进度。其它重置。
                     for(let i = 0;i<this.videos.length;i++) {
@@ -263,8 +254,11 @@
                         videoDams[i].currentTime = 0; //重置
                     }
 
-                    //让进度数组的数据显示在两个最近播放的视频上面，而不被重置。解决Bug:避免当没被手动暂停时候去播放其它而重置该播放时间
-                }else {
+                }
+                // else if(!this.isPlay && this.activeIndex !== index) {
+                //     console.log('啦啦啦')
+                // }
+                else{
                     //从vuex获取播放进度时间并给对应视频设置播放进度
                     // this.currentTime = this.videoCurrentTime[0];
                     // videoDams[index].currentTime = this.videoCurrentTime;
@@ -289,8 +283,10 @@
                         //中间播放按钮或暂停按钮是否显示
                         this.plays = false;
                         // this.playss = true;
-
                     },3000);
+
+                    // console.log(item.isPlay);
+                    console.log(`${index}` +'播放了');
 
                     if(this.currentDuration.length >=  2) {
                         if(i !== -1){
@@ -311,53 +307,10 @@
                         videoDams[i].currentTime = 0; //重置
                     }
 
-                    //避免当没被手动暂停时候去播放下一个视频而被重置播放时间。从播放进度数组获取
-                    // this.currentDuration.forEach((item) => {
-                    //       parseInt(Object.keys(item))[0] === 2
-                    // })
-
-                    // for(let i =0;i<this.currentDuration;i++) {
-                    //     parseInt(Object.keys(this.currentDuration[i])[0])
-                    // }
-
-
-
-
-                    // for(let i = 0;i<this.videos.length;i++) {
-                    //     if( parseInt(Object.keys(this.currentDuration[0])[0]) === i) continue;
-                    //     if( parseInt(Object.keys(this.currentDuration[1])[0]) === i) continue;
-                    //     videoDams[i].pause();
-                    //     videoDams[i].currentTime = 0; //重置
-                    // }
-
-                    // this.$refs.setWidth.offsetWidth = '100px'; //****没有*****
-                    // this.speedWidth = this.percent * 500;
                 }
                 this.speedWidth = this.percent * 345;
             },
 
-
-            // getwidth() {
-            //     this.$nextTick(() => {
-            //         this.$refs.setWidth.style.width = '35px';
-            //     })
-            // },
-            //黄奕老师写法
-            // format(interval) { // 对时间戳进行转化为分秒
-            //     interval = interval | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
-            //     const minute = interval / 60 | 0
-            //     const second = this._pad(interval % 60) // 秒数前面补零操作
-            //     return `${minute}:${second}`
-            // },
-            // // 进一步对播放时间处理，秒数补零操作，一位秒数的时候是 0x ，两位不需要处理
-            // _pad (num, n = 2) {
-            //     let len = num.toString().length;
-            //     while (len < n) {
-            //         num = '0' + num;
-            //         len++
-            //     }
-            //     return num
-            // },
             updateTime (e) {
                 // if(this.activeIndex !== e.index) {
                 //     this.currentTime = this.Durationms(e.target.currentTime);
@@ -379,14 +332,14 @@
                 return `${minute}:${second}`;
             },
 
-            toPlayerDetail(vid,currentUrl) {
+            toPlayerDetail(vid) {
                 console.log('去视频页');
                 // 视频详情页，这个不会把底部评论提前
                 this.$router.push({
                     path:`videoplayer`
                 });
                 //给vuex提交vid，确定当前要播放视频id
-                this.video({vid,currentUrl});
+                this.video({vid});
             },
             avatar() {
                 //去up主页
@@ -394,17 +347,14 @@
             praisedCount() {
                 //点赞
             },
-            details(vid,currentUrl) {
+            details(vid) {
                 console.log('去视频页并评论提前');
                 //视频详情页，这个不会把底部评论提前
                 this.$router.push({
                     path:`videoplayer`
                 });
                 //给vuex提交vid，确定当前要播放视频id
-                this.video({
-                    vid,
-                    currentUrl
-                });
+                this.video({vid});
                 this.commentBack({back:true});
             },
             more() {
@@ -420,7 +370,6 @@
                 setVideoList:'SET_VIDEO_LIST',
                 setCurrentIndex: 'SET_CURRENT_INDEX',
                 setVideoCurrentTime:'SET_VIDEO_CURRENT_TIME',
-                setCurrentUrl:'SET_CURRENT_URL'
             })
         }
     }
@@ -573,3 +522,4 @@
             text-align:center
 
 </style>
+
