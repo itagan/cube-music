@@ -18,14 +18,15 @@
   import {serializeNumber} from '../../assets/js/number'
     export default {
         name: "nav.vue",
-        data(){
-            return {
-                result: this.result
-            }
-        },
+        // data(){
+        //     return {
+        //         result: this.result
+        //     }
+        // },
         props: {
             result:{
                 type:Array,
+                default:[],
                 required:true
             }
         },
