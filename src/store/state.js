@@ -9,5 +9,6 @@ const state = {
   currentIndex:-1,
   videoCurrentTime:[], //保存前后两个视频的播放时间
   currentUrl:'', //当前的播放地址
+  uid:477726475,//用户Id信息
 };
 export default state

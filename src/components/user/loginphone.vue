@@ -63,14 +63,18 @@
                 }
 
                 //提示方法
-                const toast = msg => {
-                    this.$createToast({
-                        time: 1000,
-                        txt: msg,
-                        type: 'error',
-
-                    });
-                };
+                // const toast = msg => {
+                //     this.$createToast({
+                //         time: 1000,
+                //         txt: msg,
+                //         type: 'error',
+                //     });
+                // };
+                const toast =this.$createToast({
+                    time: 1000,
+                    txt: '手机号应该是11位数字！',
+                    type: 'error',
+                });
                 //判断手机号
                 if(this.value.length === 11){
                     // toast.show();
@@ -80,23 +84,23 @@
                         path:`/login/cellphone/${this.value}`
                     });
 
-                    //调用接口
+                    //调用接口验证码登录
                     // this.sendCode(this.value);
-                    if(this.status === 200) {
-                        //验证码登录
-                        this.$router.push({
-                            path:`/login/phone/${this.value}`
-                        });
-
-                    }else {
-                        //密码登录
-                        this.$router.push({
-                            path:`/login/cellphone/${this.value}`
-                        });
-                    }
+                    // if(this.status === 200) {
+                    //     //验证码登录
+                    //     this.$router.push({
+                    //         path:`/login/phone/${this.value}`
+                    //     });
+                    //
+                    // }else {
+                    //     //密码登录
+                    //     this.$router.push({
+                    //         path:`/login/cellphone/${this.value}`
+                    //     });
+                    // }
 
                 }else {
-                    toast.show('手机号应该是11位数字');
+                    toast.show();
                 }
             },
             back() {

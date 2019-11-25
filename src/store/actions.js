@@ -30,3 +30,8 @@ export const setCurrentTimes = function ({commit, state},{videoCurrentTime}) {
 
   commit(types.SET_VIDEO_CURRENT_TIME,videoCurrentTime);
 };
+//用户相关
+export const User = function ({commit,state},{uid}) {
+  commit(types.SET_UID,uid);
+
+};

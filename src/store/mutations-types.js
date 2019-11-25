@@ -8,3 +8,4 @@ export const SET_VIDEO_LIST = 'SET_VIDEO_LIST';
 export const SET_CURRENT_INDEX = 'SET_CURRENT_INDEX';
 export const SET_VIDEO_CURRENT_TIME = 'SET_VIDEO_CURRENT_TIME';
 export const SET_CURRENT_URL = 'SET_CURRENT_URL';
+export const SET_UID = 'SET_UID';

@@ -33,6 +33,9 @@ const mutations = {
   [types.SET_CURRENT_URL](state,currentUrl) {
     state.currentUrl = currentUrl
   },
+  [types.SET_UID](state,uid) {
+    state.uid = uid
+  },
 };
 
 export default mutations;

@@ -29,6 +29,8 @@
 </template>
 
 <script>
+    import {mapMutations} from 'vuex'
+
     export default {
         data() {
             return {
@@ -50,6 +52,7 @@
                 },
                 phone:0,
                 code: '',
+                uid:-1
             }
         },
         created() {
@@ -73,11 +76,11 @@
             getPhone() {
                 // return this.code;
                 this.phone = this.$route.params.phone;
-                console.log(this.phone)  //访问参数
             },
             getRes() {
                 this.$api.users.cellphone(this.phone,this.value).then(res => {
                     this.code = res.data.code;
+                    this.uid = res.data.account.id;
                     console.log(res);
                 })
             },
@@ -96,9 +99,14 @@
                 if(this.code === 400) {
                     toast.show('密码错误！');
                 }else if(this.code === 200) {
+                    //把用户id信息提交到vuex
+                    this.setUid(this.uid);
+
                     //登录成功，刷新登录状态
                     this.$api.users.refresh().then(res => {
-                        if(res.code === 200) {
+                        console.log(res);
+                        if(res.status === 200) {
+                            console.log('刷出状态成功');
                             //刷新成功，可以登录并跳转到首页
                             this.$router.push(
                                 {
@@ -112,7 +120,10 @@
                     })
 
                 }
-            }
+            },
+            ...mapMutations({
+                setUid:'SET_UID'
+            })
         }
     }
 </script>

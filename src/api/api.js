@@ -111,6 +111,10 @@ const users = {
   },
   //更新用户信息
 
+  //获取用户歌单
+  async playlist(uid) {
+    return await axios.get(`${base}/user/playlist?uid=${uid}`)
+  },
 };
 
 export default {

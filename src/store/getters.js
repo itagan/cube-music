@@ -13,5 +13,6 @@ export const currentVideo = (state) => {
   return state.videoList[state.currentIndex] || {}
 };
 export const currentUrl = state => state.currentUrl;
+export const uid = state => state.uid;
 
 
