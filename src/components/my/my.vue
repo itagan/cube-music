@@ -44,6 +44,7 @@
 
 <script>
     import playlist from "./playlist";
+    // import ModalHelper from '../../assets/js/dialog'
 
     const txts = ['爵士电台', '最嗨电音', 'ACG专区', '古典专区', '爵士电台', '最嗨电音', 'ACG专区', '古典专区',  '爵士电台', '最嗨电音', 'ACG专区', '古典专区','cube-ui666']
 
@@ -75,6 +76,18 @@
         // created() {
         //     this.widthComputed()
         // },
+        watch: {
+            isbuild:function(val) {
+                if (!!val){
+                    // ModalHelper.afterOpen();
+                    this._dialog.afterOpen();
+                } else {
+                    // ModalHelper.beforeClose();
+                    this._dialog.beforeClose();
+
+                }
+            }
+        },
         methods: {
             // widthComputed() {
             //     this.navWidth=this.navTxts.length*520

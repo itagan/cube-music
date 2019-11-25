@@ -117,9 +117,18 @@ const users = {
   },
 };
 
+//歌单有关
+const playlists = {
+  //新建歌单
+  async createlist(name,privacy) {
+    return await axios.get(`${base}/playlist/create?name=${name}&privacy=${privacy}`)
+  },
+};
+
 export default {
   login,
   find,
   video,
   users,
+  playlists
 }
