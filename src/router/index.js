@@ -11,12 +11,12 @@ import loginPhone from '../components/user/loginphone'
 import Code from '../components/user/code'
 import PassWord from '../components/user/loginpassword'
 
-Vue.use(Router);
+Vue.use(Router)
 
-const originalPush = Router.prototype.push;
-Router.prototype.push = function push(location) {
+const originalPush = Router.prototype.push
+Router.prototype.push = function push (location) {
   return originalPush.call(this, location).catch(err => err)
-};
+}
 
 export default new Router({
   routes: [
@@ -25,12 +25,12 @@ export default new Router({
       redirect: '/Find'
     },
     {
-      path:'/login',
-      component:Login,
+      path: '/login',
+      component: Login
     },
     {
-      path:'/login/phone',
-      component:loginPhone,
+      path: '/login/phone',
+      component: loginPhone
       // children:[
       //   {
       //     path:':phone',
@@ -38,39 +38,39 @@ export default new Router({
       //   },
       // ]
     },
-    //非父子关系组件~把号码通过路由传值。
-    { name:'code',
-      path:'/login/phone/:phone',
-      component:Code
+    // 非父子关系组件~把号码通过路由传值。
+    { name: 'code',
+      path: '/login/phone/:phone',
+      component: Code
     },
-    //非父子关系组件~把号码通过路由传值。
-    { name:'password',
-      path:'/login/cellphone/:phone',
-      component:PassWord
-    },
-    {
-      path:'/find',
-      component:Find
+    // 非父子关系组件~把号码通过路由传值。
+    { name: 'password',
+      path: '/login/cellphone/:phone',
+      component: PassWord
     },
     {
-      path:'/video',
-      component:Video
+      path: '/find',
+      component: Find
     },
     {
-      path:'/my',
-      component:My
+      path: '/video',
+      component: Video
     },
     {
-      path:'/village',
-      component:Village
+      path: '/my',
+      component: My
     },
     {
-      path:'/account',
-      component:Account
+      path: '/village',
+      component: Village
     },
     {
-      path:'/videoplayer',
-      component:Videoplayer
+      path: '/account',
+      component: Account
+    },
+    {
+      path: '/videoplayer',
+      component: Videoplayer
     }
 
   ]

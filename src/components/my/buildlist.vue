@@ -29,69 +29,69 @@
 
 <script>
     export default {
-        name: "buildlist.vue",
-        data() {
-            return {
-                value: '',
-                isprivacy:'', //是否隐私歌单
-                placeholder:'歌单标题',
-                autofocus:true,
-                clearable: {
-                    visible: true,
-                    blurHidden: true
-                },
-            }
-        },
-        methods: {
-            //提交创建的歌单
-            createlist() {
-                this.$api.playlists.createlist(this.value,this.isprivacy).then(res => {
-                    console.log(res);
-                })
-            },
-            input(val) {
-                const toast =this.$createToast({
-                    time: 3000,
-                    txt: '字数超过限制',
-                    type: 'error',
-                });
-                //输入中
-                if(val.length > 0) {
-                    document.getElementsByClassName('complete')[0].style.color = 'black';
-                }else {
-                    document.getElementsByClassName('complete')[0].style.color = 'rgba(128,128,128,.5)'
-                }
-
-                if(val.length > 20) {
-                    toast.show();
-                    // val = val.slice(0,20)
-                    val = val.slice(0,20);
-                    //必须下边这样设置才能实现新替换的显示出来！！
-                        this.$nextTick(() => {
-                            this.value = val;
-                        })
-                }
-            },
-            cancel(e) {
-                //触摸到遮罩层就取消本组件
-                this.$emit('cancel');
-                this.value = ''; //清空内容
-            },
-            complete() {
-                //完成创建
-                if(this.value){
-                    this.createlist();
-                }
-            },
-            privacy() {
-                //设置为隐私歌单
-                if(this.isprivacy) {
-                    this.isprivacy = '';
-                }else {
-                    this.isprivacy = 10
-                }
-            }
+      name: 'buildlist.vue',
+      data () {
+        return {
+          value: '',
+          isprivacy: '', // 是否隐私歌单
+          placeholder: '歌单标题',
+          autofocus: true,
+          clearable: {
+            visible: true,
+            blurHidden: true
+          }
         }
+      },
+      methods: {
+            // 提交创建的歌单
+        createlist () {
+          this.$api.playlists.createlist(this.value, this.isprivacy).then(res => {
+            console.log(res)
+          })
+        },
+        input (val) {
+          const toast = this.$createToast({
+            time: 3000,
+            txt: '字数超过限制',
+            type: 'error'
+          })
+            // 输入中
+          if (val.length > 0) {
+            document.getElementsByClassName('complete')[0].style.color = 'black'
+          } else {
+            document.getElementsByClassName('complete')[0].style.color = 'rgba(128,128,128,.5)'
+          }
+
+          if (val.length > 20) {
+            toast.show()
+                // val = val.slice(0,20)
+            val = val.slice(0, 20)
+                // 必须下边这样设置才能实现新替换的显示出来！！
+            this.$nextTick(() => {
+              this.value = val
+            })
+          }
+        },
+        cancel (e) {
+                // 触摸到遮罩层就取消本组件
+          this.$emit('cancel')
+          this.value = '' // 清空内容
+        },
+        complete () {
+                // 完成创建
+          if (this.value) {
+            this.createlist()
+          }
+        },
+        privacy () {
+                // 设置为隐私歌单
+          if (this.isprivacy) {
+            this.isprivacy = ''
+          } else {
+            this.isprivacy = 10
+          }
+        }
+      }
     }
 </script>
 

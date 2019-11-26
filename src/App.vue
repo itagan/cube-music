@@ -10,28 +10,28 @@
 <script>
     import Tab from './components/tabbar/tabbar'
     export default {
-        name: 'app',
-        provide (){
-            return {
-                reload:this.reload
-            }
-        },
-        data(){
-            return {
-                isRouterAlive:true
-            }
-        },
-        methods:{
-            reload (){
-                this.isRouterAlive = false;
-                this.$nextTick(function(){
-                    this.isRouterAlive = true;
-                })
-            }
-        },
-        components: {
-            Tab,
+      name: 'app',
+      provide () {
+        return {
+          reload: this.reload
         }
+      },
+      data () {
+        return {
+          isRouterAlive: true
+        }
+      },
+      methods: {
+        reload () {
+          this.isRouterAlive = false
+          this.$nextTick(function () {
+            this.isRouterAlive = true
+          })
+        }
+      },
+      components: {
+        Tab
+      }
     }
 </script>
 

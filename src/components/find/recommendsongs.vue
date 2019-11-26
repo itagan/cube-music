@@ -10,28 +10,28 @@
 
 <script>
   import BaseNav from '../../base/nav/nav'
-    export default {
-        name: "recommendsongs.vue",
-        components: {
-            BaseNav
-        },
-        data(){
-            return {
-                result:[]
-            }
-        },
-        created() {
-            this.getResults()
-        },
-        methods: {
-            getResults() {
-                this.$api.find.recommend().then((res) => {
-                    this.result = res.data.result;
-                    // console.log(this.result)
-                });
-            }
-        }
+  export default {
+    name: 'recommendsongs.vue',
+    components: {
+      BaseNav
+    },
+    data () {
+      return {
+        result: []
+      }
+    },
+    created () {
+      this.getResults()
+    },
+    methods: {
+      getResults () {
+        this.$api.find.recommend().then((res) => {
+          this.result = res.data.result
+                  // console.log(this.result)
+        })
+      }
     }
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

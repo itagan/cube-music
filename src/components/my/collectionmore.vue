@@ -9,29 +9,29 @@
 </template>
 
 <script>
-    import moreSongs from "../common/moresongs";
-    export default {
-        name: "playmore.vue",
-        components:{
-            moreSongs
+    import moreSongs from '../common/moresongs'
+export default {
+      name: 'playmore.vue',
+      components: {
+        moreSongs
+      },
+      props: {
+        nums: {
+          type: Number,
+          default: 0
+        }
+      },
+      methods: {
+        cancel () {
+                // 触摸到遮罩层就取消本组件
+          this.$emit('cancel')
         },
-        props:{
-            nums:{
-                type:Number,
-                default:0
-            }
-        },
-        methods: {
-            cancel() {
-                //触摸到遮罩层就取消本组件
-                this.$emit('cancel');
-            },
-            manage() {
-                //管理歌单
-                //管理歌单  子提醒父组件再通知其他子组件
-                this.$emit('manage');
-            }
-        },
+        manage () {
+                // 管理歌单
+                // 管理歌单  子提醒父组件再通知其他子组件
+          this.$emit('manage')
+        }
+      }
     }
 </script>
 

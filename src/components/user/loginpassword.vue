@@ -32,37 +32,37 @@
     import {mapMutations} from 'vuex'
 
     export default {
-        data() {
-            return {
-                value: '',
-                placeholder: '输入密码',
-                type: 'password',
-                readonly: false,
-                maxlength: 100,
-                disabled: false,
-                autofocus: true,
-                autocomplete: true,
-                eye: {
-                    open: true,
-                    reverse: false
-                },
-                clearable: {
-                    visible: true,
-                    blurHidden: true
-                },
-                phone:0,
-                code: '',
-                uid:-1
-            }
+      data () {
+        return {
+          value: '',
+          placeholder: '输入密码',
+          type: 'password',
+          readonly: false,
+          maxlength: 100,
+          disabled: false,
+          autofocus: true,
+          autocomplete: true,
+          eye: {
+            open: true,
+            reverse: false
+          },
+          clearable: {
+            visible: true,
+            blurHidden: true
+          },
+          phone: 0,
+          code: '',
+          uid: -1
+        }
+      },
+      created () {
+        this.getPhone()
+    },
+      methods: {
+        back () {
+                // 返回上一页
+          this.$router.back()
         },
-        created() {
-            this.getPhone();
-        },
-        methods: {
-            back() {
-                //返回上一页
-                this.$router.back();
-            },
             // input(val) {
             //     //输入中
             //     if (val.length > 0) {
@@ -72,59 +72,57 @@
             //     }
             //
             // },
-            //获取手机号码
-            getPhone() {
+            // 获取手机号码
+        getPhone () {
                 // return this.code;
-                this.phone = this.$route.params.phone;
-            },
-            getRes() {
-                this.$api.users.cellphone(this.phone,this.value).then(res => {
-                    this.code = res.data.code;
-                    this.uid = res.data.account.id;
-                    console.log(res);
-                })
-            },
-            login() {
-                this.getRes();
-                //提示方法
-                const toast = msg => {
-                    this.$createToast({
-                        time: 1000,
-                        txt: msg,
-                        type: 'error',
+          this.phone = this.$route.params.phone
+        },
+        getRes () {
+          this.$api.users.cellphone(this.phone, this.value).then(res => {
+            this.code = res.data.code
+            this.uid = res.data.account.id
+            console.log(res)
+          })
+        },
+        login () {
+          this.getRes()
+            // 提示方法
+          const toast = msg => {
+            this.$createToast({
+              time: 1000,
+              txt: msg,
+              type: 'error'
 
-                    });
-                };
-
-                if(this.code === 400) {
-                    toast.show('密码错误！');
-                }else if(this.code === 200) {
-                    //把用户id信息提交到vuex
-                    this.setUid(this.uid);
-
-                    //登录成功，刷新登录状态
-                    this.$api.users.refresh().then(res => {
-                        console.log(res);
-                        if(res.status === 200) {
-                            console.log('刷出状态成功');
-                            //刷新成功，可以登录并跳转到首页
-                            this.$router.push(
-                                {
-                                    path:'/find'
-                                }
-                            );
-                            return;
-                        }else {
-                            console.log('刷出状态失败');
-                        }
-                    })
-
-                }
-            },
-            ...mapMutations({
-                setUid:'SET_UID'
             })
-        }
+          }
+
+          if (this.code === 400) {
+            toast.show('密码错误！')
+          } else if (this.code === 200) {
+                    // 把用户id信息提交到vuex
+            this.setUid(this.uid)
+
+                // 登录成功，刷新登录状态
+            this.$api.users.refresh().then(res => {
+              console.log(res)
+              if (res.status === 200) {
+                console.log('刷出状态成功')
+                    // 刷新成功，可以登录并跳转到首页
+                this.$router.push(
+                  {
+                    path: '/find'
+                  }
+                        )
+              } else {
+                console.log('刷出状态失败')
+              }
+            })
+          }
+        },
+        ...mapMutations({
+          setUid: 'SET_UID'
+        })
+      }
     }
 </script>
 

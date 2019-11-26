@@ -29,25 +29,25 @@
 
 <script>
     export default {
-        name: "buildlist.vue",
-        data() {
-            return {
-            }
-        },
-        props:{
-            title:{
-                type:String,
-                default:''
-            },
-
-        },
-        methods: {
-            //提交创建的歌单
-            cancel() {
-                //触摸到遮罩层就取消本组件
-                this.$emit('cancel');
-            },
+      name: 'buildlist.vue',
+      data () {
+        return {
         }
+      },
+      props: {
+        title: {
+          type: String,
+          default: ''
+        }
+
+      },
+      methods: {
+            // 提交创建的歌单
+        cancel () {
+                // 触摸到遮罩层就取消本组件
+          this.$emit('cancel')
+        }
+      }
     }
 </script>
 

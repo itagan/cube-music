@@ -16,73 +16,73 @@
 </template>
 
 <script>
-    import BaseComment from "../../base/basecomment/basecomment";
-    import {mapMutations} from 'vuex'
+    import BaseComment from '../../base/basecomment/basecomment'
+import {mapMutations} from 'vuex'
     import {timestampother} from '../../assets/js/timestamp'
     export default {
-        name: "comment.vue",
-        components: {
-            BaseComment
-        },
-        data() {
-            return {
-                comments: [],
-                item: {},
-                showallhot:false
-            }
-        },
-        props: {
-            detail: {
-                type: Object,
-                default: {}
-            }
-        },
+      name: 'comment.vue',
+      components: {
+        BaseComment
+      },
+      data () {
+        return {
+          comments: [],
+          item: {},
+          showallhot: false
+        }
+      },
+      props: {
+        detail: {
+          type: Object,
+          default: {}
+        }
+      },
         // computed: {
         //     ...mapGetters([
         //         'currentVid'
         //     ])
         // },
-        created() {
-            this.getHotcomment()
-        },
-        watch: {
-            //监控父组件传递过来的vid变化则重新渲染新相关推荐数据
-            detail() {
-                this.getHotcomment();
-            }
-        },
-        methods: {
-            getHotcomment() {
-                this.$api.video.hotcomment(this.detail.vid).then(res => {
-                    //判断是否显示全部评论按钮
-                    // console.log(res.data.hotComments.length);
-                    if(res.data.hotComments.length >= 15) {
-                        this.showallhot = true;
-                        this.comments = res.data.hotComments.slice(0,15);
-                        // console.log(this.comments)
-                        for (let i = 0; i < 15; i++) {
-                            this.comments[i].time = timestampother(this.comments[i].time);
-                        }
-                    }else{
-                        this.comments = res.data.hotComments;
-                        //不足15个精彩评论的全部显示
-                        for (let i = 0; i < this.comments.length; i++) {
-                            this.comments[i].time = timestampother(this.comments[i].time);
-                        }
-                    }
-                })
-            },
-            allhotcomment() {
-                //向父组件发送消息，显示全部精彩评论覆盖掉其它
-                this.$emit('allhot');
-                // 把vuex的数据还原
-                this.setHotLimit(20);
-            },
-
-            ...mapMutations({
-                setHotLimit:'SET_HOT_LIMIT'
-            })
+      created () {
+        this.getHotcomment()
+      },
+      watch: {
+            // 监控父组件传递过来的vid变化则重新渲染新相关推荐数据
+        detail () {
+          this.getHotcomment()
         }
+      },
+      methods: {
+        getHotcomment () {
+          this.$api.video.hotcomment(this.detail.vid).then(res => {
+                    // 判断是否显示全部评论按钮
+                    // console.log(res.data.hotComments.length);
+            if (res.data.hotComments.length >= 15) {
+              this.showallhot = true
+              this.comments = res.data.hotComments.slice(0, 15)
+                    // console.log(this.comments)
+              for (let i = 0; i < 15; i++) {
+                this.comments[i].time = timestampother(this.comments[i].time)
+              }
+            } else {
+              this.comments = res.data.hotComments
+                    // 不足15个精彩评论的全部显示
+              for (let i = 0; i < this.comments.length; i++) {
+                this.comments[i].time = timestampother(this.comments[i].time)
+              }
+            }
+          })
+        },
+        allhotcomment () {
+                // 向父组件发送消息，显示全部精彩评论覆盖掉其它
+          this.$emit('allhot')
+            // 把vuex的数据还原
+          this.setHotLimit(20)
+        },
+
+        ...mapMutations({
+          setHotLimit: 'SET_HOT_LIMIT'
+        })
+      }
     }
 </script>
 

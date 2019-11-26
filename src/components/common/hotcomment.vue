@@ -67,100 +67,100 @@
 
 <script>
     import {mapGetters, mapMutations} from 'vuex'
-    import BaseComment from "../../base/basecomment/basecomment";
-    import {timestampother} from '../../assets/js/timestamp'
+    import BaseComment from '../../base/basecomment/basecomment'
+import {timestampother} from '../../assets/js/timestamp'
 
     export default {
-        name: "hotcomment.vue",
-        components: {
-            BaseComment
-        },
-        data() {
-            return {
-                allcomments:[],
-                comments: [],
-                item: {},
-                total:'',
-                visible:false,
-                scrollEvents: ['scroll'],
-                scrollY: 0,
+      name: 'hotcomment.vue',
+      components: {
+        BaseComment
+      },
+      data () {
+        return {
+          allcomments: [],
+          comments: [],
+          item: {},
+          total: '',
+          visible: false,
+          scrollEvents: ['scroll'],
+          scrollY: 0,
 
-                pullUpLoad: true,
-                pullUpLoadThreshold: 0,
-                pullUpLoadMoreTxt: '加载中…………',
-                pullUpLoadNoMoreTxt: '没有更多数据了~',
+          pullUpLoad: true,
+          pullUpLoadThreshold: 0,
+          pullUpLoadMoreTxt: '加载中…………',
+          pullUpLoadNoMoreTxt: '没有更多数据了~',
 
-                loadisshow:false //上拉加载是否显示,数据全部加载完则不显示了
-            }
-        },
-        props: {
-            detail: {
-                type: Object,
-                default: {}
-            }
-        },
+          loadisshow: false // 上拉加载是否显示,数据全部加载完则不显示了
+        }
+      },
+      props: {
+        detail: {
+          type: Object,
+          default: {}
+        }
+      },
         // created() {
         //     this.getHotcomment();
         // },
-        watch: {
-            //监控父组件传递过来的vid变化则重新渲染新相关推荐数据
-            detail() {
-                this.getHotcomment();
-                // setTimeout(()=> {
-                //     this.getHotcomment();
-                // },1000);
-            }
-        },
-        computed: {
-            options() {
-                return {
+      watch: {
+            // 监控父组件传递过来的vid变化则重新渲染新相关推荐数据
+        detail () {
+          this.getHotcomment()
+            // setTimeout(()=> {
+            //     this.getHotcomment();
+            // },1000);
+        }
+      },
+      computed: {
+        options () {
+          return {
                     // pullDownRefresh: this.pullDownRefreshObj,
-                    pullUpLoad: this.pullUpLoadObj,
-                    scrollbar: true,
-                    probeType: 1,
-                }
-            },
-            pullUpLoadObj: function() {
-                return this.pullUpLoad ? {
-                    threshold: parseInt(this.pullUpLoadThreshold),
-                    txt: {
-                        more: this.pullUpLoadMoreTxt,
-                        noMore: this.pullUpLoadNoMoreTxt
-                    }
-                } : false
-            },
-            ...mapGetters([
-                'hotLimit'
-            ])
+            pullUpLoad: this.pullUpLoadObj,
+            scrollbar: true,
+            probeType: 1
+          }
         },
-        methods: {
-            getHotcomment(hotLimit) {
-                this.$api.video.hotcomment(this.detail.vid,hotLimit).then(res => {
-                    this.total = res.data.total;
-                    // this.allcomments = res.data.hotComments;
-                    //因评论总数比较少，api未发现符合实际效果的参数。这里模拟分页数据，实现下拉加载中效果。每100条显示加载中
-                    // let num =Math.ceil( this.total / 100);//向上取整
-                    if (this.isPullUpLoad) {
-                        this.comments = [] // 清空数据，以防重复渲染
-                    };
+        pullUpLoadObj: function () {
+          return this.pullUpLoad ? {
+            threshold: parseInt(this.pullUpLoadThreshold),
+            txt: {
+              more: this.pullUpLoadMoreTxt,
+              noMore: this.pullUpLoadNoMoreTxt
+            }
+          } : false
+        },
+        ...mapGetters([
+          'hotLimit'
+        ])
+      },
+      methods: {
+        getHotcomment (hotLimit) {
+          this.$api.video.hotcomment(this.detail.vid, hotLimit).then(res => {
+            this.total = res.data.total
+                // this.allcomments = res.data.hotComments;
+                // 因评论总数比较少，api未发现符合实际效果的参数。这里模拟分页数据，实现下拉加载中效果。每100条显示加载中
+                // let num =Math.ceil( this.total / 100);//向上取整
+            if (this.isPullUpLoad) {
+              this.comments = [] // 清空数据，以防重复渲染
+            };
 
-                    this.comments = res.data.hotComments;
-                    for (let i = 0; i < this.comments.length; i++) {
-                        this.comments[i].time = timestampother(this.comments[i].time);
-                    }
-                })
-            },
-            scrollHandler(pos) {
-                this.scrollY = -pos.y;
-                // console.log(pos)
-                if(pos.y > 10) {
-                    setTimeout(()=> {
-                        this.hide();
-                    },100);
-                }
-            },
-            onPullingUp() {
-                //闭包保存上次上拉加载的数据位置  *****没作用*****
+            this.comments = res.data.hotComments
+            for (let i = 0; i < this.comments.length; i++) {
+              this.comments[i].time = timestampother(this.comments[i].time)
+            }
+          })
+        },
+        scrollHandler (pos) {
+          this.scrollY = -pos.y
+            // console.log(pos)
+          if (pos.y > 10) {
+            setTimeout(() => {
+              this.hide()
+            }, 100)
+          }
+        },
+        onPullingUp () {
+                // 闭包保存上次上拉加载的数据位置  *****没作用*****
                 // limit=20;
                 // function Limit1(){
                 //     // var limit=20;
@@ -175,57 +175,56 @@
                 // var result=Limit1();
                 // result();
                 // nAdd();
-                //决定上拉加载效果是否显示出来
-                this.loadisshow =  this.comments.length >= this.hotLimit;
+                // 决定上拉加载效果是否显示出来
+          this.loadisshow = this.comments.length >= this.hotLimit
 
-                //改用vuex方式获取设置上拉加载的索引：实现上拉加载新数据效果
-                // 更新数据
-                //获取原数据并增加数据然后设置新的vuex
-                // let newlimit = this.limit + 10;
-                setTimeout(() => {
-                    if (this.isPullUpLoad) {
-                        this.comments = [] // 清空数据，以防重复渲染
-                    };
-                    this.getHotcomment(this.hotLimit + 10);
-                    let newPage = this.comments.slice(this.hotLimit,this.hotLimit+10);
+            // 改用vuex方式获取设置上拉加载的索引：实现上拉加载新数据效果
+            // 更新数据
+            // 获取原数据并增加数据然后设置新的vuex
+            // let newlimit = this.limit + 10;
+          setTimeout(() => {
+            if (this.isPullUpLoad) {
+              this.comments = [] // 清空数据，以防重复渲染
+            };
+            this.getHotcomment(this.hotLimit + 10)
+            let newPage = this.comments.slice(this.hotLimit, this.hotLimit + 10)
 
-                    if (newPage) {
+            if (newPage) {
                         // 如果有新数据
-                        //获取新数据并渲染出来
-                        this.comments = this.comments.concat(newPage);
-                        this.$refs.scroll.forceUpdate();
-                        // this.$refs.scroll.refresh();
-
-                    } else {
+                        // 获取新数据并渲染出来
+              this.comments = this.comments.concat(newPage)
+              this.$refs.scroll.forceUpdate()
+                    // this.$refs.scroll.refresh();
+            } else {
                         // 如果没有新数据
-                        //取消加载中，并刷新下滚动组件
+                        // 取消加载中，并刷新下滚动组件
                         // this.$refs.scroll.refresh();
-                        this.$refs.scroll.forceUpdate();
-                    }
-                }, 1000);
-                //再把新数据设置到vuex
-                this.setHotLimit(this.hotLimit + 10);
-            },
-            //展开或者隐藏全部评价
-            show(){
-                this.visible = true;
-            },
-            hide() {
-                this.visible = false;
-                //告诉父组件你该显示了
-                setTimeout(()=> {
-                    this.$emit('parshow');
-                },200);
-                //把vuex的数据还原
-                this.setHotLimit(20);
-                //页面数据也清空
-                // this.comments = [];
-            },
-            ...mapMutations({
+              this.$refs.scroll.forceUpdate()
+            }
+          }, 1000)
+            // 再把新数据设置到vuex
+          this.setHotLimit(this.hotLimit + 10)
+        },
+            // 展开或者隐藏全部评价
+        show () {
+          this.visible = true
+        },
+        hide () {
+          this.visible = false
+            // 告诉父组件你该显示了
+          setTimeout(() => {
+            this.$emit('parshow')
+          }, 200)
+            // 把vuex的数据还原
+          this.setHotLimit(20)
+            // 页面数据也清空
+            // this.comments = [];
+        },
+        ...mapMutations({
                 // setLimit:'SET_LIMIT'
-                setHotLimit:'SET_HOT_LIMIT'
-            })
-        }
+          setHotLimit: 'SET_HOT_LIMIT'
+        })
+      }
     }
 </script>
 

@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "village.vue"
+      name: 'village.vue'
     }
 </script>
 

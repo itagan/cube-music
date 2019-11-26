@@ -28,20 +28,19 @@
 </template>
 
 <script type="text/ecmascript-6">
-
-    const txts = ['爵士电台', '最嗨电音', 'ACG专区', '古典专区', '爵士电台', '最嗨电音', 'ACG专区', '古典专区',  '爵士电台', '最嗨电音', 'ACG专区', '古典专区','cube-ui666']
+    const txts = ['爵士电台', '最嗨电音', 'ACG专区', '古典专区', '爵士电台', '最嗨电音', 'ACG专区', '古典专区', '爵士电台', '最嗨电音', 'ACG专区', '古典专区', 'cube-ui666']
 
     export default {
-        data() {
-            return {
-                navTxts: txts,
-            }
-        },
-        methods: {
-            edit() {
-                //打开编辑页面
-            },
+      data () {
+        return {
+          navTxts: txts
         }
+      },
+      methods: {
+        edit () {
+                // 打开编辑页面
+        }
+      }
     }
 </script>
 

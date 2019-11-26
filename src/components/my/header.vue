@@ -10,32 +10,32 @@
 <script>
     import MyHeader from '../../base/navbar/navbar'
     export default {
-        name: "header.vue",
-        components:{
-            MyHeader,
+      name: 'header.vue',
+      components: {
+        MyHeader
 
-        },
-        data(){
-            return {
-                iscomplete:true
-            }
-        },
-        methods: {
-            cloud() {
-
-            },
-            music() {
-
-            },
-            ischange() {
-                this.iscomplete = false;
-            },
-            complete() {
-              //点击完成，其他归位
-                this.iscomplete = true;
-                this.$emit('complete');
-            }
+      },
+      data () {
+        return {
+          iscomplete: true
         }
+      },
+      methods: {
+        cloud () {
+
+        },
+        music () {
+
+        },
+        ischange () {
+          this.iscomplete = false
+        },
+        complete () {
+              // 点击完成，其他归位
+          this.iscomplete = true
+          this.$emit('complete')
+        }
+      }
     }
 </script>
 

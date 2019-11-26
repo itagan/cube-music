@@ -53,7 +53,7 @@
 
 <script>
     export default {
-        name: "mymusic.vue"
+      name: 'mymusic.vue'
     }
 </script>
 

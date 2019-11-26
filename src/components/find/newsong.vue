@@ -34,40 +34,39 @@
 
 <script>
     export default {
-        name: "newsong.vue",
-        data() {
-            return {
-                isshow:true,
-                show:false,
-                result:[]
-            }
+      name: 'newsong.vue',
+      data () {
+        return {
+          isshow: true,
+          show: false,
+          result: []
+        }
+      },
+      created () {
+        this.getResults()
+      },
+      methods: {
+        getResults () {
+          this.$api.find.recommend().then((res) => {
+            this.result = res.data.result
+          })
         },
-        created() {
-            this.getResults()
+        newLeft () {
+          this.isshow = true
+          this.show = false
         },
-        methods: {
-            getResults() {
-                this.$api.find.recommend().then((res) => {
-                    this.result = res.data.result;
-                });
-            },
-            newLeft() {
-                this.isshow = true;
-                this.show = false;
-            },
-            newRight() {
-                this.isshow = false;
-                this.show = true;
-            },
-            player() {
-                //播放歌曲但不打开播放页面，阻止事件冒泡
+        newRight () {
+          this.isshow = false
+          this.show = true
+        },
+        player () {
+                // 播放歌曲但不打开播放页面，阻止事件冒泡
                 // e.preventDefault()
                 // event.stopPropagation()
                 // this.$router.push({path:`/my`})
-                console.log('播放')
-
-            }
+          console.log('播放')
         }
+      }
     }
 </script>
 

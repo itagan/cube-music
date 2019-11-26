@@ -39,7 +39,7 @@
 
 <script>
     export default {
-        name: "nav.vue"
+      name: 'nav.vue'
     }
 </script>
 

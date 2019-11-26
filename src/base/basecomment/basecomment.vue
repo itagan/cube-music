@@ -31,38 +31,38 @@
 
 <script>
   export default {
-        name: "basecomment.vue",
-        props: {
-          item:{
-              type:Object,
-              default:{}
-          }
-        },
+    name: 'basecomment.vue',
+    props: {
+      item: {
+        type: Object,
+        default: {}
+      }
+    },
         // watch: {
         //     item() {
         //         console.log('变化了')
         //     }
         // },
-        data() {
-            return {
-                replyshow:false
-            }
-        },
-        methods: {
-            remind() {
-                //点击评论提醒该要什么
-            },
-            touser() {
-                //去用户个人中心页面
-            },
-            liked() {
-                //点赞
-            },
-            reply() {
-                //回复
-            }
-        }
+    data () {
+      return {
+        replyshow: false
+      }
+    },
+    methods: {
+      remind () {
+                // 点击评论提醒该要什么
+      },
+      touser () {
+                // 去用户个人中心页面
+      },
+      liked () {
+                // 点赞
+      },
+      reply () {
+                // 回复
+      }
     }
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

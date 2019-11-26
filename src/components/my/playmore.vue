@@ -21,33 +21,33 @@
 </template>
 
 <script>
-    import moreSongs from "../common/moresongs";
-    export default {
-        name: "playmore.vue",
-        components:{
-            moreSongs
+    import moreSongs from '../common/moresongs'
+export default {
+      name: 'playmore.vue',
+      components: {
+        moreSongs
+      },
+      props: {
+        num: {
+          type: Number,
+          default: 0
+        }
+      },
+      methods: {
+        cancel () {
+                // 触摸到遮罩层就取消本组件
+          this.$emit('cancel')
         },
-        props:{
-            num:{
-                type:Number,
-                default:0
-            }
+        build () {
+                // 告诉父组件创建新歌单
+          this.$emit('build')
+            // 并取消自己
         },
-        methods: {
-            cancel() {
-                //触摸到遮罩层就取消本组件
-                this.$emit('cancel');
-            },
-            build() {
-                //告诉父组件创建新歌单
-                this.$emit('build');
-                //并取消自己
-            },
-            manage() {
-                //管理歌单  子提醒父组件再通知其他子组件
-                this.$emit('manage');
-            }
-        },
+        manage () {
+                // 管理歌单  子提醒父组件再通知其他子组件
+          this.$emit('manage')
+        }
+      }
     }
 </script>
 

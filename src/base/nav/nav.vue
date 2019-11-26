@@ -16,20 +16,20 @@
 
 <script>
   import {serializeNumber} from '../../assets/js/number'
-    export default {
-        name: "nav.vue",
+  export default {
+    name: 'nav.vue',
         // data(){
         //     return {
         //         result: this.result
         //     }
         // },
-        props: {
-            result:{
-                type:Array,
-                default:[],
-                required:true
-            }
-        },
+    props: {
+      result: {
+        type: Array,
+        default: [],
+        required: true
+      }
+    },
         // created(){
         //     this.serializeNumber()
         // },
@@ -53,15 +53,15 @@
         //         })
         //     }
         // },
-        watch:{
-          result(val){
-               for(let i=0;i<val.length;i++){
-                 val[i].playCount = serializeNumber(val[i].playCount)
-              }
-              // console.log(this.result)
-          }
+    watch: {
+      result (val) {
+        for (let i = 0; i < val.length; i++) {
+          val[i].playCount = serializeNumber(val[i].playCount)
         }
+              // console.log(this.result)
+      }
     }
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
