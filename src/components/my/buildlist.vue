@@ -74,7 +74,6 @@
             },
             cancel(e) {
                 //触摸到遮罩层就取消本组件
-                console.log(e);
                 this.$emit('cancel');
                 this.value = ''; //清空内容
             },

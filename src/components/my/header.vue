@@ -2,7 +2,8 @@
   <my-header class="header">
     <i class="iconfont iconlive" slot="left" @click="cloud"></i>
     <div slot="center" class="music">我的音乐</div>
-    <i class="iconfont iconyinletiaodongzhuangtai" slot="right" @click="music"></i>
+    <i class="iconfont iconyinletiaodongzhuangtai" slot="right" @click="music" v-show="iscomplete"></i>
+    <span @click="complete" v-show="!iscomplete" slot="right">完成</span>
   </my-header>
 </template>
 
@@ -16,7 +17,7 @@
         },
         data(){
             return {
-
+                iscomplete:true
             }
         },
         methods: {
@@ -25,6 +26,14 @@
             },
             music() {
 
+            },
+            ischange() {
+                this.iscomplete = false;
+            },
+            complete() {
+              //点击完成，其他归位
+                this.iscomplete = true;
+                this.$emit('complete');
             }
         }
     }
@@ -36,5 +45,7 @@
 
     .music
       font-size:$font-size-medium-x
-
+    span
+      color:gray
+      font-size:$font-size-medium-x
 </style>
