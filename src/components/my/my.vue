@@ -1,39 +1,30 @@
 <template>
   <div class="my">
     <my-header ref="change" @complete="complete"></my-header>
+    <my-nav class="my-nav"></my-nav>
 
-    <div class="nav-scroll-list-wrap">
-      <cube-scroll
-        ref="navScroll"
-        direction="horizontal"
-        :options="options"
-        class="horizontal-scroll-list-wrap"
-      >
-        <ul class="nav-wrapper">
-          <li v-for="(item, index) in navTxts" :key="index" class="nav-item">
-            <router-link to="/find" tab="div">
-              <div class="item-top">
-                <i></i>
-              </div>
-              <div class="item-bottom">
-                {{ item }}
-              </div>
-            </router-link>
-          </li>
-        </ul>
-      </cube-scroll>
-    </div>
-
-<!--    <div class="content-scroll-wrapper">-->
-<!--      <div class="content-scroll-list-wrap" ref="scrollWrapper">-->
-<!--        <cube-scroll-->
-<!--          ref="contentScroll"-->
-<!--          :data="content"-->
-<!--          :options="options"-->
-<!--          >-->
-<!--        </cube-scroll>-->
-<!--      </div>-->
+<!--    <div class="nav-scroll-list-wrap">-->
+<!--      <cube-scroll-->
+<!--        ref="navScroll"-->
+<!--        direction="horizontal"-->
+<!--        :options="options"-->
+<!--        class="horizontal-scroll-list-wrap"-->
+<!--      >-->
+<!--        <ul class="nav-wrapper">-->
+<!--          <li v-for="(item, index) in navTxts" :key="index" class="nav-item">-->
+<!--            <router-link to="/find" tab="div">-->
+<!--              <div class="item-top">-->
+<!--                <i></i>-->
+<!--              </div>-->
+<!--              <div class="item-bottom">-->
+<!--                {{ item }}-->
+<!--              </div>-->
+<!--            </router-link>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </cube-scroll>-->
 <!--    </div>-->
+
 
     <my-music class="mu-music"></my-music>
     <play-list
@@ -69,6 +60,7 @@
     const txts = ['爵士电台', '最嗨电音', 'ACG专区', '古典专区', '爵士电台', '最嗨电音', 'ACG专区', '古典专区',  '爵士电台', '最嗨电音', 'ACG专区', '古典专区','cube-ui666']
 
     import myHeader from './header'
+    import myNav from "./mynav";
     import myMusic from "./mymusic"
     import playList from "./playlist"
     import buildList from "./buildlist"
@@ -79,6 +71,7 @@
         name: "my.vue",
         components: {
             myHeader,
+            myNav,
             myMusic,
             playList,
             buildList,
@@ -202,46 +195,13 @@
     height:667px
     width:100%
     background-color:white
-    .nav-scroll-list-wrap
-      position:relative
-      top:60px
-      height:70px
-      overflow: hidden;
-      transform: rotate(0deg)
-      width:375px
-      .cube-scroll-content
-        display: inline-block
-        .nav-wrapper
-          display: inline-block
-          white-space: nowrap
-          padding: 0 10px
-          line-height: 70px
-          .nav-item
-            padding: 0 5px
-            display: inline-block
-            .item-top
-              /*display: inline-block*/
-              width:35px
-              height:35px
-              border-radius:50%
-              background-color:red
-              i
-                color:white
-                font-size:$font-size-medium-x
-            .item-bottom
-              /*display: inline-block*/
-              heigth:15px
-              width:60px
-              text-align:center
-              line-height:20px
-              font-size:$font-size-small-s
 
-  .cube-scroll-content
-    display: inline-block !important
+  /*.cube-scroll-content*/
+  /*  display: inline-block !important*/
 
   .mu-music
     position:absolute
-    top:130px
+    top:120px
   .create-list
     position:absolute
     top:330px
@@ -256,4 +216,13 @@
     bottom:0
     left:0
     right:0
+
+  .my-nav
+    width:375px
+    height:auto
+    position:absolute
+    top:50px
+    font-size:$font-size-small-s
+    i
+      font-size:$font-size-medium-x !important
 </style>

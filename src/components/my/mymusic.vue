@@ -68,7 +68,7 @@
     .li
       flex-between()
       height:50px
-      border-top:1px solid #DCDCDC
+      border-top:.5px solid rgba(128, 128, 128, 0.5)
       width:100%
       .li-left
         font-size:$font-size-medium-x
