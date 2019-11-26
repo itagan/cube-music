@@ -23,55 +23,55 @@
 
 <script>
     export default {
-        name: "code.vue",
-        data() {
-            return {
-                code: '',
-                phone:0,
-                time:60,
-                interval: ""
-            }
-        },
-        created() {
-            this.getPhone();
-        },
-        methods: {
-            //获取手机号码
-            getPhone() {
+      name: 'code.vue',
+      data () {
+        return {
+          code: '',
+          phone: 0,
+          time: 60,
+          interval: ''
+        }
+      },
+      created () {
+        this.getPhone()
+    },
+      methods: {
+            // 获取手机号码
+        getPhone () {
                 // return this.code;
-                this.phone = this.$route.params.phone;
-                console.log(this.phone)  //访问参数
-            },
+          this.phone = this.$route.params.phone
+          console.log(this.phone)  // 访问参数
+        },
             // 验证验证码
-            verification() {
-                this.$api.users.verifyCode(this.phone,this.code).then(res => {
-                    console.log(res);
-                    if(res.data.code === 200) {
-                        //登录成功
+        verification () {
+          this.$api.users.verifyCode(this.phone, this.code).then(res => {
+            console.log(res)
+            if (res.data.code === 200) {
+                        // 登录成功
                         // this.$router.push(
                         //     {
                         //         path:'/find'
                         //     }
                         // );
                         // return
-                        console.log('验证成功');
-                    }
+              console.log('验证成功')
+            }
 
-                    if(res.status === 503) {
-                        const toast = this.$createToast({
-                            time: 1000,
-                            txt: '验证码错误！',
-                            type: 'error',
-                        });
-                        toast.show();
-                    }
-                })
-            },
-            //输入的时候底部边框自动变黑色，删除就还原
+            if (res.status === 503) {
+              const toast = this.$createToast({
+                time: 1000,
+                txt: '验证码错误！',
+                type: 'error'
+              })
+              toast.show()
+            }
+          })
+        },
+            // 输入的时候底部边框自动变黑色，删除就还原
 
-            //自动倒计时
-            countdown() {
-                //参考网友……
+            // 自动倒计时
+        countdown () {
+                // 参考网友……
                 // let that = this;
                 // let interval = window.setInterval(function() {
                 //     that.interval = interval;
@@ -80,46 +80,45 @@
                 //     }
                 // }, 1000);
 
-                this.interval = window.setInterval(() => {
-                    if ((this.time--) <= 1) {
-                        clearInterval(this.interval);
-                    }
-                },1000)
-            },
-            back() {
-                //返回上一页
-                this.$router.back();
-                //清除定时器
-                clearInterval(this.interval)
+          this.interval = window.setInterval(() => {
+            if ((this.time--) <= 1) {
+              clearInterval(this.interval)
             }
+          }, 1000)
         },
-        watch: {
-            code(val) {
-                if(val.trim().length===4){
-                    this.verification();
-                }
-                let li = document.getElementsByTagName('li');
-                if(val.trim().length > 0) {
-                    li[val.trim().length - 1].classList.add('border');
-                    li[val.trim().length].classList.remove('border');
-                }
+        back () {
+                // 返回上一页
+          this.$router.back()
+            // 清除定时器
+          clearInterval(this.interval)
+        }
+      },
+      watch: {
+        code (val) {
+          if (val.trim().length === 4) {
+            this.verification()
+          }
+          let li = document.getElementsByTagName('li')
+          if (val.trim().length > 0) {
+            li[val.trim().length - 1].classList.add('border')
+            li[val.trim().length].classList.remove('border')
+          }
                 // if(li[0].innerHTML.length === 0) {
                 //     li[0].classList.remove('border');
                 //     console.log('0')
                 // }
 
-                //解决第1个样式不去除的问题以及产生的报错
-                if(!val) {
-                    li[0].classList.remove('border');
-                }
-            }
-        },
-        mounted() {
-            this.countdown();
+                // 解决第1个样式不去除的问题以及产生的报错
+          if (!val) {
+            li[0].classList.remove('border')
+          }
         }
-
+      },
+      mounted () {
+        this.countdown()
     }
 
+    }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

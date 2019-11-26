@@ -16,24 +16,24 @@
     import MyHeader from '../../base/navbar/navbar'
     import MySearch from '../../base/search/search'
     export default {
-        name: "header.vue",
-        components:{
-            MyHeader,
-            MySearch
-        },
-        data(){
-            return {
-                placeholder:'陈奕迅'
-            }
-        },
-        methods: {
-            getQuery(query) {
-                console.log(query)
-            },
-            goToSearch() {
-                this.$router.push('/my');
-            }
+      name: 'header.vue',
+      components: {
+        MyHeader,
+        MySearch
+      },
+      data () {
+        return {
+          placeholder: '陈奕迅'
         }
+      },
+      methods: {
+        getQuery (query) {
+          console.log(query)
+        },
+        goToSearch () {
+          this.$router.push('/my')
+        }
+      }
     }
 </script>
 

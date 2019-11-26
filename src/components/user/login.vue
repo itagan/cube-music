@@ -29,66 +29,65 @@
 
 <script>
     export default {
-        name: "login.vue",
-        data() {
-            return {
-                checked:false
-            }
-        },
-        methods: {
-            login() {
-                if(this.checked) {
-                    //下一步
-                    this.$router.push({
-                        path:'/login/phone'
-                    })
-                }else {
-                    //提醒下
-                    this.toast = this.$createToast({
-                        time: 2000,
-                        txt: '请先勾选霸王条款哈~',
-                        type: 'txt'
-                    });
-                    this.toast.show();
-                    this.$refs.shaky.classList.add('shaky');
-
-                    setTimeout(() => {
-                        this.$refs.shaky.classList.remove('shaky');
-                    },1000);
-
-                }
-            },
-            experience() {
-                if(this.checked) {
-                    //下一步
-                    this.$router.push({
-                        path:'/login/phone'
-                    })
-                }else {
-                    //提醒下
-                    this.toast = this.$createToast({
-                        time: 2000,
-                        txt: '请先勾选霸王条款哈~',
-                        type: 'txt'
-                    });
-                    this.toast.show();
-                    this.$refs.shaky.classList.add('shaky');
-
-                    setTimeout(() => {
-                        this.$refs.shaky.classList.remove('shaky');
-                    },1000);
-                }
-            },
-            check() {
-                this.checked = !this.checked;
-                if(this.checked === true) {
-                    this.$refs.shaky.classList.remove('shaky');
-                }
-            }
-        },
-        destroyed() {
-            this.checked = false;
+      name: 'login.vue',
+      data () {
+        return {
+          checked: false
         }
+      },
+      methods: {
+        login () {
+          if (this.checked) {
+                    // 下一步
+            this.$router.push({
+              path: '/login/phone'
+            })
+          } else {
+                    // 提醒下
+            this.toast = this.$createToast({
+              time: 2000,
+              txt: '请先勾选霸王条款哈~',
+              type: 'txt'
+            })
+            this.toast.show()
+            this.$refs.shaky.classList.add('shaky')
+
+            setTimeout(() => {
+              this.$refs.shaky.classList.remove('shaky')
+            }, 1000)
+          }
+        },
+        experience () {
+          if (this.checked) {
+                    // 下一步
+            this.$router.push({
+              path: '/login/phone'
+            })
+          } else {
+                    // 提醒下
+            this.toast = this.$createToast({
+              time: 2000,
+              txt: '请先勾选霸王条款哈~',
+              type: 'txt'
+            })
+            this.toast.show()
+            this.$refs.shaky.classList.add('shaky')
+
+            setTimeout(() => {
+              this.$refs.shaky.classList.remove('shaky')
+            }, 1000)
+          }
+        },
+        check () {
+          this.checked = !this.checked
+          if (this.checked === true) {
+            this.$refs.shaky.classList.remove('shaky')
+          }
+        }
+      },
+      destroyed () {
+        this.checked = false
+    }
     }
 </script>
 

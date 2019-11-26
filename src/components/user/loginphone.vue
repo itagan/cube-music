@@ -23,87 +23,89 @@
 
 <script>
     export default {
-        name: "loginphone.vue",
-        data() {
-            return {
-                value: '',
-                placeholder:'输入手机号',
-                autofocus:true,
-                clearable: {
-                    visible: true,
-                    blurHidden: true
-                },
-                disabled:false,
-                status:0
-            }
+      name: 'loginphone.vue',
+      data () {
+        return {
+          value: '',
+          placeholder: '输入手机号',
+          autofocus: true,
+          clearable: {
+            visible: true,
+            blurHidden: true
+          },
+          disabled: false,
+          status: 0
+        }
+      },
+      methods: {
+            // 发送验证码
+        sendCode (phonenumber) {
+          this.$api.users.sendCode(phonenumber).then(res => {
+            console.log(res)
+            this.status = res.status
+          })
         },
-        methods: {
-            //发送验证码
-            sendCode(phonenumber) {
-                this.$api.users.sendCode(phonenumber).then(res => {
-                    console.log(res)
-                    this.status = res.status;
-                })
-            },
-            input(val) {
-                //输入中
-                if(val.length > 0) {
-                    document.getElementsByClassName('next')[0].style.opacity = 1
-                }else {
-                    document.getElementsByClassName('next')[0].style.opacity = 0.2
-                }
+        input (val) {
+                // 输入中
+          if (val.length > 0) {
+            document.getElementsByClassName('next')[0].style.opacity = 1
+          } else {
+            document.getElementsByClassName('next')[0].style.opacity = 0.2
+          }
+        },
+        next () {
+          if (this.value.length === 0) {
+            this.disabled = true
+            return
+          } else {
+            this.disabled = false
+          }
 
-            },
-            next() {
-                if(this.value.length === 0) {
-                    this.disabled = true;
-                    return
-                }else {
-                    this.disabled = false;
-                }
-
-                //提示方法
-                const toast = msg => {
-                    this.$createToast({
-                        time: 1000,
-                        txt: msg,
-                        type: 'error',
-
-                    });
-                };
-                //判断手机号
-                if(this.value.length === 11){
+                // 提示方法
+                // const toast = msg => {
+                //     this.$createToast({
+                //         time: 1000,
+                //         txt: msg,
+                //         type: 'error',
+                //     });
+                // };
+          const toast = this.$createToast({
+            time: 1000,
+            txt: '手机号应该是11位数字！',
+            type: 'error'
+          })
+            // 判断手机号
+          if (this.value.length === 11) {
                     // toast.show();
 
-                    //密码登录
-                    this.$router.push({
-                        path:`/login/cellphone/${this.value}`
-                    });
+                    // 密码登录
+            this.$router.push({
+              path: `/login/cellphone/${this.value}`
+            })
 
-                    //调用接口
-                    // this.sendCode(this.value);
-                    if(this.status === 200) {
-                        //验证码登录
-                        this.$router.push({
-                            path:`/login/phone/${this.value}`
-                        });
-
-                    }else {
-                        //密码登录
-                        this.$router.push({
-                            path:`/login/cellphone/${this.value}`
-                        });
-                    }
-
-                }else {
-                    toast.show('手机号应该是11位数字');
-                }
-            },
-            back() {
-                //返回上一页
-                this.$router.back();
-            }
+                // 调用接口验证码登录
+                // this.sendCode(this.value);
+                // if(this.status === 200) {
+                //     //验证码登录
+                //     this.$router.push({
+                //         path:`/login/phone/${this.value}`
+                //     });
+                //
+                // }else {
+                //     //密码登录
+                //     this.$router.push({
+                //         path:`/login/cellphone/${this.value}`
+                //     });
+                // }
+          } else {
+            toast.show()
+          }
+        },
+        back () {
+                // 返回上一页
+          this.$router.back()
         }
+      }
     }
 </script>
 

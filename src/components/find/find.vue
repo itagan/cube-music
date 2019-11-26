@@ -17,15 +17,15 @@
     import FindNew from './newsong'
     import FindVideos from './videos'
     export default {
-        name: "find.vue",
-        components: {
-            FindHeader,
-            FindSlider,
-            FindNav,
-            FindRecommend,
-            FindNew,
-            FindVideos
-        },
+      name: 'find.vue',
+      components: {
+        FindHeader,
+        FindSlider,
+        FindNav,
+        FindRecommend,
+        FindNew,
+        FindVideos
+      }
 
     }
 </script>

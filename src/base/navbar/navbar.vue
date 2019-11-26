@@ -17,14 +17,14 @@
 
 <script>
     export default {
-        name: "navbar.vue",
-        props:{
-            //考虑到头部可能会需要传入值
-            title:{
-                type:String,
-                default:''
-            }
+      name: 'navbar.vue',
+      props: {
+            // 考虑到头部可能会需要传入值
+        title: {
+          type: String,
+          default: ''
         }
+      }
     }
 </script>
 

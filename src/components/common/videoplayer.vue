@@ -746,154 +746,154 @@
 <script type="text/ecmascript-6">
     import {mapGetters, mapMutations} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
-    import {timestamp,durationms} from '../../assets/js/timestamp'
-    import recommendSwiper from "../../base/swiper/recommendSwiper";
-    import Comment from './comment'
-    import newComment from "./newcomment";
-    import hotComment from "./hotcomment";
+    import {timestamp, durationms} from '../../assets/js/timestamp'
+    import recommendSwiper from '../../base/swiper/recommendSwiper'
+import Comment from './comment'
+    import newComment from './newcomment'
+import hotComment from './hotcomment'
 
-    export default {
-        inject:['reload'],
-        data() {
-            return {
-                scrollY: 0,
+export default {
+      inject: ['reload'],
+      data () {
+        return {
+          scrollY: 0,
                 // checkTop: false,
-                detail:{},
-                videourl:'',
-                videourls:'',
-                show:true,
-                descshow:false,//是否显示描述
-                allshow:true, //是否显示全部精彩评论
-                commit:true,//是否显示底部评论功能
-                totop:false, //右下角回到顶部功能
-                scrollEvents: ['scroll','before-scroll-start'],
+          detail: {},
+          videourl: '',
+          videourls: '',
+          show: true,
+          descshow: false, // 是否显示描述
+          allshow: true, // 是否显示全部精彩评论
+          commit: true, // 是否显示底部评论功能
+          totop: false, // 右下角回到顶部功能
+          scrollEvents: ['scroll', 'before-scroll-start'],
                 // scrollEvents: ['scroll','scrollStart'],//多个事件的话这里数组写。
 
-                pullUpLoad: true,
-                pullUpLoadThreshold: 0,
-                pullUpLoadMoreTxt: '加载中…………',
-                pullUpLoadNoMoreTxt: '没有更多数据了~',
+          pullUpLoad: true,
+          pullUpLoadThreshold: 0,
+          pullUpLoadMoreTxt: '加载中…………',
+          pullUpLoadNoMoreTxt: '没有更多数据了~',
 
-                loadisshow:false, //上拉加载是否显示,数据全部加载完则不显示了
-                limits:20, //传给子组件需要显示的评论数量
-                swipeHeight:0,//子组件recommentswiper的高度
-                titleHeight:35,//标题高度
+          loadisshow: false, // 上拉加载是否显示,数据全部加载完则不显示了
+          limits: 20, // 传给子组件需要显示的评论数量
+          swipeHeight: 0, // 子组件recommentswiper的高度
+          titleHeight: 35, // 标题高度
 
-                wrapShow:true, //遮罩层显示
-                currentTimeShow:false,//显示播放时间进度
-                controlBtn:false, //进度按钮
-                fullscreen:false,//是否全屏
-                plays:false,//播放或暂停按钮显示出来
-                play:true, //播放和暂停按钮切换
-                currentTime:`00:00`, //播放进度时间
-                isPlay:true,
+          wrapShow: true, // 遮罩层显示
+          currentTimeShow: false, // 显示播放时间进度
+          controlBtn: false, // 进度按钮
+          fullscreen: false, // 是否全屏
+          plays: false, // 播放或暂停按钮显示出来
+          play: true, // 播放和暂停按钮切换
+          currentTime: `00:00`, // 播放进度时间
+          isPlay: true,
 
-                speedWidth:0,
-                durationms:0,//视频播放总时间
-                currentDuration:[{},{}], //存放前后播放视频的播放进度
-                durationHistory:[], //存放本视频流页面前后视频播放进度的历史记录
+          speedWidth: 0,
+          durationms: 0, // 视频播放总时间
+          currentDuration: [{}, {}], // 存放前后播放视频的播放进度
+          durationHistory: [] // 存放本视频流页面前后视频播放进度的历史记录
 
+        }
+      },
+      components: {
+        recommendSwiper,
+        Comment,
+        newComment,
+        hotComment
+      },
+      computed: {
+        icon () {
+          return this.show ? 'iconzan1' : 'iconduoren'
+        },
+        ...mapGetters([
+          'currentVid',
+          'limit',
+          'back',
+          'currentUrl'
+        ]),
+        options () {
+          return {
+            pullUpLoad: this.pullUpLoadObj,
+            scrollbar: true
+          }
+        },
+        pullUpLoadObj: function () {
+          return this.pullUpLoad ? {
+            threshold: parseInt(this.pullUpLoadThreshold),
+            txt: {
+              more: this.pullUpLoadMoreTxt,
+              noMore: this.pullUpLoadNoMoreTxt
             }
-        },
-        components: {
-            recommendSwiper,
-            Comment,
-            newComment,
-            hotComment
-        },
-        computed:{
-            icon(){
-                return this.show ? 'iconzan1' : 'iconduoren'
-            },
-            ...mapGetters([
-                'currentVid',
-                'limit',
-                'back',
-                'currentUrl'
-            ]),
-            options() {
-                return {
-                    pullUpLoad: this.pullUpLoadObj,
-                    scrollbar: true,
-                }
-            },
-            pullUpLoadObj: function() {
-                return this.pullUpLoad ? {
-                    threshold: parseInt(this.pullUpLoadThreshold),
-                    txt: {
-                        more: this.pullUpLoadMoreTxt,
-                        noMore: this.pullUpLoadNoMoreTxt
-                    }
-                } : false
-            },
-        },
+          } : false
+        }
+      },
         // beforeCreate() {
         //     //刚进入新页面应该重置vuex避免获取渲染错误数据
         //     this.setLimit(20);
         // },
-        created() {
-            this.getvVideoUrl();
-            //
-            this.getVideo();
-            // this.$nextTick(() => {
+      created () {
+        this.getvVideoUrl()
+        //
+        this.getVideo()
+        // this.$nextTick(() => {
+        //     this.getHeight();
+        // })
+        // this.commentBack()
+    },
+      methods: {
+        scrollHandler ({ y }) {
+          this.scrollY = -y
+            // console.log(this.scrollY);
+          let heights = this.titleHeight + this.swipeHeight + 45 - 328
+          this.totop = this.scrollY > heights
+            // if(this.scrollY){
             //     this.getHeight();
-            // })
-            // this.commentBack()
+            // }
         },
-        methods: {
-            scrollHandler({ y }) {
-                this.scrollY = -y;
-                // console.log(this.scrollY);
-                let heights = this.titleHeight + this.swipeHeight + 45 - 328;
-                this.totop = this.scrollY > heights;
-                // if(this.scrollY){
-                //     this.getHeight();
-                // }
-            },
-            scrollStartHandler() {
-                this.getHeight();
-                // console.log(this.titleHeight);
-                // console.log(this.swipeHeight);
-            },
-            onPullingUp() {
-                //滚动上拉加载的时候派发事件给子组件：告知limit新数据
-                this.limits = this.limit + +10;
-                // console.log(this.limits);
-            },
-            newlimits(has) {
-                if(has){
-                    this.loadisshow = true;
-                    this.$refs.scroll.forceUpdate();
-                    //再把新数据设置到vuex
-                    this.setLimit(this.limits);
-                }else {
-                    this.$refs.scroll.forceUpdate();
-                    //决定上拉加载效果是否显示出来
-                    this.loadisshow = false;
-                }
-            },
-            getVideo() {
-                if(!this.currentVid) {
-                    this.$router.push(`/find`);
-                    return
-                }
+        scrollStartHandler () {
+          this.getHeight()
+            // console.log(this.titleHeight);
+            // console.log(this.swipeHeight);
+        },
+        onPullingUp () {
+                // 滚动上拉加载的时候派发事件给子组件：告知limit新数据
+          this.limits = this.limit + +10
+            // console.log(this.limits);
+        },
+        newlimits (has) {
+          if (has) {
+            this.loadisshow = true
+            this.$refs.scroll.forceUpdate()
+                // 再把新数据设置到vuex
+            this.setLimit(this.limits)
+          } else {
+            this.$refs.scroll.forceUpdate()
+                // 决定上拉加载效果是否显示出来
+            this.loadisshow = false
+          }
+        },
+        getVideo () {
+          if (!this.currentVid) {
+            this.$router.push(`/find`)
+            return
+          }
 
-                this.$api.video.video(this.currentVid).then(res => {
+          this.$api.video.video(this.currentVid).then(res => {
                     // this.setLimit(20); //重置vuex
-                    this.detail = res.data.data;
-                    this.detail.playTime = serializeNumber(res.data.data.playTime);
-                    this.detail.publishTime = timestamp(this.detail.publishTime);
-                    this.detail.durationms = durationms(this.detail.durationms);
+            this.detail = res.data.data
+            this.detail.playTime = serializeNumber(res.data.data.playTime)
+            this.detail.publishTime = timestamp(this.detail.publishTime)
+            this.detail.durationms = durationms(this.detail.durationms)
 
-                    console.log(this.detail);
-                })
-            },
-            //获取播放地址
-            getvVideoUrl() {
-                this.$api.video.videourl(this.currentVid).then(res => {
-                    this.videourls = res.data.urls[0].url;
-                    console.log(this.videourl);
-                })
+            console.log(this.detail)
+          })
+        },
+            // 获取播放地址
+        getvVideoUrl () {
+          this.$api.video.videourl(this.currentVid).then(res => {
+            this.videourls = res.data.urls[0].url
+            console.log(this.videourl)
+          })
 
                 // this.$api.video.videolist(this.currentVid).then((res) => {
                 //     this.videos = res.data.datas;
@@ -904,219 +904,213 @@
                 //     // console.log(this.videos)
                 //     this.videourl =  this.videos[0].data.urlInfo.url;
                 // })
-            },
-            //展开还是隐藏视频描述等
-            toggle() {
-                if(this.show) {
-                    this.show = false;
-                    this.descshow = true;
-                    this.$refs.setHeight.style.height = 'auto'
-                }else {
-                    this.show = true;
-                    this.descshow = false;
-                    this.$refs.setHeight.style.height = '35px'
-                }
-            },
-            recommendvideo(vid) {
-                this.getVideo();
-                this.getvVideoUrl();
-                this.reload(); //刷新本页面
-                // this.$nextTick( this.getVideo())
-                //把vuex的数据还原
-                this.setLimit(20);
-                this.limits = 20;
-                this.setCommentBack(false);
-                //刷新后重置
-                this.show = true;
-                this.descshow = false;
-                this.$refs.setHeight.style.height = '35px'
-            },
-            //显示全部精彩评论
-            allhotshow() {
-                this.$refs.allhotcomment.show();
-                // setTimeout( ()=>{
-                //     this.$refs.allhotcomment.getHotcomment();
-                // },2000);
-                setTimeout( ()=> {
-                    this.$refs.allhotcomment.getHotcomment();
-                    this.commit = false;
-                    this.allshow = false;
-                },300);
-            },
-            //子组件提醒父组件
-            isshow() {
-                this.commit = true;
-                this.allshow = true;
-            },
-            //评论返回顶部
-            backtop() {
-                this.$refs.scroll.scrollTo(0,0,200);
-                //this.$refs.scroll.scrollToElement('.title', 200);其它方式，除了css还可以ref引用this.$refs.tohere
-
-            },
-            //评论区上升
-            commentTop() {
+        },
+            // 展开还是隐藏视频描述等
+        toggle () {
+          if (this.show) {
+            this.show = false
+            this.descshow = true
+            this.$refs.setHeight.style.height = 'auto'
+          } else {
+            this.show = true
+            this.descshow = false
+            this.$refs.setHeight.style.height = '35px'
+          }
+        },
+        recommendvideo (vid) {
+          this.getVideo()
+          this.getvVideoUrl()
+          this.reload() // 刷新本页面
+            // this.$nextTick( this.getVideo())
+            // 把vuex的数据还原
+          this.setLimit(20)
+          this.limits = 20
+          this.setCommentBack(false)
+            // 刷新后重置
+          this.show = true
+          this.descshow = false
+          this.$refs.setHeight.style.height = '35px'
+        },
+            // 显示全部精彩评论
+        allhotshow () {
+          this.$refs.allhotcomment.show()
+            // setTimeout( ()=>{
+            //     this.$refs.allhotcomment.getHotcomment();
+            // },2000);
+          setTimeout(() => {
+            this.$refs.allhotcomment.getHotcomment()
+            this.commit = false
+            this.allshow = false
+          }, 300)
+        },
+            // 子组件提醒父组件
+        isshow () {
+          this.commit = true
+          this.allshow = true
+        },
+            // 评论返回顶部
+        backtop () {
+          this.$refs.scroll.scrollTo(0, 0, 200)
+            // this.$refs.scroll.scrollToElement('.title', 200);其它方式，除了css还可以ref引用this.$refs.tohere
+        },
+            // 评论区上升
+        commentTop () {
                 // this.$refs.scroll.scrollTo(0,-515,200);
                 // this.$refs.tohere 测试发现自定义子组件不能用这个方式，而该用css引用dom
-                this.$refs.scroll.scrollToElement('.here', 200,0,-50);
-            },
-            tagBacktop() {
-                let heights = this.titleHeight + this.swipeHeight + 45 - 323;
-                if(this.scrollY > heights) {
-                    this.backtop()
+          this.$refs.scroll.scrollToElement('.here', 200, 0, -50)
+        },
+        tagBacktop () {
+          let heights = this.titleHeight + this.swipeHeight + 45 - 323
+          if (this.scrollY > heights) {
+            this.backtop()
                     // this.commentTop()
-                }else {
-                    this.commentTop()
-                }
-            },
-            //子组件通知父组件swipe数量并得出该组件高度
-            swipeNum(num) {
-                this.swipeHeight = 15 + num * 60 + num * 10;
-            },
-            //获取高度
-            getHeight() {
+          } else {
+            this.commentTop()
+          }
+        },
+            // 子组件通知父组件swipe数量并得出该组件高度
+        swipeNum (num) {
+          this.swipeHeight = 15 + num * 60 + num * 10
+        },
+            // 获取高度
+        getHeight () {
                 // let heights = this.$refs.getSwipeHeight.height;
                 // let height= this.$refs.element.offsetHeight
 
                 // console.log(height)
-                this.$refs.getNum.getLength();
-                this.titleHeight = this.$refs.titleHeight.offsetHeight; //标题class.title高度
-                // let num = this.$refs.getNum.offsetHeight; //获取失败
-                // console.log(num)
-            },
-            //某些时候打开本页面需要评论区提前展示
-            commentBack() {
+          this.$refs.getNum.getLength()
+          this.titleHeight = this.$refs.titleHeight.offsetHeight // 标题class.title高度
+            // let num = this.$refs.getNum.offsetHeight; //获取失败
+            // console.log(num)
+        },
+            // 某些时候打开本页面需要评论区提前展示
+        commentBack () {
                 // 从vuex拿数据决定是否提前展示
-                if(this.back) {
-                    this.commentTop()
-                }
-            },
-            updateTime (e) {
-                this.currentTime = e.target.currentTime; // 播放的时候派发事件，能够获得当前时间 ***注意写法
+          if (this.back) {
+            this.commentTop()
+          }
+        },
+        updateTime (e) {
+          this.currentTime = e.target.currentTime // 播放的时候派发事件，能够获得当前时间 ***注意写法
 
-                this.speedWidth = this.percent * 345;
-            },
-            Durationms(durationms){
+          this.speedWidth = this.percent * 345
+        },
+        Durationms (durationms) {
                 // 对时间戳进行转化为分秒
                 // durationms = durationms / 1000;//转换为多少秒  本身播放当前时间为秒
-                durationms = durationms | 0; // 互零操作符，一个正数向下取整 相当于Math.floor方法
-                let  minute = durationms / 60 | 0;
-                minute = minute < 10 ? '0' + minute : minute;
-                // let second = _pad(durationms) % 60;
-                let second = durationms % 60;
-                second = second < 10 ? '0' + second : second;// 秒数前面补零操作
-                return `${minute}:${second}`;
-            },
-            playVideo() {
-                //点击后才加载视频，并开启音量，才能播放。
-                this.videourl = this.currentUrl;
-                // this.videourl = this.videourls;
-                //该视频未显示播放进度情况下（非暂停状态），点击容器可播放视频
-                // this.$refs.video.play() ***
-                this.videoDom = this.$refs.video;
-                this.videoDom.muted = false;
-                // this.videoDom = document.getElementById('video');
-                this.durationms = this.videoDom.duration;
+          durationms = durationms | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
+          let minute = durationms / 60 | 0
+          minute = minute < 10 ? '0' + minute : minute
+            // let second = _pad(durationms) % 60;
+          let second = durationms % 60
+          second = second < 10 ? '0' + second : second// 秒数前面补零操作
+          return `${minute}:${second}`
+        },
+        playVideo () {
+                // 点击后才加载视频，并开启音量，才能播放。
+          this.videourl = this.currentUrl
+            // this.videourl = this.videourls;
+            // 该视频未显示播放进度情况下（非暂停状态），点击容器可播放视频
+            // this.$refs.video.play() ***
+          this.videoDom = this.$refs.video
+          this.videoDom.muted = false
+            // this.videoDom = document.getElementById('video');
+          this.durationms = this.videoDom.duration
 
-                //播放或暂停的时候进度按钮显示
-                this.controlBtn = true;
-                //播放总长度变成全屏按钮
-                this.fullscreen = true;
-                //中间播放按钮或暂停按钮是否显示
-                this.plays = true;
-                //播放按钮变暂停按钮
-                this.play = false;
-                //播放时间进度显示
-                this.currentTimeShow = true;
+            // 播放或暂停的时候进度按钮显示
+          this.controlBtn = true
+            // 播放总长度变成全屏按钮
+          this.fullscreen = true
+            // 中间播放按钮或暂停按钮是否显示
+          this.plays = true
+            // 播放按钮变暂停按钮
+          this.play = false
+            // 播放时间进度显示
+          this.currentTimeShow = true
 
+            // 该视频是否播放
+          if (this.isPlay) {
+            this.videoDom.pause()
+                // 标志位
+            this.isPlay = false
+                // this.activeIndex = -1;
+            this.countTime = false
+                // 暂停按钮变播放按钮
+            this.play = true
+            this.currentTime = this.videoDom.currentTime
 
-                // 该视频是否播放
-                if(this.isPlay) {
-                    this.videoDom.pause();
-                    //标志位
-                    this.isPlay =  false;
-                    // this.activeIndex = -1;
-                    this.countTime = false;
-                    //暂停按钮变播放按钮
-                    this.play = true;
-                    this.currentTime = this.videoDom.currentTime;
+                // if(i !== -1){
+                //     //原来就存在的话，那就把它替换为新播放进度
+                //     this.currentDuration[i][index] = videoDams[index].currentTime;
+                // }else {
+                //
+                //     if(this.currentDuration.length >=  2) {
+                //         this.currentDuration.splice(0,1);//删除第1个
+                //         this.currentDuration.push(obj);//再把新的推进来
+                //
+                //     }else {
+                //         // this.currentDuration.splice(0,1);//删除第1个
+                //         this.currentDuration.push(obj);
+                //     }
+                // }
 
-                    // if(i !== -1){
-                    //     //原来就存在的话，那就把它替换为新播放进度
-                    //     this.currentDuration[i][index] = videoDams[index].currentTime;
-                    // }else {
-                    //
-                    //     if(this.currentDuration.length >=  2) {
-                    //         this.currentDuration.splice(0,1);//删除第1个
-                    //         this.currentDuration.push(obj);//再把新的推进来
-                    //
-                    //     }else {
-                    //         // this.currentDuration.splice(0,1);//删除第1个
-                    //         this.currentDuration.push(obj);
-                    //     }
-                    // }
+                // //从vuex获取播放进度时间并给对应视频设置播放进度
+                // 把当前视频的播放进度提交vuex
+                // this.setVideoCurrentTime(this.currentTime);
+                // let arr = [index + ":" + this.currentTime]
+                // this.setCurrentTimes({
+                //     // index,
+                //     videoCurrentTime:this.currentTime
+                //     // videoCurrentTime:arr
+                // });
+                //* **不从vuex获取***//
+                // 当该视频开启了播放，即使之后暂停。其它视频统统还原状态。仅仅保存上一条播放的进度。其它重置。
 
-
-                    // //从vuex获取播放进度时间并给对应视频设置播放进度
-                    //把当前视频的播放进度提交vuex
-                    // this.setVideoCurrentTime(this.currentTime);
-                    // let arr = [index + ":" + this.currentTime]
-                    // this.setCurrentTimes({
-                    //     // index,
-                    //     videoCurrentTime:this.currentTime
-                    //     // videoCurrentTime:arr
-                    // });
-                    //***不从vuex获取***//
-                    //当该视频开启了播放，即使之后暂停。其它视频统统还原状态。仅仅保存上一条播放的进度。其它重置。
-
-                    //让进度数组的数据显示在两个最近播放的视频上面，而不被重置。解决Bug:避免当没被手动暂停时候去播放其它而重置该播放时间
-                }else {
-                    //从vuex获取播放进度时间并给对应视频设置播放进度
+                // 让进度数组的数据显示在两个最近播放的视频上面，而不被重置。解决Bug:避免当没被手动暂停时候去播放其它而重置该播放时间
+          } else {
+                    // 从vuex获取播放进度时间并给对应视频设置播放进度
                     // this.currentTime = this.videoCurrentTime[0];
                     // videoDams[index].currentTime = this.videoCurrentTime;
-                    this.videoDom.play();
-                    //标志位播放
-                    this.isPlay = true;
-                    //播放的时候视频顶部显示切换
-                    setTimeout(() => {
-                        //底部播放或暂停的时候进度按钮显示
-                        this.controlBtn = false;
-                        // //中间播放按钮变暂停按钮
-                        this.plays = false;
-                        //左下角播放量或者进度是否显示
-                        //播放进度
-                        this.currentTimeShow = false;
-                        //播放按钮变暂停按钮
-                        this.play = true;
-                        //中间播放按钮或暂停按钮是否显示
-                        this.plays = false;
-                    },3000);
-
-
-                }
-                this.speedWidth = this.percent * 345;
-            },
-
-
-            ...mapMutations({
-                setLimit:'SET_LIMIT',
-                setCommentBack:'SET_BACK'
-            })
+            this.videoDom.play()
+                // 标志位播放
+            this.isPlay = true
+                // 播放的时候视频顶部显示切换
+            setTimeout(() => {
+                        // 底部播放或暂停的时候进度按钮显示
+              this.controlBtn = false
+                    // //中间播放按钮变暂停按钮
+              this.plays = false
+                    // 左下角播放量或者进度是否显示
+                    // 播放进度
+              this.currentTimeShow = false
+                    // 播放按钮变暂停按钮
+              this.play = true
+                    // 中间播放按钮或暂停按钮是否显示
+              this.plays = false
+            }, 3000)
+          }
+          this.speedWidth = this.percent * 345
         },
-        mounted() {
-            //确保DOM结构渲染完成才能滚动。延时确保滚动结构距离正常
-            this.$nextTick(() => {
+
+        ...mapMutations({
+          setLimit: 'SET_LIMIT',
+          setCommentBack: 'SET_BACK'
+        })
+      },
+      mounted () {
+            // 确保DOM结构渲染完成才能滚动。延时确保滚动结构距离正常
+        this.$nextTick(() => {
                 // this.commentBack();
-                setTimeout(() => {
-                    this.commentBack();
-                },1000)
+          setTimeout(() => {
+            this.commentBack()
+          }, 1000)
                 // this.setCommentBack(false);
-            })
-        },
-        destroyed() {
-            //销毁本页面时候，把vuex的一些重置
-            this.setCommentBack(false);
-        }
+        })
+      },
+      destroyed () {
+            // 销毁本页面时候，把vuex的一些重置
+        this.setCommentBack(false)
+    }
 
     }
 </script>

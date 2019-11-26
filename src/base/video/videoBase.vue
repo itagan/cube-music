@@ -224,64 +224,62 @@
     import {serializeNumber} from '../../assets/js/number'
     import {durationms} from '../../assets/js/timestamp'
 
-
     export default {
-        name: "videoBase.vue",
-        data() {
-            return {
-                videos:this.videos,
-                show:true
-            }
-        },
-        props: {
-            videos:{
-                type:Array,
-                required:true
-            }
-        },
-        watch: {
-            videos(val) {
-                for(let i=0;i<val.length;i++){
-                    val[i].data.playTime = serializeNumber(val[i].data.playTime)
-                    val[i].data.durationms = durationms(val[i].data.durationms)
-                }
-            }
-        },
-        methods:{
-            player() {
+      name: 'videoBase.vue',
+      data () {
+        return {
+          videos: this.videos,
+          show: true
+        }
+      },
+      props: {
+        videos: {
+          type: Array,
+          required: true
+        }
+      },
+      watch: {
+        videos (val) {
+          for (let i = 0; i < val.length; i++) {
+            val[i].data.playTime = serializeNumber(val[i].data.playTime)
+            val[i].data.durationms = durationms(val[i].data.durationms)
+          }
+        }
+      },
+      methods: {
+        player () {
                 // if(this.show) {
                 //     this.show = false
                 // }
-                this.show = !this.show
-
-            },
-            wonderfulVideo(vid) {
-                //去精彩视频页面并自动播放该视频
+          this.show = !this.show
+        },
+        wonderfulVideo (vid) {
+                // 去精彩视频页面并自动播放该视频
                 // this.$router.push({
                 //     path:`videoplayer`
                 // })
-            },
-            toPlayerDetail() {
+        },
+        toPlayerDetail () {
 
-            },
-            avatar() {
-                //去up主页
-            },
-            praisedCount() {
-                //点赞
-            },
-            details(vid) {
-                //视频详情页，自动把底部评论提前
-                this.$router.push({
-                    path:`videoplayer`
-                });
-                //把视频详情id发给父组件
-                this.$emit('videoEmit',vid)
-            },
-            more() {
-                //更多
-            },
+        },
+        avatar () {
+                // 去up主页
+        },
+        praisedCount () {
+                // 点赞
+        },
+        details (vid) {
+                // 视频详情页，自动把底部评论提前
+          this.$router.push({
+            path: `videoplayer`
+          })
+            // 把视频详情id发给父组件
+          this.$emit('videoEmit', vid)
+        },
+        more () {
+                // 更多
         }
+      }
 
     }
 </script>

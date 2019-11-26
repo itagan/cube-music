@@ -16,29 +16,29 @@
 <script>
   // import {find} from '../../api/api'
     export default {
-        data() {
-            return {
-                items: []
-            }
-        },
-        created() {
-            this.getSliders();
-        },
-        methods: {
-            changePage(current) {
-                // console.log('当前轮播图序号为:' + current)
-            },
-            clickHandler(item, index) {
-                // console.log(item, index)
-            },
-            getSliders() {
-                 this.$api.find.slide().then((res) => {
-                     this.items = res.data.banners;
-                     // console.log(res)
-                 });
-            }
-
+      data () {
+        return {
+          items: []
         }
+      },
+      created () {
+        this.getSliders()
+      },
+      methods: {
+        changePage (current) {
+                // console.log('当前轮播图序号为:' + current)
+        },
+        clickHandler (item, index) {
+                // console.log(item, index)
+        },
+        getSliders () {
+          this.$api.find.slide().then((res) => {
+            this.items = res.data.banners
+                   // console.log(res)
+          })
+        }
+
+      }
     }
 </script>
 

@@ -94,58 +94,58 @@
     import {durationms} from '../../assets/js/timestamp'
 
     export default {
-        name: "videos.vue",
-        data() {
-            return {
-                videos:[],
-            }
-        },
-        created() {
-            this.getVideos()
-        },
-        methods: {
-            getVideos() {
-                this.$api.video.videolist().then((res) => {
-                    this.videos = res.data.datas;
-                    for(let i=0;i<this.videos.length;i++){
-                        this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
-                        this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
-                    }
-                    // console.log(this.videos)
-                })
-            },
-            //这里代理actions，mapActions把它包装成类似函数调用的方式
-            ...mapActions([
-                'video',
-                'commentBack'
-            ]),
-            wonderfulVideo() {
-                this.commentBack({back:false});
-                //去精彩视频页面并自动播放该视频
-                // this.$router.push({
-                //     path:`videoplayer`
-                // })
-            },
-            avatar() {
-                //去up主页
-            },
-            praisedCount() {
-                //点赞
-            },
-            details(vid) {
-                //视频详情页，自动把底部评论提前
-                this.$router.push({
-                    path:`videoplayer`
-                });
-                //给vuex提交vid，确定当前要播放视频id
-                this.video({vid});
-                this.commentBack({back:true});
-            },
-            more() {
-                //更多
-            },
-
+      name: 'videos.vue',
+      data () {
+        return {
+          videos: []
         }
+      },
+      created () {
+        this.getVideos()
+      },
+      methods: {
+        getVideos () {
+          this.$api.video.videolist().then((res) => {
+            this.videos = res.data.datas
+            for (let i = 0; i < this.videos.length; i++) {
+              this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
+              this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
+            }
+                    // console.log(this.videos)
+          })
+        },
+            // 这里代理actions，mapActions把它包装成类似函数调用的方式
+        ...mapActions([
+          'video',
+          'commentBack'
+        ]),
+        wonderfulVideo () {
+          this.commentBack({back: false})
+            // 去精彩视频页面并自动播放该视频
+            // this.$router.push({
+            //     path:`videoplayer`
+            // })
+        },
+        avatar () {
+                // 去up主页
+        },
+        praisedCount () {
+                // 点赞
+        },
+        details (vid) {
+                // 视频详情页，自动把底部评论提前
+          this.$router.push({
+            path: `videoplayer`
+          })
+            // 给vuex提交vid，确定当前要播放视频id
+          this.video({vid})
+          this.commentBack({back: true})
+        },
+        more () {
+                // 更多
+        }
+
+      }
     }
 </script>
 
