@@ -1,7 +1,7 @@
 <template>
   <div class="flexdiv">
     <div class="container">
-      <div class="wrapper" @click.prevent="playVideo(item,index)" :key="index">
+      <div class="wrapper" @click="playVideo(item,index)" :key="index">
         <video :poster="item.data.coverUrl"
                :src="item.data.urlInfo.url"
                class="video"
@@ -11,7 +11,6 @@
                ref="video"
                :moted="true"
                @timeupdate="updateTime"
-
         >
           <source :src="item.data.urlInfo.url" type="audio/mpeg">
         </video>
@@ -40,7 +39,7 @@
 
         </div>
 
-        <div class="control">
+        <div class="control" v-show="this.speedWidth">
           <div class="speed"  :style="[activeIndex === index ? {width: speedWidth + 'px'} : {width: 0} ]"></div>
 
           <div class="controlBtn" ref="setWidth" :style="[activeIndex === index ? {left: speedWidth + 'px'} : {left: 0} ]" v-show="controlBtn"></div>
@@ -81,56 +80,55 @@
     import {currentVideo} from '../../store/getters'
     import {serializeNumber} from '../../assets/js/number'
     import {durationms} from '../../assets/js/timestamp'
-
     export default {
-      name: 'videoList.vue',
-      data () {
-        return {
+        name: "videoList.vue",
+        data() {
+            return {
                 // videos:this.videos,
-          gropshow: false,
-          videoDom: '',
-                // isPlay:falste, //是否播放
-          currentshow: true, // 视频左下角播放量或者进度是否显示
-          currentTimeShow: true, // 播放量跟播放进度转换
-          check: true, // 是否显示
-          countTime: true, // 视频左下角播放量变成播放时间进度
-          wrapShow: true, // 遮罩层显示
-          controlBtn: false, // 进度按钮
-          playTime: true, // 播放总时间是否变成视频全屏按钮
-          playTimes: true, // 播放总时间或者全屏按钮是否会显示
-          plays: true, // 播放或暂停按钮显示出来
+                gropshow:false,
+                videoDom:'',
+                videoDoms:'',
+                // isPlay:false, //是否播放
+                currentshow:true,//视频左下角播放量或者进度是否显示
+                currentTimeShow:true,//播放量跟播放进度转换
+                check:true,//是否显示
+                countTime:true, //视频左下角播放量变成播放时间进度
+                wrapShow:true, //遮罩层显示
+                controlBtn:false, //进度按钮
+                playTime:true, //播放总时间是否变成视频全屏按钮
+                playTimes:true,//播放总时间或者全屏按钮是否会显示
+                plays:true,//播放或暂停按钮显示出来
                 // playss:true,
-          play: true, // 播放和暂停按钮切换
-          currentTime: `00:00`, // 播放进度时间
+                play:true, //播放和暂停按钮切换
+                currentTime:`00:00`, //播放进度时间
                 // _currentTime:`00:00`,//保存进度
-          activeIndex: -1,
+                activeIndex: -1,
                 // duration:'', //视频播放总时间
-          speedWidth: 0,
-          durationms: 0, // 视频播放总时间
-          currentDuration: [{}, {}], // 存放前后播放视频的播放进度
-          durationHistory: [], // 存放本视频流页面前后视频播放进度的历史记录
-          isPlay: false
-
-        }
-      },
-      props: {
+                speedWidth:0,
+                durationms:0,//视频播放总时间
+                currentDuration:[{},{}], //存放前后播放视频的播放进度
+                durationHistory:[], //存放本视频流页面前后视频播放进度的历史记录
+            }
+        },
+        props: {
             // videoGroupId:{
             //     type:Number,
             //     required:true
             // },
-        videos: {
-          type: Array,
-          required: true
+            videos:{
+                type:Array,
+                default:[],
+                required:true
+            },
+            item: {
+                type:Object,
+                required: true
+            },
+            index:{
+                type:Number,
+                required:true
+            }
         },
-        item: {
-          type: Object,
-          required: true
-        },
-        index: {
-          type: Number,
-          required: true
-        }
-      },
         // watch: {
         //     //videoGroup 的 id 父组件切换时候传过来
         //     // videoGroupId(id) {
@@ -146,20 +144,22 @@
         // created() {
         //     this.getVideos()
         // },
-      computed: {
-        percent () {
-          return this.currentTime / this.durationms
+        computed: {
+            percent(){
+                return this.currentTime / this.durationms
+            },
+            ...mapGetters([
+                'videoList',
+                'currentVideo',
+                'videoCurrentTime',
+                'currentIndex',
+                'back'
+            ]),
         },
-        ...mapGetters([
-          'videoList',
-          'currentVideo',
-          'videoCurrentTime',
-          'currentIndex',
-          'back'
-        ])
-      },
-
-      methods: {
+        // mounted() {
+        //     this.playVideo()
+        // },
+        methods:{
             // getVideos(id) {
             //     this.$api.video.videolist(id).then((res) => {
             //         this.videos = res.data.datas;
@@ -170,200 +170,224 @@
             //         console.log(this.videos)
             //     })
             // },
-        playVideo (item, index) {
-                // 该视频未显示播放进度情况下（非暂停状态），点击容器可播放视频
-                // this.$refs.video.play() ***没有用，报错
+            playVideo(item,index) {
+                //其他设计思路。监控视频播放状态。暂停的isPlay属性都是false。播放为true……
+
+
+                //该视频未显示播放进度情况下（非暂停状态），点击容器可播放视频
                 // this.videoDom = document.getElementById('video');
-          let videoDams = document.getElementsByClassName('video')
-          this.videoDom = document.getElementsByClassName('video')[index]
-          this.durationms = this.videoDom.duration
-          this.setCurrentIndex(index)
-          if (typeof item.isPlay === 'undefined') {
-                    // 给对象添加属性
-            this.$set(item, 'isPlay', false)
-                 // this.isPlay = false;
-          } else {
-            item.isPlay = !item.isPlay
-          }
-          console.log(item.isPlay)
-          console.log(index)
+                // console.log(this.$refs.video);
 
-            // 隐藏播放量，显示播放进度
-          this.currentTimeShow = false
-            // 播放或暂停的时候进度按钮显示
-          this.controlBtn = true
-            // 播放总长度变成全屏按钮
-          this.playTime = false
-            // this.playss = true;
-            // //中间播放按钮或暂停按钮是否显示
-            // this.plays = false;
-            // 播放按钮变暂停按钮
-          this.play = false
-            // 右下角播放总长度变成全屏按钮
-          this.playTimes = true
-            // 左下角播放量或者进度是否显示
-          this.currentshow = true
+                this.videoDom = this.$refs.video;
+                this.videoDoms = document.querySelectorAll('video');
+                // this.videoDoms = document.getElementsByClassName('video');
+                // this.videoDom = document.getElementsByClassName('video')[index];
+                // console.log(this.videoDoms);
 
-          let obj = {}
-          obj[index] = this.currentTime
-            // 判断被点击的视频是否存在了***为避免空值无法Object.keys转 currentDuration:[0,0]这样定义。
-            // let has = parseInt(Object.keys(this.currentDuration[0])[0]) === index || parseInt(Object.keys(this.currentDuration[1])[0]) === index;
-            // 看看当前被点击的是否有在数组中//不存在则返回-1
-          let i = this.currentDuration.findIndex((value) => {
-            return index === parseInt(Object.keys(value)[0])
-          })
-            // 该视频是否播放
-          if (this.isPlay && this.activeIndex === index) {
-            this.videoDom.pause()
-                // 标志位
-            this.isPlay = false
-            this.activeIndex = -1
-            this.countTime = false
-                // 中间播放按钮或暂停按钮是否显示
-            this.plays = true
-                // 暂停按钮变播放按钮
-            this.play = true
+                this.durationms = this.videoDom.duration;
+                this.setCurrentIndex(index);
 
-            console.log(`${index}` + '暂停了')
-
-            this.currentTime = videoDams[index].currentTime
-
-            if (i !== -1) {
-                        // 原来就存在的话，那就把它替换为新播放进度
-              this.currentDuration[i][index] = videoDams[index].currentTime
-            } else {
-              if (this.currentDuration.length >= 2) {
-                this.currentDuration.splice(0, 1)// 删除第1个
-                this.currentDuration.push(obj)// 再把新的推进来
-              } else {
-                            // this.currentDuration.splice(0,1);//删除第1个
-                this.currentDuration.push(obj)
-              }
-            }
-
-                    //* **不从vuex获取***//
-                    // 当该视频开启了播放，即使之后暂停。其它视频统统还原状态。仅仅保存上一条播放的进度。其它重置。
-            for (let i = 0; i < this.videos.length; i++) {
-              if (index === i) continue
-              this.videos[i].isPlay = false
-              videoDams[i].pause()
-              videoDams[i].currentTime = 0 // 重置
-            }
-          }
-                // else if(!this.isPlay && this.activeIndex !== index) {
-                //     console.log('啦啦啦')
+                if(typeof item.isPlay == 'undefined'){
+                    //给对象添加属性
+                    this.$set(item,'isPlay',false);
+                    console.log('总是我');
+                }
+                // else {
+                //     item.isPlay = !item.isPlay;
+                //     console.log(item.isPlay)
                 // }
-          else {
-                    // 从vuex获取播放进度时间并给对应视频设置播放进度
+                //下边已经有判断并且里面设置了取反操作。所以不需要前面取反操作了
+
+                //注意以下3个的区别。。1和3是同一个。2包含了item，这里指循环的单个组件。
+                console.log(item);
+                // console.log(this);
+                // console.log(this.videos[index])
+
+
+
+                console.log(item.isPlay);
+                // console.log(index);
+                //隐藏播放量，显示播放进度
+                this.currentTimeShow = false;
+                //播放或暂停的时候进度按钮显示
+                this.controlBtn = true;
+                //播放总长度变成全屏按钮
+                this.playTime = false;
+                // this.playss = true;
+                // //中间播放按钮或暂停按钮是否显示
+                // this.plays = false;
+                //播放按钮变暂停按钮
+                this.play = false;
+                //右下角播放总长度变成全屏按钮
+                this.playTimes = true;
+                //左下角播放量或者进度是否显示
+                this.currentshow = true;
+                let obj = {};
+                obj[index] = this.currentTime;
+                //判断被点击的视频是否存在了***为避免空值无法Object.keys转 currentDuration:[0,0]这样定义。
+                // let has = parseInt(Object.keys(this.currentDuration[0])[0]) === index || parseInt(Object.keys(this.currentDuration[1])[0]) === index;
+                //看看当前被点击的是否有在数组中//不存在则返回-1
+                let i = this.currentDuration.findIndex((value) => {
+                    return index === parseInt(Object.keys(value)[0]);
+                });
+
+
+                  // console.log(this.isPlay);
+                  // console.log(this.activeIndex === index);
+                // 该视频是否播放
+                // this.isPlay && this.activeIndex === index
+                if( item.isPlay) {
+                    this.videoDom.pause();
+                    //标志位
+                    item.isPlay =  false;
+                    this.activeIndex = -1;
+                    this.countTime = false;
+                    //中间播放按钮或暂停按钮是否显示
+                    this.plays = true;
+                    //暂停按钮变播放按钮
+                    this.play = true;
+                    console.log(`${index}` + '暂停了');
+
+                    this.currentTime = this.videoDoms[index].currentTime;
+                    if(i !== -1){
+                        //原来就存在的话，那就把它替换为新播放进度
+                        this.currentDuration[i][index] = this.videoDoms[index].currentTime;
+                    }else {
+                        if(this.currentDuration.length >=  2) {
+                            this.currentDuration.splice(0,1);//删除第1个
+                            this.currentDuration.push(obj);//再把新的推进来
+                        }else {
+                            // this.currentDuration.splice(0,1);//删除第1个
+                            this.currentDuration.push(obj);
+                        }
+                    }
+
+                    //当该视频开启了播放，即使之后暂停。其它视频统统还原状态。仅仅保存上一条播放的进度。其它重置。
+                    for(let i = 0;i<this.videos.length;i++) {
+                        if(index === i) continue;
+                        this.videos[i].isPlay = false;
+                        this.videoDoms[i].pause();
+                        this.videoDoms[i].currentTime = 0; //重置
+                        this.videos[i].isPlay = false;
+                    }
+
+                }
+                else{
+                    //从vuex获取播放进度时间并给对应视频设置播放进度
                     // this.currentTime = this.videoCurrentTime[0];
                     // videoDams[index].currentTime = this.videoCurrentTime;
-            this.videoDom.play()
-                // 标志位播放
-            this.isPlay = true
-            this.activeIndex = index
-                // 播放的时候视频顶部显示切换
-            setTimeout(() => {
-                        // 底部播放或暂停的时候进度按钮显示
-              this.controlBtn = false
-                    // 右下角播放总长度变成全屏按钮
-              this.playTimes = false
-                    // //中间播放按钮变暂停按钮
-                    // this.plays = false;
-                    // 左下角播放量或者进度是否显示
-              this.currentshow = false
-                    // 隐藏播放进度播放量，显示播放量
-              this.currentTimeShow = true
-                    // 播放按钮变暂停按钮
-              this.play = true
-                    // 中间播放按钮或暂停按钮是否显示
-              this.plays = false
-                    // this.playss = true;
-            }, 3000)
+                    this.videoDom.play();
+                    //标志位播放
+                    item.isPlay = true;
+                    this.activeIndex = index;
+                    //播放的时候视频顶部显示切换
+                    setTimeout(() => {
+                        //底部播放或暂停的时候进度按钮显示
+                        this.controlBtn = false;
+                        //右下角播放总长度变成全屏按钮
+                        this.playTimes = false;
+                        // //中间播放按钮变暂停按钮
+                        // this.plays = false;
+                        //左下角播放量或者进度是否显示
+                        this.currentshow = false;
+                        //隐藏播放进度播放量，显示播放量
+                        this.currentTimeShow = true;
+                        //播放按钮变暂停按钮
+                        this.play = true;
+                        //中间播放按钮或暂停按钮是否显示
+                        this.plays = false;
+                    },3000);
+                    console.log(`${index}` +'播放了');
 
-                // console.log(item.isPlay);
-            console.log(`${index}` + '播放了')
 
-            if (this.currentDuration.length >= 2) {
-              if (i !== -1) {
-                            // 在数组中存在，那么取出上次的播放进度作为当前播放开头
-                this.currentTime = this.currentDuration[i][index]
-                videoDams[index].currentTime = this.currentDuration[i][index]
-              }
-            } else {
-                        // 没找到说明没有最近上次播放进度
-              this.currentDuration.splice(0, 1)// 删除第1个
-              this.currentDuration.push(obj)// 再把新的推进来
-            }
 
-            for (let i = 0; i < this.videos.length; i++) {
-              if (i === index) continue
-              videoDams[i].pause()
-              videoDams[i].currentTime = 0 // 重置
-            }
-          }
-          this.speedWidth = this.percent * 345
-        },
 
-        updateTime (e) {
+                    if(this.currentDuration.length >=  2) {
+                        if(i !== -1){
+                            //在数组中存在，那么取出上次的播放进度作为当前播放开头
+                            this.currentTime = this.currentDuration[i][index];
+                            this.videoDoms[index].currentTime= this.currentDuration[i][index];
+                        }
+                    }else {
+                        //没找到说明没有最近上次播放进度
+                        this.currentDuration.splice(0,1);//删除第1个
+                        this.currentDuration.push(obj);//再把新的推进来
+                    }
+                    for(let i = 0;i<this.videos.length;i++) {
+                        if(i === index) continue;
+                        this.videoDoms[i].pause();
+                        this.videoDoms[i].currentTime = 0; //重置
+                        //还得把其它项的isPlay属性重置为false。解决点击两次才播放的bug。因为其他的isPlay属性可能还是true。。
+                        this.videos[i].isPlay = false;
+                    }
+                }
+                this.speedWidth = this.percent * 345;
+            },
+            updateTime (e) {
                 // if(this.activeIndex !== e.index) {
                 //     this.currentTime = this.Durationms(e.target.currentTime);
                 // }
-          this.currentTime = e.target.currentTime // 播放的时候派发事件，能够获得当前时间 ***注意写法
-
-          this.speedWidth = this.percent * 345
-        },
-        Durationms (durationms) {
+                this.currentTime = e.target.currentTime; // 播放的时候派发事件，能够获得当前播放时间 ***注意写法
+                this.speedWidth = this.percent * 345;
+            },
+            Durationms(durationms){
                 // 对时间戳进行转化为分秒
                 // durationms = durationms / 1000;//转换为多少秒  本身播放当前时间为秒
-          durationms = durationms | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
-          let minute = durationms / 60 | 0
-          minute = minute < 10 ? '0' + minute : minute
-            // let second = _pad(durationms) % 60;
-          let second = durationms % 60
-          second = second < 10 ? '0' + second : second// 秒数前面补零操作
-          return `${minute}:${second}`
+                durationms = durationms | 0; // 互零操作符，一个正数向下取整 相当于Math.floor方法
+                let  minute = durationms / 60 | 0;
+                minute = minute < 10 ? '0' + minute : minute;
+                // let second = _pad(durationms) % 60;
+                let second = durationms % 60;
+                second = second < 10 ? '0' + second : second;// 秒数前面补零操作
+                return `${minute}:${second}`;
+            },
+            toPlayerDetail(vid) {
+                console.log('去视频页');
+                // 视频详情页，这个不会把底部评论提前
+                this.$router.push({
+                    path:`videoplayer`
+                });
+                //给vuex提交vid，确定当前要播放视频id
+                this.video({vid});
+            },
+            avatar() {
+                //去up主页
+            },
+            praisedCount() {
+                //点赞
+            },
+            details(vid) {
+                console.log('去视频页并评论提前');
+                //视频详情页，这个不会把底部评论提前
+                this.$router.push({
+                    path:`videoplayer`
+                });
+                //给vuex提交vid，确定当前要播放视频id
+                this.video({vid});
+                this.commentBack({back:true});
+            },
+            more() {
+                //更多
+            },
+            ...mapActions([
+                'video',
+                'setCurrentTimes',
+                'commentBack'
+            ]),
+            ...mapMutations({
+                setVideoList:'SET_VIDEO_LIST',
+                setCurrentIndex: 'SET_CURRENT_INDEX',
+                setVideoCurrentTime:'SET_VIDEO_CURRENT_TIME',
+            })
         },
+        destroyed() {
+            //销毁期把每个项的item isPlay属性剔除或者为false。
+            for(let i = 0;i<this.videos.length;i++) {
+                this.videos[i].isPlay = false;
+            }
 
-        toPlayerDetail (vid) {
-          console.log('去视频页')
-            // 视频详情页，这个不会把底部评论提前
-          this.$router.push({
-            path: `videoplayer`
-          })
-            // 给vuex提交vid，确定当前要播放视频id
-          this.video({vid})
-        },
-        avatar () {
-                // 去up主页
-        },
-        praisedCount () {
-                // 点赞
-        },
-        details (vid) {
-          console.log('去视频页并评论提前')
-            // 视频详情页，这个不会把底部评论提前
-          this.$router.push({
-            path: `videoplayer`
-          })
-            // 给vuex提交vid，确定当前要播放视频id
-          this.video({vid})
-          this.commentBack({back: true})
-        },
-        more () {
-                // 更多
-        },
-        ...mapActions([
-          'video',
-          'setCurrentTimes',
-          'commentBack'
-
-        ]),
-        ...mapMutations({
-          setVideoList: 'SET_VIDEO_LIST',
-          setCurrentIndex: 'SET_CURRENT_INDEX',
-          setVideoCurrentTime: 'SET_VIDEO_CURRENT_TIME'
-        })
-      }
+            console.log('啊有人被销毁了');
+        }
     }
 </script>
 
@@ -381,7 +405,7 @@
           background-color:#dcdcdc
           border-radius:10px
           position:relative
-          height:203px
+          height:202px
           font-size:$font-size-small-s
           .video
             width:100%
@@ -394,7 +418,6 @@
             bottom:0
             left:0
             opacity: 0.8
-
             .grop
               position:absolute
               top:10px
@@ -427,9 +450,10 @@
               height:10px
               color:white
           .control
-            height:2px
-            width:100%
-            background-color:yellow
+            height:1px
+            width:96%
+            margin:0 7px
+            background-color:gray
             position:absolute
             bottom:0
             .speed
@@ -445,8 +469,6 @@
               position:absolute
               bottom:-3px
               left:0
-
-
         .title
           border-bottom:1px solid #dcdcdc
           flex-between()
@@ -495,7 +517,6 @@
               position:absolute
               bottom:8px
               left:13px
-
           .wrapBottomCenter
             position:absolute
             left:280px
@@ -512,6 +533,4 @@
             height:100%
             width:35px
             text-align:center
-
 </style>
-

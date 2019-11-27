@@ -1,38 +1,32 @@
 <template>
-  <div>
+  <div class="video">
     <video-header></video-header>
-    <video-list :video-group-id="videogroupid"></video-list>
-<!--    <cube-scroll-nav @change="changeHandler">-->
-<!--      <cube-scroll-nav-panel-->
-<!--        v-for="item in data"-->
-<!--        :key="item.name"-->
-<!--        :label="item.name">-->
-<!--        <ul>-->
-<!--          <li v-for="food in item.foods">-->
-<!--            <div>-->
-<!--              <img :src="food.icon">-->
-<!--              <p>{{food.name}}</p>-->
-<!--            </div>-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--      </cube-scroll-nav-panel>-->
-<!--    </cube-scroll-nav>-->
+    <video-nav class="my-nav"></video-nav>
+<!--    <video-list :video-group-id="videogroupid" class="videolist"></video-list>-->
+    <video-one class="videolist"></video-one>
+
+
   </div>
 </template>
 
 <script>
-    import videoList from '../common/videolist'
     import videoHeader from './header'
+    import videoNav from "./videonav"
+    import videoList from '../common/videolist'
+    import videoOne from "./videoone";
+
     export default {
       name: 'video.vue',
       components: {
         videoList,
-        videoHeader
+        videoHeader,
+          videoNav,
+          videoOne,
       },
       data () {
         return {
-          datas: [],
-          videogroupid: 9102
+            datas: [],
+            videogroupid: 9102,
         }
       },
       created () {
@@ -49,6 +43,22 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/variable"
+  @import "../../common/stylus/mixin"
+  .video
+    position:relative
+    .my-nav
+      width:375px
+      height:42px
+      position:fixed
+      top:50px
+      font-size:$font-size-small-s
+      z-index:200
+    .videolist
+      position:absolute
+      top:100px
+      bottom:50px
+      height:500px
 
 </style>

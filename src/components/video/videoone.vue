@@ -1,8 +1,4 @@
 <template>
-<!--  <div>-->
-<!--    -->
-<!--    <base-video></base-video>-->
-<!--  </div>-->
   <ul>
     <li v-for="(item,index) in videos" :key="item.data.vid">
           <base-video :videos="videos" :item="item" :index="index"></base-video>
@@ -46,6 +42,11 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/variable"
+  @import "../../common/stylus/mixin"
+  ul
+    position:absolute
+    width:100%
 
 </style>
