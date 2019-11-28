@@ -3,12 +3,12 @@
     <cube-scroll ref="navScroll" direction="horizontal">
       <ul class="nav-wrapper">
         <li
-          v-for="(item, index) in navTxts"
+          v-for="(item, index) in obj"
           :key="index"
           :class="[active === index ? activeClass : '', errorClass]"
           @click.prevent="navto(item,index)"
           class="nav-item"
-        >{{ item }}</li>
+        >{{ item.text }}</li>
       </ul>
     </cube-scroll>
   </div>
@@ -24,12 +24,63 @@
                 activeClass: 'nav-item-active',
                 errorClass:'',
                 active:0,
+                obj:[
+                    {
+                        text:'推荐',
+                        id:9102
+                    },
+                    {
+                        text:'影视',
+                        id:3100
+                    },
+                    {
+                        text:'生活',
+                        id:2100
+                    },
+                    {
+                        text:'听BGM',
+                        id:58101
+                    },
+                    {
+                        text:'现场',
+                        id:58100
+                    },
+                    {
+                        text:'舞蹈',
+                        id:1101
+                    },
+                    {
+                        text:'翻唱',
+                        id:60100
+                    },
+                    {
+                        text:'萌宠',
+                        id:1103
+                    },
+                    {
+                        text:'音乐',
+                        id:5100
+                    },
+                    {
+                        text:'MV',
+                        id:1000
+                    },
+                    {
+                        text:'ACG音乐',
+                        id:57104
+                    },
+                    {
+                        text:'游戏',
+                        id:2103
+                    }
+                ]
             }
         },
         methods: {
             navto(item,index) {
                 //导航去哪
                 this.active = index;
+                this.$emit('toggle',item.id)
             }
         }
     }
