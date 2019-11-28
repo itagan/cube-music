@@ -15,7 +15,7 @@
           <source :src="item.data.urlInfo.url" type="audio/mpeg">
         </video>
 
-        <div class="wrap" v-show="wrapShow">
+        <div class="wrap">
           <div class="grop" v-if="gropshow">22</div>
           <div class="wrapperLeft">
             <div  v-show="currentshow">
@@ -24,9 +24,7 @@
               <div v-if="!currentTimeShow"> {{Durationms(currentTime)}} / {{item.data.durationms}}</div>
             </div>
           </div>
-          <div class="wrapperCenter" v-if="plays">
-            <!--                  <i class="iconfont iconliuyan" v-if="play && activeIndex === index"></i>-->
-            <!--                  <i class="iconfont iconnetease" v-else></i>-->
+          <div class="wrapperCenter" v-if="plays" >
             <i class="iconfont iconnetease" v-if="play"></i>
             <i class="iconfont iconliuyan" v-else></i>
           </div>
@@ -39,11 +37,31 @@
 
         </div>
 
-        <div class="control" v-show="this.speedWidth">
-          <div class="speed"  :style="[activeIndex === index ? {width: speedWidth + 'px'} : {width: 0} ]"></div>
+        <div class="control" v-show="this.speedWidth" ref="progressBar">
+          <div class="bar-inner">
+<!--          <div class="speed" ref="speed" :style="{width: speedWidth + 'px'}"></div>-->
+            <div class="speed" ref="speed"></div>
 
-          <div class="controlBtn" ref="setWidth" :style="[activeIndex === index ? {left: speedWidth + 'px'} : {left: 0} ]" v-show="controlBtn"></div>
+<!--            <div-->
+<!--            ref="controlBtn"-->
+<!--&lt;!&ndash;            :style="{left: speedWidth + 'px'}"&ndash;&gt;-->
+<!--            v-show="controlBtn"-->
+<!--            @touchstart.prevent="btnTouchStart"-->
+<!--            @touchmove.prevent="btnTouchMove"-->
+<!--            @touchend="btnTouchEnd"-->
+<!--          >-->
+            <div
+              ref="controlBtn"
+              v-show="controlBtn"
+              @touchstart.prevent="btnTouchStart"
+              @touchmove.prevent="btnTouchMove"
+              @touchend="btnTouchEnd"
+            >
+            <div class="controlBtn" ref="btn"></div>
+          </div>
         </div>
+        </div>
+
       </div>
 
       <div class="title" @click="toPlayerDetail(item.data.vid)">
@@ -80,6 +98,11 @@
     import {currentVideo} from '../../store/getters'
     import {serializeNumber} from '../../assets/js/number'
     import {durationms} from '../../assets/js/timestamp'
+    import { prefixStyle } from '../../assets/js/dom'
+
+    const btnBtnWidth = 10; //按钮的长度 //触摸按钮的时候放大按钮，从10到20
+    const transform  = prefixStyle('transform')
+
     export default {
         name: "videoList.vue",
         data() {
@@ -88,12 +111,12 @@
                 gropshow:false,
                 videoDom:'',
                 videoDoms:'',
-                // isPlay:false, //是否播放
+                // isPlay:false, //是否播放..不再设置给vue组件，而是作为Item属性
                 currentshow:true,//视频左下角播放量或者进度是否显示
                 currentTimeShow:true,//播放量跟播放进度转换
                 check:true,//是否显示
                 countTime:true, //视频左下角播放量变成播放时间进度
-                wrapShow:true, //遮罩层显示
+                wrapShow:false, //遮罩层是否存在
                 controlBtn:false, //进度按钮
                 playTime:true, //播放总时间是否变成视频全屏按钮
                 playTimes:true,//播放总时间或者全屏按钮是否会显示
@@ -141,9 +164,9 @@
         //         }
         //     }
         // },
-        // created() {
-        //     this.getVideos()
-        // },
+        created() {
+            this.touch = {}  //用于不同回调的时候共享数据挂载到这里来
+        },
         computed: {
             percent(){
                 return this.currentTime / this.durationms
@@ -155,6 +178,17 @@
                 'currentIndex',
                 'back'
             ]),
+        },
+        watch: {
+            percent(newPercent) {
+                //为避免拖动的时候跳动，因为拖动的时候原来还播着，这里加个条件限制，拖动的时候initiated为true 这样就不能进行改变跳动了
+                if (newPercent >= 0 && !this.touch.initiated) {
+                    const barWidth = this.$refs.progressBar.clientWidth - btnBtnWidth //获取实际进度条框的长度
+                    const offsetWidth = newPercent * barWidth //偏移的宽度即比例*总长
+                    this.$refs.speed.style.width = `${offsetWidth}px` //按钮底部进度条移动是其宽度距离
+                    this.$refs.controlBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)` //按钮小球的偏移，别忘记单位和模板字符串形式
+                }
+            }
         },
         // mounted() {
         //     this.playVideo()
@@ -170,9 +204,14 @@
             //         console.log(this.videos)
             //     })
             // },
+
             playVideo(item,index) {
                 //其他设计思路。监控视频播放状态。暂停的isPlay属性都是false。播放为true……
 
+                if(!this.wrapShow) {
+                    //遮罩层存在，那就只能点击中间的播放暂停按钮实现播放暂停
+
+                }
 
                 //该视频未显示播放进度情况下（非暂停状态），点击容器可播放视频
                 // this.videoDom = document.getElementById('video');
@@ -190,7 +229,6 @@
                 if(typeof item.isPlay == 'undefined'){
                     //给对象添加属性
                     this.$set(item,'isPlay',false);
-                    console.log('总是我');
                 }
                 // else {
                 //     item.isPlay = !item.isPlay;
@@ -199,13 +237,10 @@
                 //下边已经有判断并且里面设置了取反操作。所以不需要前面取反操作了
 
                 //注意以下3个的区别。。1和3是同一个。2包含了item，这里指循环的单个组件。
-                console.log(item);
+                // console.log(item);
                 // console.log(this);
                 // console.log(this.videos[index])
 
-
-
-                console.log(item.isPlay);
                 // console.log(index);
                 //隐藏播放量，显示播放进度
                 this.currentTimeShow = false;
@@ -247,6 +282,9 @@
                     //暂停按钮变播放按钮
                     this.play = true;
                     console.log(`${index}` + '暂停了');
+                    // this.speedWidth = this.currentTime / this.durationms * 345;
+                    // console.log(this.activeIndex === index)
+
 
                     this.currentTime = this.videoDoms[index].currentTime;
                     if(i !== -1){
@@ -321,14 +359,19 @@
                         this.videos[i].isPlay = false;
                     }
                 }
-                this.speedWidth = this.percent * 345;
+                // this.speedWidth = this.percent * 355;
             },
+
+
+
+
+
             updateTime (e) {
                 // if(this.activeIndex !== e.index) {
                 //     this.currentTime = this.Durationms(e.target.currentTime);
                 // }
                 this.currentTime = e.target.currentTime; // 播放的时候派发事件，能够获得当前播放时间 ***注意写法
-                this.speedWidth = this.percent * 345;
+                this.speedWidth = this.percent * 355;
             },
             Durationms(durationms){
                 // 对时间戳进行转化为分秒
@@ -368,6 +411,56 @@
             },
             more() {
                 //更多
+            },
+            //触摸有关
+            btnTouchStart(e) {
+                this.touch.initiated = true  //设立标志位，true表示初始化了
+                this.touch.startX = e.touches[0].pageX //开始触摸时候的位置
+                this.touch.left = this.$refs.speed.clientWidth //开始点击的时候进度条本身偏移长度
+                console.log(this.touch.left)
+            },
+            btnTouchMove(e) {
+                if (!this.touch.initiated) {
+                    return //触摸时候没有start事件直接进入move直接返回
+                }
+                const deltaX = e.touches[0].pageX - this.touch.startX   //计算Move过程中移动的距离，移动的坐标减去开始的
+                //  拖拽的长度不能太大，拖拽如果直接到末尾的话，那就是总长-按钮的距离了。取它与拖拽移动距离的最小值
+                const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - btnBtnWidth, Math.max(0, this.touch.left + deltaX))
+                this._offset(offsetWidth)
+                this.bigBtn();
+                console.log('滚动了');
+            },
+            btnTouchEnd(e) {
+                this.touch.initiated = false;
+                this._triggerPercent() //拖动结束调用方法设置播放进度
+                this.removeBig();
+                console.log('滚动结束了');
+
+            },
+            _triggerPercent() {
+                const barWidth = this.$refs.progressBar.clientWidth - btnBtnWidth //获取进度条框的实际长度，需要减去上面按钮的宽度
+                const percent = this.$refs.speed.clientWidth  / barWidth //底部进度条的长度/进度条框长度，得到比例
+
+                this.$refs.video.currentTime = this.durationms * percent
+                // 拖动后实现播放
+                if (!this.videoDom.isPlay) {
+                    this.videoDom.isPlay = true;
+                    this.videoDom.play();
+
+                }
+            },
+            _offset (offsetWidth) {
+                //底部的进度条和拖动按钮设置一样的长度/位移
+                this.$refs.speed.style.width = `${offsetWidth}px`
+                this.$refs.controlBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)`
+            },
+            //滚动的时候小球放大
+            bigBtn() {
+                this.$refs.btn.classList.add('activeBtn');
+            },
+            //不滚动的时候还有
+            removeBig() {
+                this.$refs.btn.classList.remove('activeBtn');
             },
             ...mapActions([
                 'video',
@@ -450,25 +543,46 @@
               height:10px
               color:white
           .control
-            height:1px
+            height:2px
             width:96%
             margin:0 7px
             background-color:gray
-            position:absolute
+            position:relative
             bottom:0
-            .speed
-              height:2px
-              background-color:red
-              /*width:0*/
-              margin:0 5px
-            .controlBtn
-              border-radius:50%
-              background-color:red
-              height:10px
-              width:10px
+            .bar-inner
               position:absolute
-              bottom:-3px
-              left:0
+              bottom:0
+              height: 100%
+              width:100%
+              .speed
+                height:2px
+                background-color:red
+                width:96%
+                position: absolute
+                left:0
+                top: 0
+                padding:0 5px
+              div
+                position: absolute
+                left:-10px
+                top: -2px
+                width: 20px
+                height: 20px
+                flex-center
+                .controlBtn
+                  border-radius:50%
+                  background-color:red
+                  height:10px
+                  width:10px
+                  position:absolute
+                  /*bottom:10px*/
+                  left:10px
+
+        .activeBtn
+          height:15px !important
+          width:15px  !important
+          top:-5px !important
+
         .title
           border-bottom:1px solid #dcdcdc
           flex-between()
