@@ -85,7 +85,6 @@
               options: {
                   pullDownRefresh: {
                       threshold: 30,
-                      // stop: 44,
                       stopTime: 1000,
                       txt: '更新成功'
                   },
@@ -93,7 +92,6 @@
               },
               secondStop: 0,
               scrollEvents: ['scroll'],
-              // findmore:false,
               pullDownY:0
 
           }
@@ -101,7 +99,7 @@
           props:{
               groupid:{
                   type:Number,
-                  default:9102
+                  // default:9102
               }
           },
         created () {
@@ -109,7 +107,8 @@
         },
         watch:{
             groupid() {
-                this.getVideos()
+                this.getVideos();
+                // console.log('11');
             }
         },
         methods: {
@@ -210,6 +209,7 @@
     height:517px
     width:375px
     bottom:50px
+    top:15px
     ul
       height: 100%
       overflow: hidden

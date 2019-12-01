@@ -1,10 +1,10 @@
 <template>
   <div class="video">
     <video-header></video-header>
-    <video-nav class="my-nav" @toggle="toggles"></video-nav>
-<!--    <video-list :video-group-id="videogroupid" class="videolist"></video-list>-->
-    <video-one class="videolist" :groupid="videogroupid"></video-one>
-
+<!--    <video-nav class="my-nav" @toggle="toggles"></video-nav>-->
+<!--&lt;!&ndash;    <video-list :video-group-id="videogroupid" class="videolist"></video-list>&ndash;&gt;-->
+<!--    <video-one class="videolist" :groupid="videogroupid"></video-one>-->
+<slide @toggle="toggles" :groupid="videogroupid"></slide>
 
   </div>
 </template>
@@ -13,7 +13,8 @@
       import videoHeader from './header'
       import videoNav from "./videonav"
       import videoList from '../common/videolist'
-      import videoOne from "./videoone";
+      import videoOne from "./videoone"
+      import Slide from "./slide"
 
       export default {
         name: 'video.vue',
@@ -22,11 +23,12 @@
           videoHeader,
             videoNav,
             videoOne,
+            Slide
         },
         data () {
           return {
               datas: [],
-              videogroupid: 9102,
+              videogroupid:'',
           }
         },
         created () {
@@ -41,8 +43,9 @@
           },
             toggles(id) {
                 //点击切换列表
-                console.log(id)
                 this.videogroupid = id;
+                console.log(this.videogroupid)
+
             }
         }
       }

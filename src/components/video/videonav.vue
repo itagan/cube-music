@@ -80,7 +80,7 @@
             navto(item,index) {
                 //导航去哪
                 this.active = index;
-                this.$emit('toggle',item.id)
+                this.$emit('toggle',item.id,index)
             }
         }
     }
