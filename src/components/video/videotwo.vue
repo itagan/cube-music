@@ -124,14 +124,14 @@
             })
           },
             rollBack(top) {
-                if(top < 110) {
+                if(top < 90) {
                     // this.$nextTick(() => {
                     //     this.$refs.contentScroll.scroll.scrollBy(0,top,300);
                     //     // this.$refs.navs.scrollBy(0,30);
                     //
                     // });
                     // this.$refs.contentScroll.scrollBy(0,-30);
-                    let _top = 110 - top;
+                    let _top = 90 - top;
 
                     this.$refs.contentScroll.scroll.scrollBy(0,_top,300);
                     this.$refs.contentScroll.refresh();
@@ -206,10 +206,11 @@
   @import "../../common/stylus/mixin"
   .content-scroll-wrapper
     position:absolute
-    height:517px
+    height:537px
     width:375px
     bottom:50px
     top:15px
+    z-index:300
     ul
       height: 100%
       overflow: hidden
