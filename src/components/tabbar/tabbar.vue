@@ -40,6 +40,7 @@
     width: 100%
     height:50px
     background-color:rgb(255,255,255)
+    z-index:2000
     &-item
         flex:1
         flex-wrap:nowrap
