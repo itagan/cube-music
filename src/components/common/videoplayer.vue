@@ -957,7 +957,6 @@ export default {
         commentTop () {
                 // this.$refs.scroll.scrollTo(0,-515,200);
                 // this.$refs.tohere 测试发现自定义子组件不能用这个方式，而该用css引用dom
-          this.$refs.scroll.scrollToElement('.here', 200, 0, -50)
         },
         tagBacktop () {
           let heights = this.titleHeight + this.swipeHeight + 45 - 323

@@ -6,16 +6,24 @@
 <!--  </ul>-->
 
 
-  <div class="content-scroll-wrapper">
+  <div class="content-scroll-wrapper" ref="navs">
       <cube-scroll
         ref="contentScroll"
         :scroll-events="scrollEvents"
         :options="options"
+        @scroll="scrollHandler"
         @pulling-down="onPullingDown"
         @pulling-up="onPullingUp">
         <ul>
-          <li v-for="(item,index) in videos" :key="item.data.vid" >
-            <base-video :videos="videos" :item="item" :index="index" @refresh="refreshfinish"></base-video>
+          <li v-for="(item,index) in videos" :key="item.data.vid">
+            <base-video
+              :videos="videos"
+              :item="item"
+              :index="index"
+              :pullDownY="pullDownY"
+              @refresh="refreshfinish"
+              @rollback="rollBack"
+            ></base-video>
           </li>
         </ul>
 
@@ -38,7 +46,7 @@
               <span :class="{rotate: props.bubbleY > 0}" v-show="!props.isPullingDown">↓</span>
 
               <transition name="bounce" v-if="!props.isPullingDown">
-                <div v-show="findmore" class="text-wrapper">
+                <div class="text-wrapper">
                   <span class="refresh-text">
                     发现了更多新内容
                   </span>
@@ -92,7 +100,7 @@
               },
               secondStop: 0,
               scrollEvents: ['scroll'],
-              findmore:false,
+              // findmore:false,
               pullDownY:0
 
           }
@@ -117,19 +125,46 @@
               this.videos = res.data.datas;
               for (let i = 0; i < this.videos.length; i++) {
                 this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
+                  // console.log(this.videos[i].data.playTime);
                 this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
               }
               // console.log(this.videos)
             })
           },
+            rollBack(top) {
+                if(top < 110) {
+                    // this.$nextTick(() => {
+                    //     this.$refs.contentScroll.scroll.scrollBy(0,top,300);
+                    //     // this.$refs.navs.scrollBy(0,30);
+                    //
+                    // });
+                    // this.$refs.contentScroll.scrollBy(0,-30);
+                    let _top = 110 - top;
 
+                    this.$refs.contentScroll.scroll.scrollBy(0,_top,300);
+                    this.$refs.contentScroll.refresh();
+                    // this.$refs.contentScroll.scrollTo(0,top,300);
+
+                    // this.$refs.contentScroll.scrollToElement('.nav-wrapper', 200, 0, 0);
+                    // this.$refs.navs.scrollTo(0, 30, 300);
+
+                    // let scrollDom = document.getElementsByClassName('content-scroll-wrapper')[0];
+                    // // this.$refs.navs.$el.scrollTop = -30;
+                    // scrollDom.scrollTop = 30;
+                    // console.log(scrollDom.scrollTop)
+                }else if(top > 366) {
+                    let _top = -(top - 366);
+                    this.$refs.contentScroll.scroll.scrollBy(0,_top,300);
+                    this.$refs.contentScroll.refresh();
+                }
+            },
 
             onPullingDown() {
                 setTimeout(() => {
                     // this.getVideos();
                     this.videos = this.videos.reverse();
                     this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
-                    // this.forceUpdate();//下拉完毕
+                    // this.$refs.contentScroll.forceUpdate();//下拉完毕
                 }, 1000);
             },
 
@@ -155,17 +190,21 @@
                 //     console.log('11')
                 //     this.findmore = true;
                 // }
-
-                this.findmore = true;
+                // this.findmore = true;
 
 
             },
-            // onScrollHandle(pos) {
-            //     this.pullDownY = pos.y;
-            //     // if(this.pullDownY === 0) {
-            //     //     this.findmore = true;
-            //     // }
-            // },
+            scrollHandler(pos) {
+                this.pullDownY = -pos.y;
+                // console.log(this.pullDownY)
+                // if(this.pullDownY === 0) {
+                //     this.findmore = true;
+                // }
+                // console.log(this.pullDownY);
+                // console.log(this.$refs.nav.scrollTop);
+                // console.log(this.$refs.nav.offsetTop);
+
+            },
         }
       }
 </script>
