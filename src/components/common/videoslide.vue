@@ -40,6 +40,7 @@
 </template>
 
 <script>
+    import {mapMutations} from 'vuex'
     import navBar from "../../base/navbar/navbar"
     import wonderfulBase from "../../base/video/wonderfulbase"
     import {serializeNumber} from '../../assets/js/number'
@@ -107,6 +108,7 @@
             changePage(current) {
                 console.log('当前轮播图序号为:' + current)
                 this.ind = current;
+                this.setCurrentIndex(current)
             },
             // clickHandler(item, index) {
             //     console.log(item, index)
@@ -165,6 +167,9 @@
             //     }
             //
             // },
+            ...mapMutations({
+                setCurrentIndex: 'SET_CURRENT_INDEX',
+            })
         }
     }
 </script>

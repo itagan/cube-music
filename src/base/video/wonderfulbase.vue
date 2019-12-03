@@ -82,7 +82,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex'
+    import { mapGetters, mapMutations} from 'vuex'
     import {currentVideo} from '../../store/getters'
     import {serializeNumber} from '../../assets/js/number'
     import {durationms} from '../../assets/js/timestamp'
@@ -167,12 +167,12 @@
                 return this.currentTime / this.durationms
             },
             ...mapGetters([
-                'videoList',
-                'currentVideo',
-                'videoCurrentTime',
                 'currentIndex',
                 'back'
             ]),
+            current() {
+                return this.currentIndex
+            }
         },
         watch: {
             percent(newPercent) {
@@ -189,17 +189,40 @@
                 this.$emit('refresh');
             },
 
+            current(newCurrent, oldCurrent) {
+                //vuex也未能解决bug
+                console.log(newCurrent,oldCurrent);
+
+
+                // let newind = newCurrent + 1;
+                //
+                // if(newind === 8) {
+                //     newind = 0;
+                // };
+                //
+                // let videoDoms = document.querySelectorAll('video');
+                // this.videoDoms = Array.from(videoDoms).splice(0,8)
+                // for(let i = 0;i<this.videos.length;i++) {
+                //     if(newind === i) continue;
+                //     this.videos[i].isPlay = false;
+                //     this.videoDoms[i].pause();
+                //     this.videoDoms[i].currentTime = 0; //重置
+                //     // if(0 === i) continue;
+                // }
+                //
+                // this.videoDoms[newind].play();
+
+            },
+
             ind(ind,newi) {
                 // console.log(ind,newi)
                 let newind = ind + 1;
-
-                // let newind = ind + 1;
 
                 if(newind === 8) {
                     newind = 0;
                 };
 
-                console.log(newind)
+                // console.log(newind)
                 // if(newind === 7) {
                 //     this.videos[7].isPlay = false;
                 // };
@@ -208,18 +231,17 @@
                 let videoDoms = document.querySelectorAll('video');
                 this.videoDoms = Array.from(videoDoms).splice(0,8)
                 // console.log( this.videoDoms);
-
+                //
                 for(let i = 0;i<this.videos.length;i++) {
                     if(newind === i) continue;
                     this.videos[i].isPlay = false;
                     this.videoDoms[i].pause();
                     this.videoDoms[i].currentTime = 0; //重置
                     // if(0 === i) continue;
-
                 }
 
                 this.videoDoms[newind].play();
-
+                //
                 // setTimeout(() => {
                 //     if(newind === 0) {
                 //         this.videos[7].isPlay = true;
@@ -591,15 +613,8 @@
             removeBig() {
                 this.$refs.btn.classList.remove('activeBtn');
             },
-            ...mapActions([
-                'video',
-                'setCurrentTimes',
-                'commentBack'
-            ]),
             ...mapMutations({
-                setVideoList:'SET_VIDEO_LIST',
                 setCurrentIndex: 'SET_CURRENT_INDEX',
-                setVideoCurrentTime:'SET_VIDEO_CURRENT_TIME',
             })
         },
         destroyed() {
