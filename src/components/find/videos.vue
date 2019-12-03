@@ -130,12 +130,18 @@
         wonderfulVideo () {
           this.commentBack({back: false})
           this.video({
-              videoGroupId:9104
+              videoGroupId:9102
           });
-            // 去精彩视频页面并自动播放该视频
-            this.$router.push({
-                path:`videoslide`
-            })
+          setTimeout(() => {
+              // 去精彩视频页面并自动播放该视频
+              this.$router.push({
+                  path:`videoslide`
+              })
+          },100)
+            // // 去精彩视频页面并自动播放该视频
+            // this.$router.push({
+            //     path:`videoslide`
+            // })
         },
         avatar () {
                 // 去up主页
