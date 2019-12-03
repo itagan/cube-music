@@ -1,12 +1,11 @@
 <template>
   <div class="flexdiv" ref="nav">
     <div class="container">
-      <div class="wrapper" @click="playVideo(item,index,$event)" :key="index">
+      <div class="wrapper" @click.stop="playVideo(item,index,$event)" :key="index">
         <video :poster="item.data.coverUrl"
                :src="item.data.urlInfo.url"
                class="video"
-               width="375px"
-               height="200px"
+
                id="video"
                ref="video"
                :moted="true"
@@ -39,17 +38,7 @@
 
         <div class="control" v-show="this.speedWidth" ref="progressBar">
           <div class="bar-inner">
-<!--          <div class="speed" ref="speed" :style="{width: speedWidth + 'px'}"></div>-->
             <div class="speed" ref="speed"></div>
-
-<!--            <div-->
-<!--            ref="controlBtn"-->
-<!--&lt;!&ndash;            :style="{left: speedWidth + 'px'}"&ndash;&gt;-->
-<!--            v-show="controlBtn"-->
-<!--            @touchstart.prevent="btnTouchStart"-->
-<!--            @touchmove.prevent="btnTouchMove"-->
-<!--            @touchend="btnTouchEnd"-->
-<!--          >-->
             <div
               ref="controlBtn"
               v-show="controlBtn"
@@ -57,9 +46,9 @@
               @touchmove.prevent="btnTouchMove"
               @touchend="btnTouchEnd"
             >
-            <div class="controlBtn" ref="btn"></div>
+              <div class="controlBtn" ref="btn"></div>
+            </div>
           </div>
-        </div>
         </div>
 
       </div>
@@ -68,7 +57,6 @@
               <span>
                 {{item.data.title}}
               </span>
-        <img :src="item.data.creator.avatarUrl" v-if="titleImg">
       </div>
 
       <div class="wrapBottom">
@@ -94,7 +82,7 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex'
+    import { mapGetters, mapMutations} from 'vuex'
     import {currentVideo} from '../../store/getters'
     import {serializeNumber} from '../../assets/js/number'
     import {durationms} from '../../assets/js/timestamp'
@@ -104,14 +92,12 @@
     const transform  = prefixStyle('transform')
 
     export default {
-        name: "videoList.vue",
         data() {
             return {
                 // videos:this.videos,
                 gropshow:false,
                 videoDom:'',
                 videoDoms:'',
-                titleImg:false, //标题右边的图
                 // isPlay:false, //是否播放..不再设置给vue组件，而是作为Item属性
                 currentshow:true,//视频左下角播放量或者进度是否显示
                 currentTimeShow:true,//播放量跟播放进度转换
@@ -155,6 +141,10 @@
             pullDownY: {
                 type:Number,
                 default: 0
+            },
+            ind: {
+                type:Number,
+                required:true
             }
         },
         // watch: {
@@ -169,6 +159,7 @@
         //         }
         //     }
         // },
+
         created() {
             this.touch = {}  //用于不同回调的时候共享数据挂载到这里来
         },
@@ -177,12 +168,12 @@
                 return this.currentTime / this.durationms
             },
             ...mapGetters([
-                'videoList',
-                'currentVideo',
-                'videoCurrentTime',
                 'currentIndex',
                 'back'
             ]),
+            current() {
+                return this.currentIndex
+            }
         },
         watch: {
             percent(newPercent) {
@@ -198,18 +189,41 @@
                 //刷新了，数据变化了。向父级说明刷新完成
                 this.$emit('refresh');
             },
-            pullDownY() {
-                //监控滚动行为，超出视界的暂停播放。
-                if(this.item.isPlay) {
-                      let top = this.$refs.nav.getBoundingClientRect().top;
-                      this.videoDom = this.$refs.video;
-                    console.log(top);
-                    if(top < -110 || top > 625) {
-                          //上滑过头，需要暂停并保存进度。
-                          this.item.isPlay = false;
-                          this.videoDom.pause();
-                      }
+
+            current(newCurrent, oldCurrent) {
+                //vuex也未能解决bug
+                console.log(newCurrent,oldCurrent);
+            },
+
+            ind(ind,newi) {
+                // console.log(ind,newi)
+
+                //取决于是否开启循环播放
+                // let newind = ind + 1;
+                let newind = ind ;
+
+                // if(newind === 8) {
+                //     newind = 0;
+                // };
+
+                // console.log(newind)
+                // if(newind === 7) {
+                //     this.videos[7].isPlay = false;
+                // };
+
+                 this.videoDoms = document.querySelectorAll('video');
+                // this.videoDoms = Array.from(videoDoms).splice(0,8)
+                // console.log( this.videoDoms);
+                //
+                for(let i = 0;i<this.videos.length;i++) {
+                    if(newind === i) continue;
+                    this.videos[i].isPlay = false;
+                    this.videoDoms[i].pause();
+                    this.videoDoms[i].currentTime = 0; //重置
                 }
+
+                this.videoDoms[newind].play();
+
             }
         },
         // mounted() {
@@ -228,26 +242,15 @@
             // },
 
             playVideo(item,index,e) {
-                //其他设计思路。监控视频播放状态。暂停的isPlay属性都是false。播放为true……
-                // this.wrapShow = !this.wrapShow;
-
-                //该视频未显示播放进度情况下（非暂停状态），点击容器可播放视频
-                // this.videoDom = document.getElementById('video');
-                // console.log(this.$refs.video);
-
-
-                // console.log(this.$refs.nav.scrollTop);
-                // console.log(this.$refs.nav.offsetTop);
-                console.log(this.$refs.nav.getBoundingClientRect().top);
-
-
                 this.top = this.$refs.nav.getBoundingClientRect().top; //播放盒子距离顶部距离。
+                //播放的时候判断距离顶部距离。上滚动回到可播放区。
+                if(this.top > 100) {
+                    this.$emit('rollback');
+                    console.log(this.top)
+                }
+
                 this.videoDom = this.$refs.video;
                 this.videoDoms = document.querySelectorAll('video');
-                // this.videoDoms = document.getElementsByClassName('video');
-                // this.videoDom = document.getElementsByClassName('video')[index];
-                // console.log(this.videoDoms);
-
                 this.durationms = this.videoDom.duration;
                 this.setCurrentIndex(index);
 
@@ -255,18 +258,7 @@
                     //给对象添加属性
                     this.$set(item,'isPlay',false);
                 }
-                // else {
-                //     item.isPlay = !item.isPlay;
-                //     console.log(item.isPlay)
-                // }
-                //下边已经有判断并且里面设置了取反操作。所以不需要前面取反操作了
 
-                //注意以下3个的区别。。1和3是同一个。2包含了item，这里指循环的单个组件。
-                // console.log(item);
-                // console.log(this);
-                // console.log(this.videos[index])
-
-                // console.log(index);
                 //隐藏播放量，显示播放进度
                 this.currentTimeShow = false;
                 //播放或暂停的时候进度按钮显示
@@ -284,8 +276,7 @@
                 this.currentshow = true;
                 let obj = {};
                 obj[index] = this.currentTime;
-                //判断被点击的视频是否存在了***为避免空值无法Object.keys转 currentDuration:[0,0]这样定义。
-                // let has = parseInt(Object.keys(this.currentDuration[0])[0]) === index || parseInt(Object.keys(this.currentDuration[1])[0]) === index;
+
                 //看看当前被点击的是否有在数组中//不存在则返回-1
                 let i = this.currentDuration.findIndex((value) => {
                     return index === parseInt(Object.keys(value)[0]);
@@ -294,13 +285,8 @@
                 //每次点击都能够决定是否呈现播放或者暂停按钮
                 this.plays = !this.plays;
 
-                // if(timeone) {
-                //     console.log('存在');
-                //     clearTimeout(timeone)
-                // }
-
                 //播放的时候视频顶部显示切换
-                    let timeone =  setTimeout(() => {
+                let timeone =  setTimeout(() => {
                     //底部播放或暂停的时候进度按钮显示
                     this.controlBtn = false;
                     //右下角播放总长度变成全屏按钮
@@ -324,9 +310,6 @@
                         //暂停按钮变播放按钮
                         this.play = true;
                         console.log(`${index}` + '暂停了');
-                        // this.speedWidth = this.currentTime / this.durationms * 345;
-                        // console.log(this.activeIndex === index)
-
 
                         this.currentTime = this.videoDoms[index].currentTime;
                         if(i !== -1){
@@ -357,16 +340,6 @@
                         // this.currentTime = this.videoCurrentTime[0];
                         // videoDams[index].currentTime = this.videoCurrentTime;
 
-                        //播放的时候判断距离顶部距离。不全在可视区的情况下，需要调用滚动，使它上或下滚动回到可视区。
-                        if(this.top < 110 || this.top > 366) {
-                            // console.log('回滚');
-                            this.$emit('rollback',this.top);
-                            // this.scrollBack();
-                            // let scrollDom = document.getElementsByClassName('flexdiv')[0];
-                            // // this.$refs.navs.$el.scrollTop = -30;
-                            // scrollDom.scrollTop = 30;
-                        }
-
                         this.videoDom.play();
                         //标志位播放
                         item.isPlay = true;
@@ -392,9 +365,6 @@
 
                         console.log(`${index}` +'播放了');
 
-
-
-
                         if(this.currentDuration.length >=  2) {
                             if(i !== -1){
                                 //在数组中存在，那么取出上次的播放进度作为当前播放开头
@@ -413,7 +383,7 @@
                             //还得把其它项的isPlay属性重置为false。解决点击两次才播放的bug。因为其他的isPlay属性可能还是true。。
                             this.videos[i].isPlay = false;
                         }
-                    } //标志位
+                    }
 
                 }else {
 
@@ -432,8 +402,6 @@
                             //暂停按钮变播放按钮
                             this.play = true;
                             console.log(`${index}` + '暂停了');
-                            // this.speedWidth = this.currentTime / this.durationms * 345;
-                            // console.log(this.activeIndex === index)
 
 
                             this.currentTime = this.videoDoms[index].currentTime;
@@ -487,7 +455,7 @@
                                 this.plays = false;
                             },5000);
 
-                            // console.log(`${index}` +'播放了');
+                            console.log(`${index}` +'播放了');
 
 
 
@@ -519,19 +487,11 @@
                     }
                 }
 
-
-                //判断是否在可视区内，不在的若在播放则暂停。
-
             },
 
 
-
-
-
             updateTime (e) {
-                // if(this.activeIndex !== e.index) {
-                //     this.currentTime = this.Durationms(e.target.currentTime);
-                // }
+
                 this.currentTime = e.target.currentTime; // 播放的时候派发事件，能够获得当前播放时间 ***注意写法
                 this.speedWidth = this.percent * 355;
             },
@@ -624,21 +584,8 @@
             removeBig() {
                 this.$refs.btn.classList.remove('activeBtn');
             },
-            //滚动的时候父组件调用的方法
-            scrollBack() {
-                //自身偏移距离
-                this.$refs.nav.scrollBy(0, -30, 300);
-                console.log('我被调用')
-            },
-            ...mapActions([
-                'video',
-                'setCurrentTimes',
-                'commentBack'
-            ]),
             ...mapMutations({
-                setVideoList:'SET_VIDEO_LIST',
                 setCurrentIndex: 'SET_CURRENT_INDEX',
-                setVideoCurrentTime:'SET_VIDEO_CURRENT_TIME',
             })
         },
         destroyed() {
@@ -647,7 +594,6 @@
                 this.videos[i].isPlay = false;
             }
 
-            console.log('啊有人被销毁了');
         }
     }
 </script>
@@ -655,23 +601,23 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-  li
-    margin:10px auto
+  /*li*/
+  /*  margin:10px auto*/
+
     .flexdiv
       width:100%
-      background-color:white
+      height:308.47px
+      background-color:black
       .container
-        margin:5px 10px
+        margin:auto
         .wrapper
-          background-color:#dcdcdc
-          border-radius:10px
+          background-color:black
           position:relative
-          height:202px
+          height:210px
           font-size:$font-size-small-s
           .video
             width:100%
-            height:200px
-            border-radius:10px
+            height:210px
           .wrap
             position:absolute
             top:0
@@ -689,8 +635,7 @@
               border-radius:6px
               height:13px
               line-height:13px
-              padding:2px 8px
-              background-color:greenyellow
+              padding:0 8px
             .wrapperLeft
               position: absolute
               left:5px
@@ -712,8 +657,8 @@
               color:white
           .control
             height:2px
-            width:96%
-            margin:0 7px
+            width:100%
+            /*margin:0 7px*/
             background-color:gray
             position:relative
             bottom:0
@@ -725,11 +670,10 @@
               .speed
                 height:2px
                 background-color:red
-                width:96%
+                width:100%
                 position: absolute
                 left:0
                 top: 0
-                padding:0 5px
               div
                 position: absolute
                 left:-10px
@@ -752,10 +696,11 @@
           top:-5px !important
 
         .title
-          border-bottom:1px solid #dcdcdc
+          border-bottom:.5px solid rgba(128,128,128,.6)
           flex-between()
           margin:auto 5px
-          height:45px
+          height:50px
+          color:white
           span
             ellipsis()
             font-size:$font-size-medium
@@ -764,8 +709,11 @@
             height:30px
             border-radius:50%
         .wrapBottom
-          height:45px
-          line-height:45px
+          height:50px
+          line-height:50px
+          color:white
+          opacity: 0.8
+          margin:auto 10px
           position:relative
           flex-center(column)
           font-size:$font-size-large
