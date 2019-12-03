@@ -1,10 +1,16 @@
 <template>
-  <div>账户</div>
+  <div>
+    <video-slide></video-slide>
+  </div>
 </template>
 
 <script>
+    import videoSlide from "../common/videoslide";
     export default {
-      name: 'account.vue'
+      name: 'account.vue',
+        components: {
+            videoSlide
+        }
     }
 </script>
 
