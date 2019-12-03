@@ -1,15 +1,25 @@
 <template>
   <div>
-    <video-slide></video-slide>
+    <my-header></my-header>
+    <personal></personal>
+    <feature></feature>
+
+    <div>
+
+    </div>
   </div>
 </template>
 
 <script>
-    import videoSlide from "../common/videoslide";
+    import myHeader from './header'
+    import Personal from "./personal"
+    import Feature from './feature'
     export default {
       name: 'account.vue',
         components: {
-            videoSlide
+            myHeader,
+            Personal,
+            Feature
         }
     }
 </script>
