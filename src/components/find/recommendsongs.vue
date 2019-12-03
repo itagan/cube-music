@@ -20,6 +20,19 @@
         result: []
       }
     },
+    // props: {
+    //     isRefresh:{
+    //         type:Boolean,
+    //         default:false
+    //     }
+    // },
+    // watch:{
+    //     isRefresh() {
+    //         //收到下拉更新消息
+    //         this.getResults()
+    //         console.log('更新推荐歌单');
+    //     }
+    // },
     created () {
       this.getResults()
     },
@@ -27,7 +40,7 @@
       getResults () {
         this.$api.find.recommend().then((res) => {
           this.result = res.data.result
-                  // console.log(this.result)
+                  console.log(this.result)
         })
       }
     }

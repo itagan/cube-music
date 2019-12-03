@@ -47,7 +47,7 @@
 <template>
   <div>
 <!--    <video-base v-bind:videos="videos" @videoEmit="videoemit"></video-base>-->
-    <div class="flexdiv">
+    <div class="flexdiv" >
       <div class="container" v-for="item in videos" :key="item.data.vid">
         <div class="wrap">
           <div class="wrapTop" @click="wonderfulVideo(item.data.vid)">
@@ -111,7 +111,7 @@
               this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
               this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
             }
-                    // console.log(this.videos)
+                    console.log(this.videos)
           })
         },
             // 这里代理actions，mapActions把它包装成类似函数调用的方式
@@ -119,11 +119,28 @@
           'video',
           'commentBack'
         ]),
+
+        //上拉加载新数据
+        upLoad() {
+            //数据重复渲染错误
+            // let _videos = this.videos.slice(4,8);
+            // this.videos.splice(0,4);
+            // this.videos =  this.videos.concat(..._videos);
+        },
         wonderfulVideo () {
           this.commentBack({back: false})
-            // 去精彩视频页面并自动播放该视频
+          this.video({
+              videoGroupId:9102
+          });
+          setTimeout(() => {
+              // 去精彩视频页面并自动播放该视频
+              this.$router.push({
+                  path:`videoslide`
+              })
+          },100)
+            // // 去精彩视频页面并自动播放该视频
             // this.$router.push({
-            //     path:`videoplayer`
+            //     path:`videoslide`
             // })
         },
         avatar () {

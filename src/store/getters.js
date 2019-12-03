@@ -14,3 +14,5 @@ export const currentVideo = (state) => {
 }
 export const currentUrl = state => state.currentUrl
 export const uid = state => state.uid
+export const videoGroupId = state => state.videoGroupId
+
