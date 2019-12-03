@@ -15,6 +15,7 @@
         :showDots="false"
         :autoPlay="false"
         :options="options"
+        :loop="false"
         @change="changePage"
         class="cube-slide">
         <cube-slide-item v-for="(item, index) in videos" :key="index"  class="slide-item">
@@ -35,7 +36,16 @@
       </cube-slide>
 
 
+      <div v-if="pullLoad" class="pullload">
+         <span class="load">
+           <i class="iconfont iconyinletiaodongzhuangtai"></i>
+           <span> 加载中...</span>
+         </span>
+      </div>
+
     </div>
+
+
   </div>
 </template>
 
@@ -66,8 +76,8 @@
                 scrollEvents: ['scroll','scroll-end'],
                 pullDownY:0,
                 der:0,
-                ind:0
-
+                ind:0,
+                pullLoad:false
             }
         },
         // props:{
@@ -109,64 +119,28 @@
                 console.log('当前轮播图序号为:' + current)
                 this.ind = current;
                 this.setCurrentIndex(current)
+                if(current === this.videos.length-1) {
+                    this.pullLoad = true;
+                    this.onPullingUp();
+                }else {
+                    this.pullLoad = false;
+                }
             },
-            // clickHandler(item, index) {
-            //     console.log(item, index)
-            // }
-            // onPullingDown() {
-            //     setTimeout(() => {
-            //         // this.getVideos();
-            //         this.videos = this.videos.reverse();
-            //         this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
-            //         // this.$refs.contentScroll.forceUpdate();//下拉完毕
-            //     }, 1000);
-            // },
 
-            //
-            // onPullingUp() {
-            //     setTimeout(() => {
-            //         if (this.isPullUpLoad) {
-            //             this.videos = [] // 清空数据，以防重复渲染
-            //         };
-            //         this.getVideos();
-            //         const contentScroll = this.$refs.contentScroll;
-            //         contentScroll.forceUpdate();
-            //         // contentScroll.refresh();
-            //     }, 1000);
-            // },
+            onPullingUp() {
+                // const _videos = this.videos;
+                setTimeout(() => {
+                    // if (this.pullLoad) {
+                    //     this.videos = [] // 清空数据，以防重复渲染
+                    // };
+                    this.getVideos(9103);
+                    // this.videos = this.videos + _videos;
+                    // this.$refs.slide.slide.forceUpdate();
+                    this.$refs.slide.slide.refresh();
+                    this.pullLoad = false;
+                }, 1000);
+            },
 
-            // refreshfinish() {
-            //     const contentScroll = this.$refs.contentScroll
-            //     contentScroll.scroll.beforePullDown && contentScroll.refresh()
-            //     contentScroll.forceUpdate();
-            // },
-            // scrollHandler(pos) {
-            //     this.pullDownY = -pos.y;
-            //     // console.log(this.pullDownY)
-            //
-            //     if(this.pullDownY) {
-            //         //上滑
-            //         // console.log('上滑')
-            //
-            //         // let der = this.$refs.contentScroll.scroll.movingDirectionY;
-            //         // //
-            //         // console.log( der )
-            //
-            //         this.$refs.contentScroll.scroll.on('touchend', (pos) => {
-            //             console.log(pos)
-            //         })
-            //
-            //         if(this.pullDownY > 100) {
-            //
-            //         }
-            //
-            //     }else {
-            //         //下滑
-            //         // console.log('下滑')
-            //
-            //     }
-            //
-            // },
             ...mapMutations({
                 setCurrentIndex: 'SET_CURRENT_INDEX',
             })
@@ -195,8 +169,9 @@
       height:617px
       margin-top:50px
       width:100%
-      position:absolute
+      position:relative
       bottom:0
+      top:50px
       overflow:hidden //避免产生自然滚动bug
       .cube-slide
         height:308.47px  //也代表轮播偏移滑动距离
@@ -204,5 +179,19 @@
         .slide-item
           height:308.47px !important
           width:100%
-
+    .pullload
+      position:absolute
+      bottom:150px
+      width:100%
+      height:30px
+      margin-top:100px
+      background-color:black
+      flex-center()
+      .load
+        font-size:$font-size-medium
+        i
+          color:red
+        span
+          color:gray
+          font-size:$font-size-medium
 </style>
