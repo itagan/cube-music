@@ -10,6 +10,7 @@ import Login from '../components/user/login'
 import loginPhone from '../components/user/loginphone'
 import Code from '../components/user/code'
 import PassWord from '../components/user/loginpassword'
+import videoSlide from '../components/common/videoslide'
 
 Vue.use(Router)
 
@@ -48,6 +49,11 @@ export default new Router({
       path: '/login/cellphone/:phone',
       component: PassWord
     },
+    // { name: 'videoslide',
+    //   path: '/login/cellphone/:phone',
+    //   component: PassWord
+    // },
+
     {
       path: '/find',
       component: Find
@@ -71,6 +77,10 @@ export default new Router({
     {
       path: '/videoplayer',
       component: Videoplayer
+    },
+    {
+      path: '/videoslide',
+      component: videoSlide
     }
 
   ]

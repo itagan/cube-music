@@ -5,7 +5,6 @@
         <video :poster="item.data.coverUrl"
                :src="item.data.urlInfo.url"
                class="video"
-
                id="video"
                ref="video"
                :moted="true"

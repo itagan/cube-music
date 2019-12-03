@@ -35,6 +35,9 @@ const mutations = {
   },
   [types.SET_UID] (state, uid) {
     state.uid = uid
+  },
+  [types.SET_VIDEO_GROUP_ID] (state, videoGroupId) {
+    state.videoGroupId = videoGroupId
   }
 }
 

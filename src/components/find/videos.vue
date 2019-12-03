@@ -47,7 +47,7 @@
 <template>
   <div>
 <!--    <video-base v-bind:videos="videos" @videoEmit="videoemit"></video-base>-->
-    <div class="flexdiv">
+    <div class="flexdiv" >
       <div class="container" v-for="item in videos" :key="item.data.vid">
         <div class="wrap">
           <div class="wrapTop" @click="wonderfulVideo(item.data.vid)">
@@ -129,10 +129,13 @@
         },
         wonderfulVideo () {
           this.commentBack({back: false})
+          this.video({
+              videoGroupId:9104
+          });
             // 去精彩视频页面并自动播放该视频
-            // this.$router.push({
-            //     path:`videoplayer`
-            // })
+            this.$router.push({
+                path:`videoslide`
+            })
         },
         avatar () {
                 // 去up主页

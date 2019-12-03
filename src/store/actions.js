@@ -7,11 +7,13 @@ export const loginState = function ({commit, state}, {loginState}) {
   commit(types.SET_LOGIN, loginState)
 }
 // 视频播放有关
-export const video = function ({commit, state}, {vid, index, videoList, currentUrl}) {
+export const video = function ({commit, state}, {vid, index, videoList, currentUrl,videoGroupId}) {
   commit(types.SET_CURRENT_VID, vid)
   commit(types.SET_CURRENT_INDEX, index)
   commit(types.SET_VIDEO_LIST, videoList)// 视频列表流 前后播放的视频进度
   commit(types.SET_CURRENT_URL, currentUrl)
+  commit(types.SET_VIDEO_GROUP_ID, videoGroupId) //视频流列表组id
+
 }
 // 评论上拉加载有关
 export const comment = function ({commit, state}, {limit, hotLimit}) {

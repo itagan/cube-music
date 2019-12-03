@@ -15,7 +15,6 @@
         :showDots="false"
         :autoPlay="false"
         :options="options"
-        :loop="false"
         @change="changePage"
         class="cube-slide">
         <cube-slide-item v-for="(item, index) in videos" :key="index"  class="slide-item">
@@ -36,12 +35,12 @@
       </cube-slide>
 
 
-      <div v-if="pullLoad" class="pullload">
-         <span class="load">
-           <i class="iconfont iconyinletiaodongzhuangtai"></i>
-           <span> 加载中...</span>
-         </span>
-      </div>
+<!--      <div v-if="pullLoad" class="pullload">-->
+<!--         <span class="load">-->
+<!--           <i class="iconfont iconyinletiaodongzhuangtai"></i>-->
+<!--           <span> 加载中...</span>-->
+<!--         </span>-->
+<!--      </div>-->
 
     </div>
 
@@ -50,7 +49,7 @@
 </template>
 
 <script>
-    import {mapMutations} from 'vuex'
+    import {mapActions, mapGetters, mapMutations} from 'vuex'
     import navBar from "../../base/navbar/navbar"
     import wonderfulBase from "../../base/video/wonderfulbase"
     import {serializeNumber} from '../../assets/js/number'
@@ -86,17 +85,39 @@
         //         default:9102
         //     }
         // },
+
         created () {
             this.getVideos()
         },
+
         // watch:{
         //     groupid() {
         //         this.getVideos();
         //     }
         // },
+        computed:{
+            ...mapGetters([
+                'videoGroupId'
+            ]),
+
+            videoGroup() {
+                return this.videoGroupId
+            }
+        },
+        watch:{
+            videoGroup(newid,old) {
+                console.log(newid,old)
+
+                this.$nextTick(() => {
+                    this.getVideos();
+                    this.$refs.slide.slide.refresh();
+                });
+              // this.getVideos()
+            }
+        },
         methods: {
             getVideos () {
-                this.$api.video.videolist(9102).then((res) => {
+                this.$api.video.videolist(this.videoGroupId).then((res) => {
                     this.videos = res.data.datas;
                     for (let i = 0; i < this.videos.length; i++) {
                         this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
@@ -119,12 +140,12 @@
                 console.log('当前轮播图序号为:' + current)
                 this.ind = current;
                 this.setCurrentIndex(current)
-                if(current === this.videos.length-1) {
-                    this.pullLoad = true;
-                    this.onPullingUp();
-                }else {
-                    this.pullLoad = false;
-                }
+                // if(current === this.videos.length-1) {
+                //     this.pullLoad = true;
+                //     this.onPullingUp();
+                // }else {
+                //     this.pullLoad = false;
+                // }
             },
 
             onPullingUp() {
@@ -133,7 +154,7 @@
                     // if (this.pullLoad) {
                     //     this.videos = [] // 清空数据，以防重复渲染
                     // };
-                    this.getVideos(9103);
+                    this.getVideos(9104);
                     // this.videos = this.videos + _videos;
                     // this.$refs.slide.slide.forceUpdate();
                     this.$refs.slide.slide.refresh();
@@ -167,9 +188,8 @@
 
     .slides
       height:617px
-      margin-top:50px
       width:100%
-      position:relative
+      position:absolute
       bottom:0
       top:50px
       overflow:hidden //避免产生自然滚动bug
@@ -179,6 +199,8 @@
         .slide-item
           height:308.47px !important
           width:100%
+
+
     .pullload
       position:absolute
       bottom:150px
