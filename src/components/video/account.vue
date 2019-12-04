@@ -7,7 +7,7 @@
 <script>
     import videoSlide from "../common/videoslide";
     export default {
-        name: 'account.vue',
+      name: 'account.vue',
         components: {
             videoSlide
         }
