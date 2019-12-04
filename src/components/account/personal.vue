@@ -14,12 +14,20 @@
         <div class="grade">Lv8</div>
       </div>
 
-      <div class="sign-in">
+      <div class="sign-in" v-show="signIn" @click="toSignIn">
         <span>已签到
         <i class="iconfont iconzan1"></i>
         </span>
-        <span></span>
       </div>
+
+      <div class="sign-in before-signin" v-show="!signIn" @click="toSignIn">
+        <span>
+        <i class="iconfont iconzan1"></i>
+          签到
+        </span>
+      </div>
+
+
     </div>
 
     <ul class="center">
@@ -47,7 +55,7 @@
         <div class="vip-left">
           <span>开通黑胶VIP</span>
           <span>
-            新客近5元
+            新客仅5元
             <i class="iconfont iconzan1"></i>
           </span>
         </div>
@@ -100,7 +108,18 @@
 
 <script>
     export default {
-        name: "personal.vue"
+        name: "personal.vue",
+        data() {
+            return {
+                signIn:false
+            }
+        },
+        methods:{
+            //签到
+            toSignIn() {
+                this.signIn = !this.signIn
+            }
+        }
     }
 </script>
 
@@ -160,7 +179,11 @@
       i
         font-size:$font-size-small
         color:rgba(128,128,128,.5)
-
+    .before-signin
+      background-color:#ff4500
+      color:white
+      i
+        color:white
 
   .center
     height:50px

@@ -99,7 +99,7 @@
     background-color:#db2c1f
     width:100%
     height:667px
-    z-index:200
+    z-index:2001
     position:relative
     .img
       width:250px

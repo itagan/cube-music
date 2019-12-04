@@ -19,6 +19,21 @@
                 account:false
             }
         },
+        props:{
+            show: {
+                type:Boolean,
+                default:false
+            }
+        },
+        watch:{
+            show(show) {
+                if(show) {
+                    this.account = true
+                }else {
+                    this.account = false
+                }
+            }
+        },
         methods: {
             //扫一扫
             scan () {
