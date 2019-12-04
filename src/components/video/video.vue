@@ -56,6 +56,8 @@
   @import "../../common/stylus/mixin"
   .video
     position:relative
+    width:375px
+    height:675px
     .my-nav
       width:375px
       height:42px
