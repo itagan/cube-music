@@ -1,13 +1,4 @@
 <template>
-<!--  <div class="find">-->
-<!--    <find-header></find-header>-->
-<!--    <find-slider></find-slider>-->
-<!--    <find-nav></find-nav>-->
-<!--    <find-recommend></find-recommend>-->
-<!--    <find-new></find-new>-->
-<!--    <find-videos></find-videos>-->
-<!--  </div>-->
-
 
   <div class="find">
     <find-header></find-header>
@@ -21,8 +12,8 @@
         @pulling-down="onPullingDown"
         @pulling-up="onPullingUp">
 
-        <find-slider></find-slider>
-        <find-nav></find-nav>
+        <find-slider class="find-slider"></find-slider>
+        <find-nav class="find-nav"></find-nav>
         <find-recommend ref="recommend"></find-recommend>
         <find-new></find-new>
         <find-videos ref="video"></find-videos>
@@ -123,20 +114,9 @@
 
                     this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
                     this.$refs.contentScroll.forceUpdate();//下拉完毕
-                    // this.trans = true;
                     this.isRefresh = true;
                 }, 1000);
 
-                // this.$refs.recommend.getResults();
-                // this.$refs.video.getVideos();
-                //
-                // this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
-                // this.$refs.contentScroll.forceUpdate();//下拉完毕
-                // this.isRefresh = true;
-
-                // if(this.isRefresh) {
-                //     this.trans = true;
-                // }
             },
 
 
@@ -149,20 +129,6 @@
                     contentScroll.forceUpdate();
                     // contentScroll.refresh();
                 }, 1000);
-            },
-
-            refreshfinish() {
-                // const contentScroll = this.$refs.contentScroll
-                // contentScroll.scroll.beforePullDown && contentScroll.refresh()
-                // contentScroll.forceUpdate();
-
-                // if(this.pullDownY === 0) {
-                //     console.log('11')
-                //     this.findmore = true;
-                // }
-                // this.findmore = true;
-
-
             },
             scrollHandler(pos) {
                 this.pullDownY = -pos.y;
@@ -178,9 +144,10 @@
   @import "../../common/stylus/mixin"
 
   .find
-    /*margin-top:50px*/
     height:667px
     width:375px
+    .find-nav
+      margin-top:160px
 
   .content-scroll-wrapper
     position:relative

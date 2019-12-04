@@ -118,14 +118,13 @@
     }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style  lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
 
   .slide
     .content
       height: 567px
-      /*margin-top:10px*/
       .cube-slide
         height:567px !important
 
@@ -146,6 +145,7 @@
           line-height: 42px
           padding: 0 5px
           display:flex
+          /*width:auto !important*/
           .nav-item
             display: inline-block
             padding: 0 5px
