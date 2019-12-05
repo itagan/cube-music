@@ -168,6 +168,9 @@ export default {
           CurrentVid() {
             return this.currentVid
           },
+          Back() {
+            return this.back
+          },
         options () {
           return {
             pullUpLoad: this.pullUpLoadObj,
@@ -193,7 +196,16 @@ export default {
           CurrentVid() {
               this.getvVideoUrl()
               this.getVideo()
-          }
+          },
+          Back(newBack) {
+              this.$nextTick(() => {
+                  if(newBack) {
+                      this.commentTop ()
+                  }else {
+                      this.backtop()
+                  }
+              })
+          },
       },
       methods: {
         scrollHandler ({ y }) {
@@ -325,8 +337,6 @@ export default {
         },
         updateTime (e) {
           this.currentTime = e.target.currentTime
-
-          this.speedWidth = this.percent * 345
         },
         Durationms (durationms) {
           durationms = durationms | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
@@ -345,7 +355,6 @@ export default {
       mounted () {
             // 确保DOM结构渲染完成才能滚动。延时确保滚动结构距离正常
         this.$nextTick(() => {
-                // this.commentBack();
           setTimeout(() => {
             this.commentBack()
           }, 1000)
@@ -354,6 +363,7 @@ export default {
       destroyed () {
             // 销毁本页面时候，把vuex的一些重置
         this.setCommentBack(false)
+          console.log('销毁')
     }
 
     }

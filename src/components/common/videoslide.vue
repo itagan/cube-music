@@ -85,19 +85,21 @@
             videoGroup(newid,old) {
                 console.log(newid,old)
 
-                this.$nextTick(() => {
-                    this.getVideos();
-                    this.$refs.slide.slide.refresh();
-                });
+                // this.getVideos();
+
+                // this.$nextTick(() => {
+                //     this.getVideos();
+                //     this.$refs.slide.slide.refresh();
+                // });
             }
         },
         methods: {
             getVideos () {
-                if(!this.videoGroupId) {
-                    this.GroupId = 9102
-                }
+                // if(!this.videoGroupId) {
+                //     this.GroupId = 9102
+                // }
 
-                this.$api.video.videolist(this.GroupId).then((res) => {
+                this.$api.video.videolist(9102).then((res) => {
                     this.videos = res.data.datas;
                     for (let i = 0; i < this.videos.length; i++) {
                         this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
@@ -106,9 +108,7 @@
                 })
             },
             goback() {
-                this.$router.push({
-                    path:'find'
-                })
+                this.$router.go(-1)
             },
             rollBack() {
                 //点击下边的视频即往上滚动并播放。

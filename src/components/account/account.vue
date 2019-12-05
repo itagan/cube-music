@@ -12,7 +12,7 @@
       >
         <personal></personal>
         <feature></feature>
-        <cube-button class="login-out" type="button" light="true" @click="loginOut">退出登录</cube-button>
+        <cube-button class="login-out" type="button" @click="loginOut">退出登录</cube-button>
 
 
       </cube-scroll>

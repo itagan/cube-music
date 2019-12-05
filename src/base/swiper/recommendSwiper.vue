@@ -54,19 +54,11 @@
             // 监控父组件传递过来的vid变化则重新渲染新相关推荐数据
         detail () {
           this.getRecommend()
-            // this.getLength();
         }
       },
       methods: {
         getRecommend () {
-              // this.$api.video.allvideo(this.currentVid).then(res => {
-              //     this.recommend = res.data.data;
-              //     for(let i = 0; i < this.recommend.length; i++){
-              //         this.recommend[i].playTime = serializeNumber(this.recommend[i].playTime);
-              //         this.recommend[i].durationms = durationms(this.recommend[i].durationms);
-              //     }
-              // })
-          this.$api.video.allvideo(this.detail.vid).then(res => {
+            this.$api.video.allvideo(this.detail.vid).then(res => {
             this.recommend = res.data.data
             for (let i = 0; i < this.recommend.length; i++) {
               this.recommend[i].playTime = serializeNumber(this.recommend[i].playTime)

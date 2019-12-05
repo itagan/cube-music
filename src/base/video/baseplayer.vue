@@ -320,6 +320,9 @@
             },
             toBack() {
                 this.$router.go(-1)
+                setTimeout(() => {
+                    this.setCommentBack(false)
+                },100)
             },
             ...mapActions([
                 'video',
@@ -329,6 +332,7 @@
             ...mapMutations({
                 setVideoList:'SET_VIDEO_LIST',
                 setVideoCurrentTime:'SET_VIDEO_CURRENT_TIME',
+                setCommentBack: 'SET_BACK'
             })
         }
     }

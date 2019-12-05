@@ -152,6 +152,7 @@
         more () {
                 // 打开更多操作
           this.$emit('more', this.playlist.length)
+            console.log('更多s')
         },
         morecollection () {
                 // 打开更多操作
