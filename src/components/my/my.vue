@@ -1,16 +1,28 @@
 <template>
   <div class="my">
     <my-header ref="change" @complete="complete"></my-header>
-    <my-nav class="my-nav"></my-nav>
-    <my-music class="mu-music"></my-music>
-    <play-list
-      class="create-list"
-      @build="buildlist"
-      @more="more"
-      @mores="mores"
-      ref="hom"
-    ></play-list>
-    <build-list class="build-list" v-if="isbuild" @cancel="cancel"></build-list>
+
+    <div class="scroll-list-wrap">
+      <cube-scroll
+        ref="scroll"
+        :scroll-events="scrollEvents"
+        :options="options"
+        :direction="direction"
+      >
+        <my-nav class="my-nav"></my-nav>
+        <my-music class="mu-music"></my-music>
+        <play-list
+          class="create-list"
+          @build="buildlist"
+          @more="more"
+          @mores="mores"
+          ref="hom"
+        ></play-list>
+        <build-list class="build-list" v-if="isbuild" @cancel="cancel"></build-list>
+
+      </cube-scroll>
+    </div>
+
     <play-more
       v-if="ismore"
       @cancel="cancelmore"
@@ -26,15 +38,14 @@
       :nums="collectionnum"
       @manage="manage"
     ></collection-more>
+
   </div>
 </template>
 
 <script>
-    import playlist from './playlist'
-// import ModalHelper from '../../assets/js/dialog'
-import myHeader from './header'
+    import myHeader from './header'
     import myNav from './mynav'
-import myMusic from './mymusic'
+    import myMusic from './mymusic'
     import playList from './playlist'
     import buildList from './buildlist'
     import playMore from './playmore'
@@ -58,7 +69,14 @@ import myMusic from './mymusic'
           ismore: false,
           createnum: 0,
           iscollectionmore: false,
-          collectionnum: 0
+          collectionnum: 0,
+            options: {
+                // probeType: ,
+                scrollbar: true,
+                preventDefault: false
+            },
+            scrollEvents: ['scroll'],
+            direction:'vertical',
         }
       },
         // created() {
@@ -67,25 +85,20 @@ import myMusic from './mymusic'
       watch: {
         isbuild (val) {
           if (val) {
-                    // ModalHelper.afterOpen();
             this._dialog.afterOpen()
           } else {
-                    // ModalHelper.beforeClose();
             this._dialog.beforeClose()
           }
         },
         ismore (val) {
           if (val) {
-                    // ModalHelper.afterOpen();
             this._dialog.afterOpen()
           } else {
-                    // ModalHelper.beforeClose();
             this._dialog.beforeClose()
           }
         },
         iscollectionmore (val) {
           if (val) {
-                    // ModalHelper.afterOpen();
             this._dialog.afterOpen()
           } else {
                     // ModalHelper.beforeClose();
@@ -154,13 +167,23 @@ import myMusic from './mymusic'
   @import "../../common/stylus/mixin"
 
   .my
-    z-index:200  //不能太大避免影响弹框显示
+    z-index:200//不能太大避免影响弹框显示
     height:667px
     width:100%
     background-color:white
 
-  /*.cube-scroll-content*/
-  /*  display: inline-block !important*/
+  .scroll-list-wrap
+    height: 617px
+    width:375px
+
+  .cube-scroll-wrapper
+    height: 617px
+    width:375px
+
+  .cube-scroll-content
+    height:auto
+    overflow:hidden
+
 
   .mu-music
     position:absolute

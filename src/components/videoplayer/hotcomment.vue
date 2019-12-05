@@ -234,7 +234,7 @@ import {timestampother} from '../../assets/js/timestamp'
 
   .sticky-view-container
     position: absolute
-    top: 45px
+    top: 220px
     bottom: 0
     left: 0
     width: 100%

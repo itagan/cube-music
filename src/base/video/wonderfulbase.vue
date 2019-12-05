@@ -117,10 +117,6 @@
             }
         },
         props: {
-            // videoGroupId:{
-            //     type:Number,
-            //     required:true
-            // },
             videos:{
                 type:Array,
                 default:[],
@@ -143,18 +139,6 @@
                 required:true
             }
         },
-        // watch: {
-        //     //videoGroup 的 id 父组件切换时候传过来
-        //     // videoGroupId(id) {
-        //     //     this.getVideos(id);
-        //     // }
-        //     videos(val) {
-        //         for(let i=0;i<val.length;i++){
-        //             val[i].data.playTime = serializeNumber(val[i].data.playTime)
-        //             val[i].data.durationms = durationms(val[i].data.durationms)
-        //         }
-        //     }
-        // },
         created() {
             this.touch = {}  //用于不同回调的时候共享数据挂载到这里来
         },
@@ -189,7 +173,6 @@
                 //vuex获取索引方式
                 console.log(newCurrent,oldCurrent);
             },
-
             ind(ind) {
                 let newind = ind;
                 let videoDoms = document.querySelectorAll('video');
@@ -207,7 +190,6 @@
         },
 
         methods:{
-
             playVideo(item,index,e) {
                 this.top = this.$refs.nav.getBoundingClientRect().top; //播放盒子距离顶部距离。
                 //播放的时候判断距离顶部距离。上滚动回到可播放区。
