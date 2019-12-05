@@ -33,7 +33,9 @@
       </li>
 
       <li class="li" v-for="(item,index) in playlist.slice(1)" :key="item.id" data-type="0">
-        <div class="li-item" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">
+        <div class="li-item" >
+<!--          <div class="li-item" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">-->
+
           <div class="li-left">
             <img :src="item.coverImgUrl">
           </div>
@@ -48,7 +50,7 @@
           </div>
         </div>
 
-        <div class="delete" @click="deleteItem" :data-index="index">删除</div>
+<!--        <div class="delete" @click="deleteItem" :data-index="index">删除</div>-->
       </li>
     </ul>
 
@@ -175,6 +177,8 @@
           this.righticon = true
         },
 
+
+        //左滑删除功能 ** 外部网上代码引入，暂时未成功本地实现
         skip () {
           if (this.checkSlide()) {
             this.restSlide()

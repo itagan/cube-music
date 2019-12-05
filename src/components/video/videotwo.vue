@@ -57,7 +57,6 @@
                    <i class="iconfont iconyinletiaodongzhuangtai"></i>
                   <span> 加载中...</span>
                 </span>
-<!--              <span v-else>更新成功</span>-->
             </template>
           </div>
         </template>
@@ -67,8 +66,6 @@
 </template>
 
 <script>
-  // 测试文件**** 新方案:分割基础组件baseVideo出去再从这里循环生成列表，解决一个bug（图标是否显示问题），但新产生一个bug（点击两下可能才播放暂停）。暂时未解决****
-
       import baseVideo from '../../base/video/basevideo'
       import {serializeNumber} from '../../assets/js/number'
       import {durationms} from '../../assets/js/timestamp'
@@ -88,7 +85,8 @@
                       stopTime: 1000,
                       txt: '更新成功'
                   },
-                  pullUpLoad: true
+                  pullUpLoad: true,
+                  click:false, //解决点击事件被触发两次的问题
               },
               secondStop: 0,
               scrollEvents: ['scroll'],
@@ -99,7 +97,7 @@
           props:{
               groupid:{
                   type:Number,
-                  // default:9102
+                  default:9102
               }
           },
         created () {
@@ -108,7 +106,6 @@
         watch:{
             groupid() {
                 this.getVideos();
-                // console.log('11');
             }
         },
         methods: {
@@ -117,33 +114,16 @@
               this.videos = res.data.datas;
               for (let i = 0; i < this.videos.length; i++) {
                 this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
-                  // console.log(this.videos[i].data.playTime);
                 this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
               }
-              // console.log(this.videos)
             })
           },
             rollBack(top) {
                 if(top < 90) {
-                    // this.$nextTick(() => {
-                    //     this.$refs.contentScroll.scroll.scrollBy(0,top,300);
-                    //     // this.$refs.navs.scrollBy(0,30);
-                    //
-                    // });
-                    // this.$refs.contentScroll.scrollBy(0,-30);
                     let _top = 90 - top;
-
                     this.$refs.contentScroll.scroll.scrollBy(0,_top,300);
                     this.$refs.contentScroll.refresh();
-                    // this.$refs.contentScroll.scrollTo(0,top,300);
 
-                    // this.$refs.contentScroll.scrollToElement('.nav-wrapper', 200, 0, 0);
-                    // this.$refs.navs.scrollTo(0, 30, 300);
-
-                    // let scrollDom = document.getElementsByClassName('content-scroll-wrapper')[0];
-                    // // this.$refs.navs.$el.scrollTop = -30;
-                    // scrollDom.scrollTop = 30;
-                    // console.log(scrollDom.scrollTop)
                 }else if(top > 366) {
                     let _top = -(top - 366);
                     this.$refs.contentScroll.scroll.scrollBy(0,_top,300);
@@ -153,7 +133,6 @@
 
             onPullingDown() {
                 setTimeout(() => {
-                    // this.getVideos();
                     this.videos = this.videos.reverse();
                     this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
                     // this.$refs.contentScroll.forceUpdate();//下拉完毕
@@ -165,7 +144,7 @@
                 setTimeout(() => {
                     if (this.isPullUpLoad) {
                         this.videos = [] // 清空数据，以防重复渲染
-                    };
+                    }
                     this.getVideos();
                     const contentScroll = this.$refs.contentScroll;
                     contentScroll.forceUpdate();
@@ -177,25 +156,9 @@
                 const contentScroll = this.$refs.contentScroll
                 contentScroll.scroll.beforePullDown && contentScroll.refresh()
                 contentScroll.forceUpdate();
-
-                // if(this.pullDownY === 0) {
-                //     console.log('11')
-                //     this.findmore = true;
-                // }
-                // this.findmore = true;
-
-
             },
             scrollHandler(pos) {
                 this.pullDownY = -pos.y;
-                // console.log(this.pullDownY)
-                // if(this.pullDownY === 0) {
-                //     this.findmore = true;
-                // }
-                // console.log(this.pullDownY);
-                // console.log(this.$refs.nav.scrollTop);
-                // console.log(this.$refs.nav.offsetTop);
-
             },
         }
       }

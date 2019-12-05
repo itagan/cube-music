@@ -37,19 +37,9 @@
 
         </div>
 
-        <div class="control" v-show="this.speedWidth" ref="progressBar">
+        <div class="control" v-show="this.speedWidth && speedShow" ref="progressBar">
           <div class="bar-inner">
-<!--          <div class="speed" ref="speed" :style="{width: speedWidth + 'px'}"></div>-->
             <div class="speed" ref="speed"></div>
-
-<!--            <div-->
-<!--            ref="controlBtn"-->
-<!--&lt;!&ndash;            :style="{left: speedWidth + 'px'}"&ndash;&gt;-->
-<!--            v-show="controlBtn"-->
-<!--            @touchstart.prevent="btnTouchStart"-->
-<!--            @touchmove.prevent="btnTouchMove"-->
-<!--            @touchend="btnTouchEnd"-->
-<!--          >-->
             <div
               ref="controlBtn"
               v-show="controlBtn"
@@ -116,18 +106,14 @@
                 currentshow:true,//视频左下角播放量或者进度是否显示
                 currentTimeShow:true,//播放量跟播放进度转换
                 check:true,//是否显示
-                countTime:true, //视频左下角播放量变成播放时间进度
                 wrapShow:false, //遮罩层是否存在
                 controlBtn:false, //进度按钮
                 playTime:true, //播放总时间是否变成视频全屏按钮
                 playTimes:true,//播放总时间或者全屏按钮是否会显示
                 plays:true,//播放或暂停按钮显示出来
-                // playss:true,
                 play:true, //播放和暂停按钮切换
+                speedShow: true , //进度条和按钮是否显示
                 currentTime:`00:00`, //播放进度时间
-                // _currentTime:`00:00`,//保存进度
-                activeIndex: -1,
-                // duration:'', //视频播放总时间
                 speedWidth:0,
                 durationms:0,//视频播放总时间
                 currentDuration:[{},{}], //存放前后播放视频的播放进度
@@ -135,10 +121,6 @@
             }
         },
         props: {
-            // videoGroupId:{
-            //     type:Number,
-            //     required:true
-            // },
             videos:{
                 type:Array,
                 default:[],
@@ -157,18 +139,6 @@
                 default: 0
             }
         },
-        // watch: {
-        //     //videoGroup 的 id 父组件切换时候传过来
-        //     // videoGroupId(id) {
-        //     //     this.getVideos(id);
-        //     // }
-        //     videos(val) {
-        //         for(let i=0;i<val.length;i++){
-        //             val[i].data.playTime = serializeNumber(val[i].data.playTime)
-        //             val[i].data.durationms = durationms(val[i].data.durationms)
-        //         }
-        //     }
-        // },
         created() {
             this.touch = {}  //用于不同回调的时候共享数据挂载到这里来
         },
@@ -200,240 +170,128 @@
             },
             pullDownY() {
                 //监控滚动行为，超出视界的暂停播放。
-                if(this.item.isPlay) {
-                      let top = this.$refs.nav.getBoundingClientRect().top;
-                      this.videoDom = this.$refs.video;
-                    console.log(top);
-                    if(top < -110 || top > 625) {
-                          //上滑过头，需要暂停并保存进度。
-                          this.item.isPlay = false;
-                          this.videoDom.pause();
-                      }
+
+                let top = this.$refs.nav.getBoundingClientRect().top;
+                if(top < -110 || top > 625) {
+                    this.plays = true;
+                    this.currentshow = true;
+                    this.currentTimeShow = true;
+                    this.playTimes = true;
+                    this.playTime = true;
+                    this.speedShow = false;
+
+                    if(this.item.isPlay) {
+                        //上下滑过头，播放中的需要暂停并保存进度。
+                        this.videoDom = this.$refs.video;
+                        this.videoDom.pause();
+                        this.item.isPlay = false;
+                    }
                 }
             }
         },
-        // mounted() {
-        //     this.playVideo()
-        // },
+
         methods:{
-            // getVideos(id) {
-            //     this.$api.video.videolist(id).then((res) => {
-            //         this.videos = res.data.datas;
-            //         for(let i=0;i<this.videos.length;i++){
-            //             this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
-            //             this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
-            //         }
-            //         console.log(this.videos)
-            //     })
-            // },
-
             playVideo(item,index,e) {
-                //其他设计思路。监控视频播放状态。暂停的isPlay属性都是false。播放为true……
-                // this.wrapShow = !this.wrapShow;
-
-                //该视频未显示播放进度情况下（非暂停状态），点击容器可播放视频
-                // this.videoDom = document.getElementById('video');
-                // console.log(this.$refs.video);
-
-
-                // console.log(this.$refs.nav.scrollTop);
-                // console.log(this.$refs.nav.offsetTop);
-                console.log(this.$refs.nav.getBoundingClientRect().top);
-
-
                 this.top = this.$refs.nav.getBoundingClientRect().top; //播放盒子距离顶部距离。
-                this.videoDom = this.$refs.video;
-                this.videoDoms = document.querySelectorAll('video');
-                // this.videoDoms = document.getElementsByClassName('video');
-                // this.videoDom = document.getElementsByClassName('video')[index];
-                // console.log(this.videoDoms);
+                this.videoDom = this.$refs.video; //获取当前播放的视频DOM
+                this.videoDoms = document.querySelectorAll('video'); //获取所有真实视频DOM
+                this.durationms = this.videoDom.duration; //获取播放时长
+                this.setCurrentIndex(index); //提交当前播放的视频索引
 
-                this.durationms = this.videoDom.duration;
-                this.setCurrentIndex(index);
-
+                //给每个项添加isPlay属性判断是否播放
                 if(typeof item.isPlay == 'undefined'){
                     //给对象添加属性
                     this.$set(item,'isPlay',false);
                 }
-                // else {
-                //     item.isPlay = !item.isPlay;
-                //     console.log(item.isPlay)
-                // }
-                //下边已经有判断并且里面设置了取反操作。所以不需要前面取反操作了
 
-                //注意以下3个的区别。。1和3是同一个。2包含了item，这里指循环的单个组件。
-                // console.log(item);
-                // console.log(this);
-                // console.log(this.videos[index])
 
-                // console.log(index);
-                //隐藏播放量，显示播放进度
-                this.currentTimeShow = false;
-                //播放或暂停的时候进度按钮显示
-                this.controlBtn = true;
-                //播放总长度变成全屏按钮
-                this.playTime = false;
-                // this.playss = true;
-                // //中间播放按钮或暂停按钮是否显示
-                // this.plays = false;
-                //播放按钮变暂停按钮
-                this.play = false;
-                //右下角播放总长度变成全屏按钮
-                this.playTimes = true;
-                //左下角播放量或者进度是否显示
-                this.currentshow = true;
+
                 let obj = {};
                 obj[index] = this.currentTime;
-                //判断被点击的视频是否存在了***为避免空值无法Object.keys转 currentDuration:[0,0]这样定义。
-                // let has = parseInt(Object.keys(this.currentDuration[0])[0]) === index || parseInt(Object.keys(this.currentDuration[1])[0]) === index;
                 //看看当前被点击的是否有在数组中//不存在则返回-1
                 let i = this.currentDuration.findIndex((value) => {
                     return index === parseInt(Object.keys(value)[0]);
                 });
 
-                //每次点击都能够决定是否呈现播放或者暂停按钮
-                this.plays = !this.plays;
 
-                // if(timeone) {
-                //     console.log('存在');
-                //     clearTimeout(timeone)
-                // }
 
-                //播放的时候视频顶部显示切换
-                    let timeone =  setTimeout(() => {
-                    //底部播放或暂停的时候进度按钮显示
-                    this.controlBtn = false;
-                    //右下角播放总长度变成全屏按钮
-                    this.playTimes = false;
-                    //左下角播放量或者进度是否显示
-                    this.currentshow = false;
-                    //中间播放按钮或暂停按钮是否显示
-                    this.plays = false;
-                },5000);
+                if(this.top < 110 || this.top > 366) {
+                    this.$emit('rollback',this.top);
+                }
+
 
                 if(this.currentTime === 0) {
-                    //播放进度为0的情况下，点击就可以播放。否则需要点击播放或暂停按钮实现
-                    if( item.isPlay) {
-                        this.videoDom.pause();
-                        //标志位
-                        item.isPlay =  false;
-                        this.activeIndex = -1;
-                        this.countTime = false;
-                        //中间播放按钮或暂停按钮是否显示
-                        this.plays = true;
-                        //暂停按钮变播放按钮
-                        this.play = true;
-                        console.log(`${index}` + '暂停了');
-                        // this.speedWidth = this.currentTime / this.durationms * 345;
-                        // console.log(this.activeIndex === index)
+                    //********功能需求：播放进度为0的情况下，点击就可以播放。否则需要点击播放或暂停按钮实现********
+                    this.videoDom.play();
+                    item.isPlay = true;
 
 
-                        this.currentTime = this.videoDoms[index].currentTime;
+                    //中间播放按钮或暂停按钮是否显示
+                    this.plays = false;
+                    //左下角播放量或者进度是否显示
+                    this.currentshow = false;
+                    //右下角播放总长度变成全屏按钮
+                    this.playTimes = false;
+                    //每次点击应都保持底部进度条有显示
+                    this.speedShow = true;
+                    //播放或暂停的时候进度按钮显示
+                    this.controlBtn = false;
+
+
+                    console.log(`${index}` +'播放了');
+
+
+                    if(this.currentDuration.length >=  2) {
                         if(i !== -1){
-                            //原来就存在的话，那就把它替换为新播放进度
-                            this.currentDuration[i][index] = this.videoDoms[index].currentTime;
-                        }else {
-                            if(this.currentDuration.length >=  2) {
-                                this.currentDuration.splice(0,1);//删除第1个
-                                this.currentDuration.push(obj);//再把新的推进来
-                            }else {
-                                // this.currentDuration.splice(0,1);//删除第1个
-                                this.currentDuration.push(obj);
-                            }
+                            //在数组中存在，那么取出上次的播放进度作为当前播放开头
+                            this.currentTime = this.currentDuration[i][index];
+                            this.videoDoms[index].currentTime= this.currentDuration[i][index];
                         }
-
-                        //当该视频开启了播放，即使之后暂停。其它视频统统还原状态。仅仅保存上一条播放的进度。其它重置。
-                        for(let i = 0;i<this.videos.length;i++) {
-                            if(index === i) continue;
-                            this.videos[i].isPlay = false;
-                            this.videoDoms[i].pause();
-                            this.videoDoms[i].currentTime = 0; //重置
-                            this.videos[i].isPlay = false;
-                        }
-
+                    }else {
+                        //没找到说明没有最近上次播放进度
+                        this.currentDuration.splice(0,1);//删除第1个
+                        this.currentDuration.push(obj);//再把新的推进来
                     }
-                    else{
-                        //从vuex获取播放进度时间并给对应视频设置播放进度
-                        // this.currentTime = this.videoCurrentTime[0];
-                        // videoDams[index].currentTime = this.videoCurrentTime;
-
-                        //播放的时候判断距离顶部距离。不全在可视区的情况下，需要调用滚动，使它上或下滚动回到可视区。
-                        if(this.top < 110 || this.top > 366) {
-                            // console.log('回滚');
-                            this.$emit('rollback',this.top);
-                            // this.scrollBack();
-                            // let scrollDom = document.getElementsByClassName('flexdiv')[0];
-                            // // this.$refs.navs.$el.scrollTop = -30;
-                            // scrollDom.scrollTop = 30;
-                        }
-
-                        this.videoDom.play();
-                        //标志位播放
-                        item.isPlay = true;
-                        this.activeIndex = index;
-
-                        //播放的时候视频顶部显示切换
-                        setTimeout(() => {
-                            //底部播放或暂停的时候进度按钮显示
-                            this.controlBtn = false;
-                            //右下角播放总长度变成全屏按钮
-                            this.playTimes = false;
-                            // //中间播放按钮变暂停按钮
-                            // this.plays = false;
-                            //左下角播放量或者进度是否显示
-                            this.currentshow = false;
-                            //隐藏播放进度播放量，显示播放量
-                            this.currentTimeShow = true;
-                            //播放按钮变暂停按钮
-                            this.play = true;
-                            //中间播放按钮或暂停按钮是否显示
-                            this.plays = false;
-                        },5000);
-
-                        console.log(`${index}` +'播放了');
 
 
 
+                    for(let i = 0;i<this.videos.length;i++) {
+                        if(i === index) continue;
+                        this.videoDoms[i].pause();
+                        this.videoDoms[i].currentTime = 0; //重置
+                        //还得把其它项的isPlay属性重置为false。解决点击两次才播放的bug。因为其他的isPlay属性可能还是true。。
+                        this.videos[i].isPlay = false;
+                    }
 
-                        if(this.currentDuration.length >=  2) {
-                            if(i !== -1){
-                                //在数组中存在，那么取出上次的播放进度作为当前播放开头
-                                this.currentTime = this.currentDuration[i][index];
-                                this.videoDoms[index].currentTime= this.currentDuration[i][index];
-                            }
-                        }else {
-                            //没找到说明没有最近上次播放进度
-                            this.currentDuration.splice(0,1);//删除第1个
-                            this.currentDuration.push(obj);//再把新的推进来
-                        }
-                        for(let i = 0;i<this.videos.length;i++) {
-                            if(i === index) continue;
-                            this.videoDoms[i].pause();
-                            this.videoDoms[i].currentTime = 0; //重置
-                            //还得把其它项的isPlay属性重置为false。解决点击两次才播放的bug。因为其他的isPlay属性可能还是true。。
-                            this.videos[i].isPlay = false;
-                        }
-                    } //标志位
+
 
                 }else {
+                      console.log(this.currentTime)
+                      //已经有播放进度。那么是手动或被动暂停了。
+                      //***被暂停时候只能点击图标实现播放或暂停。直接点击屏幕显示图层图标***
+                    let isTarget = e.target.className ===  'iconfont iconnetease' || e.target.className ===  'iconfont iconliuyan';
 
-                    if(e.target.className ===  'iconfont iconnetease' || e.target.className ===  'iconfont iconliuyan'){
-                        // this.wrapShow = false;
-                        clearTimeout(timeone); //清理定时器
-
-                        if( item.isPlay) {
+                        if(item.isPlay && isTarget) {
                             this.videoDom.pause();
-                            //标志位
                             item.isPlay =  false;
-                            this.activeIndex = -1;
-                            this.countTime = false;
+
+                            console.log('暂停');
                             //中间播放按钮或暂停按钮是否显示
                             this.plays = true;
                             //暂停按钮变播放按钮
                             this.play = true;
-                            console.log(`${index}` + '暂停了');
-                            // this.speedWidth = this.currentTime / this.durationms * 345;
-                            // console.log(this.activeIndex === index)
+                            //左下角播放量或者进度是否显示
+                            this.currentshow = true;
+                            //隐藏播放进度播放量，显示播放量
+                            this.currentTimeShow = false;
+                            //右下角播放总长度或全屏按钮是否显示
+                            this.playTimes = true;
+                            //播放总长度变成全屏按钮
+                            this.playTime = false;
+                            //每次点击应都保持底部进度条有显示
+                            this.speedShow = true;
+                            //播放或暂停的时候进度按钮显示
+                            this.controlBtn = true;
 
 
                             this.currentTime = this.videoDoms[index].currentTime;
@@ -445,7 +303,6 @@
                                     this.currentDuration.splice(0,1);//删除第1个
                                     this.currentDuration.push(obj);//再把新的推进来
                                 }else {
-                                    // this.currentDuration.splice(0,1);//删除第1个
                                     this.currentDuration.push(obj);
                                 }
                             }
@@ -459,38 +316,33 @@
                                 this.videos[i].isPlay = false;
                             }
 
-                        }
-                        else{
-                            //从vuex获取播放进度时间并给对应视频设置播放进度
-                            // this.currentTime = this.videoCurrentTime[0];
-                            // videoDams[index].currentTime = this.videoCurrentTime;
+
+                        } else if(isTarget && !item.isPlay){
+
                             this.videoDom.play();
                             //标志位播放
                             item.isPlay = true;
-                            this.activeIndex = index;
 
-                            //播放的时候视频顶部显示切换
+
+                            console.log('播放');
                             setTimeout(() => {
-                                //底部播放或暂停的时候进度按钮显示
-                                this.controlBtn = false;
-                                //右下角播放总长度变成全屏按钮
-                                this.playTimes = false;
-                                // //中间播放按钮变暂停按钮
-                                // this.plays = false;
-                                //左下角播放量或者进度是否显示
-                                this.currentshow = false;
-                                //隐藏播放进度播放量，显示播放量
-                                this.currentTimeShow = true;
-                                //播放按钮变暂停按钮
-                                this.play = true;
                                 //中间播放按钮或暂停按钮是否显示
-                                this.plays = false;
-                            },5000);
-
-                            // console.log(`${index}` +'播放了');
-
-
-
+                                this.plays = true;
+                                //暂停按钮变播放按钮
+                                this.play = false;
+                                //左下角播放量或者进度是否显示
+                                this.currentshow = true;
+                                //隐藏播放进度播放量，显示播放量
+                                this.currentTimeShow = false;
+                                //右下角播放总长度或全屏按钮是否显示
+                                this.playTimes = true;
+                                //播放总长度变成全屏按钮
+                                this.playTime = false;
+                                //每次点击应都保持底部进度条有显示
+                                this.speedShow = true;
+                                //播放或暂停的时候进度按钮显示
+                                this.controlBtn = true;
+                            },3000);
 
                             if(this.currentDuration.length >=  2) {
                                 if(i !== -1){
@@ -503,6 +355,7 @@
                                 this.currentDuration.splice(0,1);//删除第1个
                                 this.currentDuration.push(obj);//再把新的推进来
                             }
+
                             for(let i = 0;i<this.videos.length;i++) {
                                 if(i === index) continue;
                                 this.videoDoms[i].pause();
@@ -510,28 +363,50 @@
                                 //还得把其它项的isPlay属性重置为false。解决点击两次才播放的bug。因为其他的isPlay属性可能还是true。。
                                 this.videos[i].isPlay = false;
                             }
-                        } //标志位
 
+                        } else if(!isTarget){
+                        //点击的仅仅是屏幕而非播放暂停按钮，那么显示遮罩层几秒钟时间
 
-                    }else {
-                        //播放后遮罩层存在,那就只能点击中间的播放暂停按钮实现播放暂停
-                        // this.wrapShow = true;
-                    }
+                            //中间播放按钮或暂停按钮是否显示
+                            this.plays = true;
+                            //播放按钮变暂停按钮
+                            this.play = false;
+                            //左下角播放量或者进度是否显示
+                            this.currentshow = true;
+                            //隐藏播放进度播放量，显示播放量
+                            this.currentTimeShow = false;
+                            //右下角播放总长度或全屏按钮是否显示
+                            this.playTimes = true;
+                            //播放总长度变成全屏按钮
+                            this.playTime = false;
+                            //每次点击应都保持底部进度条有显示
+                            this.speedShow = true;
+                            //播放或暂停的时候进度按钮显示
+                            this.controlBtn = true;
+
+                            setTimeout(() => {
+
+                                //中间播放按钮或暂停按钮是否显示
+                                this.plays = false;
+
+                                //左下角播放量或者进度是否显示
+                                this.currentshow = false;
+
+                                //右下角播放总长度或全屏按钮是否显示
+                                this.playTimes = false;
+
+                                //播放或暂停的时候进度按钮显示
+                                this.controlBtn = false;
+
+                            },3000)
+                   }
                 }
-
-
-                //判断是否在可视区内，不在的若在播放则暂停。
 
             },
 
 
 
-
-
             updateTime (e) {
-                // if(this.activeIndex !== e.index) {
-                //     this.currentTime = this.Durationms(e.target.currentTime);
-                // }
                 this.currentTime = e.target.currentTime; // 播放的时候派发事件，能够获得当前播放时间 ***注意写法
                 this.speedWidth = this.percent * 355;
             },
