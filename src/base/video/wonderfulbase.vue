@@ -82,7 +82,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations} from 'vuex'
+    import { mapGetters, mapMutations,mapActions} from 'vuex'
     import { prefixStyle } from '../../assets/js/dom'
     const btnBtnWidth = 10; //按钮的长度 //触摸按钮的时候放大按钮，从10到20
     const transform  = prefixStyle('transform')
@@ -553,7 +553,12 @@
             },
             ...mapMutations({
                 setCurrentIndex: 'SET_CURRENT_INDEX',
-            })
+            }),
+            ...mapActions([
+                'video',
+                'setCurrentTimes',
+                'commentBack'
+            ]),
         },
         destroyed() {
             //销毁期把每个项的item isPlay属性剔除或者为false。
