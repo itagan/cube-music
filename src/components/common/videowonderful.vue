@@ -75,12 +75,7 @@
 
             }
         },
-        // props:{
-        //     groupid:{
-        //         type:Number,
-        //         default:9102
-        //     }
-        // },
+
         created () {
             this.getVideos()
         },

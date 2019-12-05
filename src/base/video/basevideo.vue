@@ -121,10 +121,6 @@
             }
         },
         props: {
-            // videoGroupId:{
-            //     type:Number,
-            //     required:true
-            // },
             videos:{
                 type:Array,
                 default:[],
@@ -143,18 +139,6 @@
                 default: 0
             }
         },
-        // watch: {
-        //     //videoGroup 的 id 父组件切换时候传过来
-        //     // videoGroupId(id) {
-        //     //     this.getVideos(id);
-        //     // }
-        //     videos(val) {
-        //         for(let i=0;i<val.length;i++){
-        //             val[i].data.playTime = serializeNumber(val[i].data.playTime)
-        //             val[i].data.durationms = durationms(val[i].data.durationms)
-        //         }
-        //     }
-        // },
         created() {
             this.touch = {}  //用于不同回调的时候共享数据挂载到这里来
         },
@@ -205,25 +189,9 @@
                 }
             }
         },
-        // mounted() {
-        //     this.playVideo()
-        // },
+
         methods:{
-            // getVideos(id) {
-            //     this.$api.video.videolist(id).then((res) => {
-            //         this.videos = res.data.datas;
-            //         for(let i=0;i<this.videos.length;i++){
-            //             this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
-            //             this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
-            //         }
-            //         console.log(this.videos)
-            //     })
-            // },
-
             playVideo(item,index,e) {
-                console.log(this.$refs.nav.getBoundingClientRect().top);
-
-
                 this.top = this.$refs.nav.getBoundingClientRect().top; //播放盒子距离顶部距离。
                 this.videoDom = this.$refs.video; //获取当前播放的视频DOM
                 this.videoDoms = document.querySelectorAll('video'); //获取所有真实视频DOM

@@ -57,7 +57,6 @@
                    <i class="iconfont iconyinletiaodongzhuangtai"></i>
                   <span> 加载中...</span>
                 </span>
-<!--              <span v-else>更新成功</span>-->
             </template>
           </div>
         </template>
@@ -67,8 +66,6 @@
 </template>
 
 <script>
-  // 测试文件**** 新方案:分割基础组件baseVideo出去再从这里循环生成列表，解决一个bug（图标是否显示问题），但新产生一个bug（点击两下可能才播放暂停）。暂时未解决****
-
       import baseVideo from '../../base/video/basevideo'
       import {serializeNumber} from '../../assets/js/number'
       import {durationms} from '../../assets/js/timestamp'

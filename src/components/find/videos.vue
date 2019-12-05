@@ -1,52 +1,5 @@
-<!--<template>-->
-<!--  <div>-->
-<!--    <video-base v-bind:videos="videos" @videoEmit="videoemit"></video-base>-->
-
-<!--  </div>-->
-<!--</template>-->
-
-<!--<script>-->
-<!--    import videoBase from "../../base/video/videoBase";-->
-<!--    import {mapActions} from 'vuex'-->
-
-<!--    export default {-->
-<!--        name: "videos.vue",-->
-<!--        components: {-->
-<!--            videoBase-->
-<!--        },-->
-<!--        data() {-->
-<!--            return {-->
-<!--                videos:[],-->
-<!--            }-->
-<!--        },-->
-<!--        created() {-->
-<!--            this.getVideos()-->
-<!--        },-->
-<!--        methods: {-->
-<!--            getVideos() {-->
-<!--              this.$api.video.videolist().then((res) => {-->
-<!--                this.videos = res.data.datas;-->
-<!--                  console.log(this.videos)-->
-<!--              })-->
-<!--            },-->
-<!--            //接收子组件传来的数据-->
-<!--            videoemit(vid) {-->
-<!--                this.video({vid});-->
-<!--            },-->
-<!--            //这里代理actions，mapActions把它包装成类似函数调用的方式-->
-<!--            ...mapActions([-->
-<!--                'video'-->
-<!--            ])-->
-<!--        }-->
-<!--    }-->
-<!--</script>-->
-
-<!--<style scoped>-->
-
-<!--</style>-->
 <template>
   <div>
-<!--    <video-base v-bind:videos="videos" @videoEmit="videoemit"></video-base>-->
     <div class="flexdiv" >
       <div class="container" v-for="item in videos" :key="item.data.vid">
         <div class="wrap">
@@ -122,26 +75,17 @@
 
         //上拉加载新数据
         upLoad() {
-            //数据重复渲染错误
-            // let _videos = this.videos.slice(4,8);
-            // this.videos.splice(0,4);
-            // this.videos =  this.videos.concat(..._videos);
+
         },
         wonderfulVideo () {
           this.commentBack({back: false})
           this.video({
-              videoGroupId:9102
+              videoGroupId:9104
           });
-          setTimeout(() => {
-              // 去精彩视频页面并自动播放该视频
-              this.$router.push({
-                  path:`videoslide`
-              })
-          },100)
-            // // 去精彩视频页面并自动播放该视频
-            // this.$router.push({
-            //     path:`videoslide`
-            // })
+            // 去精彩视频页面并自动播放该视频
+            this.$router.push({
+                path:`videoslide`
+            })
         },
         avatar () {
                 // 去up主页
