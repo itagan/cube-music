@@ -280,9 +280,7 @@
                 options: {
                     pullUpLoad: true,
                     probeType:1,
-                    momentum: false,
-                    click: true,
-                    observeDOM: false
+                    click: false,
                 },
                 secondStop: 0,
                 scrollEvents: ['scroll','scroll-end'],

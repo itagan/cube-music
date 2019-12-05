@@ -65,7 +65,8 @@
                 index: -1,
                 options: {
                     pullUpLoad: true,
-                    probeType:1
+                    probeType:1,
+                    click:false, //解决点击事件被触发两次的问题
                 },
                 secondStop: 0,
                 scrollEvents: ['scroll','scroll-end'],

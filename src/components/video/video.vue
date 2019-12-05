@@ -1,11 +1,7 @@
 <template>
   <div class="video">
     <video-header></video-header>
-<!--    <video-nav class="my-nav" @toggle="toggles"></video-nav>-->
-<!--&lt;!&ndash;    <video-list :video-group-id="videogroupid" class="videolist"></video-list>&ndash;&gt;-->
-<!--    <video-one class="videolist" :groupid="videogroupid"></video-one>-->
-<slide @toggle="toggles" :groupid="videogroupid"></slide>
-
+    <slide @toggle="toggles" :groupid="videogroupid"></slide>
   </div>
 </template>
 

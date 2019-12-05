@@ -41,7 +41,6 @@
         name: 'app',
         data () {
             return {
-                // currentPage: 1,
                 activeClass: 'nav-item-active',
                 errorClass:'',
                 currentPage:0,
