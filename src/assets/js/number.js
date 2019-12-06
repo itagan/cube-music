@@ -5,7 +5,7 @@ export const serializeNumber = (num) => {
    * @param {需要保留的小数位数} point
    */
 
-  let numStr = num.toString();
+  let numStr = num.toString()
     // 1万以内直接返回
   if (numStr.length < 5) {
     return numStr

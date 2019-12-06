@@ -58,7 +58,7 @@
       },
       methods: {
         getRecommend () {
-            this.$api.video.allvideo(this.detail.vid).then(res => {
+          this.$api.video.allvideo(this.detail.vid).then(res => {
             this.recommend = res.data.data
             for (let i = 0; i < this.recommend.length; i++) {
               this.recommend[i].playTime = serializeNumber(this.recommend[i].playTime)

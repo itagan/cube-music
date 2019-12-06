@@ -42,7 +42,7 @@
 </template>
 
 <script>
-    import {mapActions,mapGetters} from 'vuex'
+    import {mapActions, mapGetters} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
     import {durationms} from '../../assets/js/timestamp'
 
@@ -51,17 +51,17 @@
       data () {
         return {
           videos: [],
-          ispraise:false
+          ispraise: false
         }
       },
       created () {
         this.getVideos()
       },
-        computed: {
-            ...mapGetters([
-                'videoState',
-            ]),
-            VideoState () {
+      computed: {
+        ...mapGetters([
+          'videoState'
+        ]),
+        VideoState () {
                 // if(this.videoState.length === 0) return
                 //
                 // this.newIndex = this.videoState.findIndex((item,index) => {
@@ -69,14 +69,14 @@
                 // })
                 //
                 // return this.newIndex
-                return this.videoState
-            },
-        },
-        watch:{
-            VideoState () {
+          return this.videoState
+        }
+      },
+      watch: {
+        VideoState () {
 
-            },
-        },
+        }
+      },
       methods: {
         getVideos () {
           this.$api.video.videolist().then((res) => {
@@ -93,66 +93,62 @@
           'videoOperation'
         ]),
 
-        //上拉加载新数据
-        upLoad() {
+        // 上拉加载新数据
+        upLoad () {
 
         },
         wonderfulVideo () {
           this.commentBack({back: false})
           this.video({
-              videoGroupId:9102
-          });
-            // 去精彩视频页面并自动播放该视频
-            this.$router.push({
-                path:`videoslide`
-            })
+            videoGroupId: 9102
+          })
+        // 去精彩视频页面并自动播放该视频
+          this.$router.push({
+            path: `videoslide`
+          })
 
-            console.log('去精彩页面')
+          console.log('去精彩页面')
         },
         avatar () {
                 // 去up主页
         },
-        praisedCount (vid,index) {
-
+        praisedCount (vid, index) {
             // if(this.videoState.length === 0) return
 
-            this.newIndex = this.videoState.findIndex(item => {
-                return item.vid === vid
-            })
+          this.newIndex = this.videoState.findIndex(item => {
+            return item.vid === vid
+          })
 
-            if(this.newIndex !== -1){
-                if(this.videoState[this.newIndex].praise === true) {
-                        this.$api.likes.isLike(0,5,vid).then(res => {
-                            if(res.data.code === 200) {
-                                //取消点赞成功
-                                this.$refs.praise[index].style.color = ''
-                                this.ispraise = false
-                                this.$refs.Count[index].innerHTML--
-                            }
-                        })
-                }else {
-
-                        this.$api.likes.isLike(1,5,vid).then(res => {
-                            if(res.data.code === 200) {
-                                //点赞成功
-                                this.$refs.praise[index].style.color = 'red'
-                                this.ispraise = true
-                                this.$refs.Count[index].innerHTML++
-                            }
-                        })
+          if (this.newIndex !== -1) {
+            if (this.videoState[this.newIndex].praise === true) {
+              this.$api.likes.isLike(0, 5, vid).then(res => {
+                if (res.data.code === 200) {
+                                // 取消点赞成功
+                  this.$refs.praise[index].style.color = ''
+                  this.ispraise = false
+                  this.$refs.Count[index].innerHTML--
                 }
-
-            }else {
-                this.$api.likes.isLike(1,5,vid).then(res => {
-                    if(res.data.code === 200) {
-                        //点赞成功
-                        this.$refs.praise[index].style.color = 'red'
-                        this.ispraise = true
-                        this.$refs.Count[index].innerHTML++
-                    }
-                })
+              })
+            } else {
+              this.$api.likes.isLike(1, 5, vid).then(res => {
+                if (res.data.code === 200) {
+                                // 点赞成功
+                  this.$refs.praise[index].style.color = 'red'
+                  this.ispraise = true
+                  this.$refs.Count[index].innerHTML++
+                }
+              })
             }
-
+          } else {
+            this.$api.likes.isLike(1, 5, vid).then(res => {
+              if (res.data.code === 200) {
+                        // 点赞成功
+                this.$refs.praise[index].style.color = 'red'
+                this.ispraise = true
+                this.$refs.Count[index].innerHTML++
+              }
+            })
+          }
 
             // if(this.ispraise) {
             //     this.$api.likes.isLike(0,5,vid).then(res => {

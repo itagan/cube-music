@@ -35,86 +35,85 @@
 </template>
 
 <script>
-  import videoTwo from "./videotwo";
-  import videoNav from "./videonav";
-    export default {
-        name: 'app',
-        data () {
-            return {
-                activeClass: 'nav-item-active',
-                errorClass:'',
-                currentPage:0,
-                videogroupid:9102,
-                objs:[
-                    {
-                        text:'推荐',
-                        id:9102
-                    },
-                    {
-                        text:'影视',
-                        id:3100
-                    },
-                    {
-                        text:'生活',
-                        id:2100
-                    },
-                    {
-                        text:'听BGM',
-                        id:58101
-                    },
-                    {
-                        text:'现场',
-                        id:58100
-                    },
-                    {
-                        text:'舞蹈',
-                        id:1101
-                    },
-                    {
-                        text:'翻唱',
-                        id:60100
-                    },
-                    {
-                        text:'萌宠',
-                        id:1103
-                    },
-                    {
-                        text:'音乐',
-                        id:5100
-                    },
-                    {
-                        text:'MV',
-                        id:1000
-                    },
-                    {
-                        text:'ACG音乐',
-                        id:57104
-                    },
-                    {
-                        text:'游戏',
-                        id:2103
-                    }
-                ]
-            }
-        },
-        components: {
-            videoTwo,
-            videoNav
-        },
-        methods: {
-            toggles (item,index) {
-                this.currentPage = index;
-                // this.$emit('toggle',item.id)
-                this.videogroupid = item.id;
-
-            },
-            slideChange (index) {
-                this.currentPage = index;
-                // this.$emit('toggle',this.objs[index].id);
-                this.videogroupid = this.objs[index].id;
-            },
-        }
+  import videoTwo from './videotwo'
+import videoNav from './videonav'
+export default {
+    name: 'app',
+    data () {
+      return {
+        activeClass: 'nav-item-active',
+        errorClass: '',
+        currentPage: 0,
+        videogroupid: 9102,
+        objs: [
+          {
+            text: '推荐',
+            id: 9102
+          },
+          {
+            text: '影视',
+            id: 3100
+          },
+          {
+            text: '生活',
+            id: 2100
+          },
+          {
+            text: '听BGM',
+            id: 58101
+          },
+          {
+            text: '现场',
+            id: 58100
+          },
+          {
+            text: '舞蹈',
+            id: 1101
+          },
+          {
+            text: '翻唱',
+            id: 60100
+          },
+          {
+            text: '萌宠',
+            id: 1103
+          },
+          {
+            text: '音乐',
+            id: 5100
+          },
+          {
+            text: 'MV',
+            id: 1000
+          },
+          {
+            text: 'ACG音乐',
+            id: 57104
+          },
+          {
+            text: '游戏',
+            id: 2103
+          }
+        ]
+      }
+    },
+    components: {
+      videoTwo,
+      videoNav
+    },
+    methods: {
+      toggles (item, index) {
+        this.currentPage = index
+              // this.$emit('toggle',item.id)
+        this.videogroupid = item.id
+      },
+      slideChange (index) {
+        this.currentPage = index
+              // this.$emit('toggle',this.objs[index].id);
+        this.videogroupid = this.objs[index].id
+      }
     }
+  }
 </script>
 
 <style  lang="stylus" rel="stylesheet/stylus">

@@ -17,4 +17,3 @@ export const uid = state => state.uid
 export const videoGroupId = state => state.videoGroupId
 
 export const videoState = state => state.videoState
-

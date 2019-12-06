@@ -79,43 +79,43 @@
         },
         data () {
           return {
-              videos: [],
-              item: {},
-              index: -1,
-              options: {
-                  pullDownRefresh: {
-                      threshold: 30,
+            videos: [],
+            item: {},
+            index: -1,
+            options: {
+              pullDownRefresh: {
+                threshold: 30,
                       // stop: 44,
-                      stopTime: 1000,
-                      txt: '更新成功'
-                  },
-                  pullUpLoad: true
+                stopTime: 1000,
+                txt: '更新成功'
               },
-              secondStop: 0,
-              scrollEvents: ['scroll'],
+              pullUpLoad: true
+            },
+            secondStop: 0,
+            scrollEvents: ['scroll'],
               // findmore:false,
-              pullDownY:0
+            pullDownY: 0
 
           }
         },
-          props:{
-              groupid:{
-                  type:Number,
-                  default:9102
-              }
-          },
+        props: {
+          groupid: {
+            type: Number,
+            default: 9102
+          }
+        },
         created () {
           this.getVideos()
         },
-        watch:{
-            groupid() {
-                this.getVideos()
-            }
+        watch: {
+          groupid () {
+            this.getVideos()
+          }
         },
         methods: {
           getVideos () {
             this.$api.video.videolist(this.groupid).then((res) => {
-              this.videos = res.data.datas;
+              this.videos = res.data.datas
               for (let i = 0; i < this.videos.length; i++) {
                 this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
                   // console.log(this.videos[i].data.playTime);
@@ -124,80 +124,76 @@
               // console.log(this.videos)
             })
           },
-            rollBack(top) {
-                if(top < 110) {
+          rollBack (top) {
+            if (top < 110) {
                     // this.$nextTick(() => {
                     //     this.$refs.contentScroll.scroll.scrollBy(0,top,300);
                     //     // this.$refs.navs.scrollBy(0,30);
                     //
                     // });
                     // this.$refs.contentScroll.scrollBy(0,-30);
-                    let _top = 110 - top;
+              let _top = 110 - top
 
-                    this.$refs.contentScroll.scroll.scrollBy(0,_top,300);
-                    this.$refs.contentScroll.refresh();
-                    // this.$refs.contentScroll.scrollTo(0,top,300);
+              this.$refs.contentScroll.scroll.scrollBy(0, _top, 300)
+              this.$refs.contentScroll.refresh()
+                  // this.$refs.contentScroll.scrollTo(0,top,300);
 
-                    // this.$refs.contentScroll.scrollToElement('.nav-wrapper', 200, 0, 0);
-                    // this.$refs.navs.scrollTo(0, 30, 300);
+                  // this.$refs.contentScroll.scrollToElement('.nav-wrapper', 200, 0, 0);
+                  // this.$refs.navs.scrollTo(0, 30, 300);
 
-                    // let scrollDom = document.getElementsByClassName('content-scroll-wrapper')[0];
-                    // // this.$refs.navs.$el.scrollTop = -30;
-                    // scrollDom.scrollTop = 30;
-                    // console.log(scrollDom.scrollTop)
-                }else if(top > 366) {
-                    let _top = -(top - 366);
-                    this.$refs.contentScroll.scroll.scrollBy(0,_top,300);
-                    this.$refs.contentScroll.refresh();
-                }
-            },
+                  // let scrollDom = document.getElementsByClassName('content-scroll-wrapper')[0];
+                  // // this.$refs.navs.$el.scrollTop = -30;
+                  // scrollDom.scrollTop = 30;
+                  // console.log(scrollDom.scrollTop)
+            } else if (top > 366) {
+              let _top = -(top - 366)
+              this.$refs.contentScroll.scroll.scrollBy(0, _top, 300)
+              this.$refs.contentScroll.refresh()
+            }
+          },
 
-            onPullingDown() {
-                setTimeout(() => {
+          onPullingDown () {
+            setTimeout(() => {
                     // this.getVideos();
-                    this.videos = this.videos.reverse();
-                    this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
-                    // this.$refs.contentScroll.forceUpdate();//下拉完毕
-                }, 1000);
-            },
+              this.videos = this.videos.reverse()
+              this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
+                  // this.$refs.contentScroll.forceUpdate();//下拉完毕
+            }, 1000)
+          },
 
+          onPullingUp () {
+            setTimeout(() => {
+              if (this.isPullUpLoad) {
+                this.videos = [] // 清空数据，以防重复渲染
+              };
+              this.getVideos()
+              const contentScroll = this.$refs.contentScroll
+              contentScroll.forceUpdate()
+                  // contentScroll.refresh();
+            }, 1000)
+          },
 
-            onPullingUp() {
-                setTimeout(() => {
-                    if (this.isPullUpLoad) {
-                        this.videos = [] // 清空数据，以防重复渲染
-                    };
-                    this.getVideos();
-                    const contentScroll = this.$refs.contentScroll;
-                    contentScroll.forceUpdate();
-                    // contentScroll.refresh();
-                }, 1000);
-            },
+          refreshfinish () {
+            const contentScroll = this.$refs.contentScroll
+            contentScroll.scroll.beforePullDown && contentScroll.refresh()
+            contentScroll.forceUpdate()
 
-            refreshfinish() {
-                const contentScroll = this.$refs.contentScroll
-                contentScroll.scroll.beforePullDown && contentScroll.refresh()
-                contentScroll.forceUpdate();
-
-                // if(this.pullDownY === 0) {
-                //     console.log('11')
-                //     this.findmore = true;
-                // }
-                // this.findmore = true;
-
-
-            },
-            scrollHandler(pos) {
-                this.pullDownY = -pos.y;
-                // console.log(this.pullDownY)
-                // if(this.pullDownY === 0) {
-                //     this.findmore = true;
-                // }
-                // console.log(this.pullDownY);
-                // console.log(this.$refs.nav.scrollTop);
-                // console.log(this.$refs.nav.offsetTop);
-
-            },
+              // if(this.pullDownY === 0) {
+              //     console.log('11')
+              //     this.findmore = true;
+              // }
+              // this.findmore = true;
+          },
+          scrollHandler (pos) {
+            this.pullDownY = -pos.y
+              // console.log(this.pullDownY)
+              // if(this.pullDownY === 0) {
+              //     this.findmore = true;
+              // }
+              // console.log(this.pullDownY);
+              // console.log(this.$refs.nav.scrollTop);
+              // console.log(this.$refs.nav.offsetTop);
+          }
         }
       }
 </script>

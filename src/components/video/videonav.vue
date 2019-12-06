@@ -15,74 +15,74 @@
 </template>
 
 <script type="text/ecmascript-6">
-    const txts = ['推荐', 'LOOK直播', '硬币', '听BGM', '现场', '舞蹈', '翻唱', '女流', '广场', 'MV', 'ACG音乐', '游戏'];
+    const txts = ['推荐', 'LOOK直播', '硬币', '听BGM', '现场', '舞蹈', '翻唱', '女流', '广场', 'MV', 'ACG音乐', '游戏']
 
-    export default {
-        data () {
-            return {
-                navTxts: txts,
-                activeClass: 'nav-item-active',
-                errorClass:'',
-                active:0,
-                obj:[
-                    {
-                        text:'推荐',
-                        id:9102
-                    },
-                    {
-                        text:'影视',
-                        id:3100
-                    },
-                    {
-                        text:'生活',
-                        id:2100
-                    },
-                    {
-                        text:'听BGM',
-                        id:58101
-                    },
-                    {
-                        text:'现场',
-                        id:58100
-                    },
-                    {
-                        text:'舞蹈',
-                        id:1101
-                    },
-                    {
-                        text:'翻唱',
-                        id:60100
-                    },
-                    {
-                        text:'萌宠',
-                        id:1103
-                    },
-                    {
-                        text:'音乐',
-                        id:5100
-                    },
-                    {
-                        text:'MV',
-                        id:1000
-                    },
-                    {
-                        text:'ACG音乐',
-                        id:57104
-                    },
-                    {
-                        text:'游戏',
-                        id:2103
-                    }
-                ]
+export default {
+      data () {
+        return {
+          navTxts: txts,
+          activeClass: 'nav-item-active',
+          errorClass: '',
+          active: 0,
+          obj: [
+            {
+              text: '推荐',
+              id: 9102
+            },
+            {
+              text: '影视',
+              id: 3100
+            },
+            {
+              text: '生活',
+              id: 2100
+            },
+            {
+              text: '听BGM',
+              id: 58101
+            },
+            {
+              text: '现场',
+              id: 58100
+            },
+            {
+              text: '舞蹈',
+              id: 1101
+            },
+            {
+              text: '翻唱',
+              id: 60100
+            },
+            {
+              text: '萌宠',
+              id: 1103
+            },
+            {
+              text: '音乐',
+              id: 5100
+            },
+            {
+              text: 'MV',
+              id: 1000
+            },
+            {
+              text: 'ACG音乐',
+              id: 57104
+            },
+            {
+              text: '游戏',
+              id: 2103
             }
-        },
-        methods: {
-            navto(item,index) {
-                //导航去哪
-                this.active = index;
-                this.$emit('toggle',item.id,index)
-            }
+          ]
         }
+      },
+      methods: {
+        navto (item, index) {
+                // 导航去哪
+          this.active = index
+          this.$emit('toggle', item.id, index)
+        }
+      }
     }
 </script>
 

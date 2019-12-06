@@ -82,7 +82,7 @@
 
 <script>
     export default {
-        name: "feature.vue"
+      name: 'feature.vue'
     }
 </script>
 

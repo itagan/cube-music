@@ -109,34 +109,34 @@
 <script>
     import {mapGetters, mapMutations} from 'vuex'
     export default {
-        name: "personal.vue",
-        data() {
-            return {
-                signIn:false,
-                personals:{}
-            }
-        },
-        created() {
-            this.getPersonal()
-        },
-        computed: {
-            ...mapGetters([
-                'uid'
-            ])
-        },
-        methods:{
-            //签到
-            toSignIn() {
-                this.signIn = !this.signIn
-            },
-            //获取数据
-            getPersonal() {
-                this.$api.users.userdetail(this.uid).then(res => {
-                      this.personals = res.data;
-                      console.log(this.personals)
-                })
-            }
+      name: 'personal.vue',
+      data () {
+        return {
+          signIn: false,
+          personals: {}
         }
+      },
+      created () {
+        this.getPersonal()
+      },
+      computed: {
+        ...mapGetters([
+          'uid'
+        ])
+      },
+      methods: {
+            // 签到
+        toSignIn () {
+          this.signIn = !this.signIn
+        },
+            // 获取数据
+        getPersonal () {
+          this.$api.users.userdetail(this.uid).then(res => {
+            this.personals = res.data
+            console.log(this.personals)
+          })
+        }
+      }
     }
 </script>
 

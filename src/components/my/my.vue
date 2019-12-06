@@ -71,14 +71,14 @@
           createnum: 0,
           iscollectionmore: false,
           collectionnum: 0,
-            options: {
-                probeType: 3,
-                click:true,
-                scrollbar: true,
+          options: {
+            probeType: 3,
+            click: true,
+            scrollbar: true
                 // preventDefault: false
-            },
-            scrollEvents: ['scroll'],
-            direction:'vertical',
+          },
+          scrollEvents: ['scroll'],
+          direction: 'vertical'
         }
       },
         // created() {

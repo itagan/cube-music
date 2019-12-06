@@ -40,7 +40,7 @@
       getResults () {
         this.$api.find.recommend().then((res) => {
           this.result = res.data.result
-                  console.log(this.result)
+          console.log(this.result)
         })
       }
     }
