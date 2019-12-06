@@ -124,10 +124,31 @@ const playlists = {
   }
 }
 
+// 点赞
+const likes = {
+  // 资源点赞( MV,电台,视频) t: 操作,1 为点赞,其他未取消点赞
+  async isLike (is, type, id) {
+    return await axios.get(`${base}/resource/like?t=${is}&type=${type}&id=${id}`)
+  },
+  // 给动态点赞
+  async dynamic (is, threadId) {
+    return await axios.get(`${base}/resource/like?t=${is}&type=6&threadId=${threadId}`)
+  },
+  // 给评论点赞
+  async commentLike (id, cid, is, type) {
+    return await axios.get(`${base}/comment/like?id=${id}&cid=${cid}&t=${is}&type=${type}`)
+  },
+  // 给动态评论点赞
+  async commentDynamic (cid, threadId, is) {
+    return await axios.get(`${base}/comment/like?type=6&cid=${cid}&threadId=${threadId}&t=${is}`)
+  }
+}
+
 export default {
   login,
   find,
   video,
   users,
-  playlists
+  playlists,
+  likes
 }

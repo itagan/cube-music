@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flexdiv" >
-      <div class="container" v-for="item in videos" :key="item.data.vid">
+      <div class="container" v-for="(item, index) in videos" :key="item.data.vid">
         <div class="wrap">
           <div class="wrapTop" @click="wonderfulVideo(item.data.vid)">
             <div class="wrapper" :style="{backgroundImage:`url( ${item.data.coverUrl} )` }">
@@ -22,9 +22,9 @@
           </div>
 
           <div class="wrapBottom" @click="details(item.data.vid)">
-            <div class="wrapBottomLeft" @click="praisedCount()">
+            <div class="wrapBottomLeft" @click.stop="praisedCount(item.data.vid, index)" ref="praise">
               <i class="iconfont iconzan1"></i>
-              <span>{{item.data.praisedCount}}</span>
+              <span ref="Count">{{item.data.praisedCount}}</span>
             </div>
 
             <div class="wrapBottomCenter">
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-    import {mapActions} from 'vuex'
+    import {mapActions, mapGetters} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
     import {durationms} from '../../assets/js/timestamp'
 
@@ -50,11 +50,32 @@
       name: 'videos.vue',
       data () {
         return {
-          videos: []
+          videos: [],
+          ispraise: false
         }
       },
       created () {
         this.getVideos()
+      },
+      computed: {
+        ...mapGetters([
+          'videoState'
+        ]),
+        VideoState () {
+                // if(this.videoState.length === 0) return
+                //
+                // this.newIndex = this.videoState.findIndex((item,index) => {
+                //     return item.vid === this.currentVid
+                // })
+                //
+                // return this.newIndex
+          return this.videoState
+        }
+      },
+      watch: {
+        VideoState () {
+
+        }
       },
       methods: {
         getVideos () {
@@ -64,36 +85,91 @@
               this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
               this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
             }
-                    console.log(this.videos)
           })
         },
-            // 这里代理actions，mapActions把它包装成类似函数调用的方式
         ...mapActions([
           'video',
-          'commentBack'
+          'commentBack',
+          'videoOperation'
         ]),
 
-        //上拉加载新数据
-        upLoad() {
+        // 上拉加载新数据
+        upLoad () {
 
         },
         wonderfulVideo () {
           this.commentBack({back: false})
           this.video({
-              videoGroupId:9102
-          });
-            // 去精彩视频页面并自动播放该视频
-            this.$router.push({
-                path:`videoslide`
-            })
+            videoGroupId: 9102
+          })
+        // 去精彩视频页面并自动播放该视频
+          this.$router.push({
+            path: `videoslide`
+          })
 
-            console.log('去精彩页面')
+          console.log('去精彩页面')
         },
         avatar () {
                 // 去up主页
         },
-        praisedCount () {
-                // 点赞
+        praisedCount (vid, index) {
+            // if(this.videoState.length === 0) return
+
+          this.newIndex = this.videoState.findIndex(item => {
+            return item.vid === vid
+          })
+
+          if (this.newIndex !== -1) {
+            if (this.videoState[this.newIndex].praise === true) {
+              this.$api.likes.isLike(0, 5, vid).then(res => {
+                if (res.data.code === 200) {
+                                // 取消点赞成功
+                  this.$refs.praise[index].style.color = ''
+                  this.ispraise = false
+                  this.$refs.Count[index].innerHTML--
+                }
+              })
+            } else {
+              this.$api.likes.isLike(1, 5, vid).then(res => {
+                if (res.data.code === 200) {
+                                // 点赞成功
+                  this.$refs.praise[index].style.color = 'red'
+                  this.ispraise = true
+                  this.$refs.Count[index].innerHTML++
+                }
+              })
+            }
+          } else {
+            this.$api.likes.isLike(1, 5, vid).then(res => {
+              if (res.data.code === 200) {
+                        // 点赞成功
+                this.$refs.praise[index].style.color = 'red'
+                this.ispraise = true
+                this.$refs.Count[index].innerHTML++
+              }
+            })
+          }
+
+            // if(this.ispraise) {
+            //     this.$api.likes.isLike(0,5,vid).then(res => {
+            //         if(res.data.code === 200) {
+            //             //取消点赞成功
+            //             this.$refs.praise[index].style.color = ''
+            //             this.ispraise = false
+            //             this.$refs.Count[index].innerHTML--
+            //         }
+            //     })
+            // }else {
+            //     // 点赞
+            //     this.$api.likes.isLike(1,5,vid).then(res => {
+            //         if(res.data.code === 200) {
+            //             //点赞成功
+            //             this.$refs.praise[index].style.color = 'red'
+            //             this.ispraise = true
+            //             this.$refs.Count[index].innerHTML++
+            //         }
+            //     })
+            // }
         },
         details (vid) {
                 // 视频详情页，自动把底部评论提前

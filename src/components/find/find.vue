@@ -86,55 +86,52 @@
         FindNew,
         FindVideos
       },
-        data() {
-          return {
-              options: {
-                  pullDownRefresh: {
-                      threshold: 30,
-                      stopTime: 2000,
-                      txt: '更新成功'
-                  },
-                  pullUpLoad: true
-              },
-              secondStop: 0,
-              scrollEvents: ['scroll'],
-              pullDownY:0,
-              isRefresh:false,
-              trans:false
-          }
-        },
-        methods: {
+      data () {
+        return {
+          options: {
+            pullDownRefresh: {
+              threshold: 30,
+              stopTime: 2000,
+              txt: '更新成功'
+            },
+            pullUpLoad: true
+          },
+          secondStop: 0,
+          scrollEvents: ['scroll'],
+          pullDownY: 0,
+          isRefresh: false,
+          trans: false
+        }
+      },
+      methods: {
 
-            onPullingDown() {
+        onPullingDown () {
                 // this.isRefresh = true;
 
-                setTimeout(() => {
-                    this.$refs.recommend.getResults();
-                    this.$refs.video.getVideos();
+          setTimeout(() => {
+            this.$refs.recommend.getResults()
+            this.$refs.video.getVideos()
 
-                    this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
-                    this.$refs.contentScroll.forceUpdate();//下拉完毕
-                    this.isRefresh = true;
-                }, 1000);
+            this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
+            this.$refs.contentScroll.forceUpdate()// 下拉完毕
+            this.isRefresh = true
+          }, 1000)
+        },
 
-            },
+        onPullingUp () {
+          setTimeout(() => {
+            this.$refs.video.upLoad()
 
-
-            onPullingUp() {
-                setTimeout(() => {
-
-                    this.$refs.video.upLoad()
-
-                    const contentScroll = this.$refs.contentScroll;
-                    contentScroll.forceUpdate();
-                    // contentScroll.refresh();
-                }, 1000);
-            },
-            scrollHandler(pos) {
-                this.pullDownY = -pos.y;
-            },
-
+            const contentScroll = this.$refs.contentScroll
+            contentScroll.forceUpdate()
+                // contentScroll.refresh();
+          }, 1000)
+        },
+        scrollHandler (pos) {
+          this.pullDownY = -pos.y
         }
+
+      }
 
     }
 </script>

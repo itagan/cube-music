@@ -76,90 +76,88 @@
         },
         data () {
           return {
-              videos: [],
-              item: {},
-              index: -1,
-              options: {
-                  pullDownRefresh: {
-                      threshold: 30,
-                      stopTime: 1000,
-                      txt: '更新成功'
-                  },
-                  pullUpLoad: true,
-                  click:false, //解决点击事件被触发两次的问题
+            videos: [],
+            item: {},
+            index: -1,
+            options: {
+              pullDownRefresh: {
+                threshold: 30,
+                stopTime: 1000,
+                txt: '更新成功'
               },
-              secondStop: 0,
-              scrollEvents: ['scroll'],
-              pullDownY:0
+              pullUpLoad: true,
+              click: false // 解决点击事件被触发两次的问题
+            },
+            secondStop: 0,
+            scrollEvents: ['scroll'],
+            pullDownY: 0
 
           }
         },
-          props:{
-              groupid:{
-                  type:Number,
-                  default:9102
-              }
-          },
+        props: {
+          groupid: {
+            type: Number,
+            default: 9102
+          }
+        },
         created () {
           this.getVideos()
         },
-        watch:{
-            groupid() {
-                this.getVideos();
-            }
+        watch: {
+          groupid () {
+            this.getVideos()
+      }
         },
         methods: {
           getVideos () {
             this.$api.video.videolist(this.groupid).then((res) => {
-              this.videos = res.data.datas;
+              this.videos = res.data.datas
               for (let i = 0; i < this.videos.length; i++) {
                 this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
                 this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
               }
             })
           },
-            rollBack(top) {
-                if(top < 90) {
-                    let _top = 90 - top;
-                    this.$refs.contentScroll.scroll.scrollBy(0,_top,300);
-                    this.$refs.contentScroll.refresh();
+          rollBack (top) {
+            if (top < 90) {
+              let _top = 90 - top
+              this.$refs.contentScroll.scroll.scrollBy(0, _top, 300)
+              this.$refs.contentScroll.refresh()
+            } else if (top > 366) {
+              let _top = -(top - 366)
+              this.$refs.contentScroll.scroll.scrollBy(0, _top, 300)
+              this.$refs.contentScroll.refresh()
+            }
+          },
 
-                }else if(top > 366) {
-                    let _top = -(top - 366);
-                    this.$refs.contentScroll.scroll.scrollBy(0,_top,300);
-                    this.$refs.contentScroll.refresh();
-                }
-            },
+          onPullingDown () {
+            setTimeout(() => {
+              this.videos = this.videos.reverse()
+              this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
+              // this.$refs.contentScroll.forceUpdate();//下拉完毕
+            }, 1000)
+      },
 
-            onPullingDown() {
-                setTimeout(() => {
-                    this.videos = this.videos.reverse();
-                    this.$refs.contentScroll.scrollTo(0, this.secondStop, 300);
-                    // this.$refs.contentScroll.forceUpdate();//下拉完毕
-                }, 1000);
-            },
+          onPullingUp () {
+            setTimeout(() => {
+              if (this.isPullUpLoad) {
+                this.videos = [] // 清空数据，以防重复渲染
+              }
+              this.getVideos()
+              const contentScroll = this.$refs.contentScroll
+              contentScroll.forceUpdate()
+              // contentScroll.refresh();
+            }, 1000)
+      },
 
-
-            onPullingUp() {
-                setTimeout(() => {
-                    if (this.isPullUpLoad) {
-                        this.videos = [] // 清空数据，以防重复渲染
-                    }
-                    this.getVideos();
-                    const contentScroll = this.$refs.contentScroll;
-                    contentScroll.forceUpdate();
-                    // contentScroll.refresh();
-                }, 1000);
-            },
-
-            refreshfinish() {
-                const contentScroll = this.$refs.contentScroll
-                contentScroll.scroll.beforePullDown && contentScroll.refresh()
-                contentScroll.forceUpdate();
-            },
-            scrollHandler(pos) {
-                this.pullDownY = -pos.y;
-            },
+          refreshfinish () {
+            const contentScroll = this.$refs.contentScroll
+            contentScroll.scroll.beforePullDown && contentScroll.refresh()
+            contentScroll.forceUpdate()
+      },
+          scrollHandler (pos) {
+            this.pullDownY = -pos.y
+      }
         }
       }
 </script>

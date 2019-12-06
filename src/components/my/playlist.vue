@@ -152,7 +152,7 @@
         more () {
                 // 打开更多操作
           this.$emit('more', this.playlist.length)
-            console.log('更多s')
+          console.log('更多s')
         },
         morecollection () {
                 // 打开更多操作
@@ -178,8 +178,7 @@
           this.righticon = true
         },
 
-
-        //左滑删除功能 ** 外部网上代码引入，暂时未成功本地实现
+        // 左滑删除功能 ** 外部网上代码引入，暂时未成功本地实现
         skip () {
           if (this.checkSlide()) {
             this.restSlide()
@@ -193,7 +192,7 @@
         touchStart (e) {
                 // 记录初始位置
           this.startX = e.touches[0].clientX
-            console.log(this.startX)
+          console.log(this.startX)
         },
             // 滑动结束
         touchEnd (e) {

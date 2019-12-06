@@ -165,10 +165,10 @@
                 // this.$refs.video.play() ***没有用，报错
                 // this.videoDom = document.getElementById('video');
 
-          let videoDams = document.getElementsByClassName('video');
-          this.videoDom = document.getElementsByClassName('video')[index];
-          this.durationms = this.videoDom.duration;
-          this.setCurrentIndex(index);
+          let videoDams = document.getElementsByClassName('video')
+          this.videoDom = document.getElementsByClassName('video')[index]
+          this.durationms = this.videoDom.duration
+          this.setCurrentIndex(index)
           if (typeof item.isPlay === 'undefined') {
                     // 给对象添加属性
             this.$set(item, 'isPlay', false)
@@ -251,9 +251,9 @@
                     //* **不从vuex获取***//
                     // 当该视频开启了播放，即使之后暂停。其它视频统统还原状态。仅仅保存上一条播放的进度。其它重置。
             for (let i = 0; i < this.videos.length; i++) {
-              if (index === i) continue;
-              this.videos[i].isPlay = false;
-              videoDams[i].pause();
+              if (index === i) continue
+              this.videos[i].isPlay = false
+              videoDams[i].pause()
               videoDams[i].currentTime = 0 // 重置
             }
 
@@ -262,8 +262,8 @@
                     // 从vuex获取播放进度时间并给对应视频设置播放进度
                     // this.currentTime = this.videoCurrentTime[0];
                     // videoDams[index].currentTime = this.videoCurrentTime;
-            this.videoDom.play();
-                // 标志位播放
+            this.videoDom.play()
+            // 标志位播放
             this.isPlay = true
             this.activeIndex = index
                 // 播放的时候视频顶部显示切换
@@ -288,8 +288,8 @@
             if (this.currentDuration.length >= 2) {
               if (i !== -1) {
                             // 在数组中存在，那么取出上次的播放进度作为当前播放开头
-                this.currentTime = this.currentDuration[i][index];
-                videoDams[index].currentTime = this.currentDuration[i][index];
+                this.currentTime = this.currentDuration[i][index]
+                videoDams[index].currentTime = this.currentDuration[i][index]
               }
             } else {
                         // 没找到说明没有最近上次播放进度
@@ -298,8 +298,8 @@
             }
 
             for (let i = 0; i < this.videos.length; i++) {
-              if (i === index) continue;
-              videoDams[i].pause();
+              if (i === index) continue
+              videoDams[i].pause()
               videoDams[i].currentTime = 0 // 重置
             }
 

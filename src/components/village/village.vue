@@ -5,12 +5,12 @@
 </template>
 
 <script>
-    import videoSlide from "../common/videoslide";
-    export default {
-        name: 'account.vue',
-        components: {
-            videoSlide
-        }
+    import videoSlide from '../common/videoslide'
+export default {
+      name: 'account.vue',
+      components: {
+        videoSlide
+      }
     }
 </script>
 

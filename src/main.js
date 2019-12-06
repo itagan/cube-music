@@ -12,7 +12,6 @@ import dialog from './assets/js/dialog'
 import fastclick from 'fastclick'
 fastclick.attach(document.body)
 
-
 Vue.use(Cube) // 全局引入注册cube-ui
 // Vue.use(Toast);
 Vue.prototype.$api = api // 将api挂载到vue的原型上.方便全局调用

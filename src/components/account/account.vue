@@ -23,71 +23,70 @@
 
 <script>
     import myHeader from './header'
-    import Personal from "./personal"
+    import Personal from './personal'
     import Feature from './feature'
     export default {
-        name: 'account.vue',
-        components: {
-            myHeader,
-            Personal,
-            Feature
-        },
-        data() {
-          return {
-              options: {
-                  probeType: 3,
-                  scrollbar: true,
-              },
-              scrollEvents: ['scroll'],
-              direction:'vertical',
-              scrollY:0,
-              show:false
+      name: 'account.vue',
+      components: {
+        myHeader,
+        Personal,
+        Feature
+      },
+      data () {
+        return {
+          options: {
+            probeType: 3,
+            scrollbar: true
+          },
+          scrollEvents: ['scroll'],
+          direction: 'vertical',
+          scrollY: 0,
+          show: false
 
-
+        }
+      },
+      methods: {
+        scrollHandler (pos) {
+          this.scrollY = -pos.y
+          if (this.scrollY > 10) {
+            this.show = true
+          } else {
+            this.show = false
           }
         },
-        methods: {
-            scrollHandler(pos) {
-                this.scrollY = -pos.y;
-                if(this.scrollY > 10) {
-                    this.show = true
-                }else {
-                    this.show = false
-                }
-            },
             // loginOut() {
             //     //退出登录
             //
             // },
-            loginOut() {
-                this.$createDialog({
-                    type: 'confirm',
-                    title: '网易云音乐',
-                    content: '确定退出当前账号吗',
-                    zIndex:2100,
-                    $class: {
-                        'my_class': true,
-                    },
-                    confirmBtn: {
-                        text: '确定',
-                        active: true,
-                        disabled: false,
-                        href: 'javascript:;'
-                    },
-                    cancelBtn: {
-                        text: '取消',
-                        active: false,
-                        disabled: false,
-                        href: 'javascript:;'
-                    },
-                    onConfirm: () => {
-                        this.$api.users.logout();
-                        this.$router.push(
-                            {
-                                path:'/login'
-                            }
+        loginOut () {
+          this.$createDialog({
+            type: 'confirm',
+            title: '网易云音乐',
+            content: '确定退出当前账号吗',
+            zIndex: 2100,
+            $class: {
+              'my_class': true
+            },
+            confirmBtn: {
+              text: '确定',
+              active: true,
+              disabled: false,
+              href: 'javascript:;'
+            },
+            cancelBtn: {
+              text: '取消',
+              active: false,
+              disabled: false,
+              href: 'javascript:;'
+            },
+            onConfirm: () => {
+              this.$api.users.logout()
+              this.$router.push(
+                {
+                  path: '/login'
+                }
                         )
-                    },
+            }
                     // onCancel: () => {
                     //     this.$createToast({
                     //         type: 'warn',
@@ -95,9 +94,9 @@
                     //         txt: '点击取消按钮'
                     //     }).show()
                     // }
-                }).show()
-            }
+          }).show()
         }
+      }
     }
 </script>
 

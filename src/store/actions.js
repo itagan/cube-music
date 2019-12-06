@@ -7,13 +7,12 @@ export const loginState = function ({commit, state}, {loginState}) {
   commit(types.SET_LOGIN, loginState)
 }
 // 视频播放有关
-export const video = function ({commit, state}, {vid, index, videoList, currentUrl,videoGroupId}) {
+export const video = function ({commit, state}, {vid, index, videoList, currentUrl, videoGroupId}) {
   commit(types.SET_CURRENT_VID, vid)
   commit(types.SET_CURRENT_INDEX, index)
   commit(types.SET_VIDEO_LIST, videoList)// 视频列表流 前后播放的视频进度
   commit(types.SET_CURRENT_URL, currentUrl)
-  commit(types.SET_VIDEO_GROUP_ID, videoGroupId) //视频流列表组id
-
+  commit(types.SET_VIDEO_GROUP_ID, videoGroupId) // 视频流列表组id
 }
 // 评论上拉加载有关
 export const comment = function ({commit, state}, {limit, hotLimit}) {
@@ -32,6 +31,11 @@ export const setCurrentTimes = function ({commit, state}, {videoCurrentTime}) {
   commit(types.SET_VIDEO_CURRENT_TIME, videoCurrentTime)
 }
 // 用户相关
-export const User = function ({commit, state}, {uid}) {
+export const User = function ({commit, state}, {uid, isPraise}) {
   commit(types.SET_UID, uid)
+  commit(types.SET_IS_PRAISE, isPraise)
+}
+// 视频操作情况
+export const videoOperation = function ({commit, state}, {videoState}) {
+  commit(types.SET_VIDEO_STATE, videoState)
 }

@@ -117,7 +117,7 @@
     import {mapGetters, mapMutations} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
     import {timestamp, durationms} from '../../assets/js/timestamp'
-    import basePlayer from "../../base/video/baseplayer"
+    import basePlayer from '../../base/video/baseplayer'
     import recommendSwiper from '../../base/swiper/recommendSwiper'
     import Comment from './comment'
     import newComment from './newcomment'
@@ -144,7 +144,7 @@ export default {
           loadisshow: false, // 上拉加载是否显示,数据全部加载完则不显示了
           limits: 20, // 传给子组件需要显示的评论数量
           swipeHeight: 0, // 子组件recommentswiper的高度
-          titleHeight: 35, // 标题高度
+          titleHeight: 35 // 标题高度
         }
       },
       components: {
@@ -152,7 +152,7 @@ export default {
         Comment,
         newComment,
         hotComment,
-          basePlayer
+        basePlayer
 
       },
       computed: {
@@ -163,14 +163,24 @@ export default {
           'currentVid',
           'limit',
           'back',
-          'currentUrl'
+          'currentUrl',
+          'videoState'
         ]),
-          CurrentVid() {
-            return this.currentVid
-          },
-          Back() {
-            return this.back
-          },
+        CurrentVid () {
+          return this.currentVid
+        },
+        Back () {
+          return this.back
+        },
+        VideoState () {
+          if (this.videoState.length === 0) return
+
+          this.newIndex = this.videoState.findIndex((item, index) => {
+            return item.vid === this.currentVid
+          })
+
+          return this.newIndex
+        },
         options () {
           return {
             pullUpLoad: this.pullUpLoadObj,
@@ -192,20 +202,20 @@ export default {
         this.getvVideoUrl()
         this.getVideo()
     },
-      watch:{
-          CurrentVid() {
-              this.getvVideoUrl()
-              this.getVideo()
-          },
-          Back(newBack) {
-              this.$nextTick(() => {
-                  if(newBack) {
-                      this.commentTop ()
-                  }else {
-                      this.backtop()
-                  }
-              })
-          },
+      watch: {
+        CurrentVid () {
+          this.getvVideoUrl()
+          this.getVideo()
+        },
+        Back (newBack) {
+          this.$nextTick(() => {
+            if (newBack) {
+              this.commentTop()
+            } else {
+              this.backtop()
+            }
+          })
+        }
       },
       methods: {
         scrollHandler ({ y }) {
@@ -253,7 +263,6 @@ export default {
             this.videourl = res.data.urls[0].url
             console.log(this.videourl)
           })
-
         },
             // 展开还是隐藏视频描述等
         toggle () {
@@ -295,9 +304,9 @@ export default {
           this.commit = true
           this.allshow = true
         },
-          //点击评论图标
-        toComment() {
-            this.commentTop()
+          // 点击评论图标
+        toComment () {
+          this.commentTop()
         },
             // 评论返回顶部
         backtop () {
@@ -306,9 +315,9 @@ export default {
         },
             // 评论区上升
         commentTop () {
-            this.$nextTick(() => {
-                this.$refs.scroll.scrollToElement('.here', 200, 0, -50)
-            })
+          this.$nextTick(() => {
+            this.$refs.scroll.scrollToElement('.here', 200, 0, -50)
+          })
         },
         tagBacktop () {
           let heights = this.titleHeight + this.swipeHeight + 45 - 323
@@ -363,7 +372,7 @@ export default {
       destroyed () {
             // 销毁本页面时候，把vuex的一些重置
         this.setCommentBack(false)
-          console.log('销毁')
+        console.log('销毁')
     }
 
     }

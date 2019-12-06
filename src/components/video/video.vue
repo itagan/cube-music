@@ -7,24 +7,24 @@
 
 <script>
       import videoHeader from './header'
-      import videoNav from "./videonav"
+      import videoNav from './videonav'
       import videoList from '../common/videolist'
-      import videoOne from "./videoone"
-      import Slide from "./slide"
+      import videoOne from './videoone'
+      import Slide from './slide'
 
       export default {
         name: 'video.vue',
         components: {
           videoList,
           videoHeader,
-            videoNav,
-            videoOne,
-            Slide
+          videoNav,
+          videoOne,
+          Slide
         },
         data () {
           return {
-              datas: [],
-              videogroupid:'',
+            datas: [],
+            videogroupid: ''
           }
         },
         created () {
@@ -37,12 +37,11 @@
               this.videogroupid = this.datas[1].id
             })
           },
-            toggles(id) {
-                //点击切换列表
-                this.videogroupid = id;
-                console.log(this.videogroupid)
-
-            }
+          toggles (id) {
+                // 点击切换列表
+            this.videogroupid = id
+            console.log(this.videogroupid)
+          }
         }
       }
 </script>
