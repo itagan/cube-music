@@ -38,6 +38,9 @@ const mutations = {
   },
   [types.SET_VIDEO_GROUP_ID] (state, videoGroupId) {
     state.videoGroupId = videoGroupId
+  },
+  [types.SET_VIDEO_STATE] (state, videoState) {
+    state.videoState = videoState
   }
 }
 

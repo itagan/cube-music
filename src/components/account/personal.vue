@@ -8,7 +8,7 @@
 
       <div class="my-name">
         <div class="name">
-          <span>宝粉帮</span>
+          <span>{{personals.profile.nickname}}</span>
           <i class="iconfont iconzan1"></i>
         </div>
         <div class="grade">Lv8</div>
@@ -32,15 +32,15 @@
 
     <ul class="center">
       <li>
-        <span>1</span>
+        <span>{{personals.profile.eventCount}}</span>
         <span>动态</span>
       </li>
       <li>
-        <span>43</span>
+        <span>{{personals.profile.follows}}</span>
         <span>关注</span>
       </li>
       <li>
-        <span>1</span>
+        <span>{{personals.profile.followeds}}</span>
         <span>粉丝</span>
       </li>
       <li>
@@ -107,17 +107,34 @@
 </template>
 
 <script>
+    import {mapGetters, mapMutations} from 'vuex'
     export default {
         name: "personal.vue",
         data() {
             return {
-                signIn:false
+                signIn:false,
+                personals:{}
             }
+        },
+        created() {
+            this.getPersonal()
+        },
+        computed: {
+            ...mapGetters([
+                'uid'
+            ])
         },
         methods:{
             //签到
             toSignIn() {
                 this.signIn = !this.signIn
+            },
+            //获取数据
+            getPersonal() {
+                this.$api.users.userdetail(this.uid).then(res => {
+                      this.personals = res.data;
+                      console.log(this.personals)
+                })
             }
         }
     }

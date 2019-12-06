@@ -2,13 +2,13 @@
   <div class="my">
     <my-header ref="change" @complete="complete"></my-header>
 
-    <div class="scroll-list-wrap">
-      <cube-scroll
-        ref="scroll"
-        :scroll-events="scrollEvents"
-        :options="options"
-        :direction="direction"
-      >
+<!--    <div class="scroll-list-wrap">-->
+<!--      <cube-scroll-->
+<!--        ref="scroll"-->
+<!--        :scroll-events="scrollEvents"-->
+<!--        :options="options"-->
+<!--        :direction="direction"-->
+<!--      >-->
         <my-nav class="my-nav"></my-nav>
         <my-music class="mu-music"></my-music>
         <play-list
@@ -18,10 +18,11 @@
           @mores="mores"
           ref="hom"
         ></play-list>
-        <build-list class="build-list" v-if="isbuild" @cancel="cancel"></build-list>
 
-      </cube-scroll>
-    </div>
+<!--      </cube-scroll>-->
+<!--    </div>-->
+
+    <build-list class="build-list" v-if="isbuild" @cancel="cancel"></build-list>
 
     <play-more
       v-if="ismore"
@@ -71,9 +72,10 @@
           iscollectionmore: false,
           collectionnum: 0,
             options: {
-                // probeType: ,
+                probeType: 3,
+                click:true,
                 scrollbar: true,
-                preventDefault: false
+                // preventDefault: false
             },
             scrollEvents: ['scroll'],
             direction:'vertical',
@@ -175,6 +177,7 @@
   .scroll-list-wrap
     height: 617px
     width:375px
+    margin-bottom:50px
 
   .cube-scroll-wrapper
     height: 617px

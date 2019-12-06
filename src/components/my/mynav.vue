@@ -1,6 +1,6 @@
 <template>
   <div class="nav-scroll-list-wrap">
-    <cube-scroll ref="navScroll" direction="horizontal" nestMode="free">
+    <cube-scroll ref="navScroll" direction="horizontal" >
       <ul class="nav-wrapper">
         <li v-for="(item, index) in navTxts" :key="index" class="nav-item">
           <router-link to="/find" tab="div" class="nav-link">

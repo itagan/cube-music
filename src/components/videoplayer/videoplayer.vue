@@ -163,13 +163,23 @@ export default {
           'currentVid',
           'limit',
           'back',
-          'currentUrl'
+          'currentUrl',
+            'videoState',
         ]),
           CurrentVid() {
             return this.currentVid
           },
           Back() {
             return this.back
+          },
+          VideoState () {
+              if(this.videoState.length === 0) return
+
+              this.newIndex = this.videoState.findIndex((item,index) => {
+                  return item.vid === this.currentVid
+              })
+
+              return this.newIndex
           },
         options () {
           return {

@@ -151,7 +151,7 @@
                 'currentVideo',
                 'videoCurrentTime',
                 'currentIndex',
-                'back'
+                'back',
             ]),
         },
         watch: {
