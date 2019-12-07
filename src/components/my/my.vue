@@ -13,7 +13,7 @@
         <my-music class="mu-music"></my-music>
         <play-list
           class="create-list"
-          @build="buildlist"
+          @build="buildList"
           @more="more"
           @mores="mores"
           ref="hom"
@@ -22,21 +22,21 @@
 <!--      </cube-scroll>-->
 <!--    </div>-->
 
-    <build-list class="build-list" v-if="isbuild" @cancel="cancel"></build-list>
+    <build-list class="build-list" v-if="isBuild" @cancel="cancel"></build-list>
 
     <play-more
-      v-if="ismore"
-      @cancel="cancelmore"
-      @build="morebuildlist"
+      v-if="isMore"
+      @cancel="cancelMore"
+      @build="moreBuildList"
       @manage="manage"
-      :num="createnum"
+      :num="createNum"
     >
     </play-more>
 
     <collection-more
-      v-if="iscollectionmore"
-      @cancel="cancelcollectionmore"
-      :nums="collectionnum"
+      v-if="isCollectionMore"
+      @cancel="cancelCollectionMore"
+      :nums="collectionNum"
       @manage="manage"
     ></collection-more>
 
@@ -66,93 +66,80 @@
       },
       data () {
         return {
-          isbuild: false, // 注意这些变量名不能和函数名重复避免报错
-          ismore: false,
-          createnum: 0,
-          iscollectionmore: false,
-          collectionnum: 0,
+          isBuild: false, // 注意这些变量名不能和函数名重复避免报错
+          isMore: false,
+          createNum: 0,
+          isCollectionMore: false,
+          collectionNum: 0,
           options: {
             probeType: 3,
             click: true,
             scrollbar: true
-                // preventDefault: false
           },
           scrollEvents: ['scroll'],
           direction: 'vertical'
         }
       },
-        // created() {
-        //     this.widthComputed()
-        // },
       watch: {
-        isbuild (val) {
+        isBuild (val) {
           if (val) {
             this._dialog.afterOpen()
           } else {
             this._dialog.beforeClose()
           }
         },
-        ismore (val) {
+        isMore (val) {
           if (val) {
             this._dialog.afterOpen()
           } else {
             this._dialog.beforeClose()
           }
         },
-        iscollectionmore (val) {
+        isCollectionMore (val) {
           if (val) {
             this._dialog.afterOpen()
           } else {
-                    // ModalHelper.beforeClose();
             this._dialog.beforeClose()
           }
         }
       },
       methods: {
-            // widthComputed() {
-            //     this.navWidth=this.navTxts.length*520
-            // }
-        buildlist () {
-          this.isbuild = true
+        buildList () {
+          this.isBuild = true
         },
-        morebuildlist () {
-          this.ismore = false
-          this.isbuild = true
-
+        moreBuildList () {
+          this.isMore = false
+          this.isBuild = true
             // 手动调用，解决打开更多再新建歌单产生滚动现象的bug。
           this.$nextTick(() => {
             this._dialog.afterOpen()
           })
         },
         cancel () {
-          this.isbuild = false
+          this.isBuild = false
         },
         more (num) {
                 // 子组件提醒打开更多操作页面
-          this.ismore = true
-          this.createnum = num
+          this.isMore = true
+          this.createNum = num
         },
-        cancelmore () {
-          this.ismore = false
+        cancelMore () {
+          this.isMore = false
         },
-        cancelcollectionmore () {
-          this.iscollectionmore = false
+        cancelCollectionMore () {
+          this.isCollectionMore = false
         },
         mores (nums) {
-          this.iscollectionmore = true
-          this.collectionnum = nums
+          this.isCollectionMore = true
+          this.collectionNum = nums
         },
         manage () {
-                // 收到通知告诉另外子组件管理歌单
-                // this.ismanage = true;
-                // 调用子组件方法通知子组件
           this.$refs.hom.manage()
-          console.log('收到通知')
             // 头部组件图标变 完成
           this.$refs.change.ischange()
             // 取消更多弹出层
-          this.ismore = false
-          this.iscollectionmore = false
+          this.isMore = false
+          this.isCollectionMore = false
             // 定义管理菜单
         },
         complete () {

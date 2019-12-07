@@ -1,9 +1,8 @@
 <template>
-
     <cube-slide ref="slide" :data="items" @change="changePage">
       <cube-slide-item v-for="(item, index) in items" :key="index" @click.native="clickHandler(item, index)">
-        <a :href="item.url" class='sliderLink'>
-          <img :src="item.pic" class='sliderImg'>
+        <a :href="item.url" class='slider-link'>
+          <img :src="item.pic" class='slider-img'>
           <div class="title" :style="{backgroundColor:item.titleColor}">{{item.typeTitle}}</div>
         </a>
       </cube-slide-item>
@@ -14,7 +13,6 @@
 </template>
 
 <script>
-  // import {find} from '../../api/api'
     export default {
       data () {
         return {
@@ -25,16 +23,9 @@
         this.getSliders()
       },
       methods: {
-        changePage (current) {
-                // console.log('当前轮播图序号为:' + current)
-        },
-        clickHandler (item, index) {
-                // console.log(item, index)
-        },
         getSliders () {
           this.$api.find.slide().then((res) => {
             this.items = res.data.banners
-                   // console.log(res)
           })
         }
 
@@ -61,13 +52,13 @@
       width: 5px
       height: 5px
       border-radius:50%
-  .sliderLink
+  .slider-link
     display: block
     width: 100%
     overflow: hidden
     text-decoration: none
     position:relative
-    .sliderImg
+    .slider-img
       width:100%
       height: 130px
     .title

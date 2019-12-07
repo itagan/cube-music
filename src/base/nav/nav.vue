@@ -4,7 +4,7 @@
     <router-link tab="div" class="nav-item" v-for="item in result" :key="item.id" v-if="result.length" to="/my">
       <div class="nav-div">
         <img :src="item.picUrl" class="nav-img">
-        <div class="nav-imgdiv">
+        <div class="nav-img-div">
           <i class="iconfont iconzan1"></i>
           <span class="nav-num">{{item.playCount}}</span>
         </div>
@@ -18,11 +18,6 @@
   import {serializeNumber} from '../../assets/js/number'
   export default {
     name: 'nav.vue',
-        // data(){
-        //     return {
-        //         result: this.result
-        //     }
-        // },
     props: {
       result: {
         type: Array,
@@ -30,35 +25,11 @@
         required: true
       }
     },
-        // created(){
-        //     this.serializeNumber()
-        // },
-        // computed:{
-        //     newresult:{
-        //         get(){
-        //             return this.result.map(item=>{
-        //               serializeNumber(item.playCount)
-        //             })
-        //         },
-        //         set(newval){
-        //             this.result = newval
-        //         }
-        //     }
-        // },
-        // methods:{
-        //     serialize(newresult){
-        //         return newresult.map(function (item) {
-        //             console.log(item.playCount)
-        //             return serializeNumber(item.playCount)
-        //         })
-        //     }
-        // },
     watch: {
       result (val) {
         for (let i = 0; i < val.length; i++) {
           val[i].playCount = serializeNumber(val[i].playCount)
         }
-              // console.log(this.result)
       }
     }
   }
@@ -86,7 +57,7 @@
         .nav-img
           width:100%
           margin-bottom:100%
-        .nav-imgdiv
+        .nav-img-div
           position:absolute
           top:5px
           right:5px

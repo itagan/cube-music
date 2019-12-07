@@ -1,8 +1,6 @@
 <template>
-
   <div class="find">
     <find-header></find-header>
-
     <div class="content-scroll-wrapper">
       <cube-scroll
         ref="contentScroll"
@@ -56,17 +54,12 @@
                    <i class="iconfont iconyinletiaodongzhuangtai"></i>
                   <span> 加载中...</span>
                 </span>
-              <!--              <span v-else>更新成功</span>-->
             </template>
           </div>
         </template>
-
       </cube-scroll>
     </div>
-
   </div>
-
-
 </template>
 
 <script>
@@ -106,22 +99,17 @@
       methods: {
 
         onPullingDown () {
-                // this.isRefresh = true;
-
           setTimeout(() => {
             this.$refs.recommend.getResults()
             this.$refs.video.getVideos()
-
             this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
             this.$refs.contentScroll.forceUpdate()// 下拉完毕
             this.isRefresh = true
           }, 1000)
         },
-
         onPullingUp () {
           setTimeout(() => {
             this.$refs.video.upLoad()
-
             const contentScroll = this.$refs.contentScroll
             contentScroll.forceUpdate()
                 // contentScroll.refresh();
@@ -130,9 +118,7 @@
         scrollHandler (pos) {
           this.pullDownY = -pos.y
         }
-
       }
-
     }
 </script>
 
@@ -233,8 +219,6 @@
       100% {
         transform: translateX(0px);
       }
-
-
 
 
   .cube-scroll-content

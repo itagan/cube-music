@@ -14,7 +14,7 @@
         :autofocus="autofocus"
         :placeholder="placeholder"
         @input="input"
-        class="myinput"
+        class="my-input"
       ></cube-input>
     </div>
     <cube-button class="next" :light="true" @click="next" ref="btn" >下一步</cube-button>
@@ -23,7 +23,7 @@
 
 <script>
     export default {
-      name: 'loginphone.vue',
+      name: 'loginPhone.vue',
       data () {
         return {
           value: '',
@@ -61,14 +61,6 @@
             this.disabled = false
           }
 
-                // 提示方法
-                // const toast = msg => {
-                //     this.$createToast({
-                //         time: 1000,
-                //         txt: msg,
-                //         type: 'error',
-                //     });
-                // };
           const toast = this.$createToast({
             time: 1000,
             txt: '手机号应该是11位数字！',
@@ -148,7 +140,7 @@
         width:40px
         height:40px
         flex-center()
-      .myinput
+      .my-input
         flex:1
         outline:none
         -webkit-appearance: none

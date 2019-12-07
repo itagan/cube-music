@@ -1,18 +1,20 @@
 <template>
   <div class="code">
-    <div class="codeback">
+    <div class="code-back">
       <i class="iconfont iconzan1" @click="back"></i>
       <span>手机号验证</span>
     </div>
-    <div class="codetop">验证码已发送至</div>
-    <div class="codecenter">
+    <div class="code-top">验证码已发送至</div>
+    <div class="code-center">
       <span>+86 {{this.phone}}</span>
       <span>{{time}}s</span>
     </div>
-    <div class="codebottom">
-      <input maxlength="4" type="number" v-model="code" autofocus="autofocus">
+    <div class="code-bottom">
+      <label>
+        <input maxlength="4" type="number" v-model="code" autofocus="autofocus">
+      </label>
       <ul>
-        <li class="oneli" ref="oneli">{{code[0]}}</li>
+        <li class="one-li" ref="oneLi">{{code[0]}}</li>
         <li>{{code[1]}}</li>
         <li>{{code[2]}}</li>
         <li>{{code[3]}}</li>
@@ -34,27 +36,16 @@
       },
       created () {
         this.getPhone()
-    },
+      },
       methods: {
             // 获取手机号码
         getPhone () {
-                // return this.code;
           this.phone = this.$route.params.phone
-          console.log(this.phone)  // 访问参数
         },
             // 验证验证码
         verification () {
           this.$api.users.verifyCode(this.phone, this.code).then(res => {
-            console.log(res)
             if (res.data.code === 200) {
-                        // 登录成功
-                        // this.$router.push(
-                        //     {
-                        //         path:'/find'
-                        //     }
-                        // );
-                        // return
-              console.log('验证成功')
             }
 
             if (res.status === 503) {
@@ -116,7 +107,7 @@
       },
       mounted () {
         this.countdown()
-    }
+      }
 
     }
 </script>
@@ -131,7 +122,7 @@
     background-color:white
     height:667px
     width:100%
-    .codeback
+    .code-back
       font-size:$font-size-medium-x
 
       margin:auto 5px
@@ -142,19 +133,19 @@
         position:absolute
         left:10px
 
-    .codetop
+    .code-top
       font-size:$font-size-medium-x
       height:30px
       line-height:30px
       margin:40px 10px 0
-    .codecenter
+    .code-center
       font-size:$font-size-medium
       color:gray
       height:30px
       line-height:30px
       margin:auto 10px
       flex-between()
-    .codebottom
+    .code-bottom
       position:relative
       margin:auto 5px
       input
@@ -166,7 +157,7 @@
       ul
         flex-around()
         width:100%
-        .oneli
+        .one-li
           border-bottom:2px solid gray
         li
           height:60px

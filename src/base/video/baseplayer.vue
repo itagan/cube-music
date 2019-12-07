@@ -1,7 +1,7 @@
 <template>
       <div class="wrapper" @click="playVideo" >
         <video :poster="detail.coverUrl"
-               :src="videourl"
+               :src="videoUrl"
                class="video"
                width="375px"
                height="200px"
@@ -10,27 +10,27 @@
                :moted="true"
                @timeupdate="updateTime"
         >
-          <source :src="videourl" type="audio/mpeg">
+          <source :src="videoUrl" type="audio/mpeg">
         </video>
 
         <div class="wrap">
-          <div class="grop" v-if="gropshow">22</div>
-          <div class="leftTop" @click="toBack">
+          <div class="gorp" v-if="gorpShow">22</div>
+          <div class="left-top" @click="toBack">
             <i class="iconfont iconzan1"></i>
           </div>
-          <div class="wrapperLeft">
-            <div  v-show="currentshow">
+          <div class="wrapper-left">
+            <div  v-show="currentShow">
               <i class="iconfont iconzan1" v-if="currentTimeShow"></i>
               <span v-if="currentTimeShow" >{{detail.playTime}}</span>
-              <div v-if="!currentTimeShow"> {{Durationms(currentTime)}} / {{detail.durationms}}</div>
+              <div v-if="!currentTimeShow"> {{Durations(currentTime)}} / {{detail.durationms}}</div>
             </div>
           </div>
-          <div class="wrapperCenter" v-if="plays" >
+          <div class="wrapper-center" v-if="plays" >
             <i class="iconfont iconnetease" v-if="play"></i>
             <i class="iconfont iconliuyan" v-else></i>
           </div>
 
-          <div class="wrapperRight" v-show="playTimes">
+          <div class="wrapper-right" v-show="playTimes">
             <i class="iconfont iconzan1"  v-if="playTime"></i>
             <span  v-if="playTime">{{detail.durationms}}</span>
             <i class="iconfont iconliuyan" v-if="!playTime"></i>
@@ -48,7 +48,7 @@
               @touchmove.prevent="btnTouchMove"
               @touchend="btnTouchEnd"
             >
-              <div class="controlBtn" ref="btn"></div>
+              <div class="control-btn" ref="btn"></div>
             </div>
           </div>
         </div>
@@ -59,23 +59,19 @@
 
 <script>
     import {mapActions, mapGetters, mapMutations} from 'vuex'
-    import {currentVideo} from '../../store/getters'
-    import {serializeNumber} from '../../assets/js/number'
-    import {durationms} from '../../assets/js/timestamp'
     import { prefixStyle } from '../../assets/js/dom'
-
-    const btnBtnWidth = 10 // 按钮的长度 //触摸按钮的时候放大按钮，从10到20
-const transform = prefixStyle('transform')
+    const btnBtnWidth = 10
+    const transform = prefixStyle('transform')
 
     export default {
       name: 'videoList.vue',
       data () {
         return {
-          gropshow: false,
+          gorpShow: false,
           videoDom: '',
           titleImg: false, // 标题右边的图
           isPlay: false, // 是否播放..
-          currentshow: true, // 视频左下角播放量或者进度是否显示
+          currentShow: true, // 视频左下角播放量或者进度是否显示
           currentTimeShow: true, // 播放量跟播放进度转换
           check: true, // 是否显示
           wrapShow: false, // 遮罩层是否存在
@@ -87,7 +83,7 @@ const transform = prefixStyle('transform')
           speedShow: true, // 进度条和按钮是否显示
           currentTime: `00:00`, // 播放进度时间
           speedWidth: 0,
-          durationms: 0, // 视频播放总时间
+          durations: 0, // 视频播放总时间
           currentDuration: [{}, {}], // 存放前后播放视频的播放进度
           durationHistory: [] // 存放本视频流页面前后视频播放进度的历史记录
         }
@@ -97,7 +93,7 @@ const transform = prefixStyle('transform')
           type: Object,
           required: true
         },
-        videourl: {
+        videoUrl: {
           type: String,
           default: ''
         }
@@ -107,7 +103,7 @@ const transform = prefixStyle('transform')
       },
       computed: {
         percent () {
-          return this.currentTime / this.durationms
+          return this.currentTime / this.durations
         },
         ...mapGetters([
           'videoList',
@@ -133,7 +129,7 @@ const transform = prefixStyle('transform')
       methods: {
         playVideo (e) {
           this.videoDom = this.$refs.video // 获取当前播放的视频DOM
-          this.durationms = this.videoDom.duration // 获取播放时长
+          this.durations = this.videoDom.duration // 获取播放时长
           if (this.currentTime === 0) {
                     //* *******功能需求：播放进度为0的情况下，点击就可以播放。否则需要点击播放或暂停按钮实现********
             this.videoDom.play()
@@ -142,7 +138,7 @@ const transform = prefixStyle('transform')
                 // 中间播放按钮或暂停按钮是否显示
             this.plays = false
                 // 左下角播放量或者进度是否显示
-            this.currentshow = false
+            this.currentShow = false
                 // 右下角播放总长度变成全屏按钮
             this.playTimes = false
                 // 每次点击应都保持底部进度条有显示
@@ -157,14 +153,12 @@ const transform = prefixStyle('transform')
             if (this.isPlay && isTarget) {
               this.videoDom.pause()
               this.isPlay = false
-
-              console.log('暂停')
-                    // 中间播放按钮或暂停按钮是否显示
+                 // 中间播放按钮或暂停按钮是否显示
               this.plays = true
                     // 暂停按钮变播放按钮
               this.play = true
                     // 左下角播放量或者进度是否显示
-              this.currentshow = true
+              this.currentShow = true
                     // 隐藏播放进度播放量，显示播放量
               this.currentTimeShow = false
                     // 右下角播放总长度或全屏按钮是否显示
@@ -180,14 +174,13 @@ const transform = prefixStyle('transform')
                     // 标志位播放
               this.isPlay = true
 
-              console.log('播放')
               setTimeout(() => {
                             // 中间播放按钮或暂停按钮是否显示
                 this.plays = true
                         // 暂停按钮变播放按钮
                 this.play = false
                         // 左下角播放量或者进度是否显示
-                this.currentshow = true
+                this.currentShow = true
                         // 隐藏播放进度播放量，显示播放量
                 this.currentTimeShow = false
                         // 右下角播放总长度或全屏按钮是否显示
@@ -207,7 +200,7 @@ const transform = prefixStyle('transform')
                     // 播放按钮变暂停按钮
               this.play = false
                     // 左下角播放量或者进度是否显示
-              this.currentshow = true
+              this.currentShow = true
                     // 隐藏播放进度播放量，显示播放量
               this.currentTimeShow = false
                     // 右下角播放总长度或全屏按钮是否显示
@@ -224,7 +217,7 @@ const transform = prefixStyle('transform')
                 this.plays = false
 
                         // 左下角播放量或者进度是否显示
-                this.currentshow = false
+                this.currentShow = false
 
                         // 右下角播放总长度或全屏按钮是否显示
                 this.playTimes = false
@@ -240,14 +233,13 @@ const transform = prefixStyle('transform')
           this.currentTime = e.target.currentTime // 播放的时候派发事件，能够获得当前播放时间 ***注意写法
           this.speedWidth = this.percent * 355
         },
-        Durationms (durationms) {
+        Durations (durations) {
                 // 对时间戳进行转化为分秒
-                // durationms = durationms / 1000;//转换为多少秒  本身播放当前时间为秒
-          durationms = durationms | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
-          let minute = durationms / 60 | 0
+          durations = durations | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
+          let minute = durations / 60 | 0
           minute = minute < 10 ? '0' + minute : minute
-            // let second = _pad(durationms) % 60;
-          let second = durationms % 60
+            // let second = _pad(durations) % 60;
+          let second = durations % 60
           second = second < 10 ? '0' + second : second// 秒数前面补零操作
           return `${minute}:${second}`
         },
@@ -257,7 +249,6 @@ const transform = prefixStyle('transform')
           this.touch.initiated = true  // 设立标志位，true表示初始化了
           this.touch.startX = e.touches[0].pageX // 开始触摸时候的位置
           this.touch.left = this.$refs.speed.clientWidth // 开始点击的时候进度条本身偏移长度
-          console.log(this.touch.left)
         },
         btnTouchMove (e) {
           if (!this.touch.initiated) {
@@ -268,19 +259,17 @@ const transform = prefixStyle('transform')
           const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - btnBtnWidth, Math.max(0, this.touch.left + deltaX))
           this._offset(offsetWidth)
           this.bigBtn()
-          console.log('滚动了')
         },
         btnTouchEnd (e) {
           this.touch.initiated = false
           this._triggerPercent() // 拖动结束调用方法设置播放进度
           this.removeBig()
-          console.log('滚动结束了')
         },
         _triggerPercent () {
           const barWidth = this.$refs.progressBar.clientWidth - btnBtnWidth // 获取进度条框的实际长度，需要减去上面按钮的宽度
           const percent = this.$refs.speed.clientWidth / barWidth // 底部进度条的长度/进度条框长度，得到比例
 
-          this.$refs.video.currentTime = this.durationms * percent
+          this.$refs.video.currentTime = this.durations * percent
                 // 拖动后实现播放
           if (!this.isPlay) {
             this.isPlay = true
@@ -346,7 +335,7 @@ const transform = prefixStyle('transform')
             bottom:0
             left:0
             opacity: 0.8
-            .grop
+            .gorp
               position:absolute
               top:10px
               right:10px
@@ -358,26 +347,26 @@ const transform = prefixStyle('transform')
               line-height:13px
               padding:2px 8px
               background-color:greenyellow
-            .leftTop
+            .left-top
               position: absolute
               left:20px
               top:30px
               color:white
               font-size:$font-size-large-x
-            .wrapperLeft
+            .wrapper-left
               position: absolute
               left:5px
               bottom:10px
               height:10px
               color:white
-            .wrapperCenter
+            .wrapper-center
               color:white
               position: absolute
               left: 50%;
               top: 50%;
               transform: translate(-50%, -50%);
               font-size:$font-size-large-x
-            .wrapperRight
+            .wrapper-right
               position: absolute
               right:10px
               bottom:10px
@@ -410,7 +399,7 @@ const transform = prefixStyle('transform')
                 width: 20px
                 height: 20px
                 flex-center
-                .controlBtn
+                .control-btn
                   border-radius:50%
                   background-color:red
                   height:10px
@@ -418,6 +407,7 @@ const transform = prefixStyle('transform')
                   position:absolute
                   /*bottom:10px*/
                   left:10px
+                  z-index:2005
 
         .activeBtn
           height:15px !important

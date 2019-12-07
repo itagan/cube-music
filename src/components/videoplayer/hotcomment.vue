@@ -1,6 +1,6 @@
 
 <template>
-  <transition name="fade-skubase" v-if="visible">
+  <transition name="fade-comment" v-if="visible">
 
     <div class="sticky-view-container">
     <cube-sticky :pos="scrollY">
@@ -14,8 +14,8 @@
 
         <cube-sticky-ele ele-key="精彩评论">
           <ul class="sticky-header">
-            <li class="alltop">
-              <div class="alltopleft">
+            <li class="all-top">
+              <div class="all-top-left">
                 <span>精彩评论</span>
                 <span>({{total}})</span>
               </div>
@@ -26,22 +26,22 @@
           </ul>
         </cube-sticky-ele>
 
-        <div v-if="!this.comments.length" class="pullload">
+        <div v-if="!this.comments.length" class="pull-load">
                 <span v-if="props.isPullUpLoad" class="load">
                    <i class="iconfont iconyinletiaodongzhuangtai"></i>
                   <span> 正在加载...</span>
                 </span>
         </div>
 
-        <ul  class="hotul" v-else>
-          <li v-for="item in comments" class="hotli">
+        <ul  class="hot-ul" v-else>
+          <li v-for="item in comments" class="hot-li">
             <base-comment :item="item"></base-comment>
           </li>
         </ul>
 
         <template slot="pullup" slot-scope="props">
-          <div v-if="props.pullUpLoad" class="pullload">
-            <template v-if="loadisshow">
+          <div v-if="props.pullUpLoad" class="pull-load">
+            <template v-if="loadIsShow">
                 <span v-if="props.isPullUpLoad" class="load">
                    <i class="iconfont iconyinletiaodongzhuangtai"></i>
                   <span> 加载中...</span>
@@ -52,11 +52,6 @@
         </template>
 
       </cube-scroll>
-<!--      <template slot="fixed" slot-scope="props">-->
-<!--        <ul class="sticky-header">-->
-<!--          <li>{{props.current}}</li>-->
-<!--        </ul>-->
-<!--      </template>-->
     </cube-sticky>
     </div>
   </transition>
@@ -68,16 +63,16 @@
 <script>
     import {mapGetters, mapMutations} from 'vuex'
     import BaseComment from '../../base/basecomment/basecomment'
-import {timestampother} from '../../assets/js/timestamp'
+    import {timestampOther} from '../../assets/js/timestamp'
 
     export default {
-      name: 'hotcomment.vue',
+      name: 'hotComment.vue',
       components: {
         BaseComment
       },
       data () {
         return {
-          allcomments: [],
+          allComments: [],
           comments: [],
           item: {},
           total: '',
@@ -89,8 +84,7 @@ import {timestampother} from '../../assets/js/timestamp'
           pullUpLoadThreshold: 0,
           pullUpLoadMoreTxt: '加载中…………',
           pullUpLoadNoMoreTxt: '没有更多数据了~',
-
-          loadisshow: false // 上拉加载是否显示,数据全部加载完则不显示了
+          loadIsShow: false // 上拉加载是否显示,数据全部加载完则不显示了
         }
       },
       props: {
@@ -99,22 +93,15 @@ import {timestampother} from '../../assets/js/timestamp'
           default: {}
         }
       },
-        // created() {
-        //     this.getHotcomment();
-        // },
       watch: {
             // 监控父组件传递过来的vid变化则重新渲染新相关推荐数据
         detail () {
-          this.getHotcomment()
-            // setTimeout(()=> {
-            //     this.getHotcomment();
-            // },1000);
+          this.getHotComment()
         }
       },
       computed: {
         options () {
           return {
-                    // pullDownRefresh: this.pullDownRefreshObj,
             pullUpLoad: this.pullUpLoadObj,
             scrollbar: true,
             probeType: 1
@@ -134,25 +121,21 @@ import {timestampother} from '../../assets/js/timestamp'
         ])
       },
       methods: {
-        getHotcomment (hotLimit) {
+        getHotComment (hotLimit) {
           this.$api.video.hotcomment(this.detail.vid, hotLimit).then(res => {
             this.total = res.data.total
-                // this.allcomments = res.data.hotComments;
-                // 因评论总数比较少，api未发现符合实际效果的参数。这里模拟分页数据，实现下拉加载中效果。每100条显示加载中
-                // let num =Math.ceil( this.total / 100);//向上取整
             if (this.isPullUpLoad) {
               this.comments = [] // 清空数据，以防重复渲染
             };
 
             this.comments = res.data.hotComments
             for (let i = 0; i < this.comments.length; i++) {
-              this.comments[i].time = timestampother(this.comments[i].time)
+              this.comments[i].time = timestampOther(this.comments[i].time)
             }
           })
         },
         scrollHandler (pos) {
           this.scrollY = -pos.y
-            // console.log(pos)
           if (pos.y > 10) {
             setTimeout(() => {
               this.hide()
@@ -160,23 +143,7 @@ import {timestampother} from '../../assets/js/timestamp'
           }
         },
         onPullingUp () {
-                // 闭包保存上次上拉加载的数据位置  *****没作用*****
-                // limit=20;
-                // function Limit1(){
-                //     // var limit=20;
-                //     // 回调函数增加新数据
-                //     nAdd=function(){this.limit+=10};
-                //     function Limit2(){
-                //         return this.limit;
-                //     }
-                //     //返回新数据
-                //     return Limit2;
-                // }
-                // var result=Limit1();
-                // result();
-                // nAdd();
-                // 决定上拉加载效果是否显示出来
-          this.loadisshow = this.comments.length >= this.hotLimit
+          this.loadIsShow = this.comments.length >= this.hotLimit
 
             // 改用vuex方式获取设置上拉加载的索引：实现上拉加载新数据效果
             // 更新数据
@@ -186,7 +153,7 @@ import {timestampother} from '../../assets/js/timestamp'
             if (this.isPullUpLoad) {
               this.comments = [] // 清空数据，以防重复渲染
             };
-            this.getHotcomment(this.hotLimit + 10)
+            this.getHotComment(this.hotLimit + 10)
             let newPage = this.comments.slice(this.hotLimit, this.hotLimit + 10)
 
             if (newPage) {
@@ -194,7 +161,6 @@ import {timestampother} from '../../assets/js/timestamp'
                         // 获取新数据并渲染出来
               this.comments = this.comments.concat(newPage)
               this.$refs.scroll.forceUpdate()
-                    // this.$refs.scroll.refresh();
             } else {
                         // 如果没有新数据
                         // 取消加载中，并刷新下滚动组件
@@ -213,7 +179,7 @@ import {timestampother} from '../../assets/js/timestamp'
           this.visible = false
             // 告诉父组件你该显示了
           setTimeout(() => {
-            this.$emit('parshow')
+            this.$emit('pageshow')
           }, 200)
             // 把vuex的数据还原
           this.setHotLimit(20)
@@ -221,7 +187,6 @@ import {timestampother} from '../../assets/js/timestamp'
             // this.comments = [];
         },
         ...mapMutations({
-                // setLimit:'SET_LIMIT'
           setHotLimit: 'SET_HOT_LIMIT'
         })
       }
@@ -234,15 +199,15 @@ import {timestampother} from '../../assets/js/timestamp'
 
   .sticky-view-container
     position: absolute
-    top: 220px
+    top: 223px
     bottom: 0
     left: 0
     width: 100%
-    z-index:999
-    .hotul
-      margin-top:10px
+    z-index:2001
+    .hot-ul
+      margin-top:8px
     .sticky-header
-      .alltop
+      .all-top
         flex-between()
         margin-bottom:2px
         background-color:white
@@ -250,7 +215,7 @@ import {timestampother} from '../../assets/js/timestamp'
         line-height:40px
         font-size:$font-size-large
         border-bottom:1px solid #dcdcdc
-        .alltopleft
+        .all-top-left
           color:black
         .hide
           width:50px
@@ -267,7 +232,7 @@ import {timestampother} from '../../assets/js/timestamp'
         margin: 0 10px
 
      //加载中相关样式
-    .pullload
+    .pull-load
         width:100%
         height:30px
         margin-top:1px
@@ -281,13 +246,12 @@ import {timestampother} from '../../assets/js/timestamp'
             color:gray
 
   /*动画效果*/
-  .fade-skubase-enter-active,
-  .fade-skubase-leave-active
+  .fade-comment-enter-active,
+  .fade-comment-leave-active
     transition: transform .4s ease-in
 
-  .fade-skubase-enter,
-  .fade-skubase-leave-to
-    /* .list-leave-active for below version 2.1.8 */
+  .fade-comment-enter,
+  .fade-comment-leave-to
     transform: translateY(600px);
 
 </style>

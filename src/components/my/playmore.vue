@@ -1,5 +1,5 @@
 <template>
-  <more-Songs @cancel="cancel" class="mask">
+  <more-songs @cancel="cancel" class="mask">
     <span slot="top">我创建的歌单{{num}}</span>
     <div slot="main1" class="main" @click="build">
       <i class="iconfont iconzan1"></i>
@@ -17,13 +17,13 @@
       <i class="iconfont iconzan1"></i>
       <span>恢复歌单</span>
     </div>
-  </more-Songs>
+  </more-songs>
 </template>
 
 <script>
     import moreSongs from '../common/moresongs'
 export default {
-      name: 'playmore.vue',
+      name: 'playMore.vue',
       components: {
         moreSongs
       },

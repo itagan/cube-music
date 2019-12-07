@@ -24,7 +24,7 @@
         @change="slideChange">
         <cube-slide-item v-for="(item, index) in objs" :key="index">
           <div class="match-list-wrapper">
-            <video-two :type="index" :groupid="videogroupid"></video-two>
+            <video-list :type="index" :groupId="videoGroupId"></video-list>
           </div>
         </cube-slide-item>
         <div slot="dots"></div>
@@ -35,8 +35,7 @@
 </template>
 
 <script>
-  import videoTwo from './videotwo'
-import videoNav from './videonav'
+  import videoList from './videolist'
 export default {
     name: 'app',
     data () {
@@ -44,7 +43,7 @@ export default {
         activeClass: 'nav-item-active',
         errorClass: '',
         currentPage: 0,
-        videogroupid: 9102,
+        videoGroupId: 9102,
         objs: [
           {
             text: '推荐',
@@ -98,19 +97,16 @@ export default {
       }
     },
     components: {
-      videoTwo,
-      videoNav
+      videoList
     },
     methods: {
       toggles (item, index) {
         this.currentPage = index
-              // this.$emit('toggle',item.id)
-        this.videogroupid = item.id
+        this.videoGroupId = item.id
       },
       slideChange (index) {
         this.currentPage = index
-              // this.$emit('toggle',this.objs[index].id);
-        this.videogroupid = this.objs[index].id
+        this.videoGroupId = this.objs[index].id
       }
     }
   }

@@ -1,8 +1,8 @@
 <template>
   <div class="recommend">
-    <div class="recommendTop">
-      <span class="recommendLeft">推荐歌单</span>
-      <router-link tab="div" class="recommendRight" to="/my">歌单广场</router-link>
+    <div class="recommend-top">
+      <span class="recommend-left">推荐歌单</span>
+      <router-link tab="div" class="recommend-right" to="/my">歌单广场</router-link>
     </div>
     <base-nav v-bind:result="result"></base-nav>
   </div>
@@ -11,7 +11,7 @@
 <script>
   import BaseNav from '../../base/nav/nav'
   export default {
-    name: 'recommendsongs.vue',
+    name: 'recommendSongs.vue',
     components: {
       BaseNav
     },
@@ -20,19 +20,6 @@
         result: []
       }
     },
-    // props: {
-    //     isRefresh:{
-    //         type:Boolean,
-    //         default:false
-    //     }
-    // },
-    // watch:{
-    //     isRefresh() {
-    //         //收到下拉更新消息
-    //         this.getResults()
-    //         console.log('更新推荐歌单');
-    //     }
-    // },
     created () {
       this.getResults()
     },
@@ -40,7 +27,6 @@
       getResults () {
         this.$api.find.recommend().then((res) => {
           this.result = res.data.result
-          console.log(this.result)
         })
       }
     }
@@ -51,17 +37,16 @@
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
   .recommend
-    /*width:100%*/
     margin:0 10px
     margin-top:20px
-    .recommendTop
+    .recommend-top
       height:20px
       flex-between()
-      .recommendLeft
+      .recommend-left
         color:gray
         font-weight:bold
         font-size:$font-size-large
-      .recommendRight
+      .recommend-right
         color:gray
         font-size:$font-size-small
         line-height:20px

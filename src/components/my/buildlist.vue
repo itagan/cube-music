@@ -1,6 +1,5 @@
 <template>
   <div class="mask" @click.self="cancel">
-<!--    .self 只有点击当前元素的时候，才会触发处理事件-->
     <div class="build">
       <div class="build-top">
         <span @click="cancel">取消</span>
@@ -15,7 +14,7 @@
           :autofocus="autofocus"
           :placeholder="placeholder"
           @input="input"
-          class="myinput"
+          class="my-input"
         ></cube-input>
       </div>
 
@@ -29,11 +28,11 @@
 
 <script>
     export default {
-      name: 'buildlist.vue',
+      name: 'buildList.vue',
       data () {
         return {
           value: '',
-          isprivacy: '', // 是否隐私歌单
+          isPrivacy: '', // 是否隐私歌单
           placeholder: '歌单标题',
           autofocus: true,
           clearable: {
@@ -44,7 +43,7 @@
       },
       methods: {
             // 提交创建的歌单
-        createlist () {
+        createList () {
           this.$api.playlists.createlist(this.value, this.isprivacy).then(res => {
             console.log(res)
           })
@@ -64,7 +63,6 @@
 
           if (val.length > 20) {
             toast.show()
-                // val = val.slice(0,20)
             val = val.slice(0, 20)
                 // 必须下边这样设置才能实现新替换的显示出来！！
             this.$nextTick(() => {
@@ -80,15 +78,15 @@
         complete () {
                 // 完成创建
           if (this.value) {
-            this.createlist()
+            this.createList()
           }
         },
         privacy () {
                 // 设置为隐私歌单
-          if (this.isprivacy) {
-            this.isprivacy = ''
+          if (this.isPrivacy) {
+            this.isPrivacy = ''
           } else {
-            this.isprivacy = 10
+            this.isPrivacy = 10
           }
         }
       }
@@ -132,13 +130,10 @@
         width:100%
         height:60px
         margin:auto 10px
-        .myinput
+        .my-input
           height:100%
           width:auto
           padding-right:15px
-          /*margin-right:10px*/
-          /*.cube-input-append*/
-          /*  margin-right:20px !important*/
         .cube-input::after
           border:none !important  //取消默认样式
         .cube-input_active::after

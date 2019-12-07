@@ -1,6 +1,6 @@
 <template>
-  <ul class="swiper">
-    <div class="swipertop">相关推荐</div>
+  <ul class="swipe">
+    <li class="swipe-top">相关推荐</li>
     <li v-for="item in recommend" :key="item.vid" class="item" @click="selectItem(item.vid)">
      <div class="img">
         <img :src="item.coverUrl">
@@ -11,8 +11,8 @@
       </div>
 
       <div class="text">
-        <h2 class="itemtitle" v-html="item.title"></h2>
-        <p class="itemdesc">
+        <h2 class="item-title" v-html="item.title"></h2>
+        <p class="item-desc">
           {{item.durationms}}
           by
           {{item.creator[0].userName}}
@@ -25,14 +25,14 @@
 <script>
     import {mapGetters, mapMutations} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
-    import {durationms} from '../../assets/js/timestamp'
+    import {durationsTransformation} from '../../assets/js/timestamp'
 
     export default {
-      name: 'recommendSwiper.vue',
+      name: 'recommendSwipe.vue',
       data () {
         return {
           recommend: [],
-          videourl: ''
+          videoUrl: ''
         }
       },
       props: {
@@ -48,8 +48,8 @@
       },
       created () {
         this.getRecommend()
-        this.getvVideoUrl()
-    },
+        this.getVideoUrl()
+      },
       watch: {
             // 监控父组件传递过来的vid变化则重新渲染新相关推荐数据
         detail () {
@@ -62,20 +62,19 @@
             this.recommend = res.data.data
             for (let i = 0; i < this.recommend.length; i++) {
               this.recommend[i].playTime = serializeNumber(this.recommend[i].playTime)
-              this.recommend[i].durationms = durationms(this.recommend[i].durationms)
+              this.recommend[i].durationms = durationsTransformation(this.recommend[i].durationms)
             }
           })
         },
             // 获取播放地址
-        getvVideoUrl () {
+        getVideoUrl () {
           this.$api.video.videourl(this.detail.vid).then(res => {
-            this.videourl = res.data.urls[0].url
+            this.videoUrl = res.data.urls[0].url
           })
         },
         selectItem (vid) {
               // 以下顺序不能变，否则需要点击两次才获取数据刷新。先把vuex数据更改，再派发父组件事件
-          this.setPlayvideo(vid)
-          // this.setLimit(20);  //重置初始值，避免影响这些组件内容
+          this.setPlayVideo(vid)
           this.$emit('select', vid)
             // this.getRecommend();
             // this.reload(); //刷新本页面
@@ -91,7 +90,7 @@
         },
 
         ...mapMutations({
-          setPlayvideo: 'SET_CURRENT_VID',
+          setPlayVideo: 'SET_CURRENT_VID',
           setCurrentUrl: 'SET_CURRENT_URL'
 
         })
@@ -104,10 +103,10 @@
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
 
-  .swiper
+  .swipe
     margin:5px 0
     background-color:white
-    .swipertop
+    .swipe-top
       height:15px
       line-height:15px
     .item
@@ -132,13 +131,13 @@
         flex:1
         height:100%
         margin-left:15px
-        .itemtitle
+        .item-title
           font-size:$font-size-medium
           word-break:wrap
           height:40px
           line-height:1.2
           multiline-ellipsis($num=2)
-        .itemdesc
+        .item-desc
           font-size:$font-size-small
 
 </style>

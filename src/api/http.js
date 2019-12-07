@@ -6,7 +6,6 @@ import axios from 'axios'
 import router from '../router'
 import store from '../store/index'
 import Vue from 'vue'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { Toast } from 'cube-ui'
 Vue.use(Toast)
 

@@ -1,14 +1,14 @@
 <template>
   <div class="create">
-    <div class="create-top" @click="showlist">
+    <div class="create-top" @click="showList">
       <div class="create-left">
         <i class="iconfont iconzan1" v-if="show"></i>
         <i class="iconfont iconzu" v-else></i>
         <span>我创建的歌单</span>
         <span class="num">({{playlist.length}})</span>
       </div>
-      <div class="create-right" v-show="righticon">
-        <i class="iconfont iconzan1" @click.stop="buildlist"></i>
+      <div class="create-right" v-show="rightIcon">
+        <i class="iconfont iconzan1" @click.stop="buildList"></i>
         <i class="iconfont icon-ellipsis" @click.stop="more"></i>
       </div>
     </div>
@@ -32,7 +32,7 @@
         </div>
       </li>
 
-      <li class="li" v-for="(item,index) in playlist.slice(1)" :key="item.id" data-type="0">
+      <li class="li" v-for="item in playlist.slice(1)" :key="item.id" data-type="0">
         <div class="li-item" >
 <!--          <div class="li-item" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">-->
 
@@ -56,19 +56,19 @@
 
 
     <div v-if="this.collection.length">
-      <div class="create-top collection" @click="showcollectionlist">
+      <div class="create-top collection" @click="showCollectionList">
         <div class="create-left">
-          <i class="iconfont iconzan1" v-if="showcollection"></i>
+          <i class="iconfont iconzan1" v-if="showCollection"></i>
           <i class="iconfont iconzu" v-else></i>
           <span>我收藏的歌单</span>
           <span class="num">({{collection.length}})</span>
         </div>
-        <div class="create-right" v-show="righticon">
-          <i class="iconfont icon-ellipsis" @click.stop="morecollection"></i>
+        <div class="create-right" v-show="rightIcon">
+          <i class="iconfont icon-ellipsis" @click.stop="moreCollection"></i>
         </div>
       </div>
 
-      <ul v-show="showcollection">
+      <ul v-show="showCollection">
         <li class="li" v-for="item in collection" :key="item.id">
           <div class="li-item">
             <div class="li-left">
@@ -91,18 +91,18 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters} from 'vuex'
 
     export default {
-      name: 'createlist.vue',
+      name: 'createist.vue',
       data () {
         return {
           show: true,
-          showcollection: true,
+          showCollection: true,
           playing: true,
           playlist: [],
           collection: [],
-          righticon: true,
+          rightIcon: true,
                 // 左滑出现删除
           startX: 0,
           endX: 0
@@ -116,27 +116,9 @@
           'uid'
         ])
       },
-        // props:{
-        //     manage:{
-        //         type:Boolean,
-        //         default:false
-        //     }
-        // },
-        // watch:{
-        //     manage() {
-        //         this.manage = true;
-        //         console.log('管理菜单了');
-        //         this.righticon = false;
-        //         this.showcollection = true;
-        //         this.show = true;
-        //     }
-        // },
       methods: {
         getPlaylist () {
-          console.log(this.uid)
           this.$api.users.playlist(this.uid).then(res => {
-            console.log(res)
-                // this.playlist = res.data.playlist;
             this.playlist = res.data.playlist.filter((item) => {
               return item.userId === this.uid
             })
@@ -145,37 +127,35 @@
             })
           })
         },
-        buildlist () {
+        buildList () {
                 // 新建歌单
           this.$emit('build')
         },
         more () {
                 // 打开更多操作
           this.$emit('more', this.playlist.length)
-          console.log('更多s')
         },
-        morecollection () {
+        moreCollection () {
                 // 打开更多操作
           this.$emit('mores', this.collection.length)
         },
-        showlist () {
+        showList () {
           this.show = !this.show
         },
-        showcollectionlist () {
-          this.showcollection = !this.showcollection
+        showCollectionList () {
+          this.showCollection = !this.showCollection
         },
             // 父组件调用子组件方法，用于管理菜单通知
         manage () {
                 // this.manage = true;
-          console.log('管理菜单了')
-          this.righticon = false
-          this.showcollection = true
+          this.rightIcon = false
+          this.showCollection = true
           this.show = true
         },
             // 父组件调用的方法，用于布局归位
         homing () {
                 // 右边更多等图标显示出来
-          this.righticon = true
+          this.rightIcon = true
         },
 
         // 左滑删除功能 ** 外部网上代码引入，暂时未成功本地实现

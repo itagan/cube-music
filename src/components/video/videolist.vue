@@ -14,7 +14,7 @@
               :item="item"
               :index="index"
               :pullDownY="pullDownY"
-              @refresh="refreshfinish"
+              @refresh="refreshFinish"
               @rollback="rollBack"
             ></base-video>
           </li>
@@ -68,7 +68,7 @@
 <script>
       import baseVideo from '../../base/video/basevideo'
       import {serializeNumber} from '../../assets/js/number'
-      import {durationms} from '../../assets/js/timestamp'
+      import {durationsTransformation} from '../../assets/js/timestamp'
       export default {
         name: 'video1.vue',
         components: {
@@ -95,7 +95,7 @@
           }
         },
         props: {
-          groupid: {
+          groupId: {
             type: Number,
             default: 9102
           }
@@ -104,17 +104,17 @@
           this.getVideos()
         },
         watch: {
-          groupid () {
+          groupId () {
             this.getVideos()
-      }
+          }
         },
         methods: {
           getVideos () {
-            this.$api.video.videolist(this.groupid).then((res) => {
+            this.$api.video.videolist(this.groupId).then((res) => {
               this.videos = res.data.datas
               for (let i = 0; i < this.videos.length; i++) {
                 this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
-                this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
+                this.videos[i].data.durationms = durationsTransformation(this.videos[i].data.durationms)
               }
             })
           },
@@ -136,7 +136,7 @@
               this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
               // this.$refs.contentScroll.forceUpdate();//下拉完毕
             }, 1000)
-      },
+          },
 
           onPullingUp () {
             setTimeout(() => {
@@ -148,16 +148,16 @@
               contentScroll.forceUpdate()
               // contentScroll.refresh();
             }, 1000)
-      },
+          },
 
-          refreshfinish () {
+          refreshFinish () {
             const contentScroll = this.$refs.contentScroll
             contentScroll.scroll.beforePullDown && contentScroll.refresh()
             contentScroll.forceUpdate()
-      },
+          },
           scrollHandler (pos) {
             this.pullDownY = -pos.y
-      }
+          }
         }
       }
 </script>

@@ -87,7 +87,7 @@
       },
       destroyed () {
         this.checked = false
-    }
+      }
     }
 </script>
 
