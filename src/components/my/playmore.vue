@@ -2,19 +2,19 @@
   <more-songs @cancel="cancel" class="mask">
     <span slot="top">我创建的歌单{{num}}</span>
     <div slot="main1" class="main" @click="build">
-      <i class="iconfont iconzan1"></i>
+      <i class="iconfont iconxinjian"></i>
       <span>新建歌单</span>
     </div>
     <div slot="main2" class="main" @click="manage">
-      <i class="iconfont iconzan1"></i>
+      <i class="iconfont iconguanli"></i>
       <span>管理歌单</span>
     </div>
     <div slot="main3" class="main">
-      <i class="iconfont iconzan1"></i>
+      <i class="iconfont icondaoru"></i>
       <span>导入外部歌单</span>
     </div>
     <div slot="main4" class="main">
-      <i class="iconfont iconzan1"></i>
+      <i class="iconfont iconhuifu1"></i>
       <span>恢复歌单</span>
     </div>
   </more-songs>

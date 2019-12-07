@@ -2,13 +2,13 @@
   <div class="create">
     <div class="create-top" @click="showList">
       <div class="create-left">
-        <i class="iconfont iconzan1" v-if="show"></i>
-        <i class="iconfont iconzu" v-else></i>
+        <i class="iconfont iconshixinxiasanjiao" v-if="show"></i>
+        <i class="iconfont iconleft-arrow" v-else></i>
         <span>我创建的歌单</span>
         <span class="num">({{playlist.length}})</span>
       </div>
       <div class="create-right" v-show="rightIcon">
-        <i class="iconfont iconzan1" @click.stop="buildList"></i>
+        <i class="iconfont iconjia" @click.stop="buildList"></i>
         <i class="iconfont icon-ellipsis" @click.stop="more"></i>
       </div>
     </div>
@@ -26,7 +26,7 @@
           </div>
 
           <div class="beckoning">
-            <i class="iconfont iconzan1"></i>
+            <i class="iconfont iconxindong"></i>
             <span>心动模式</span>
           </div>
         </div>
@@ -46,7 +46,7 @@
           </div>
 
           <div class="playing">
-            <i class="iconfont iconzan1" v-show="playing"></i>
+            <i class="iconfont iconlaba" v-show="playing"></i>
           </div>
         </div>
 
@@ -58,8 +58,8 @@
     <div v-if="this.collection.length">
       <div class="create-top collection" @click="showCollectionList">
         <div class="create-left">
-          <i class="iconfont iconzan1" v-if="showCollection"></i>
-          <i class="iconfont iconzu" v-else></i>
+          <i class="iconfont iconshixinxiasanjiao" v-if="showCollection"></i>
+          <i class="iconfont iconleft-arrow" v-else></i>
           <span>我收藏的歌单</span>
           <span class="num">({{collection.length}})</span>
         </div>
@@ -81,7 +81,7 @@
             </div>
 
             <div class="playing">
-              <i class="iconfont iconzan1" v-show="playing"></i>
+              <i class="iconfont iconlaba" v-show="playing"></i>
             </div>
           </div>
         </li>
@@ -99,11 +99,10 @@
         return {
           show: true,
           showCollection: true,
-          playing: true,
+          playing: false,
           playlist: [],
           collection: [],
           rightIcon: true,
-                // 左滑出现删除
           startX: 0,
           endX: 0
         }

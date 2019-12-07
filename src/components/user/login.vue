@@ -7,10 +7,10 @@
     <cube-button class="experience" :light="true" @click="experience">立即体验</cube-button>
     <ul>
       <li>
-        <i class="iconfont iconvideo"></i>
+        <i class="iconfont iconweixindenglu"></i>
       </li>
       <li>
-        <i class="iconfont iconmaike"></i>
+        <i class="iconfont iconweibodenglu"></i>
       </li>
       <li>
         <i class="iconfont iconzan1"></i>

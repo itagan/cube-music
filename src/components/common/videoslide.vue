@@ -1,7 +1,7 @@
 <template>
   <div class=wonderful>
     <nav-bar class="wonderful-header">
-      <i class="iconfont iconlive" slot="left" @click="goback"></i>
+      <i class="iconfont iconfanhui" slot="left" @click="goback" style="font-size: 24px"></i>
       <div slot="center" class="music">精彩视频</div>
     </nav-bar>
     <div class="slides">
@@ -16,7 +16,6 @@
         @change="changePage"
         class="cube-slide">
         <cube-slide-item v-for="(item, index) in videos" :key="index"  class="slide-item" :style="{Height:height}">
-
           <wonderful-base
             :videos="videos"
             :item="item"
@@ -28,7 +27,6 @@
             ref="base"
           >
           </wonderful-base>
-
         </cube-slide-item>
       </cube-slide>
 

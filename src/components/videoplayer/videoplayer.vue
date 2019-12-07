@@ -45,15 +45,15 @@
                   <span>{{detail.praisedCount}}</span>
                 </li>
                 <li>
-                  <i class="iconfont iconzan1"></i>
+                  <i class="iconfont iconshoucang"></i>
                   <span>{{detail.subscribeCount}}</span>
                 </li>
                 <li>
-                  <i class="iconfont iconliuyan" @click="toComment"></i>
+                  <i class="iconfont iconpinglun" @click="toComment"></i>
                   <span>{{detail.commentCount}}</span>
                 </li>
                 <li>
-                  <i class="iconfont iconzan1"></i>
+                  <i class="iconfont iconfenxiang"></i>
                   <span>{{detail.shareCount}}</span>
                 </li>
               </ul>
@@ -69,7 +69,7 @@
                 </li>
 
                 <li class="follow">
-                  <i class="iconfont iconzan1"></i>
+                  <i class="iconfont iconjia"></i>
                   关注
                 </li>
               </ul>
@@ -102,9 +102,9 @@
     <div class="comment" v-if="commit">
       <input type="text" placeholder="发表评论">
       <div @click="tagBacktop">
-        <i class="iconfont iconnetease" v-if="totop"></i>
+        <i class="iconfont iconfanhuidingbu" v-if="totop"></i>
         <span v-else class="liuyan">
-          <i class="iconfont iconliuyan"></i>
+          <i class="iconfont iconpinglun"></i>
           <span>{{detail.commentCount}}</span>
         </span>
       </div>
@@ -140,7 +140,6 @@ export default {
           pullUpLoadThreshold: 0,
           pullUpLoadMoreTxt: '加载中…………',
           pullUpLoadNoMoreTxt: '没有更多数据了~',
-
           loadisshow: false, // 上拉加载是否显示,数据全部加载完则不显示了
           limits: 20, // 传给子组件需要显示的评论数量
           swipeHeight: 0, // 子组件recommentswiper的高度
@@ -153,11 +152,10 @@ export default {
         newComment,
         hotComment,
         basePlayer
-
       },
       computed: {
         icon () {
-          return this.show ? 'iconzan1' : 'iconduoren'
+          return this.show ? 'iconshixinxiasanjiao' : 'iconshangsanjiao'
         },
         ...mapGetters([
           'currentVid',

@@ -1,6 +1,6 @@
 <template>
   <my-header class="header">
-    <i class="iconfont iconlive" slot="left" @click="cloud"></i>
+    <i class="iconfont iconicon106-copy" slot="left" @click="cloud"></i>
     <div slot="center" class="music">我的音乐</div>
     <i class="iconfont iconyinletiaodongzhuangtai" slot="right" @click="music" v-show="isComplete"></i>
     <span @click="complete" v-show="!isComplete" slot="right">完成</span>

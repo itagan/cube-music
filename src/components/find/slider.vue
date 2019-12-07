@@ -1,6 +1,6 @@
 <template>
-    <cube-slide ref="slide" :data="items" @change="changePage">
-      <cube-slide-item v-for="(item, index) in items" :key="index" @click.native="clickHandler(item, index)">
+    <cube-slide ref="slide" :data="items">
+      <cube-slide-item v-for="(item, index) in items" :key="index">
         <a :href="item.url" class='slider-link'>
           <img :src="item.pic" class='slider-img'>
           <div class="title" :style="{backgroundColor:item.titleColor}">{{item.typeTitle}}</div>

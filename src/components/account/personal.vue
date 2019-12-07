@@ -15,12 +15,12 @@
 
       <div class="sign-in" v-show="signIn" @click="toSignIn">
         <span>已签到
-        <i class="iconfont iconzan1"></i>
+        <i class="iconfont iconleft-arrow"></i>
         </span>
       </div>
       <div class="sign-in before-signin" v-show="!signIn" @click="toSignIn">
         <span>
-        <i class="iconfont iconzan1"></i>
+        <i class="iconfont icon3"></i>
           签到
         </span>
       </div>
@@ -40,7 +40,7 @@
         <span>粉丝</span>
       </li>
       <li>
-        <i class="iconfont iconzan1"></i>
+        <i class="iconfont iconbianji"></i>
         <span>编辑资料</span>
       </li>
     </ul>
@@ -71,27 +71,27 @@
 
       <ul class="other">
         <li>
-          <i class="iconfont iconzan1"></i>
+          <i class="iconfont iconxinxiduanxinxiaoxitixingyoujiansixinyouxiang"></i>
           <div class="ads">
             消息
           </div>
         </li>
         <li>
-          <i class="iconfont iconzan1"></i>
+          <i class="iconfont iconziyuan"></i>
           <div class="ads">
             商城
           <div>限时99秒杀</div>
           </div>
         </li>
         <li>
-          <i class="iconfont iconzan1"></i>
+          <i class="iconfont iconyanchupiaowu"></i>
           <div class="ads">
             演出
           <div>梁静茹</div>
           </div>
         </li>
         <li>
-          <i class="iconfont iconzan1"></i>
+          <i class="iconfont icongexingzhuangban"></i>
           <div class="ads">
             个性装扮
           </div>
