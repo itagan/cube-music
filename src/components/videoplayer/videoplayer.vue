@@ -1,6 +1,6 @@
 <template>
   <div class="wraps">
-    <base-player :detail="detail" :videourl="videourl" ></base-player>
+    <base-player :detail="detail" :videoUrl="videoUrl" ></base-player>
     <transition name="fade-video" class="fadeVideo">
 
       <div v-if="!this.detail.videoGroup" class="pullloadtop">
@@ -77,7 +77,7 @@
 
 
             <recommend-swiper @select="recommendvideo" :detail="detail" @swipeNum="swipeNum" ref="getNum"></recommend-swiper>
-            <comment :detail="detail" @allhot="allhotshow" ref="tohere" class="here"></comment>
+            <comment :detail="detail" @allHot="allhotshow" ref="tohere" class="here"></comment>
             <new-comment :detail="detail" @Limits="newlimits" :limits="limits"></new-comment>
 
             <template slot="pullup" slot-scope="props">
@@ -97,7 +97,7 @@
       </div>
     </transition>
 
-    <hot-comment :detail="detail" ref="allhotcomment" @parshow="isshow"></hot-comment>
+    <hot-comment :detail="detail" ref="allhotcomment" @pageshow="isshow"></hot-comment>
 
     <div class="comment" v-if="commit">
       <input type="text" placeholder="发表评论">
@@ -116,7 +116,7 @@
 <script type="text/ecmascript-6">
     import {mapGetters, mapMutations} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
-    import {timestamp, durationms} from '../../assets/js/timestamp'
+    import {timestamp, durationsTransformation} from '../../assets/js/timestamp'
     import basePlayer from '../../base/video/baseplayer'
     import recommendSwiper from '../../base/swiper/recommendSwiper'
     import Comment from './comment'
@@ -129,7 +129,7 @@ export default {
         return {
           scrollY: 0,
           detail: {},
-          videourl: '',
+          videoUrl: '',
           show: true,
           descshow: false, // 是否显示描述
           allshow: true, // 是否显示全部精彩评论
@@ -199,12 +199,12 @@ export default {
       },
 
       created () {
-        this.getvVideoUrl()
+        this.getVideoUrl()
         this.getVideo()
-    },
+      },
       watch: {
         CurrentVid () {
-          this.getvVideoUrl()
+          this.getVideoUrl()
           this.getVideo()
         },
         Back (newBack) {
@@ -252,15 +252,15 @@ export default {
             this.detail = res.data.data
             this.detail.playTime = serializeNumber(res.data.data.playTime)
             this.detail.publishTime = timestamp(this.detail.publishTime)
-            this.detail.durationms = durationms(this.detail.durationms)
+            this.detail.durationms = durationsTransformation(this.detail.durationms)
 
             console.log(this.detail)
           })
         },
             // 获取播放地址
-        getvVideoUrl () {
+        getVideoUrl () {
           this.$api.video.videourl(this.currentVid).then(res => {
-            this.videourl = res.data.urls[0].url
+            this.videoUrl = res.data.urls[0].url
             console.log(this.videourl)
           })
         },
@@ -294,7 +294,7 @@ export default {
         allhotshow () {
           this.$refs.allhotcomment.show()
           setTimeout(() => {
-            this.$refs.allhotcomment.getHotcomment()
+            this.$refs.allhotcomment.getHotComment()
             this.commit = false
             this.allshow = false
           }, 300)
@@ -373,7 +373,7 @@ export default {
             // 销毁本页面时候，把vuex的一些重置
         this.setCommentBack(false)
         console.log('销毁')
-    }
+      }
 
     }
 </script>

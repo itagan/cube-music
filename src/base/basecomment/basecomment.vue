@@ -1,27 +1,27 @@
 <template>
-  <div class="basecomment" @click="remind">
-    <div class="basecommentTop">
-      <img :src="item.user.avatarUrl" @click="touser">
-      <div class="basecommentTime">
-        <span class="username">{{item.user.nickname}}</span>
-        <span class="usertime">{{item.time}}</span>
+  <div class="base-comment" @click="remind">
+    <div class="base-comment-top">
+      <img :src="item.user.avatarUrl" @click="toUser">
+      <div class="base-comment-time">
+        <span class="user-name">{{item.user.nickname}}</span>
+        <span class="user-time">{{item.time}}</span>
       </div>
-      <div class="userpraise">
+      <div class="user-praise">
         <span @click="liked">{{item.likedCount}}</span>
         <i class="iconfont iconzan1"></i>
       </div>
     </div>
-    <div class="basecommentBottom">
+    <div class="base-comment-bottom">
       <span class="comment">{{item.content}}</span>
-      <div v-if="item.beReplied.length" class="beReplied">
+      <div v-if="item.beReplied.length" class="be-replied">
         <div class="line"></div>
-        <div class="beRepliedContent">
-          <span class="beRepliedName">@{{item.beReplied[0].user.nickname}}</span>
+        <div class="be-replied-content">
+          <span class="be-replied-name">@{{item.beReplied[0].user.nickname}}</span>
           {{item.beReplied[0].content}}
           </span>
         </div>
       </div>
-      <div class="reply" @click="reply" v-if="replyshow">
+      <div class="reply" @click="reply" v-if="replyShow">
         <span>5条回复</span>
         <i class="iconfont iconzan1"></i>
       </div>
@@ -31,28 +31,23 @@
 
 <script>
   export default {
-    name: 'basecomment.vue',
+    name: 'baseComment.vue',
     props: {
       item: {
         type: Object,
         default: {}
       }
     },
-        // watch: {
-        //     item() {
-        //         console.log('变化了')
-        //     }
-        // },
     data () {
       return {
-        replyshow: false
+        replyShow: false
       }
     },
     methods: {
       remind () {
                 // 点击评论提醒该要什么
       },
-      touser () {
+      toUser () {
                 // 去用户个人中心页面
       },
       liked () {
@@ -69,12 +64,12 @@
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
 
-  .basecomment
+  .base-comment
     width:100%
     position:relative
     background-color:white
     /*padding-bottom:5px*/
-    .basecommentTop
+    .base-comment-top
       flex-between()
       height:35px
       position:relative
@@ -85,26 +80,26 @@
 
         /*position:relative*/
         /*top:50%*/
-      .basecommentTime
+      .base-comment-time
         flex-center(column)
         align-items: flex-start
         position:absolute
         left:40px
-        .username
+        .user-name
           font-size:$font-size-small-s
           color:gray
           margin-bottom:3px
-        .usertime
+        .user-time
           font-size:$font-size-small-ss
           color:#dcdcdc
-      .userpraise
+      .user-praise
         font-size:$font-size-small-s
         height:100%
         color:gray
         flex-center()
         span
           margin-right:3px
-    .basecommentBottom
+    .base-comment-bottom
       /*position:relative*/
       /*left:40px*///不用定位方式避免被整体拉到左边出现水平滚动条
       font-size:$font-size-small
@@ -119,12 +114,9 @@
         overflow-wrap:break-word
         width:100%
         display:inline-block
-      .beReplied
-        /*background-color: #cdcdcd*/
+      .be-replied
         color: gray
-        //flex-between()
         display:flex
-        /*margin:10px auto*/
         padding-bottom:10px
         margin-top:10px
         .line
@@ -132,9 +124,9 @@
           min-height:10px  //让旁边内容撑开高度。设置最小避免不出现
           background-color: #cdcdcd
           margin-right:5px
-        .beRepliedContent
+        .be-replied-content
           line-height:1.5
-          .beRepliedName
+          .be-replied-name
             color:dodgerblue
       .reply
         color:dodgerblue

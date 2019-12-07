@@ -16,7 +16,7 @@
       :autocomplete="autocomplete"
       :eye="eye"
       :clearable="clearable"
-      class="myinput"
+      class="my-input"
     ></cube-input>
 
     <cube-button class="login" :light="true" @click="login">立即登录</cube-button>
@@ -57,7 +57,7 @@
       },
       created () {
         this.getPhone()
-    },
+      },
       methods: {
         back () {
                 // 返回上一页
@@ -106,7 +106,7 @@
             this.$api.users.refresh().then(res => {
               console.log(res)
               if (res.status === 200) {
-                console.log('刷出状态成功')
+                console.log('刷新状态成功')
                     // 刷新成功，可以登录并跳转到首页
                 this.$router.push(
                   {
@@ -114,7 +114,7 @@
                   }
                         )
               } else {
-                console.log('刷出状态失败')
+                console.log('刷新状态失败')
               }
             })
           }
@@ -144,7 +144,7 @@
       i
         position:absolute
         left:10px
-    .myinput
+    .my-input
       width:100%
       height:40px
       margin-top:30px
@@ -171,6 +171,4 @@
       text-align:center
       left:50%
       margin-left:-40px
-
-
 </style>

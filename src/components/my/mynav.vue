@@ -2,7 +2,7 @@
   <div class="nav-scroll-list-wrap">
     <cube-scroll ref="navScroll" direction="horizontal" >
       <ul class="nav-wrapper">
-        <li v-for="(item, index) in navTxts" :key="index" class="nav-item">
+        <li v-for="(item, index) in navTexts" :key="index" class="nav-item">
           <router-link to="/find" tab="div" class="nav-link">
             <div class="item-top">
               <i class="iconfont iconzan1" style="font-size:22px"></i>
@@ -11,7 +11,7 @@
               {{ item }}
             </div>
           </router-link>
-
+        </li>
           <li class="nav-item-last nav-item" @click="edit">
             <div class="top">
               <i class="iconfont iconzan1" style="font-size:22px"></i>
@@ -20,20 +20,17 @@
              编辑
             </div>
           </li>
-
-        </li>
       </ul>
     </cube-scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-    const txts = ['爵士电台', '最嗨电音', 'ACG专区', '古典专区', '爵士电台', '最嗨电音', 'ACG专区', '古典专区', '爵士电台', '最嗨电音', 'ACG专区', '古典专区', 'cube-ui666']
-
+    const texts = ['Sati空间', '私人推荐', 'ACG专区', '爵士电台', '最嗨电音', '古典专区', '云村正能量']
     export default {
       data () {
         return {
-          navTxts: txts
+          navTexts: texts
         }
       },
       methods: {
@@ -45,7 +42,7 @@
 </script>
 
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style  lang="stylus" rel="stylesheet/stylus">
 
   .nav-scroll-list-wrap
     transform: rotate(0deg) // fix 子元素超出边框圆角部分不隐藏的问题
@@ -55,7 +52,6 @@
       display: inline-block
       width:auto
       .nav-wrapper
-        /*display: inline-block*/
         white-space: nowrap
         line-height: 70px
         padding: 0 5px
@@ -114,6 +110,6 @@
             line-height:20px
             margin:auto
 
-    .cube-scroll-wrapper
-      width:375px
+    /*.cube-scroll-wrapper*/
+    /*  width:375px*/
 </style>

@@ -1,17 +1,17 @@
 <template>
-  <more-Songs @cancel="cancel" class="mask">
+  <more-songs @cancel="cancel" class="mask">
     <span slot="top">我收藏的歌单{{nums}}</span>
     <div slot="main1" class="main" @click="manage">
       <i class="iconfont iconzan1"></i>
       <span>管理歌单</span>
     </div>
-  </more-Songs>
+  </more-songs>
 </template>
 
 <script>
     import moreSongs from '../common/moresongs'
-export default {
-      name: 'playmore.vue',
+    export default {
+      name: 'playMore.vue',
       components: {
         moreSongs
       },
@@ -23,12 +23,12 @@ export default {
       },
       methods: {
         cancel () {
-                // 触摸到遮罩层就取消本组件
+                    // 触摸到遮罩层就取消本组件
           this.$emit('cancel')
         },
         manage () {
-                // 管理歌单
-                // 管理歌单  子提醒父组件再通知其他子组件
+                    // 管理歌单
+                    // 管理歌单  子提醒父组件再通知其他子组件
           this.$emit('manage')
         }
       }

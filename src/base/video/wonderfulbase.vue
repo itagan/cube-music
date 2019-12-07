@@ -1,11 +1,10 @@
 <template>
-  <div class="flexdiv" ref="nav">
+  <div class="flex-div" ref="nav">
     <div class="container">
       <div class="wrapper" @click.stop="playVideo(item,index,$event)" :key="index">
         <video :poster="item.data.coverUrl"
                :src="item.data.urlInfo.url"
                class="video"
-
                id="video"
                ref="video"
                :moted="true"
@@ -15,20 +14,20 @@
         </video>
 
         <div class="wrap">
-          <div class="grop" v-if="gropshow">22</div>
-          <div class="wrapperLeft">
-            <div  v-show="currentshow">
+          <div class="gorp" v-if="gorpShow">22</div>
+          <div class="wrapper-left">
+            <div  v-show="currentShow">
               <i class="iconfont iconzan1" v-if="currentTimeShow"></i>
               <span v-if="currentTimeShow" >{{item.data.playTime}}</span>
-              <div v-if="!currentTimeShow"> {{Durationms(currentTime)}} / {{item.data.durationms}}</div>
+              <div v-if="!currentTimeShow"> {{Durations(currentTime)}} / {{item.data.durationms}}</div>
             </div>
           </div>
-          <div class="wrapperCenter" v-if="plays" >
+          <div class="wrapper-center" v-if="plays" >
             <i class="iconfont iconnetease" v-if="play"></i>
             <i class="iconfont iconliuyan" v-else></i>
           </div>
 
-          <div class="wrapperRight" v-show="playTimes">
+          <div class="wrapper-right" v-show="playTimes">
             <i class="iconfont iconzan1"  v-if="playTime"></i>
             <span  v-if="playTime">{{item.data.durationms}}</span>
             <i class="iconfont iconliuyan" v-if="!playTime"></i>
@@ -46,7 +45,7 @@
               @touchmove.prevent="btnTouchMove"
               @touchend="btnTouchEnd"
             >
-              <div class="controlBtn" ref="btn"></div>
+              <div class="control-btn" ref="btn"></div>
             </div>
           </div>
         </div>
@@ -59,43 +58,40 @@
               </span>
       </div>
 
-      <div class="wrapBottom">
-        <div class="wrapBottomImg" @click="avatar()">
+      <div class="wrap-bottom">
+        <div class="wrap-bottom-img" @click="avatar()">
           <img :src="item.data.creator.avatarUrl">
           <span>{{item.data.creator.nickname}}</span>
         </div>
 
-        <div class="wrapBottomLeft" @click="praisedCount()">
+        <div class="wrap-bottom-left" @click="praisedCount()">
           <i class="iconfont iconzan1"></i>
           <span>{{item.data.praisedCount}}</span>
         </div>
 
-        <div class="wrapBottomCenter" @click="details(item.data.vid)">
+        <div class="wrap-bottom-center" @click="details(item.data.vid)">
           <i class="iconfont iconliuyan"></i>
           <span>{{item.data.commentCount}}</span>
         </div>
 
-        <i class="wrapBottomRight iconfont icon-ellipsis" @click="more()"></i>
+        <i class="wrap-bottom-right iconfont icon-ellipsis" @click="more()"></i>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-    import { mapGetters, mapMutations, mapActions} from 'vuex'
+    import {mapGetters, mapMutations, mapActions} from 'vuex'
     import { prefixStyle } from '../../assets/js/dom'
-    const btnBtnWidth = 10 // 按钮的长度 //触摸按钮的时候放大按钮，从10到20
-const transform = prefixStyle('transform')
-
+    const btnBtnWidth = 10
+    const transform = prefixStyle('transform')
     export default {
       data () {
         return {
-                // videos:this.videos,
-          gropshow: false,
+          gorpShow: false,
           videoDom: '',
-          videoDoms: '',
-                // isPlay:false, //是否播放..不再设置给vue组件，而是作为Item属性
-          currentshow: true, // 视频左下角播放量或者进度是否显示
+          allVideoDom: '',
+          currentShow: true, // 视频左下角播放量或者进度是否显示
           currentTimeShow: true, // 播放量跟播放进度转换
           check: true, // 是否显示
           countTime: true, // 视频左下角播放量变成播放时间进度
@@ -104,14 +100,11 @@ const transform = prefixStyle('transform')
           playTime: true, // 播放总时间是否变成视频全屏按钮
           playTimes: true, // 播放总时间或者全屏按钮是否会显示
           plays: true, // 播放或暂停按钮显示出来
-                // playss:true,
           play: true, // 播放和暂停按钮切换
           currentTime: `00:00`, // 播放进度时间
-                // _currentTime:`00:00`,//保存进度
           activeIndex: -1,
-                // duration:'', //视频播放总时间
           speedWidth: 0,
-          durationms: 0, // 视频播放总时间
+          durations: 0, // 视频播放总时间
           currentDuration: [{}, {}], // 存放前后播放视频的播放进度
           durationHistory: [] // 存放本视频流页面前后视频播放进度的历史记录
         }
@@ -171,34 +164,28 @@ const transform = prefixStyle('transform')
 
         current (newCurrent, oldCurrent) {
                 // vuex获取索引方式
-          console.log(newCurrent, oldCurrent)
         },
         ind (ind) {
-          let newind = ind
-          let videoDoms = document.querySelectorAll('video')
-          this.videoDoms = Array.from(videoDoms).splice(0, 8)
+          this.allVideoDom = document.querySelectorAll('video')
           for (let i = 0; i < this.videos.length; i++) {
-            if (newind === i) continue
+            if (ind === i) continue
             this.videos[i].isPlay = false
-            this.videoDoms[i].pause()
-            this.videoDoms[i].currentTime = 0 // 重置
+            this.allVideoDom[i].pause()
+            this.allVideoDom[i].currentTime = 0
           }
-
-          this.videoDoms[newind].play()
+          this.allVideoDom[ind].play()
         }
       },
-
       methods: {
         playVideo (item, index, e) {
           this.top = this.$refs.nav.getBoundingClientRect().top // 播放盒子距离顶部距离。
             // 播放的时候判断距离顶部距离。上滚动回到可播放区。
           if (this.top > 100) {
             this.$emit('rollback')
-            console.log(this.top)
           }
 
           this.videoDom = this.$refs.video
-          this.videoDoms = document.querySelectorAll('video')
+          this.allVideoDom = document.querySelectorAll('video')
           this.durationms = this.videoDom.duration
           this.setCurrentIndex(index)
 
@@ -213,15 +200,11 @@ const transform = prefixStyle('transform')
           this.controlBtn = true
             // 播放总长度变成全屏按钮
           this.playTime = false
-            // this.playss = true;
-            // //中间播放按钮或暂停按钮是否显示
-            // this.plays = false;
-            // 播放按钮变暂停按钮
           this.play = false
             // 右下角播放总长度变成全屏按钮
           this.playTimes = true
             // 左下角播放量或者进度是否显示
-          this.currentshow = true
+          this.currentShow = true
           let obj = {}
           obj[index] = this.currentTime
 
@@ -234,13 +217,12 @@ const transform = prefixStyle('transform')
           this.plays = !this.plays
 
             // 播放的时候视频顶部显示切换
-          let timeone = setTimeout(() => {
-                    // 底部播放或暂停的时候进度按钮显示
+          setTimeout(() => {
             this.controlBtn = false
                 // 右下角播放总长度变成全屏按钮
             this.playTimes = false
                 // 左下角播放量或者进度是否显示
-            this.currentshow = false
+            this.currentShow = false
                 // 中间播放按钮或暂停按钮是否显示
             this.plays = false
           }, 5000)
@@ -257,18 +239,16 @@ const transform = prefixStyle('transform')
               this.plays = true
                     // 暂停按钮变播放按钮
               this.play = true
-              console.log(`${index}` + '暂停了')
 
-              this.currentTime = this.videoDoms[index].currentTime
+              this.currentTime = this.allVideoDom[index].currentTime
               if (i !== -1) {
                             // 原来就存在的话，那就把它替换为新播放进度
-                this.currentDuration[i][index] = this.videoDoms[index].currentTime
+                this.currentDuration[i][index] = this.allVideoDom[index].currentTime
               } else {
                 if (this.currentDuration.length >= 2) {
                   this.currentDuration.splice(0, 1)// 删除第1个
                   this.currentDuration.push(obj)// 再把新的推进来
                 } else {
-                                // this.currentDuration.splice(0,1);//删除第1个
                   this.currentDuration.push(obj)
                 }
               }
@@ -277,8 +257,8 @@ const transform = prefixStyle('transform')
               for (let i = 0; i < this.videos.length; i++) {
                 if (index === i) continue
                 this.videos[i].isPlay = false
-                this.videoDoms[i].pause()
-                this.videoDoms[i].currentTime = 0 // 重置
+                this.allVideoDom[i].pause()
+                this.allVideoDom[i].currentTime = 0 // 重置
                 this.videos[i].isPlay = false
               }
             } else {
@@ -300,7 +280,7 @@ const transform = prefixStyle('transform')
                         // //中间播放按钮变暂停按钮
                         // this.plays = false;
                         // 左下角播放量或者进度是否显示
-                this.currentshow = false
+                this.currentShow = false
                         // 隐藏播放进度播放量，显示播放量
                 this.currentTimeShow = true
                         // 播放按钮变暂停按钮
@@ -309,13 +289,11 @@ const transform = prefixStyle('transform')
                 this.plays = false
               }, 5000)
 
-              console.log(`${index}` + '播放了')
-
               if (this.currentDuration.length >= 2) {
                 if (i !== -1) {
                                 // 在数组中存在，那么取出上次的播放进度作为当前播放开头
                   this.currentTime = this.currentDuration[i][index]
-                  this.videoDoms[index].currentTime = this.currentDuration[i][index]
+                  this.allVideoDom[index].currentTime = this.currentDuration[i][index]
                 }
               } else {
                             // 没找到说明没有最近上次播放进度
@@ -324,8 +302,8 @@ const transform = prefixStyle('transform')
               }
               for (let i = 0; i < this.videos.length; i++) {
                 if (i === index) continue
-                this.videoDoms[i].pause()
-                this.videoDoms[i].currentTime = 0 // 重置
+                this.allVideoDom[i].pause()
+                this.allVideoDom[i].currentTime = 0 // 重置
                         // 还得把其它项的isPlay属性重置为false。解决点击两次才播放的bug。因为其他的isPlay属性可能还是true。。
                 this.videos[i].isPlay = false
               }
@@ -333,7 +311,6 @@ const transform = prefixStyle('transform')
           } else {
             if (e.target.className === 'iconfont iconnetease' || e.target.className === 'iconfont iconliuyan') {
                         // this.wrapShow = false;
-              clearTimeout(timeone) // 清理定时器
 
               if (item.isPlay) {
                 this.videoDom.pause()
@@ -345,12 +322,11 @@ const transform = prefixStyle('transform')
                 this.plays = true
                         // 暂停按钮变播放按钮
                 this.play = true
-                console.log(`${index}` + '暂停了')
 
-                this.currentTime = this.videoDoms[index].currentTime
+                this.currentTime = this.allVideoDom[index].currentTime
                 if (i !== -1) {
                                 // 原来就存在的话，那就把它替换为新播放进度
-                  this.currentDuration[i][index] = this.videoDoms[index].currentTime
+                  this.currentDuration[i][index] = this.allVideoDom[index].currentTime
                 } else {
                   if (this.currentDuration.length >= 2) {
                     this.currentDuration.splice(0, 1)// 删除第1个
@@ -365,8 +341,8 @@ const transform = prefixStyle('transform')
                 for (let i = 0; i < this.videos.length; i++) {
                   if (index === i) continue
                   this.videos[i].isPlay = false
-                  this.videoDoms[i].pause()
-                  this.videoDoms[i].currentTime = 0 // 重置
+                  this.allVideoDom[i].pause()
+                  this.allVideoDom[i].currentTime = 0 // 重置
                   this.videos[i].isPlay = false
                 }
               } else {
@@ -387,7 +363,7 @@ const transform = prefixStyle('transform')
                             // //中间播放按钮变暂停按钮
                             // this.plays = false;
                             // 左下角播放量或者进度是否显示
-                  this.currentshow = false
+                  this.currentShow = false
                             // 隐藏播放进度播放量，显示播放量
                   this.currentTimeShow = true
                             // 播放按钮变暂停按钮
@@ -396,13 +372,11 @@ const transform = prefixStyle('transform')
                   this.plays = false
                 }, 5000)
 
-                console.log(`${index}` + '播放了')
-
                 if (this.currentDuration.length >= 2) {
                   if (i !== -1) {
                                     // 在数组中存在，那么取出上次的播放进度作为当前播放开头
                     this.currentTime = this.currentDuration[i][index]
-                    this.videoDoms[index].currentTime = this.currentDuration[i][index]
+                    this.allVideoDom[index].currentTime = this.currentDuration[i][index]
                   }
                 } else {
                                 // 没找到说明没有最近上次播放进度
@@ -411,8 +385,8 @@ const transform = prefixStyle('transform')
                 }
                 for (let i = 0; i < this.videos.length; i++) {
                   if (i === index) continue
-                  this.videoDoms[i].pause()
-                  this.videoDoms[i].currentTime = 0 // 重置
+                  this.allVideoDom[i].pause()
+                  this.allVideoDom[i].currentTime = 0 // 重置
                             // 还得把其它项的isPlay属性重置为false。解决点击两次才播放的bug。因为其他的isPlay属性可能还是true。。
                   this.videos[i].isPlay = false
                 }
@@ -428,19 +402,15 @@ const transform = prefixStyle('transform')
           this.currentTime = e.target.currentTime // 播放的时候派发事件，能够获得当前播放时间 ***注意写法
           this.speedWidth = this.percent * 355
         },
-        Durationms (durationms) {
-                // 对时间戳进行转化为分秒
-                // durationms = durationms / 1000;//转换为多少秒  本身播放当前时间为秒
-          durationms = durationms | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
-          let minute = durationms / 60 | 0
+        Durations (durations) {
+          durations = durations | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
+          let minute = durations / 60 | 0
           minute = minute < 10 ? '0' + minute : minute
-            // let second = _pad(durationms) % 60;
-          let second = durationms % 60
+          let second = durations % 60
           second = second < 10 ? '0' + second : second// 秒数前面补零操作
           return `${minute}:${second}`
         },
         toPlayerDetail (vid) {
-          console.log('去视频页')
             // 视频详情页，这个不会把底部评论提前
           this.$router.push({
             path: `videoplayer`
@@ -455,7 +425,6 @@ const transform = prefixStyle('transform')
                 // 点赞
         },
         details (vid) {
-          console.log('去视频页并评论提前')
             // 视频详情页，这个不会把底部评论提前
           this.$router.push({
             path: `videoplayer`
@@ -483,13 +452,11 @@ const transform = prefixStyle('transform')
           const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - btnBtnWidth, Math.max(0, this.touch.left + deltaX))
           this._offset(offsetWidth)
           this.bigBtn()
-          console.log('滚动了')
         },
         btnTouchEnd (e) {
           this.touch.initiated = false
           this._triggerPercent() // 拖动结束调用方法设置播放进度
           this.removeBig()
-          console.log('滚动结束了')
         },
         _triggerPercent () {
           const barWidth = this.$refs.progressBar.clientWidth - btnBtnWidth // 获取进度条框的实际长度，需要减去上面按钮的宽度
@@ -536,10 +503,9 @@ const transform = prefixStyle('transform')
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-  /*li*/
-  /*  margin:10px auto*/
 
-  .flexdiv
+
+  .flex-div
     width:100%
     height:308.47px
     background-color:black
@@ -560,7 +526,7 @@ const transform = prefixStyle('transform')
           bottom:0
           left:0
           opacity: 0.8
-          .grop
+          .gorp
             position:absolute
             top:10px
             right:10px
@@ -571,20 +537,20 @@ const transform = prefixStyle('transform')
             height:13px
             line-height:13px
             padding:0 8px
-          .wrapperLeft
+          .wrapper-left
             position: absolute
             left:5px
             bottom:10px
             height:10px
             color:white
-          .wrapperCenter
+          .wrapper-center
             color:white
             position: absolute
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
             font-size:$font-size-large-x
-          .wrapperRight
+          .wrapper-right
             position: absolute
             right:10px
             bottom:10px
@@ -616,7 +582,7 @@ const transform = prefixStyle('transform')
               width: 20px
               height: 20px
               flex-center
-              .controlBtn
+              .control-btn
                 border-radius:50%
                 background-color:red
                 height:10px
@@ -643,7 +609,7 @@ const transform = prefixStyle('transform')
           width:30px
           height:30px
           border-radius:50%
-      .wrapBottom
+      .wrap-bottom
         height:50px
         line-height:50px
         color:white
@@ -652,7 +618,7 @@ const transform = prefixStyle('transform')
         position:relative
         flex-center(column)
         font-size:$font-size-large
-        .wrapBottomImg
+        .wrap-bottom-img
           position:absolute
           left:0
           height:100%
@@ -672,7 +638,7 @@ const transform = prefixStyle('transform')
             line-height:35px
             margin-left:35px
             font-size:$font-size-small
-        .wrapBottomLeft
+        .wrap-bottom-left
           position:absolute
           left:210px
           height:100%
@@ -682,7 +648,7 @@ const transform = prefixStyle('transform')
             position:absolute
             bottom:8px
             left:13px
-        .wrapBottomCenter
+        .wrap-bottom-center
           position:absolute
           left:280px
           height:100%
@@ -692,13 +658,12 @@ const transform = prefixStyle('transform')
             position:absolute
             bottom:8px
             left:13px
-        .wrapBottomRight
+        .wrap-bottom-right
           position:absolute
           right:-10px
           height:100%
           width:35px
           text-align:center
-
 
     .touch-action
       none

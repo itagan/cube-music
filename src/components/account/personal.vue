@@ -5,7 +5,6 @@
         <span>上传头像</span>
         <img src="" alt="">
       </div>
-
       <div class="my-name">
         <div class="name">
           <span>{{personals.profile.nickname}}</span>
@@ -19,15 +18,12 @@
         <i class="iconfont iconzan1"></i>
         </span>
       </div>
-
       <div class="sign-in before-signin" v-show="!signIn" @click="toSignIn">
         <span>
         <i class="iconfont iconzan1"></i>
           签到
         </span>
       </div>
-
-
     </div>
 
     <ul class="center">
@@ -107,7 +103,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations} from 'vuex'
+    import {mapGetters} from 'vuex'
     export default {
       name: 'personal.vue',
       data () {
@@ -133,7 +129,6 @@
         getPersonal () {
           this.$api.users.userdetail(this.uid).then(res => {
             this.personals = res.data
-            console.log(this.personals)
           })
         }
       }
@@ -277,5 +272,4 @@
             color:rgba(128,128,128,.9)
             ellipsis()
             margin-top:5px
-
 </style>

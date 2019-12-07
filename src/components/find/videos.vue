@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div class="flexdiv" >
+    <div class="flex-div" >
       <div class="container" v-for="(item, index) in videos" :key="item.data.vid">
         <div class="wrap">
-          <div class="wrapTop" @click="wonderfulVideo(item.data.vid)">
+          <div class="wrap-top" @click="wonderfulVideo(item.data.vid)">
             <div class="wrapper" :style="{backgroundImage:`url( ${item.data.coverUrl} )` }">
-              <div class="wrapperLeft">
+              <div class="wrapper-left">
                 <i class="iconfont iconzan1"></i>
                 <span>{{item.data.playTime}}</span>
               </div>
-              <div class="wrapperRight">
+              <div class="wrapper-right">
                 <i class="iconfont iconzan1"></i>
                 <span>{{item.data.durationms}}</span>
               </div>
@@ -21,18 +21,18 @@
             </div>
           </div>
 
-          <div class="wrapBottom" @click="details(item.data.vid)">
-            <div class="wrapBottomLeft" @click.stop="praisedCount(item.data.vid, index)" ref="praise">
+          <div class="wrap-bottom" @click="details(item.data.vid)">
+            <div class="wrap-bottom-left" @click.stop="praisedCount(item.data.vid, index)" ref="praise">
               <i class="iconfont iconzan1"></i>
               <span ref="Count">{{item.data.praisedCount}}</span>
             </div>
 
-            <div class="wrapBottomCenter">
+            <div class="wrap-bottom-center">
               <i class="iconfont iconliuyan"></i>
               <span>{{item.data.commentCount}}</span>
             </div>
 
-            <i class="wrapBottomRight iconfont icon-ellipsis" @click="more()"></i>
+            <i class="wrap-bottom-right iconfont icon-ellipsis" @click="more()"></i>
           </div>
         </div>
       </div>
@@ -44,14 +44,13 @@
 <script>
     import {mapActions, mapGetters} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
-    import {durationms} from '../../assets/js/timestamp'
+    import {durationsTransformation} from '../../assets/js/timestamp'
 
     export default {
       name: 'videos.vue',
       data () {
         return {
-          videos: [],
-          ispraise: false
+          videos: []
         }
       },
       created () {
@@ -83,7 +82,7 @@
             this.videos = res.data.datas
             for (let i = 0; i < this.videos.length; i++) {
               this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
-              this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
+              this.videos[i].data.durationms = durationsTransformation(this.videos[i].data.durationms)
             }
           })
         },
@@ -191,26 +190,26 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-  .flexdiv
+  .flex-div
     width:100%
     margin-bottom:50px
     .container
       margin:5px 10px
       .wrap
         /*margin:10px*/
-        .wrapTop
+        .wrap-top
           background-color:#dcdcdc
           border-radius:5px
           .wrapper
             position:relative
             height:200px
             font-size:$font-size-small-s
-            .wrapperLeft
+            .wrapper-left
               position: absolute
               left:5px
               bottom:5px
               height:10px
-            .wrapperRight
+            .wrapper-right
               position: absolute
               right:5px
               bottom:5px
@@ -226,23 +225,23 @@
               width:20px
               height:20px
               border-radius:50%
-        .wrapBottom
+        .wrap-bottom
           height:35px
           line-height:35px
           font-size:$font-size-small-s
           position:relative
           flex-center(column)
-          .wrapBottomLeft
+          .wrap-bottom-left
             position:absolute
             left:0
             height:100%
             min-width:35px
-          .wrapBottomCenter
+          .wrap-bottom-center
             position:absolute
             left:100px
             height:100%
             min-width:35px
-          .wrapBottomRight
+          .wrap-bottom-right
             position:absolute
             right:-10px
             height:100%

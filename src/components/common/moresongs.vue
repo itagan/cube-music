@@ -29,7 +29,7 @@
 
 <script>
     export default {
-      name: 'buildlist.vue',
+      name: 'moreSongs.vue',
       data () {
         return {
         }

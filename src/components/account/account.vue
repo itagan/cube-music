@@ -1,7 +1,6 @@
 <template>
   <div>
     <my-header :show="show"></my-header>
-
     <div class="scroll-list-wrap">
       <cube-scroll
         ref="scroll"
@@ -13,8 +12,6 @@
         <personal></personal>
         <feature></feature>
         <cube-button class="login-out" type="button" @click="loginOut">退出登录</cube-button>
-
-
       </cube-scroll>
     </div>
 
@@ -54,10 +51,6 @@
             this.show = false
           }
         },
-            // loginOut() {
-            //     //退出登录
-            //
-            // },
         loginOut () {
           this.$createDialog({
             type: 'confirm',
@@ -87,13 +80,6 @@
                 }
                         )
             }
-                    // onCancel: () => {
-                    //     this.$createToast({
-                    //         type: 'warn',
-                    //         time: 1000,
-                    //         txt: '点击取消按钮'
-                    //     }).show()
-                    // }
           }).show()
         }
       }
@@ -108,7 +94,6 @@
     height: 617px
     width:375px
     margin-bottom:50px
-
 
     .login-out
       width:100%

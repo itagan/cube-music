@@ -12,7 +12,6 @@
       name: 'header.vue',
       components: {
         MyHeader
-
       },
       data () {
         return {
@@ -27,11 +26,7 @@
       },
       watch: {
         show (show) {
-          if (show) {
-            this.account = true
-          } else {
-            this.account = false
-          }
+          this.account = !!show
         }
       },
       methods: {

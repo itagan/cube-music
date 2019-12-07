@@ -3,14 +3,16 @@
     <i class="iconfont iconzhanghao" v-if="!fake"></i>
     <!--    这个是虚假的输入框，根据要求，点击输入框会跳进搜索页面才是真正的input-->
     <div v-if="fake" class="search-box"><i class="iconfont iconzhanghao icon-search"></i>{{placeholder}}</div>
-    <input
-      type="text"
-      class="search-box"
-      :placeholder="placeholder"
-      ref="input"
-      v-model="query"
-      v-if="!fake"
-    >
+    <label>
+      <input
+        type="text"
+        class="search-box"
+        :placeholder="placeholder"
+        ref="input"
+        v-model="query"
+        v-if="!fake"
+      >
+    </label>
     <i class="iconfont iconzhanghao" v-show="query" @click="reset"></i>
   </div>
 </template>

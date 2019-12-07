@@ -1,13 +1,10 @@
 <template>
   <div class=wonderful>
-
     <nav-bar class="wonderful-header">
       <i class="iconfont iconlive" slot="left" @click="goback"></i>
       <div slot="center" class="music">精彩视频</div>
     </nav-bar>
-
     <div class="slides">
-
       <cube-slide
         ref="slide"
         :data="videos"
@@ -35,17 +32,16 @@
         </cube-slide-item>
       </cube-slide>
 
-
     </div>
   </div>
 </template>
 
 <script>
-    import {mapActions, mapGetters, mapMutations} from 'vuex'
+    import {mapGetters, mapMutations} from 'vuex'
     import navBar from '../../base/navbar/navbar'
     import wonderfulBase from '../../base/video/wonderfulbase'
     import {serializeNumber} from '../../assets/js/number'
-    import {durationms} from '../../assets/js/timestamp'
+    import {durationsTransformation} from '../../assets/js/timestamp'
     export default {
       components: {
         navBar,
@@ -71,7 +67,7 @@
       },
       created () {
         this.getVideos()
-    },
+      },
       computed: {
         ...mapGetters([
           'videoGroupId'
@@ -82,28 +78,16 @@
         }
       },
       watch: {
-        videoGroup (newid, old) {
-          console.log(newid, old)
-
-                // this.getVideos();
-
-                // this.$nextTick(() => {
-                //     this.getVideos();
-                //     this.$refs.slide.slide.refresh();
-                // });
+        videoGroup () {
         }
       },
       methods: {
         getVideos () {
-                // if(!this.videoGroupId) {
-                //     this.GroupId = 9102
-                // }
-
           this.$api.video.videolist(9102).then((res) => {
             this.videos = res.data.datas
             for (let i = 0; i < this.videos.length; i++) {
               this.videos[i].data.playTime = serializeNumber(this.videos[i].data.playTime)
-              this.videos[i].data.durationms = durationms(this.videos[i].data.durationms)
+              this.videos[i].data.durationms = durationsTransformation(this.videos[i].data.durationms)
             }
           })
         },
@@ -112,15 +96,13 @@
         },
         rollBack () {
                 // 点击下边的视频即往上滚动并播放。
-          this.$refs.slide.slide.next()  // 注意写法。
+          this.$refs.slide.slide.next()
           this.$refs.slide.slide.refresh()
         },
         changePage (current) {
-          console.log('当前轮播图序号为:' + current)
           this.ind = current
           this.setCurrentIndex(current)
         },
-
         ...mapMutations({
           setCurrentIndex: 'SET_CURRENT_INDEX'
         })

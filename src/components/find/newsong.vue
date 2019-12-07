@@ -1,19 +1,19 @@
 <template>
-  <div class="newsongs">
-    <div class="newsongsTop">
-      <div class="newsongsLeft">
-        <span class="newLeft" @click="newLeft()">新碟</span>
-        <span class="newCenter"></span>
-        <span class="newRight" @click="newRight()">新歌</span>
+  <div class="new-songs">
+    <div class="new-songs-top">
+      <div class="new-songs-left">
+        <span class="new-left" @click="newLeft()">新碟</span>
+        <span class="new-center"></span>
+        <span class="new-right" @click="newRight()">新歌</span>
       </div>
-      <router-link tab="div" class="newsongsRight" to="/my" v-if="isshow">更多新碟</router-link>
-      <router-link tab="div" class="newsongsRight" to="/my" v-if="show">新歌推荐</router-link>
+      <router-link tab="div" class="new-songs-right" to="/my" v-if="isShow">更多新碟</router-link>
+      <router-link tab="div" class="new-songs-right" to="/my" v-if="show">新歌推荐</router-link>
     </div>
 
-    <div class="nav-flex" v-if="isshow">
+    <div class="nav-flex" v-if="isShow">
       <router-link tab="div" class="nav-item" v-for="item in result" :key="item.id" v-if="result.length" to="/my">
         <div class="nav-div">
-          <img :src="item.picUrl" class="nav-img">
+          <img :src="item.picUrl" class="nav-img" alt="图像">
         </div>
         <div class="nav-title">{{item.name}}</div>
       </router-link>
@@ -23,7 +23,7 @@
       <div class="nav-item" v-for="item in result" :key="item.id" v-if="result.length">
         <div class="nav-div">
           <img :src="item.picUrl" class="nav-img">
-          <div class="nav-imgdiv" @click="player()"></div>
+          <div class="nav-img-div" @click="player()"></div>
         </div>
         <div class="nav-title">{{item.name}}</div>
       </div>
@@ -34,10 +34,10 @@
 
 <script>
     export default {
-      name: 'newsong.vue',
+      name: 'newSongs.vue',
       data () {
         return {
-          isshow: true,
+          isShow: true,
           show: false,
           result: []
         }
@@ -48,15 +48,15 @@
       methods: {
         getResults () {
           this.$api.find.recommend().then((res) => {
-            this.result = res.data.result
+            this.result = res.data.result.slice(0, 3)
           })
         },
         newLeft () {
-          this.isshow = true
+          this.isShow = true
           this.show = false
         },
         newRight () {
-          this.isshow = false
+          this.isShow = false
           this.show = true
         },
         player () {
@@ -64,7 +64,6 @@
                 // e.preventDefault()
                 // event.stopPropagation()
                 // this.$router.push({path:`/my`})
-          console.log('播放')
         }
       }
     }
@@ -73,27 +72,25 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-  .newsongs
+  .new-songs
     margin:0 10px
     margin-top:20px
-    .newsongsTop
+    .new-songs-top
       height:20px
       flex-between()
-      .newsongsLeft
+      .new-songs-left
         font-weight:bold
         font-size:$font-size-large
         flex-between()
-        .newLeft
+        .new-left
           /*float:left*/
-        .newCenter
+        .new-center
           display:flex
           height:15px
           width:1px
           background-color:#dcdcdc
           margin:auto 5px
-        .newRight
-          /*float:right*/
-      .newsongsRight
+      .new-songs-right
         color:black
         font-size:$font-size-small
         line-height:20px
@@ -122,7 +119,7 @@
         .nav-img
           width:100%
           margin-bottom:100%
-        .nav-imgdiv
+        .nav-img-div
           position:absolute
           bottom:3px
           right:3px
@@ -134,7 +131,7 @@
           background-color:#dcdcdc
           opacity:0.8
           display: flex
-        .nav-imgdiv:after
+        .nav-img-div:after
           position: absolute
           left:9px
           top:9px
