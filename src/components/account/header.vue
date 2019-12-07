@@ -1,6 +1,6 @@
 <template>
   <my-header class="header">
-    <i class="iconfont iconlive" slot="left" @click="scan"></i>
+    <i class="iconfont iconrichscan_icon" slot="left" @click="scan"></i>
     <div slot="center" class="account" v-show="account">账号</div>
     <i class="iconfont iconyinletiaodongzhuangtai" slot="right" @click="playMusic"></i>
   </my-header>

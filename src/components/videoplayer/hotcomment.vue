@@ -1,7 +1,5 @@
-
 <template>
   <transition name="fade-comment" v-if="visible">
-
     <div class="sticky-view-container">
     <cube-sticky :pos="scrollY">
       <cube-scroll
@@ -11,7 +9,6 @@
         :options="options"
         ref="scroll"
       >
-
         <cube-sticky-ele ele-key="精彩评论">
           <ul class="sticky-header">
             <li class="all-top">
@@ -25,20 +22,17 @@
             </li>
           </ul>
         </cube-sticky-ele>
-
         <div v-if="!this.comments.length" class="pull-load">
                 <span v-if="props.isPullUpLoad" class="load">
                    <i class="iconfont iconyinletiaodongzhuangtai"></i>
                   <span> 正在加载...</span>
                 </span>
         </div>
-
         <ul  class="hot-ul" v-else>
           <li v-for="item in comments" class="hot-li">
             <base-comment :item="item"></base-comment>
           </li>
         </ul>
-
         <template slot="pullup" slot-scope="props">
           <div v-if="props.pullUpLoad" class="pull-load">
             <template v-if="loadIsShow">
@@ -50,16 +44,11 @@
             </template>
           </div>
         </template>
-
       </cube-scroll>
     </cube-sticky>
     </div>
   </transition>
 </template>
-
-
-
-
 <script>
     import {mapGetters, mapMutations} from 'vuex'
     import BaseComment from '../../base/basecomment/basecomment'
@@ -79,7 +68,6 @@
           visible: false,
           scrollEvents: ['scroll'],
           scrollY: 0,
-
           pullUpLoad: true,
           pullUpLoadThreshold: 0,
           pullUpLoadMoreTxt: '加载中…………',

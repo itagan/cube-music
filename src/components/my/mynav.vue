@@ -5,16 +5,16 @@
         <li v-for="(item, index) in navTexts" :key="index" class="nav-item">
           <router-link to="/find" tab="div" class="nav-link">
             <div class="item-top">
-              <i class="iconfont iconzan1" style="font-size:22px"></i>
+              <i class="iconfont" :class="item.icon" style="font-size:22px"></i>
             </div>
             <div class="item-bottom">
-              {{ item }}
+              {{ item.text }}
             </div>
           </router-link>
         </li>
           <li class="nav-item-last nav-item" @click="edit">
             <div class="top">
-              <i class="iconfont iconzan1" style="font-size:22px"></i>
+              <i class="iconfont icontuozhuai" style="font-size:22px"></i>
             </div>
             <div class="bottom">
              编辑
@@ -26,11 +26,39 @@
 </template>
 
 <script type="text/ecmascript-6">
-    const texts = ['Sati空间', '私人推荐', 'ACG专区', '爵士电台', '最嗨电音', '古典专区', '云村正能量']
     export default {
       data () {
         return {
-          navTexts: texts
+          navTexts: [
+            {
+              text: '私人FM',
+              icon: 'iconFM'
+            },
+            {
+              text: 'Sati空间',
+              icon: 'iconyueliang'
+            },
+            {
+              text: '亲子频道',
+              icon: 'iconqinzi'
+            },
+            {
+              text: '古典专区',
+              icon: 'icongangqin-copy'
+            },
+            {
+              text: '跑步FM',
+              icon: 'iconpaobu'
+            },
+            {
+              text: '小冰电台',
+              icon: 'icondiantai'
+            },
+            {
+              text: '驾驶模式',
+              icon: 'iconic-normal-car'
+            }
+          ]
         }
       },
       methods: {
@@ -78,9 +106,6 @@
               margin-top:10px
               text-align:center
               i
-                display: inline-block
-                width:40px
-                height:40px
                 color:white
                 font-size:$font-size-medium //无效，改用内联样式
             .item-bottom

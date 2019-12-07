@@ -2,65 +2,62 @@
   <ul class="ul">
     <router-link to="/find" tag="li" class="li">
       <div class="li-left">
-        <i class="iconfont iconzan1"></i>
+        <i class="iconfont iconyinyue-copy"></i>
         <span>本地音乐</span>
       </div>
 
       <div class="li-right">
         <span>11</span>
-        <i class="iconfont iconzu"></i>
+        <i class="iconfont iconleft-arrow"></i>
       </div>
     </router-link>
 
     <router-link to="/find" tag="li" class="li">
       <div class="li-left">
-        <i class="iconfont iconzan1"></i>
+        <i class="iconfont iconzuijinbofang"></i>
         <span>最近播放</span>
       </div>
 
       <div class="li-right">
         <span>11</span>
-        <i class="iconfont iconzu"></i>
+        <i class="iconfont iconleft-arrow"></i>
       </div>
     </router-link>
 
       <router-link to="/find" tag="li" class="li">
       <div class="li-left">
-        <i class="iconfont iconzan1"></i>
+        <i class="iconfont icondiantai"></i>
         <span>我的电台</span>
       </div>
 
       <div class="li-right">
         <span>11</span>
-        <i class="iconfont iconzu"></i>
+        <i class="iconfont iconleft-arrow"></i>
       </div>
       </router-link>
 
         <router-link to="/find" tag="li" class="li">
       <div class="li-left">
-        <i class="iconfont iconzan1"></i>
+        <i class="iconfont iconwodeshoucang"></i>
         <span>我的收藏</span>
       </div>
 
       <div class="li-right">
         <span>11</span>
-        <i class="iconfont iconzu"></i>
+        <i class="iconfont iconleft-arrow"></i>
       </div>
         </router-link>
-
   </ul>
 </template>
 
 <script>
     export default {
-      name: 'mymusic.vue'
+      name: 'myMusic.vue'
     }
 </script>
-
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-
   .ul
     background-color:white
     width:100%

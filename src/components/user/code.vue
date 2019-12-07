@@ -1,7 +1,7 @@
 <template>
   <div class="code">
     <div class="code-back">
-      <i class="iconfont iconzan1" @click="back"></i>
+      <i class="iconfont iconfanhui" @click="back"></i>
       <span>手机号验证</span>
     </div>
     <div class="code-top">验证码已发送至</div>

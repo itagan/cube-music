@@ -16,24 +16,24 @@
         <div class="wrap">
           <div class="gorp" v-if="gorpShow">22</div>
           <div class="left-top" @click="toBack">
-            <i class="iconfont iconzan1"></i>
+            <i class="iconfont iconfanhui" style="font-size: 24px"></i>
           </div>
           <div class="wrapper-left">
             <div  v-show="currentShow">
-              <i class="iconfont iconzan1" v-if="currentTimeShow"></i>
+              <i class="iconfont iconCell-PlayVolume" v-if="currentTimeShow"></i>
               <span v-if="currentTimeShow" >{{detail.playTime}}</span>
               <div v-if="!currentTimeShow"> {{Durations(currentTime)}} / {{detail.durationms}}</div>
             </div>
           </div>
           <div class="wrapper-center" v-if="plays" >
-            <i class="iconfont iconnetease" v-if="play"></i>
-            <i class="iconfont iconliuyan" v-else></i>
+            <i class="iconfont iconbofang5" v-if="play" style="font-size: 40px"></i>
+            <i class="iconfont iconzanting2" v-else style="font-size: 30px"></i>
           </div>
 
           <div class="wrapper-right" v-show="playTimes">
-            <i class="iconfont iconzan1"  v-if="playTime"></i>
+            <i class="iconfont iconbofangzhuangtaizanting"  v-if="playTime"></i>
             <span  v-if="playTime">{{detail.durationms}}</span>
-            <i class="iconfont iconliuyan" v-if="!playTime"></i>
+            <i class="iconfont iconquanping" v-if="!playTime" style="font-size: 26px"></i>
           </div>
 
         </div>
@@ -123,9 +123,7 @@
             this.$refs.controlBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)` // 按钮小球的偏移，别忘记单位和模板字符串形式
           }
         }
-
       },
-
       methods: {
         playVideo (e) {
           this.videoDom = this.$refs.video // 获取当前播放的视频DOM
@@ -148,8 +146,7 @@
           } else {
                     // 已经有播放进度。那么是手动或被动暂停了。
                     //* **被暂停时候只能点击图标实现播放或暂停。直接点击屏幕显示图层图标***
-            let isTarget = e.target.className === 'iconfont iconnetease' || e.target.className === 'iconfont iconliuyan'
-
+              let isTarget = e.target.className === 'iconfont iconbofang5' || e.target.className === 'iconfont iconzanting2'
             if (this.isPlay && isTarget) {
               this.videoDom.pause()
               this.isPlay = false
@@ -350,9 +347,8 @@
             .left-top
               position: absolute
               left:20px
-              top:30px
+              top:20px
               color:white
-              font-size:$font-size-large-x
             .wrapper-left
               position: absolute
               left:5px
@@ -372,6 +368,10 @@
               bottom:10px
               height:10px
               color:white
+              .iconquanping
+                position:absolute
+                bottom:-3px
+                right:-8px
           .control
             height:2px
             width:96%

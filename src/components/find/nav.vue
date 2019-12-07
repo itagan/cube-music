@@ -2,7 +2,7 @@
   <div class="wrap">
     <router-link tab="div" class="wrapper" to="/my">
       <div class="wrapperIcon">
-        <i class="iconfont iconzan1"></i>
+        <i class="iconfont iconrili"></i>
       </div>
       <span>每日推荐</span>
     </router-link>

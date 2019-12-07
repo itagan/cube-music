@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="top">
-      <i class="iconfont iconzan1" @click="back"></i>
+      <i class="iconfont iconfanhui" @click="back"></i>
       <span>手机号登录</span>
     </div>
     <div class="message">未注册手机号登录后将自动创建账号</div>

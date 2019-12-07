@@ -5,7 +5,7 @@
      <div class="img">
         <img :src="item.coverUrl">
         <div class="playtime">
-          <i class="iconfont iconzan1"></i>
+          <i class="iconfont iconCell-PlayVolume"></i>
           <span>{{item.playTime}}</span>
         </div>
       </div>

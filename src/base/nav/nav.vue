@@ -5,7 +5,7 @@
       <div class="nav-div">
         <img :src="item.picUrl" class="nav-img">
         <div class="nav-img-div">
-          <i class="iconfont iconzan1"></i>
+          <i class="iconfont iconCell-PlayVolume"></i>
           <span class="nav-num">{{item.playCount}}</span>
         </div>
       </div>

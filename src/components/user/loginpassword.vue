@@ -1,7 +1,7 @@
 <template>
   <div class="phone">
     <div class="back">
-      <i class="iconfont iconzan1" @click="back"></i>
+      <i class="iconfont iconfanhui" @click="back"></i>
       <span>手机号登录</span>
     </div>
 

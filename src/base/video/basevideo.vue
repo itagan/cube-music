@@ -19,20 +19,20 @@
           <div class="gorp" v-if="gorpShow">22</div>
           <div class="wrapper-left">
             <div  v-show="currentShow">
-              <i class="iconfont iconzan1" v-if="currentTimeShow"></i>
+              <i class="iconfont iconCell-PlayVolume" v-if="currentTimeShow"></i>
               <span v-if="currentTimeShow" >{{item.data.playTime}}</span>
               <div v-if="!currentTimeShow"> {{Durations(currentTime)}} / {{item.data.durationms}}</div>
             </div>
           </div>
           <div class="wrapper-center" v-if="plays" >
-            <i class="iconfont iconnetease" v-if="play"></i>
-            <i class="iconfont iconliuyan" v-else></i>
+            <i class="iconfont iconbofang6" v-if="play" style="font-size: 40px"></i>
+            <i class="iconfont iconzanting1" v-else style="font-size: 30px"></i>
           </div>
 
           <div class="wrapper-right" v-show="playTimes">
-            <i class="iconfont iconzan1"  v-if="playTime"></i>
+            <i class="iconfont iconbofangzhuangtaizanting"  v-if="playTime"></i>
             <span  v-if="playTime">{{item.data.durationms}}</span>
-            <i class="iconfont iconliuyan" v-if="!playTime"></i>
+            <i class="iconfont iconquanping" v-if="!playTime" style="font-size: 26px"></i>
           </div>
 
         </div>
@@ -191,13 +191,11 @@
           this.allVideoDom = document.querySelectorAll('video') // 获取所有真实视频DOM
           this.durations = this.videoDom.duration // 获取播放时长
           this.setCurrentIndex(index) // 提交当前播放的视频索引
-
             // 给每个项添加isPlay属性判断是否播放
           if (typeof item.isPlay === 'undefined') {
                     // 给对象添加属性
             this.$set(item, 'isPlay', false)
           }
-
           let obj = {}
           obj[index] = this.currentTime
             // 看看当前被点击的是否有在数组中//不存在则返回-1
@@ -213,7 +211,7 @@
                     //* *******功能需求：播放进度为0的情况下，点击就可以播放。否则需要点击播放或暂停按钮实现********
             this.videoDom.play()
             item.isPlay = true
-
+            console.log('播放了')
                 // 中间播放按钮或暂停按钮是否显示
             this.plays = false
                 // 左下角播放量或者进度是否显示
@@ -247,11 +245,12 @@
           } else {
                       // 已经有播放进度。那么是手动或被动暂停了。
                       //* **被暂停时候只能点击图标实现播放或暂停。直接点击屏幕显示图层图标***
-            let isTarget = e.target.className === 'iconfont iconnetease' || e.target.className === 'iconfont iconliuyan'
+            let isTarget = e.target.className === 'iconfont iconbofang6' || e.target.className === 'iconfont iconzanting1'
 
             if (item.isPlay && isTarget) {
               this.videoDom.pause()
               item.isPlay = false
+                console.log('暂停了')
 
                         // 中间播放按钮或暂停按钮是否显示
               this.plays = true
@@ -295,6 +294,7 @@
               this.videoDom.play()
                         // 标志位播放
               item.isPlay = true
+                console.log('播放了')
 
               setTimeout(() => {
                                 // 中间播放按钮或暂停按钮是否显示
@@ -537,6 +537,10 @@
               bottom:10px
               height:10px
               color:white
+              .iconquanping
+                position:absolute
+                bottom:-3px
+                right:-8px
           .control
             height:2px
             width:96%
