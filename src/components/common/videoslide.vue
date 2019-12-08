@@ -29,7 +29,6 @@
           </wonderful-base>
         </cube-slide-item>
       </cube-slide>
-
     </div>
   </div>
 </template>
