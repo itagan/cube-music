@@ -205,13 +205,6 @@
                     // 给对象添加属性
             this.$set(item, 'isPlay', false)
           }
-            // console.log('暂停1')
-          // let obj = {}
-          // obj[index] = this.currentTime
-          //   // 看看当前被点击的是否有在数组中//不存在则返回-1
-          // let i = this.currentDuration.findIndex((value) => {
-          //   return index === parseInt(Object.keys(value)[0])
-          // })
           if (this.top < 110 || this.top > 366) {
             this.$emit('rollback', this.top)
           }
@@ -235,17 +228,6 @@
             this.speedShow = true
                 // 播放或暂停的时候进度按钮显示
             this.controlBtn = false
-            // if (this.currentDuration.length >= 2) {
-            //   if (i !== -1) {
-            //                 // 在数组中存在，那么取出上次的播放进度作为当前播放开头
-            //     this.currentTime = this.currentDuration[i][index]
-            //     this.allVideoDom[index].currentTime = this.currentDuration[i][index]
-            //   }
-            // } else {
-            //             // 没找到说明没有最近上次播放进度
-            //   this.currentDuration.splice(0, 1)
-            //   this.currentDuration.push(obj)// 再把新的推进来
-            // }
             for (let i = 0; i < this.videos.length; i++) {
               if (i === index) continue
               this.allVideoDom[i].pause()
@@ -285,18 +267,6 @@
           this.controlBtn = true
 
           this.currentTime = this.allVideoDom[index].currentTime
-              // if (i !== -1) {
-              //                   // 原来就存在的话，那就把它替换为新播放进度
-              //   this.currentDuration[i][index] = this.allVideoDom[index].currentTime
-              // } else {
-              //   if (this.currentDuration.length >= 2) {
-              //     this.currentDuration.splice(0, 1)// 删除第1个
-              //     this.currentDuration.push(obj)// 再把新的推进来
-              //   } else {
-              //     this.currentDuration.push(obj)
-              //   }
-              // }
-                            // 当该视频开启了播放，即使之后暂停。其它视频统统还原状态。仅仅保存上一条播放的进度。其它重置。
               for (let i = 0; i < this.videos.length; i++) {
                 if (index === i) continue
                 this.videos[i].isPlay = false
@@ -308,19 +278,16 @@
               this.videoDom.play()
                         // 标志位播放
               item.isPlay = true
-
                 this.play = false
                 this.currentTimeShow = false
                 this.speedShow = true
                 this.controlBtn = true
-
                 if(this.timerOne) {
                     clearTimeout(this.timerOne)
                 }
                 if(this.timerTwo) {
                     clearTimeout(this.timerTwo)
                 }
-
                 this.timerOne =  setTimeout(() => {
                     this.plays = false
                     // 暂停按钮变播放按钮
@@ -332,21 +299,6 @@
                     // 播放或暂停的时候进度按钮显示
                     this.controlBtn = false
                 }, 3000)
-
-
-
-              // if (this.currentDuration.length >= 2) {
-              //   if (i !== -1) {
-              //                       // 在数组中存在，那么取出上次的播放进度作为当前播放开头
-              //     this.currentTime = this.currentDuration[i][index]
-              //     this.allVideoDom[index].currentTime = this.currentDuration[i][index]
-              //   }
-              // } else {
-              //                   // 没找到说明没有最近上次播放进度
-              //   this.currentDuration.splice(0, 1)// 删除第1个
-              //   this.currentDuration.push(obj)// 再把新的推进来
-              // }
-
               for (let i = 0; i < this.videos.length; i++) {
                 if (i === index) continue
                 this.allVideoDom[i].pause()
@@ -354,7 +306,6 @@
                             // 还得把其它项的isPlay属性重置为false。解决点击两次才播放的bug。因为其他的isPlay属性可能还是true。。
                 this.videos[i].isPlay = false
               }
-
             } else if (!isTarget) {
                         // 点击的仅仅是屏幕而非播放暂停按钮，那么显示遮罩层几秒钟时间
                 this.plays = !this.plays
@@ -366,7 +317,6 @@
                 this.playTime = false
                 // 每次点击应都保持底部进度条有显示
                 this.speedShow = true
-
                 this.timerTwo = setTimeout(() => {
                     // 中间播放按钮或暂停按钮是否显示
                     this.plays = false
@@ -377,12 +327,10 @@
                     // 播放或暂停的时候进度按钮显示
                     this.controlBtn = false
                 }, 3000)
-
                 if(!this.videoDom.paused){
                     // 播放按钮变暂停按钮
                     this.play = false
                 }
-
                 console.log('暂停other');
             }
           }
