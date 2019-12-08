@@ -143,7 +143,10 @@ export default {
           loadisshow: false, // 上拉加载是否显示,数据全部加载完则不显示了
           limits: 20, // 传给子组件需要显示的评论数量
           swipeHeight: 0, // 子组件recommentswiper的高度
-          titleHeight: 35 // 标题高度
+          titleHeight: 35, // 标题高度
+          timerOne: null,
+          timerTwo: null,
+          timerThree: null
         }
       },
       components: {
