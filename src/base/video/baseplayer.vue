@@ -146,7 +146,7 @@
           } else {
                     // 已经有播放进度。那么是手动或被动暂停了。
                     //* **被暂停时候只能点击图标实现播放或暂停。直接点击屏幕显示图层图标***
-              let isTarget = e.target.className === 'iconfont iconbofang5' || e.target.className === 'iconfont iconzanting2'
+            let isTarget = e.target.className === 'iconfont iconbofang5' || e.target.className === 'iconfont iconzanting2'
             if (this.isPlay && isTarget) {
               this.videoDom.pause()
               this.isPlay = false
