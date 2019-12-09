@@ -1,11 +1,13 @@
 import storage from 'good-storage'
 
-const LIKE_VIDEO_KEY = '__like-video__'
-const LIKE_VIDEO_LEN = 200
+const COLLECT_VIDEO_KEY = '__collect-video__'
+const COLLECT_VIDEO_LEN = 200
+const CURRENT_VIDEO_KEY = '__collect-video__'
+const CURRENT_VIDEO_LEN = 1
 
 function insertArray (arr, val, compare, maxLen) {
   const index = arr.findIndex(compare)
-  if (index === 0) {
+  if (index === -1) {
     return
   }
   if (index > 0) {
@@ -24,23 +26,45 @@ function deleteFromArray (arr, compare) {
   }
 }
 
-export function saveLikeVideo (video) {
-  let videoLikes = storage.get(LIKE_VIDEO_KEY, [])
-  insertArray(videoLikes, video, (item) => {
+export function saveCurrentVideo (video) {
+  let _currentVideo = storage.get(CURRENT_VIDEO_KEY, [])
+  insertArray( _currentVideo, video, (item) => {
     return item.vid === video.vid
-  }, LIKE_VIDEO_LEN)
-  storage.set(LIKE_VIDEO_KEY, videoLikes)
-  return videoLikes
+  }, CURRENT_VIDEO_LEN)
+  storage.set(CURRENT_VIDEO_KEY, _currentVideo)
+  return _currentVideo
 }
 
-export function deleteLikeVideo (video) {
-  let videoLikes = storage.get(LIKE_VIDEO_KEY, [])
-  deleteFromArray(videoLikes, (item) => {
+export function deleteCurrentVideo (video) {
+  let _currentVideo = storage.get(CURRENT_VIDEO_KEY, [])
+  deleteFromArray( _currentVideo, (item) => {
     return item.vid === video.vid
   })
-  storage.set(LIKE_VIDEO_KEY, videoLikes)
-  return videoLikes
+  storage.set(CURRENT_VIDEO_KEY, _currentVideo)
+  return _currentVideo
 }
-export function loadLikeVideo () {
-  return storage.get(LIKE_VIDEO_KEY, [])
+
+export function loadCurrentVideo () {
+  return storage.get(CURRENT_VIDEO_KEY, [])
+}
+
+export function saveCollectVideo (video) {
+  let videoCollections = storage.get(COLLECT_VIDEO_KEY, [])
+  insertArray(videoCollections, video, (item) => {
+    return item.vid === video.vid
+  }, COLLECT_VIDEO_LEN)
+  storage.set(COLLECT_VIDEO_KEY, videoCollections)
+  return videoCollections
+}
+
+export function deleteCollectVideo (video) {
+  let videoCollections = storage.get(COLLECT_VIDEO_KEY, [])
+  deleteFromArray(videoCollections, (item) => {
+    return item.vid === video.vid
+  })
+  storage.set(COLLECT_VIDEO_KEY, videoCollections)
+  return videoCollections
+}
+export function loadCollectVideo () {
+  return storage.get(COLLECT_VIDEO_KEY, [])
 }

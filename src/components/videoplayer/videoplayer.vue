@@ -44,8 +44,8 @@
                   <i class="iconfont iconzan1" :style="[detail.praised === true ? {color:'red'} : {color:''}]"></i>
                   <span :style="[detail.praised === true ? {color:'red'} : {color:''}]" ref="Count">{{detail.praisedCount}}</span>
                 </li>
-                <li>
-                  <i class="iconfont iconshoucang"></i>
+                <li @click.stop="toSubscribed(detail)" ref="praise">
+                  <i class="iconfont" :class="iconSubscribed"></i>
                   <span>{{detail.subscribeCount}}</span>
                 </li>
                 <li>
@@ -114,6 +114,7 @@
 
 
 <script type="text/ecmascript-6">
+    import { deleteCollectVideo } from '../../common/js/goodstorage'
     import {mapGetters, mapMutations} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
     import {timestamp, durationsTransformation} from '../../assets/js/timestamp'
@@ -146,7 +147,8 @@ export default {
           titleHeight: 35, // 标题高度
           timerOne: null,
           timerTwo: null,
-          timerThree: null
+          timerThree: null,
+          subscribed:false
         }
       },
       components: {
@@ -160,26 +162,21 @@ export default {
         icon () {
           return this.show ? 'iconshixinxiasanjiao' : 'iconshangsanjiao'
         },
+        iconSubscribed () {
+            return this.subscribed ? 'iconshoucangchenggong' : 'iconshoucang'
+        },
         ...mapGetters([
           'currentVid',
           'limit',
           'back',
           'currentUrl',
-          'videoState'
+          'currentVideo',
         ]),
-        CurrentVid () {
-          return this.currentVid
+        CurrentVideo () {
+          return this.currentVideo
         },
         Back () {
           return this.back
-        },
-        VideoState () {
-          if (this.videoState.length === 0) return
-
-          this.newIndex = this.videoState.findIndex((item, index) => {
-            return item.vid === this.currentVid
-          })
-          return this.newIndex
         },
         options () {
           return {
@@ -203,7 +200,7 @@ export default {
         this.getVideo()
       },
       watch: {
-        CurrentVid () {
+        CurrentVideo () {
           this.getVideoUrl()
           this.getVideo()
         },
@@ -243,25 +240,17 @@ export default {
           }
         },
         getVideo () {
-          if (!this.currentVid) {
-            this.$router.push(`/find`)
-            return
-          }
-
-          this.$api.video.video(this.currentVid).then(res => {
+            this.$api.video.video(this.currentVideo[0].currentVideo.vid).then(res => {
             this.detail = res.data.data
             this.detail.playTime = serializeNumber(res.data.data.playTime)
             this.detail.publishTime = timestamp(this.detail.publishTime)
             this.detail.durationms = durationsTransformation(this.detail.durationms)
-
-            console.log(this.detail)
           })
         },
             // 获取播放地址
         getVideoUrl () {
-          this.$api.video.videourl(this.currentVid).then(res => {
+          this.$api.video.videourl(this.currentVideo[0].currentVideo.vid).then(res => {
             this.videoUrl = res.data.urls[0].url
-            console.log(this.videourl)
           })
         },
             // 展开还是隐藏视频描述等
@@ -278,7 +267,7 @@ export default {
         },
         recommendvideo (vid) {
           this.getVideo()
-          this.getvVideoUrl()
+          this.getVideoUrl()
           this.reload() // 刷新本页面
             // this.$nextTick( this.getVideo())
             // 把vuex的数据还原
@@ -374,6 +363,9 @@ export default {
               })
           }
         },
+        toSubscribed() {
+
+        },
           ...mapMutations({
           setLimit: 'SET_LIMIT',
           setCommentBack: 'SET_BACK'
@@ -390,7 +382,7 @@ export default {
       destroyed () {
             // 销毁本页面时候，把vuex的一些重置
         this.setCommentBack(false)
-        console.log('销毁')
+        deleteCollectVideo()
       }
 
     }

@@ -3,7 +3,7 @@
     <div class="flex-div" >
       <div class="container" v-for="(item, index) in videos" :key="item.data.vid">
         <div class="wrap">
-          <div class="wrap-top" @click="wonderfulVideo(item.data.vid)">
+          <div class="wrap-top" @click="wonderfulVideo(index)">
             <div class="wrapper" :style="{backgroundImage:`url( ${item.data.coverUrl} )` }">
               <div class="wrapper-left">
                 <i class="iconfont iconCell-PlayVolume"></i>
@@ -21,7 +21,7 @@
             </div>
           </div>
 
-          <div class="wrap-bottom" @click="details(item.data.vid)">
+          <div class="wrap-bottom" @click="details(item.data.vid,index)">
             <div class="wrap-bottom-left" @click.stop="praisedCount(item, index)" ref="praise">
               <i class="iconfont iconzan1" :style="[item.data.praised === true ? {color:'red'} : {color:''}]"></i>
               <span ref="Count" :style="[item.data.praised === true ? {color:'red'} : {color:''}]">{{item.data.praisedCount}}</span>
@@ -56,13 +56,6 @@
       created () {
         this.getVideos()
       },
-      computed: {
-        ...mapGetters([
-          'videoLikesList'
-        ]),
-      },
-      watch: {
-      },
       methods: {
         getVideos () {
           this.$api.video.videolist().then((res) => {
@@ -76,20 +69,20 @@
         ...mapActions([
           'video',
           'commentBack',
-          'saveFavoriteList',
-          'deleteFavoriteList'
+          'saveCurrentVideoList'
         ]),
-
         // 上拉加载新数据
         upLoad () {
 
         },
-        wonderfulVideo () {
+        wonderfulVideo (index) {
           this.commentBack({back: false})
           this.video({
             videoGroupId: 9102
           })
-        // 去精彩视频页面并自动播放该视频
+          let currentVideo = this.videos[index].data
+          this.saveCurrentVideoList({currentVideo:currentVideo})
+            // 去精彩视频页面并自动播放该视频
           this.$router.push({
             path: `videoslide`
           })
@@ -116,7 +109,7 @@
             })
           }
         },
-        details (vid) {
+        details (vid,index) {
                 // 视频详情页，自动把底部评论提前
           this.$router.push({
             path: `videoplayer`
@@ -124,6 +117,8 @@
             // 给vuex提交vid，确定当前要播放视频id
           this.video({vid})
           this.commentBack({back: true})
+          let currentVideo = this.videos[index].data
+          this.saveCurrentVideoList({currentVideo:currentVideo})
         },
         more () {
                 // 更多

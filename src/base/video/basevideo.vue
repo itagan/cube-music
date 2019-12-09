@@ -193,7 +193,6 @@
       },
       methods: {
         playVideo (item, index, e) {
-            console.log(item)
           this.top = this.$refs.nav.getBoundingClientRect().top // 播放盒子距离顶部距离。
           this.videoDom = this.$refs.video // 获取当前播放的视频DOM
           this.allVideoDom = document.querySelectorAll('video') // 获取所有真实视频DOM
@@ -458,7 +457,9 @@
         ...mapActions([
           'video',
           'setCurrentTimes',
-          'commentBack'
+          'commentBack',
+          'saveCurrentVideoList'
+
         ]),
         ...mapMutations({
           setVideoList: 'SET_VIDEO_LIST',

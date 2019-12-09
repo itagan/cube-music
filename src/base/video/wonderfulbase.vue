@@ -61,7 +61,7 @@
           <span>{{item.data.praisedCount}}</span>
         </div>
 
-        <div class="wrap-bottom-center" @click="details(item.data.vid)">
+        <div class="wrap-bottom-center" @click="details(item)">
           <i class="iconfont iconliuyan"></i>
           <span>{{item.data.commentCount}}</span>
         </div>
@@ -294,12 +294,15 @@
         praisedCount () {
                 // 点赞
         },
-        details (vid) {
+        details (item) {
           this.$router.push({
             path: `videoplayer`
           })
+          let vid = item.data.vid
           this.video({vid})
           this.commentBack({back: true})
+          let currentVideo = this.item.data
+          this.saveCurrentVideoList({currentVideo:currentVideo})
         },
         more () {
                 // 更多
@@ -363,7 +366,8 @@
         ...mapActions([
           'video',
           'setCurrentTimes',
-          'commentBack'
+          'commentBack',
+          'saveCurrentVideoList'
         ])
       },
       destroyed () {
