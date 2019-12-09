@@ -40,9 +40,9 @@
                 <span class="titledesc">{{detail.description}}</span>
               </div>
               <ul class="titleBottom">
-                <li>
-                  <i class="iconfont iconzan1"></i>
-                  <span>{{detail.praisedCount}}</span>
+                <li @click.stop="praisedCount(detail)" ref="praise">
+                  <i class="iconfont iconzan1" :style="[detail.praised === true ? {color:'red'} : {color:''}]"></i>
+                  <span :style="[detail.praised === true ? {color:'red'} : {color:''}]" ref="Count">{{detail.praisedCount}}</span>
                 </li>
                 <li>
                   <i class="iconfont iconshoucang"></i>
@@ -179,7 +179,6 @@ export default {
           this.newIndex = this.videoState.findIndex((item, index) => {
             return item.vid === this.currentVid
           })
-
           return this.newIndex
         },
         options () {
@@ -357,7 +356,25 @@ export default {
           second = second < 10 ? '0' + second : second// 秒数前面补零操作
           return `${minute}:${second}`
         },
-        ...mapMutations({
+        praisedCount (detail) {
+          let isPraised = detail.praised
+          if (isPraised) {
+              this.$api.likes.isLike(0, 5, detail.vid).then(res => {
+                  if (res.data.code === 200) {
+                      this.$refs.praise.style.color = ''
+                      this.$refs.Count.innerHTML--
+                  }
+              })
+          } else {
+              this.$api.likes.isLike(1, 5, detail.vid).then(res => {
+                  if (res.data.code === 200) {
+                      this.$refs.praise.style.color = 'red'
+                      this.$refs.Count.innerHTML++
+                  }
+              })
+          }
+        },
+          ...mapMutations({
           setLimit: 'SET_LIMIT',
           setCommentBack: 'SET_BACK'
         })

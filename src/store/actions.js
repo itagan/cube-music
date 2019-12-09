@@ -1,4 +1,12 @@
 import * as types from './mutations-types'
+import { saveLikeVideo,deleteLikeVideo } from '../common/js/goodstorage'
+
+
+function findIndex (list, video) {
+  return list.findIndex((item) => {
+    return item.vid === video.vid
+  })
+}
 
 export const token = function ({commit, state}, {token}) {
   commit(types.SET_TOKEN, token)
@@ -34,3 +42,13 @@ export const User = function ({commit, state}, {uid}) {
 export const videoOperation = function ({commit, state}, {videoState}) {
   commit(types.SET_VIDEO_STATE, videoState)
 }
+
+
+export const saveFavoriteList = function ({ commit }, video) {
+  commit(types.SET_VIDEO_LIKES_LIST, saveLikeVideo(video))
+}
+
+export const deleteFavoriteList = function ({ commit }, video) {
+  commit(types.SET_VIDEO_LIKES_LIST, deleteLikeVideo(video))
+}
+
