@@ -67,9 +67,9 @@
           <span>{{item.data.creator.nickname}}</span>
         </div>
 
-        <div class="wrap-bottom-left" @click="praisedCount()">
-          <i class="iconfont iconzan1"></i>
-          <span>{{item.data.praisedCount}}</span>
+        <div class="wrap-bottom-left" @click.stop="praisedCount(item)" ref="praise">
+          <i class="iconfont iconzan1" :style="[item.data.praised === true ? {color:'red'} : {color:''}]"></i>
+          <span :style="[item.data.praised === true ? {color:'red'} : {color:''}]" ref="Count">{{item.data.praisedCount}}</span>
         </div>
 
         <div class="wrap-bottom-center" @click="details(item.data.vid)">
@@ -193,6 +193,7 @@
       },
       methods: {
         playVideo (item, index, e) {
+            console.log(item)
           this.top = this.$refs.nav.getBoundingClientRect().top // 播放盒子距离顶部距离。
           this.videoDom = this.$refs.video // 获取当前播放的视频DOM
           this.allVideoDom = document.querySelectorAll('video') // 获取所有真实视频DOM
@@ -357,8 +358,23 @@
         avatar () {
                 // 去up主页
         },
-        praisedCount () {
-                // 点赞
+        praisedCount (item) {
+          let isPraised = item.data.praised
+          if (isPraised) {
+              this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
+                  if (res.data.code === 200) {
+                      this.$refs.praise.style.color = ''
+                      this.$refs.Count.innerHTML--
+                  }
+              })
+          } else {
+              this.$api.likes.isLike(1, 5, item.data.vid).then(res => {
+                  if (res.data.code === 200) {
+                      this.$refs.praise.style.color = 'red'
+                      this.$refs.Count.innerHTML++
+                  }
+              })
+          }
         },
         details (vid) {
             // 视频详情页，这个不会把底部评论提前

@@ -41,6 +41,9 @@ const mutations = {
   },
   [types.SET_VIDEO_STATE] (state, videoState) {
     state.videoState = videoState
+  },
+  [types.SET_VIDEO_LIKES_LIST] (state, list) {
+    state.videoLikesList = list
   }
 }
 

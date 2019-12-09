@@ -6,11 +6,11 @@
           <div class="wrap-top" @click="wonderfulVideo(item.data.vid)">
             <div class="wrapper" :style="{backgroundImage:`url( ${item.data.coverUrl} )` }">
               <div class="wrapper-left">
-                <i class="iconfont iconzan1"></i>
+                <i class="iconfont iconCell-PlayVolume"></i>
                 <span>{{item.data.playTime}}</span>
               </div>
               <div class="wrapper-right">
-                <i class="iconfont iconzan1"></i>
+                <i class="iconfont iconbofangzhuangtaizanting"></i>
                 <span>{{item.data.durationms}}</span>
               </div>
             </div>
@@ -22,9 +22,9 @@
           </div>
 
           <div class="wrap-bottom" @click="details(item.data.vid)">
-            <div class="wrap-bottom-left" @click.stop="praisedCount(item.data.vid, index)" ref="praise">
-              <i class="iconfont iconzan1"></i>
-              <span ref="Count">{{item.data.praisedCount}}</span>
+            <div class="wrap-bottom-left" @click.stop="praisedCount(item, index)" ref="praise">
+              <i class="iconfont iconzan1" :style="[item.data.praised === true ? {color:'red'} : {color:''}]"></i>
+              <span ref="Count" :style="[item.data.praised === true ? {color:'red'} : {color:''}]">{{item.data.praisedCount}}</span>
             </div>
 
             <div class="wrap-bottom-center">
@@ -58,23 +58,10 @@
       },
       computed: {
         ...mapGetters([
-          'videoState'
+          'videoLikesList'
         ]),
-        VideoState () {
-                // if(this.videoState.length === 0) return
-                //
-                // this.newIndex = this.videoState.findIndex((item,index) => {
-                //     return item.vid === this.currentVid
-                // })
-                //
-                // return this.newIndex
-          return this.videoState
-        }
       },
       watch: {
-        VideoState () {
-
-        }
       },
       methods: {
         getVideos () {
@@ -89,7 +76,8 @@
         ...mapActions([
           'video',
           'commentBack',
-          'videoOperation'
+          'saveFavoriteList',
+          'deleteFavoriteList'
         ]),
 
         // 上拉加载新数据
@@ -105,70 +93,28 @@
           this.$router.push({
             path: `videoslide`
           })
-
-          console.log('去精彩页面')
         },
         avatar () {
                 // 去up主页
         },
-        praisedCount (vid, index) {
-            // if(this.videoState.length === 0) return
-
-          this.newIndex = this.videoState.findIndex(item => {
-            return item.vid === vid
-          })
-
-          if (this.newIndex !== -1) {
-            if (this.videoState[this.newIndex].praise === true) {
-              this.$api.likes.isLike(0, 5, vid).then(res => {
-                if (res.data.code === 200) {
-                                // 取消点赞成功
-                  this.$refs.praise[index].style.color = ''
-                  this.ispraise = false
-                  this.$refs.Count[index].innerHTML--
-                }
+        praisedCount (item, index) {
+          let isPraised = item.data.praised
+            console.log(isPraised)
+          if (isPraised) {
+              this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
+                  if (res.data.code === 200) {
+                      this.$refs.praise[index].style.color = ''
+                      this.$refs.Count[index].innerHTML--
+                  }
               })
-            } else {
-              this.$api.likes.isLike(1, 5, vid).then(res => {
-                if (res.data.code === 200) {
-                                // 点赞成功
-                  this.$refs.praise[index].style.color = 'red'
-                  this.ispraise = true
-                  this.$refs.Count[index].innerHTML++
-                }
-              })
-            }
           } else {
-            this.$api.likes.isLike(1, 5, vid).then(res => {
+            this.$api.likes.isLike(1, 5, item.data.vid).then(res => {
               if (res.data.code === 200) {
-                        // 点赞成功
                 this.$refs.praise[index].style.color = 'red'
-                this.ispraise = true
                 this.$refs.Count[index].innerHTML++
               }
             })
           }
-
-            // if(this.ispraise) {
-            //     this.$api.likes.isLike(0,5,vid).then(res => {
-            //         if(res.data.code === 200) {
-            //             //取消点赞成功
-            //             this.$refs.praise[index].style.color = ''
-            //             this.ispraise = false
-            //             this.$refs.Count[index].innerHTML--
-            //         }
-            //     })
-            // }else {
-            //     // 点赞
-            //     this.$api.likes.isLike(1,5,vid).then(res => {
-            //         if(res.data.code === 200) {
-            //             //点赞成功
-            //             this.$refs.praise[index].style.color = 'red'
-            //             this.ispraise = true
-            //             this.$refs.Count[index].innerHTML++
-            //         }
-            //     })
-            // }
         },
         details (vid) {
                 // 视频详情页，自动把底部评论提前
