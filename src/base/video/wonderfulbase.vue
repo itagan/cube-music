@@ -302,7 +302,8 @@
           this.video({vid})
           this.commentBack({back: true})
           let currentVideo = this.item.data
-          this.saveCurrentVideoList({currentVideo:currentVideo})
+          currentVideo._currentTime = this.currentTime
+          this.saveCurrentVideoList(currentVideo)
         },
         more () {
                 // 更多

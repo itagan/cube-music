@@ -113,7 +113,8 @@
           'currentVideo',
           'videoCurrentTime',
           'currentIndex',
-          'back'
+          'back',
+          'currentVideo'
         ])
       },
       watch: {
@@ -135,6 +136,9 @@
           }
           if (this.timerTwo) {
             clearTimeout(this.timerTwo)
+          }
+          if(this.currentVideo[0]._currentTime) {
+              this.videoDom.currentTime = this.currentVideo[0]._currentTime
           }
           if (this.currentTime === 0) {
             this.videoDom.play()
@@ -278,7 +282,8 @@
         ...mapActions([
           'video',
           'setCurrentTimes',
-          'commentBack'
+          'commentBack',
+          'saveCurrentVideoList'
         ]),
         ...mapMutations({
           setVideoList: 'SET_VIDEO_LIST',

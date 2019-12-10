@@ -81,7 +81,8 @@
             videoGroupId: 9102
           })
           let currentVideo = this.videos[index].data
-          this.saveCurrentVideoList({currentVideo:currentVideo})
+          currentVideo._currentTime = 0
+          this.saveCurrentVideoList(currentVideo)
             // 去精彩视频页面并自动播放该视频
           this.$router.push({
             path: `videoslide`
@@ -118,7 +119,8 @@
           this.video({vid})
           this.commentBack({back: true})
           let currentVideo = this.videos[index].data
-          this.saveCurrentVideoList({currentVideo:currentVideo})
+          currentVideo._currentTime = 0
+          this.saveCurrentVideoList(currentVideo)
         },
         more () {
                 // 更多

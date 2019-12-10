@@ -240,7 +240,8 @@ export default {
           }
         },
         getVideo () {
-            this.$api.video.video(this.currentVideo[0].currentVideo.vid).then(res => {
+            console.log(this.currentVideo)
+            this.$api.video.video(this.currentVideo[0].vid).then(res => {
             this.detail = res.data.data
             this.detail.playTime = serializeNumber(res.data.data.playTime)
             this.detail.publishTime = timestamp(this.detail.publishTime)
@@ -249,7 +250,7 @@ export default {
         },
             // 获取播放地址
         getVideoUrl () {
-          this.$api.video.videourl(this.currentVideo[0].currentVideo.vid).then(res => {
+          this.$api.video.videourl(this.currentVideo[0].vid).then(res => {
             this.videoUrl = res.data.urls[0].url
           })
         },

@@ -2,14 +2,14 @@ import storage from 'good-storage'
 
 const COLLECT_VIDEO_KEY = '__collect-video__'
 const COLLECT_VIDEO_LEN = 200
-const CURRENT_VIDEO_KEY = '__collect-video__'
+const CURRENT_VIDEO_KEY = '__current-video__'
 const CURRENT_VIDEO_LEN = 1
 
 function insertArray (arr, val, compare, maxLen) {
   const index = arr.findIndex(compare)
-  if (index === -1) {
+  if (index === 0) {
     return
-  }
+  }  //解决刚开始为空的问题，所以不能-1
   if (index > 0) {
     arr.splice(index, 1)
   }

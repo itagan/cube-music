@@ -161,7 +161,7 @@
           toCurrentVideo (index) {
               //不直接用item是因为额外添加了随时切换的isPlay属性导致vuex警告报错
             let currentVideo = this.videos[index].data
-            this.saveCurrentVideoList({currentVideo:currentVideo})
+            this.saveCurrentVideoList(currentVideo)
           },
           ...mapActions([
               'saveCurrentVideoList'

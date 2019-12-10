@@ -14,7 +14,6 @@ export const currentIndex = state => state.currentIndex
 export const currentUrl = state => state.currentUrl
 export const uid = state => state.uid
 export const videoGroupId = state => state.videoGroupId
-export const videoState = state => state.videoState
 
 export const videoCollectionsList = (state) => {
   return state.videoCollectionsList.map((video) => {
