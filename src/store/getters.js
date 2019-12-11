@@ -1,5 +1,5 @@
 import Video from '../common/js/video'
-import { loadCurrentVideo } from '../common/js/goodstorage'
+import { loadCurrentVideo, loadOperation } from '../common/js/goodstorage'
 
 
 export const token = state => state.token
@@ -30,4 +30,9 @@ export const currentVideo = (state) => {
     return state.currentVideo
 }
 
-
+export const operation = (state) => {
+  if(!state.operation.length) {
+    return loadOperation()
+  }
+  return state.operation
+}

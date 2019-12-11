@@ -1,10 +1,19 @@
+/**
+ 本地存储操作 部分写法来自黄老师vue-music课程
+ 引进插件
+ 前置，处理方法，具体存储设置获取删除操作
+ **/
+
 import storage from 'good-storage'
 
 const COLLECT_VIDEO_KEY = '__collect-video__'
 const COLLECT_VIDEO_LEN = 200
 const CURRENT_VIDEO_KEY = '__current-video__'
 const CURRENT_VIDEO_LEN = 1
+const CURRENT_OPERATION_KEY = '__current-operation__'
+const CURRENT_OPERATION_LEN = 1
 
+//公共方法设置
 function insertArray (arr, val, compare, maxLen) {
   const index = arr.findIndex(compare)
   if (index === 0) {
@@ -18,14 +27,16 @@ function insertArray (arr, val, compare, maxLen) {
     arr.pop()
   }
 }
-
 function deleteFromArray (arr, compare) {
   const index = arr.findIndex(compare)
   if (index > -1) {
     arr.splice(index, 1)
   }
 }
+function Operation() {
 
+}
+//当前视频
 export function saveCurrentVideo (video) {
   let _currentVideo = storage.get(CURRENT_VIDEO_KEY, [])
   insertArray( _currentVideo, video, (item) => {
@@ -34,7 +45,6 @@ export function saveCurrentVideo (video) {
   storage.set(CURRENT_VIDEO_KEY, _currentVideo)
   return _currentVideo
 }
-
 export function deleteCurrentVideo (video) {
   let _currentVideo = storage.get(CURRENT_VIDEO_KEY, [])
   deleteFromArray( _currentVideo, (item) => {
@@ -43,11 +53,10 @@ export function deleteCurrentVideo (video) {
   storage.set(CURRENT_VIDEO_KEY, _currentVideo)
   return _currentVideo
 }
-
 export function loadCurrentVideo () {
   return storage.get(CURRENT_VIDEO_KEY, [])
 }
-
+//视频收藏历史记录
 export function saveCollectVideo (video) {
   let videoCollections = storage.get(COLLECT_VIDEO_KEY, [])
   insertArray(videoCollections, video, (item) => {
@@ -56,7 +65,6 @@ export function saveCollectVideo (video) {
   storage.set(COLLECT_VIDEO_KEY, videoCollections)
   return videoCollections
 }
-
 export function deleteCollectVideo (video) {
   let videoCollections = storage.get(COLLECT_VIDEO_KEY, [])
   deleteFromArray(videoCollections, (item) => {
@@ -67,4 +75,24 @@ export function deleteCollectVideo (video) {
 }
 export function loadCollectVideo () {
   return storage.get(COLLECT_VIDEO_KEY, [])
+}
+//是否已经对当前视频等资源操作过，如点赞，收藏,关注，播放进度等
+export function saveOperation(value) {
+  let _currentOperation = storage.get(CURRENT_VIDEO_KEY, [])
+  insertArray( _currentOperation, value, (item) => {
+    return item.id === value.id
+  }, CURRENT_OPERATION_LEN)
+  storage.set(CURRENT_OPERATION_KEY, _currentOperation)
+  return _currentOperation
+}
+export function deleteOperation(value) {
+  let _currentOperation = storage.get(CURRENT_OPERATION_KEY, [])
+  deleteFromArray( _currentOperation, (item) => {
+    return item.id === value.id
+  })
+  storage.set(CURRENT_OPERATION_KEY, _currentOperation)
+  return _currentOperation
+}
+export function loadOperation() {
+  return storage.get(CURRENT_OPERATION_KEY, [])
 }

@@ -22,9 +22,9 @@
           </div>
 
           <div class="wrap-bottom" @click="details(item.data.vid,index)">
-            <div class="wrap-bottom-left" @click.stop="praisedCount(item, index)" ref="praise">
-              <i class="iconfont iconzan1" :style="[item.data.praised === true ? {color:'red'} : {color:''}]"></i>
-              <span ref="Count" :style="[item.data.praised === true ? {color:'red'} : {color:''}]">{{item.data.praisedCount}}</span>
+            <div class="wrap-bottom-left" @click.stop="praisedCount(item, index)" ref="praise" :class="[item.data.praised === true ? redColor : '']">
+              <i class="iconfont iconzan1"></i>
+              <span ref="Count">{{item.data.praisedCount}}</span>
             </div>
 
             <div class="wrap-bottom-center">
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+    import { saveOperation, deleteOperation, loadOperation} from '../../common/js/goodstorage'
     import {mapActions, mapGetters} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
     import {durationsTransformation} from '../../assets/js/timestamp'
@@ -50,11 +51,47 @@
       name: 'videos.vue',
       data () {
         return {
-          videos: []
+          videos: [],
+          redColor:'redColor'
         }
       },
       created () {
         this.getVideos()
+      },
+      computed: {
+        ...mapGetters([
+                'operation'
+          ]),
+        Operation() {
+          return this.operation
+        }
+      },
+      watch:{
+        Operation(newOperation) {
+            let index = this.videos.findIndex(item => {
+                return item.data.vid === this.operation[0].id
+            })
+            console.log(index)
+            // if(index) {
+            //     if(this.operation[0].isPraised) {
+            //         this.$refs.praise[index].classList.add('redColor')
+            //         this.$refs.Count[index].innerHTML++
+            //     }else {
+            //         this.$refs.praise[index].classList.remove('redColor')
+            //         this.$refs.Count[index].innerHTML--
+            //     }
+            // }else {
+            //     this.$refs.praise[index].classList.add('redColor')
+            //     this.$refs.Count[index].innerHTML++
+            // }
+            if(newOperation[0].isPraised) {
+                this.$refs.praise[index].classList.add('redColor')
+                this.$refs.Count[index].innerHTML++
+            }else {
+                this.$refs.praise[index].classList.remove('redColor')
+                this.$refs.Count[index].innerHTML--
+            }
+        }
       },
       methods: {
         getVideos () {
@@ -69,7 +106,8 @@
         ...mapActions([
           'video',
           'commentBack',
-          'saveCurrentVideoList'
+          'saveCurrentVideoList',
+          'saveOperationList'
         ]),
         // 上拉加载新数据
         upLoad () {
@@ -91,21 +129,37 @@
         avatar () {
                 // 去up主页
         },
+        // //加载页面的时候默认操作
+        // Operation() {
+        //
+        // },
         praisedCount (item, index) {
-          let isPraised = item.data.praised
-            console.log(isPraised)
-          if (isPraised) {
+          let obj = {}
+          obj.id = item.data.vid
+          obj.isSubscribed = item.data.subscribed
+          obj.followed = item.data.creator.followed
+          let isPra = this.$refs.praise[index].className === 'wrap-bottom-left redColor'
+          if (isPra) {
               this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
                   if (res.data.code === 200) {
-                      this.$refs.praise[index].style.color = ''
-                      this.$refs.Count[index].innerHTML--
+                      // this.$refs.praise[index].classList.remove('redColor')
+                      // this.$refs.Count[index].innerHTML--
+                      obj.isPraised = false
+                      this.saveOperationList(obj)
+
+                      // saveOperation(obj)
+                      // this.isPraiseing = false
                   }
               })
           } else {
             this.$api.likes.isLike(1, 5, item.data.vid).then(res => {
               if (res.data.code === 200) {
-                this.$refs.praise[index].style.color = 'red'
-                this.$refs.Count[index].innerHTML++
+                // this.$refs.praise[index].classList.add('redColor')
+                // this.$refs.Count[index].innerHTML++
+                obj.isPraised = true
+                // saveOperation(obj)
+                this.saveOperationList(obj)
+                  // this.isPraiseing = true
               }
             })
           }
@@ -121,6 +175,12 @@
           let currentVideo = this.videos[index].data
           currentVideo._currentTime = 0
           this.saveCurrentVideoList(currentVideo)
+
+          // let obj = {}
+          // obj.id = item.data.vid
+          // obj.isSubscribed = item.data.subscribed
+          // obj.followed = item.data.creator.followed
+
         },
         more () {
                 // 更多
@@ -204,5 +264,7 @@
           border-right: 17px solid transparent
           border-bottom: 17px solid transparent
           border-top:17px solid transparent
-</style>
 
+    .redColor
+      color: red
+</style>

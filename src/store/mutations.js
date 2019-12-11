@@ -47,6 +47,9 @@ const mutations = {
   },
   [types.SET_CURRENT_VIDEO] (state, currentVideo) {
     state.currentVideo = currentVideo
+  },
+  [types.SET_OPERATION] (state, operation) {
+    state.operation = operation
   }
 }
 export default mutations

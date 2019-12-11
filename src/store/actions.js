@@ -1,5 +1,5 @@
 import * as types from './mutations-types'
-import { saveCollectVideo,deleteCollectVideo,saveCurrentVideo,deleteCurrentVideo } from '../common/js/goodstorage'
+import { saveCollectVideo,deleteCollectVideo,saveCurrentVideo,deleteCurrentVideo,saveOperation,deleteOperation } from '../common/js/goodstorage'
 
 
 function findIndex (list, video) {
@@ -59,4 +59,12 @@ export const saveCurrentVideoList = function ({commit, state}, currentVideo) {
 
 export const deleteCurrentVideoList = function ({commit, state}, currentVideo) {
   commit(types.SET_CURRENT_VIDEO, deleteCurrentVideo(currentVideo))
+}
+//资源操作，点赞收藏等
+export const saveOperationList = function ({commit, state}, operation) {
+  commit(types.SET_OPERATION, saveOperation(operation))
+}
+
+export const deleteOperationList = function ({commit, state}, operation) {
+  commit(types.SET_OPERATION, deleteOperation(operation))
 }

@@ -14,6 +14,7 @@ const state = {
   videoGroupId: 0,
   videoState: [{vid: '', praise: false, collection: false, share: false}], // 视频资源是否操作了
   videoCollectionsList:[],
-  currentVideo:[]
+  currentVideo:[],
+  operation:[]
 }
 export default state

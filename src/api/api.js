@@ -140,6 +140,25 @@ const likes = {
     return axios.get(`${base}/comment/like?type=6&cid=${cid}&threadId=${threadId}&t=${is}`)
   }
 }
+//收藏功能
+const subs = {
+  // 资源点赞( MV,电台,视频) t: 操作,1 为点赞,其他未取消点赞
+  isVideoSub (is, id) {
+    return axios.get(`${base}/video/sub?t=${is}&id=${id}`)
+  },
+  // 给动态点赞
+  dynamic (is, threadId) {
+    return axios.get(`${base}/resource/like?t=${is}&type=6&threadId=${threadId}`)
+  },
+  // 给评论点赞
+  commentLike (id, cid, is, type) {
+    return axios.get(`${base}/comment/like?id=${id}&cid=${cid}&t=${is}&type=${type}`)
+  },
+  // 给动态评论点赞
+  commentDynamic (cid, threadId, is) {
+    return axios.get(`${base}/comment/like?type=6&cid=${cid}&threadId=${threadId}&t=${is}`)
+  }
+}
 
 export default {
   login,
@@ -147,5 +166,6 @@ export default {
   video,
   users,
   playlists,
-  likes
+  likes,
+  subs
 }
