@@ -3,7 +3,7 @@
     <div class="flex-div" >
       <div class="container" v-for="(item, index) in videos" :key="item.data.vid">
         <div class="wrap">
-          <div class="wrap-top" @click="wonderfulVideo(item.data.vid)">
+          <div class="wrap-top" @click="wonderfulVideo(index)">
             <div class="wrapper" :style="{backgroundImage:`url( ${item.data.coverUrl} )` }">
               <div class="wrapper-left">
                 <i class="iconfont iconCell-PlayVolume"></i>
@@ -21,10 +21,10 @@
             </div>
           </div>
 
-          <div class="wrap-bottom" @click="details(item.data.vid)">
-            <div class="wrap-bottom-left" @click.stop="praisedCount(item, index)" ref="praise">
-              <i class="iconfont iconzan1" :style="[item.data.praised === true ? {color:'red'} : {color:''}]"></i>
-              <span ref="Count" :style="[item.data.praised === true ? {color:'red'} : {color:''}]">{{item.data.praisedCount}}</span>
+          <div class="wrap-bottom" @click="details(item.data.vid,index)">
+            <div class="wrap-bottom-left" @click.stop="praisedCount(item, index)" ref="praise" :class="[item.data.praised === true ? redColor : '']">
+              <i class="iconfont iconzan1"></i>
+              <span ref="Count">{{item.data.praisedCount}}</span>
             </div>
 
             <div class="wrap-bottom-center">
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+    import { saveOperation, deleteOperation, loadOperation} from '../../common/js/goodstorage'
     import {mapActions, mapGetters} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
     import {durationsTransformation} from '../../assets/js/timestamp'
@@ -50,7 +51,8 @@
       name: 'videos.vue',
       data () {
         return {
-          videos: []
+          videos: [],
+          redColor:'redColor'
         }
       },
       created () {
@@ -58,10 +60,29 @@
       },
       computed: {
         ...mapGetters([
-          'videoLikesList'
-        ]),
+                'operation'
+          ]),
+        Operation() {
+          return this.operation
+        }
       },
-      watch: {
+      watch:{
+        Operation(newOperation) {
+            let index = this.videos.findIndex(item => {
+                return item.data.vid === this.operation[0].id
+            })
+            if(newOperation[0].id === this.videos[index].data.vid) {
+                if(newOperation[0].isPraised) {
+                    this.$refs.praise[index].classList.add('redColor')
+                    this.$refs.Count[index].innerHTML++
+                    console.log('详情加')
+                }else {
+                    this.$refs.praise[index].classList.remove('redColor')
+                    this.$refs.Count[index].innerHTML--
+                    console.log('详情减')
+                }
+            }
+        }
       },
       methods: {
         getVideos () {
@@ -76,20 +97,22 @@
         ...mapActions([
           'video',
           'commentBack',
-          'saveFavoriteList',
-          'deleteFavoriteList'
+          'saveCurrentVideoList',
+          'saveOperationList'
         ]),
-
         // 上拉加载新数据
         upLoad () {
 
         },
-        wonderfulVideo () {
+        wonderfulVideo (index) {
           this.commentBack({back: false})
           this.video({
             videoGroupId: 9102
           })
-        // 去精彩视频页面并自动播放该视频
+          let currentVideo = this.videos[index].data
+          currentVideo._currentTime = 0
+          this.saveCurrentVideoList(currentVideo)
+            // 去精彩视频页面并自动播放该视频
           this.$router.push({
             path: `videoslide`
           })
@@ -97,26 +120,43 @@
         avatar () {
                 // 去up主页
         },
+        // //加载页面的时候默认操作
+        // Operation() {
+        //
+        // },
         praisedCount (item, index) {
-          let isPraised = item.data.praised
-            console.log(isPraised)
-          if (isPraised) {
+          let obj = {}
+          obj.id = item.data.vid
+          obj.isSubscribed = item.data.subscribed
+          obj.followed = item.data.creator.followed
+          let isPra = this.$refs.praise[index].className === 'wrap-bottom-left redColor'
+          if (isPra) {
               this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
                   if (res.data.code === 200) {
-                      this.$refs.praise[index].style.color = ''
-                      this.$refs.Count[index].innerHTML--
+                      // this.$refs.praise[index].classList.remove('redColor')
+                      // this.$refs.Count[index].innerHTML--
+                      obj.isPraised = false
+
+                      this.saveOperationList(obj)
+
+                      // saveOperation(obj)
+                      // this.isPraiseing = false
                   }
               })
           } else {
             this.$api.likes.isLike(1, 5, item.data.vid).then(res => {
               if (res.data.code === 200) {
-                this.$refs.praise[index].style.color = 'red'
-                this.$refs.Count[index].innerHTML++
+                // this.$refs.praise[index].classList.add('redColor')
+                // this.$refs.Count[index].innerHTML++
+                obj.isPraised = true
+                // saveOperation(obj)
+                this.saveOperationList(obj)
+                  // this.isPraiseing = true
               }
             })
           }
         },
-        details (vid) {
+        details (vid,index) {
                 // 视频详情页，自动把底部评论提前
           this.$router.push({
             path: `videoplayer`
@@ -124,6 +164,15 @@
             // 给vuex提交vid，确定当前要播放视频id
           this.video({vid})
           this.commentBack({back: true})
+          let currentVideo = this.videos[index].data
+          currentVideo._currentTime = 0
+          this.saveCurrentVideoList(currentVideo)
+
+          // let obj = {}
+          // obj.id = item.data.vid
+          // obj.isSubscribed = item.data.subscribed
+          // obj.followed = item.data.creator.followed
+
         },
         more () {
                 // 更多
@@ -207,5 +256,7 @@
           border-right: 17px solid transparent
           border-bottom: 17px solid transparent
           border-top:17px solid transparent
-</style>
 
+    .redColor
+      color: red
+</style>

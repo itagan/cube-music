@@ -42,9 +42,14 @@ const mutations = {
   [types.SET_VIDEO_STATE] (state, videoState) {
     state.videoState = videoState
   },
-  [types.SET_VIDEO_LIKES_LIST] (state, list) {
-    state.videoLikesList = list
+  [types.SET_VIDEO_COLLECTIONS_LIST] (state, list) {
+    state.videoCollectionsList = list
+  },
+  [types.SET_CURRENT_VIDEO] (state, currentVideo) {
+    state.currentVideo = currentVideo
+  },
+  [types.SET_OPERATION] (state, operation) {
+    state.operation = operation
   }
 }
-
 export default mutations

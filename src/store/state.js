@@ -1,3 +1,4 @@
+import { loadCurrentVideo } from '../common/js/goodstorage'
 const state = {
   token: '', // 网站token
   loginState: false,
@@ -12,6 +13,8 @@ const state = {
   uid: 477726475, // 用户Id信息
   videoGroupId: 0,
   videoState: [{vid: '', praise: false, collection: false, share: false}], // 视频资源是否操作了
-  videoLikesList:[],
+  videoCollectionsList:[],
+  currentVideo:[],
+  operation:[]
 }
 export default state

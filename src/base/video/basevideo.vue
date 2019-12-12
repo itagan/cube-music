@@ -68,8 +68,8 @@
         </div>
 
         <div class="wrap-bottom-left" @click.stop="praisedCount(item)" ref="praise">
-          <i class="iconfont iconzan1" :style="[item.data.praised === true ? {color:'red'} : {color:''}]"></i>
-          <span :style="[item.data.praised === true ? {color:'red'} : {color:''}]" ref="Count">{{item.data.praisedCount}}</span>
+          <i class="iconfont iconzan1" :style="[item.data.praised === true ? redColor : '']"></i>
+          <span :style="[item.data.praised === true ? redColor : '']" ref="Count">{{item.data.praisedCount}}</span>
         </div>
 
         <div class="wrap-bottom-center" @click="details(item.data.vid)">
@@ -114,7 +114,8 @@
           durationHistory: [], // 存放本视频流页面前后视频播放进度的历史记录
           timerOne: null,
           timerTwo: null,
-          timerThree: null
+          timerThree: null,
+          redColor:'redColor'
         }
       },
       props: {
@@ -148,8 +149,12 @@
           'currentVideo',
           'videoCurrentTime',
           'currentIndex',
-          'back'
-        ])
+          'back',
+          'operation'
+        ]),
+        Operation() {
+            return this.operation
+        }
       },
       watch: {
         percent (newPercent) {
@@ -189,11 +194,20 @@
               this.item.isPlay = false
             }
           }
-        }
+        },
+          Operation(newOperation) {
+
+              if(newOperation[0].isPraised) {
+                  this.$refs.praise.classList.add('redColor')
+                  this.$refs.Count.innerHTML++
+              }else {
+                  this.$refs.praise.classList.remove('redColor')
+                  this.$refs.Count.innerHTML--
+              }
+          }
       },
       methods: {
         playVideo (item, index, e) {
-            console.log(item)
           this.top = this.$refs.nav.getBoundingClientRect().top // 播放盒子距离顶部距离。
           this.videoDom = this.$refs.video // 获取当前播放的视频DOM
           this.allVideoDom = document.querySelectorAll('video') // 获取所有真实视频DOM
@@ -359,19 +373,48 @@
                 // 去up主页
         },
         praisedCount (item) {
-          let isPraised = item.data.praised
-          if (isPraised) {
+          // let isPraised = item.data.praised
+          // if (isPraised) {
+          //     this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
+          //         if (res.data.code === 200) {
+          //             this.$refs.praise.style.color = ''
+          //             this.$refs.Count.innerHTML--
+          //         }
+          //     })
+          // } else {
+          //     this.$api.likes.isLike(1, 5, item.data.vid).then(res => {
+          //         if (res.data.code === 200) {
+          //             this.$refs.praise.style.color = 'red'
+          //             this.$refs.Count.innerHTML++
+          //         }
+          //     })
+          // }
+          let obj = {}
+          obj.id = item.data.vid
+          obj.isSubscribed = item.data.subscribed
+          obj.followed = item.data.creator.followed
+          let isPra = this.$refs.praise.className === 'wrap-bottom-left redColor'
+          if (isPra) {
               this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
                   if (res.data.code === 200) {
-                      this.$refs.praise.style.color = ''
-                      this.$refs.Count.innerHTML--
+                      // this.$refs.praise[index].classList.remove('redColor')
+                      // this.$refs.Count[index].innerHTML--
+                      obj.isPraised = false
+                      this.saveOperationList(obj)
+
+                      // saveOperation(obj)
+                      // this.isPraiseing = false
                   }
               })
           } else {
               this.$api.likes.isLike(1, 5, item.data.vid).then(res => {
                   if (res.data.code === 200) {
-                      this.$refs.praise.style.color = 'red'
-                      this.$refs.Count.innerHTML++
+                      // this.$refs.praise[index].classList.add('redColor')
+                      // this.$refs.Count[index].innerHTML++
+                      obj.isPraised = true
+                      // saveOperation(obj)
+                      this.saveOperationList(obj)
+                      // this.isPraiseing = true
                   }
               })
           }
@@ -458,7 +501,10 @@
         ...mapActions([
           'video',
           'setCurrentTimes',
-          'commentBack'
+          'commentBack',
+          'saveCurrentVideoList',
+          'saveOperationList'
+
         ]),
         ...mapMutations({
           setVideoList: 'SET_VIDEO_LIST',
@@ -643,6 +689,8 @@
             width:35px
             text-align:center
 
+      .redColor
+        color: red
 
       .touch-action
         none

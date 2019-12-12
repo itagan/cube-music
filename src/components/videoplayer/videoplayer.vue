@@ -1,6 +1,6 @@
 <template>
   <div class="wraps">
-    <base-player :detail="detail" :videoUrl="videoUrl" ></base-player>
+    <base-player :detail="detail" :videoUrl="videoUrl" ref="video"></base-player>
     <transition name="fade-video" class="fadeVideo">
 
       <div v-if="!this.detail.videoGroup" class="pullloadtop">
@@ -40,13 +40,13 @@
                 <span class="titledesc">{{detail.description}}</span>
               </div>
               <ul class="titleBottom">
-                <li @click.stop="praisedCount(detail)" ref="praise">
-                  <i class="iconfont iconzan1" :style="[detail.praised === true ? {color:'red'} : {color:''}]"></i>
-                  <span :style="[detail.praised === true ? {color:'red'} : {color:''}]" ref="Count">{{detail.praisedCount}}</span>
+                <li @click.stop="praisedCount(detail)" ref="praise" :class="colorToggle">
+                  <i class="iconfont iconzan1"></i>
+                  <span ref="Count">{{detail.praisedCount}}</span>
                 </li>
-                <li>
-                  <i class="iconfont iconshoucang"></i>
-                  <span>{{detail.subscribeCount}}</span>
+                <li @click.stop="toSubscribed(detail)" ref="sub">
+                  <i class="iconfont" :class="iconSubscribed"></i>
+                  <span ref="Sub">{{detail.subscribeCount}}</span>
                 </li>
                 <li>
                   <i class="iconfont iconpinglun" @click="toComment"></i>
@@ -114,7 +114,8 @@
 
 
 <script type="text/ecmascript-6">
-    import {mapGetters, mapMutations} from 'vuex'
+    import { deleteCollectVideo, saveOperation, deleteOperation, loadOperation } from '../../common/js/goodstorage'
+    import {mapGetters, mapMutations, mapActions} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
     import {timestamp, durationsTransformation} from '../../assets/js/timestamp'
     import basePlayer from '../../base/video/baseplayer'
@@ -146,7 +147,12 @@ export default {
           titleHeight: 35, // 标题高度
           timerOne: null,
           timerTwo: null,
-          timerThree: null
+          timerThree: null,
+          isSubscribed:false,
+          isPraised:false,
+          redColor:'redColor',
+          praisedCounts:0
+
         }
       },
       components: {
@@ -160,26 +166,26 @@ export default {
         icon () {
           return this.show ? 'iconshixinxiasanjiao' : 'iconshangsanjiao'
         },
+        iconSubscribed () {
+            return this.isSubscribed ? 'iconshoucangchenggong' : 'iconshoucang'
+        },
+        colorToggle () {
+          return this.isPraised === true ? 'redColor' : ''
+        },
         ...mapGetters([
-          'currentVid',
           'limit',
           'back',
-          'currentUrl',
-          'videoState'
+          'currentVideo',
+          'operation'
         ]),
-        CurrentVid () {
-          return this.currentVid
+        Operation() {
+          return this.operation
+        },
+        CurrentVideo () {
+          return this.currentVideo
         },
         Back () {
           return this.back
-        },
-        VideoState () {
-          if (this.videoState.length === 0) return
-
-          this.newIndex = this.videoState.findIndex((item, index) => {
-            return item.vid === this.currentVid
-          })
-          return this.newIndex
         },
         options () {
           return {
@@ -201,11 +207,13 @@ export default {
       created () {
         this.getVideoUrl()
         this.getVideo()
+        this.defaultOperation()
       },
       watch: {
-        CurrentVid () {
+        CurrentVideo () {
           this.getVideoUrl()
           this.getVideo()
+          // this.defaultOperation()
         },
         Back (newBack) {
           this.$nextTick(() => {
@@ -215,6 +223,21 @@ export default {
               this.backtop()
             }
           })
+        },
+        Operation(newOperation) {
+            // this.defaultOperation()
+
+            if(newOperation[0].id === this.currentVideo[0].vid) {
+                if(newOperation[0].isPraised) {
+                    this.$refs.praise.classList.add('redColor')
+                    this.$refs.Count.innerHTML++
+                    console.log('详情加')
+                }else {
+                    this.$refs.praise.classList.remove('redColor')
+                    this.$refs.Count.innerHTML--
+                    console.log('详情减')
+                }
+            }
         }
       },
       methods: {
@@ -243,26 +266,29 @@ export default {
           }
         },
         getVideo () {
-          if (!this.currentVid) {
-            this.$router.push(`/find`)
-            return
-          }
-
-          this.$api.video.video(this.currentVid).then(res => {
-            this.detail = res.data.data
-            this.detail.playTime = serializeNumber(res.data.data.playTime)
-            this.detail.publishTime = timestamp(this.detail.publishTime)
-            this.detail.durationms = durationsTransformation(this.detail.durationms)
-
-            console.log(this.detail)
+          this.$api.video.video(this.currentVideo[0].vid).then(res => {
+          this.detail = res.data.data
+          this.detail.playTime = serializeNumber(res.data.data.playTime)
+          this.detail.publishTime = timestamp(this.detail.publishTime)
+          this.detail.durationms = durationsTransformation(this.detail.durationms)
           })
         },
             // 获取播放地址
         getVideoUrl () {
-          this.$api.video.videourl(this.currentVid).then(res => {
+          this.$api.video.videourl(this.currentVideo[0].vid).then(res => {
             this.videoUrl = res.data.urls[0].url
-            console.log(this.videourl)
           })
+        },
+        //加载页面时判断是否操作过如点赞
+        defaultOperation () {
+          this.isSubscribed = this.currentVideo[0].subscribed
+            if(this.operation.length && this.operation[0].id === this.currentVideo[0].vid) {
+                this.isPraised = this.operation[0].isPraised
+            }else {
+                this.isPraised = this.currentVideo[0].praised
+                console.log('该我了')
+            }
+          // this.isPraised = this.operation[0].isPraised
         },
             // 展开还是隐藏视频描述等
         toggle () {
@@ -278,7 +304,7 @@ export default {
         },
         recommendvideo (vid) {
           this.getVideo()
-          this.getvVideoUrl()
+          this.getVideoUrl()
           this.reload() // 刷新本页面
             // this.$nextTick( this.getVideo())
             // 把vuex的数据还原
@@ -317,6 +343,8 @@ export default {
         commentTop () {
           this.$nextTick(() => {
             this.$refs.scroll.scrollToElement('.here', 200, 0, -50)
+              // this.$refs.video.currentTime = this.currentVideo[0]._currentTime
+              // this.$refs.video.currentTime.play()
           })
         },
         tagBacktop () {
@@ -347,50 +375,119 @@ export default {
         updateTime (e) {
           this.currentTime = e.target.currentTime
         },
-        Durationms (durationms) {
-          durationms = durationms | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
-          let minute = durationms / 60 | 0
-          minute = minute < 10 ? '0' + minute : minute
-            // let second = _pad(durationms) % 60;
-          let second = durationms % 60
-          second = second < 10 ? '0' + second : second// 秒数前面补零操作
-          return `${minute}:${second}`
-        },
         praisedCount (detail) {
-          let isPraised = detail.praised
-          if (isPraised) {
+          if(this.operation.length && this.operation[0].id === detail.vid) {
+              this.isPraised = this.operation[0].isPraised
+          }else {
+              this.isPraised = this.currentVideo[0].praised
+              console.log('还不存在')
+          }
+          // this.isPraised = this.operation[0].isPraised
+
+
+          let obj = {}
+          obj.id = detail.vid
+          obj.isSubscribed = detail.subscribed
+          obj.followed = detail.creator.followed
+
+          if (this.isPraised) {
               this.$api.likes.isLike(0, 5, detail.vid).then(res => {
                   if (res.data.code === 200) {
-                      this.$refs.praise.style.color = ''
-                      this.$refs.Count.innerHTML--
+                      // this.$refs.praise.classList.remove('redColor')
+                      // this.$refs.Count.innerHTML--
+                      obj.isPraised = false
+                      // saveOperation(obj)
+                      this.saveOperationList(obj)
+                      this.isPraised = false
                   }
               })
           } else {
               this.$api.likes.isLike(1, 5, detail.vid).then(res => {
                   if (res.data.code === 200) {
-                      this.$refs.praise.style.color = 'red'
-                      this.$refs.Count.innerHTML++
+                      // this.$refs.praise.classList.add('redColor')
+                      // this.$refs.Count.innerHTML++
+                      obj.isPraised = true
+                      // saveOperation(obj)
+                      this.saveOperationList(obj)
+                      this.isPraised = true
                   }
               })
           }
         },
+        toSubscribed(detail) {
+            if(this.isSubscribed) {
+                this.$createDialog({
+                    type: 'confirm',
+                    title: '确定不再收藏该视频？',
+                    confirmBtn: {
+                        text: '确定',
+                        active: true,
+                        disabled: false,
+                        href: 'javascript:;'
+                    },
+                    cancelBtn: {
+                        text: '取消',
+                        active: false,
+                        disabled: false,
+                        href: 'javascript:;'
+                    },
+                    onConfirm: () => {
+                        this.$api.subs.isVideoSub(0, detail.vid).then(res => {
+                            if(res.status === 200) {
+                                this.$createToast({
+                                    type: 'text',
+                                    time: 1000,
+                                    txt: '视频已取消收藏'
+                                }).show()
+                                this.$refs.Sub.innerHTML--
+                                this.isSubscribed = false
+                                this.deleteVideoCollectionsList(detail)
+                            }
+                        })
+                    }
+                }).show()
+            }else {
+                this.$api.subs.isVideoSub(1, detail.vid).then(res => {
+                    if(res.status === 200) {
+                        const toast = this.$createToast({
+                            txt: '视频已收藏',
+                            type: 'correct',
+                            time: 2000,
+                        })
+                        toast.show()
+                        this.$refs.Sub.innerHTML++
+                        this.isSubscribed = true
+                        this.saveVideoCollectionsList(detail)
+                    }
+                })
+            }
+        },
           ...mapMutations({
           setLimit: 'SET_LIMIT',
           setCommentBack: 'SET_BACK'
-        })
+        }),
+          ...mapActions([
+            'saveOperationList',
+            'saveVideoCollectionsList',
+            'deleteVideoCollectionsList'
+        ]),
       },
       mounted () {
             // 确保DOM结构渲染完成才能滚动。延时确保滚动结构距离正常
         this.$nextTick(() => {
           setTimeout(() => {
             this.commentBack()
+              // this.$refs.Count.innerHTML =  this.currentVideo[0].praisedCount
+
+              this.$refs.video.currentTime = this.currentVideo[0]._currentTime
           }, 1000)
         })
       },
       destroyed () {
             // 销毁本页面时候，把vuex的一些重置
         this.setCommentBack(false)
-        console.log('销毁')
+        this.deleteCollectVideo()
+        this.deleteOperationList()
       }
 
     }
@@ -590,7 +687,8 @@ export default {
           color:red
         span
           color:gray
-
+  .redColor
+    color: red !important
 </style>
 
 

@@ -8,7 +8,7 @@
         @pulling-down="onPullingDown"
         @pulling-up="onPullingUp">
         <ul>
-          <li v-for="(item,index) in videos" :key="item.data.vid">
+          <li v-for="(item,index) in videos" :key="item.data.vid" @click="toCurrentVideo(index)">
             <base-video
               :videos="videos"
               :item="item"
@@ -66,6 +66,7 @@
 </template>
 
 <script>
+      import {mapActions} from 'vuex'
       import baseVideo from '../../base/video/basevideo'
       import {serializeNumber} from '../../assets/js/number'
       import {durationsTransformation} from '../../assets/js/timestamp'
@@ -91,7 +92,6 @@
             secondStop: 0,
             scrollEvents: ['scroll'],
             pullDownY: 0
-
           }
         },
         props: {
@@ -157,7 +157,15 @@
           },
           scrollHandler (pos) {
             this.pullDownY = -pos.y
-          }
+          },
+          toCurrentVideo (index) {
+              //不直接用item是因为额外添加了随时切换的isPlay属性导致vuex警告报错
+            let currentVideo = this.videos[index].data
+            this.saveCurrentVideoList(currentVideo)
+          },
+          ...mapActions([
+              'saveCurrentVideoList'
+          ]),
         }
       }
 </script>

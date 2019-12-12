@@ -88,7 +88,8 @@
           durationHistory: [],
           timerOne: null,
           timerTwo: null,
-          timerThree: null
+          timerThree: null,
+          isAutoPlay:true
         }
       },
       props: {
@@ -113,8 +114,13 @@
           'currentVideo',
           'videoCurrentTime',
           'currentIndex',
-          'back'
-        ])
+          'back',
+          'currentVideo',
+          'operation'
+        ]),
+          CurrentVideo () {
+              return this.currentVideo
+          },
       },
       watch: {
         percent (newPercent) {
@@ -124,7 +130,13 @@
             this.$refs.speed.style.width = `${offsetWidth}px`
             this.$refs.controlBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)`
           }
-        }
+        },
+          // CurrentVideo() {
+          //     this.$nextTick(() => {
+          //         this.autoPlay()
+          //         console.log('播放')
+          //     })
+          // }
       },
       methods: {
         playVideo (e) {
@@ -135,6 +147,13 @@
           }
           if (this.timerTwo) {
             clearTimeout(this.timerTwo)
+          }
+          console.log(this.isAutoPlay)
+          console.log(this.currentVideo[0]._currentTime)
+          if(this.currentVideo[0]._currentTime && this.isAutoPlay) {
+            // this.videoDom.currentTime = this.currentVideo[0]._currentTime
+            this.autoPlay()
+            this.isAutoPlay = false
           }
           if (this.currentTime === 0) {
             this.videoDom.play()
@@ -207,6 +226,10 @@
           this.currentTime = e.target.currentTime // 播放的时候派发事件，能够获得当前播放时间 ***注意写法
           this.speedWidth = this.percent * 375
         },
+        autoPlay() {
+            this.videoDom.currentTime = this.currentVideo[0]._currentTime
+            this.videoDom.play()
+        },
         Durations (durations) {
           durations = durations | 0
           let minute = durations / 60 | 0
@@ -273,12 +296,17 @@
           this.$router.go(-1)
           setTimeout(() => {
             this.setCommentBack(false)
+              this.isAutoPlay = true
+              // let currentVideo = this.currentVideo
+              // currentVideo._currentTime = this.currentTime
+              // this.saveCurrentVideoList(currentVideo)
           }, 100)
         },
         ...mapActions([
           'video',
           'setCurrentTimes',
-          'commentBack'
+          'commentBack',
+          'saveCurrentVideoList'
         ]),
         ...mapMutations({
           setVideoList: 'SET_VIDEO_LIST',

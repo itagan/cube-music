@@ -75,7 +75,8 @@ const errorHandle = (status, other) => {
       toast('请求的资源不存在')
       break
     default:
-      console.log(other)
+      // console.log(other)
+      toast(other)
   }
 }
 
@@ -113,7 +114,7 @@ instance.interceptors.response.use(
     if (response) {
       // 请求已发出，但是不在2xx的范围
       errorHandle(response.status, response.data.message)
-      return Promise.reject(response)
+      // return Promise.reject(response)
     } else {
       // 处理断网的情况
       // eg:请求超时或断网时，更新state的network状态
@@ -122,7 +123,7 @@ instance.interceptors.response.use(
       if (!window.navigator.onLine) {
         store.commit('changeNetwork', false)
       } else {
-        return Promise.reject(error)
+        // return Promise.reject(error)
       }
     }
   })
