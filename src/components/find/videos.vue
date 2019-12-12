@@ -71,25 +71,16 @@
             let index = this.videos.findIndex(item => {
                 return item.data.vid === this.operation[0].id
             })
-            console.log(index)
-            // if(index) {
-            //     if(this.operation[0].isPraised) {
-            //         this.$refs.praise[index].classList.add('redColor')
-            //         this.$refs.Count[index].innerHTML++
-            //     }else {
-            //         this.$refs.praise[index].classList.remove('redColor')
-            //         this.$refs.Count[index].innerHTML--
-            //     }
-            // }else {
-            //     this.$refs.praise[index].classList.add('redColor')
-            //     this.$refs.Count[index].innerHTML++
-            // }
-            if(newOperation[0].isPraised) {
-                this.$refs.praise[index].classList.add('redColor')
-                this.$refs.Count[index].innerHTML++
-            }else {
-                this.$refs.praise[index].classList.remove('redColor')
-                this.$refs.Count[index].innerHTML--
+            if(newOperation[0].id === this.videos[index].data.vid) {
+                if(newOperation[0].isPraised) {
+                    this.$refs.praise[index].classList.add('redColor')
+                    this.$refs.Count[index].innerHTML++
+                    console.log('详情加')
+                }else {
+                    this.$refs.praise[index].classList.remove('redColor')
+                    this.$refs.Count[index].innerHTML--
+                    console.log('详情减')
+                }
             }
         }
       },
@@ -145,6 +136,7 @@
                       // this.$refs.praise[index].classList.remove('redColor')
                       // this.$refs.Count[index].innerHTML--
                       obj.isPraised = false
+
                       this.saveOperationList(obj)
 
                       // saveOperation(obj)

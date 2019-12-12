@@ -150,7 +150,8 @@ export default {
           timerThree: null,
           isSubscribed:false,
           isPraised:false,
-          redColor:'redColor'
+          redColor:'redColor',
+          praisedCounts:0
 
         }
       },
@@ -212,6 +213,7 @@ export default {
         CurrentVideo () {
           this.getVideoUrl()
           this.getVideo()
+          // this.defaultOperation()
         },
         Back (newBack) {
           this.$nextTick(() => {
@@ -223,14 +225,18 @@ export default {
           })
         },
         Operation(newOperation) {
-            if(newOperation[0].isPraised) {
-                this.$refs.praise.classList.add('redColor')
-                this.$refs.Count.innerHTML++
-                console.log('详情加')
-            }else {
-                this.$refs.praise.classList.remove('redColor')
-                this.$refs.Count.innerHTML--
-                console.log('详情减')
+            // this.defaultOperation()
+
+            if(newOperation[0].id === this.currentVideo[0].vid) {
+                if(newOperation[0].isPraised) {
+                    this.$refs.praise.classList.add('redColor')
+                    this.$refs.Count.innerHTML++
+                    console.log('详情加')
+                }else {
+                    this.$refs.praise.classList.remove('redColor')
+                    this.$refs.Count.innerHTML--
+                    console.log('详情减')
+                }
             }
         }
       },
@@ -260,11 +266,11 @@ export default {
           }
         },
         getVideo () {
-            this.$api.video.video(this.currentVideo[0].vid).then(res => {
-            this.detail = res.data.data
-            this.detail.playTime = serializeNumber(res.data.data.playTime)
-            this.detail.publishTime = timestamp(this.detail.publishTime)
-            this.detail.durationms = durationsTransformation(this.detail.durationms)
+          this.$api.video.video(this.currentVideo[0].vid).then(res => {
+          this.detail = res.data.data
+          this.detail.playTime = serializeNumber(res.data.data.playTime)
+          this.detail.publishTime = timestamp(this.detail.publishTime)
+          this.detail.durationms = durationsTransformation(this.detail.durationms)
           })
         },
             // 获取播放地址
@@ -273,10 +279,9 @@ export default {
             this.videoUrl = res.data.urls[0].url
           })
         },
-        //加载页面时判断是否操作过如点赞收藏
+        //加载页面时判断是否操作过如点赞
         defaultOperation () {
           this.isSubscribed = this.currentVideo[0].subscribed
-          // this.isPraised = this.currentVideo[0].praised
             if(this.operation.length && this.operation[0].id === this.currentVideo[0].vid) {
                 this.isPraised = this.operation[0].isPraised
             }else {
@@ -436,6 +441,7 @@ export default {
                                 }).show()
                                 this.$refs.Sub.innerHTML--
                                 this.isSubscribed = false
+                                this.deleteVideoCollectionsList(detail)
                             }
                         })
                     }
@@ -445,11 +451,13 @@ export default {
                     if(res.status === 200) {
                         const toast = this.$createToast({
                             txt: '视频已收藏',
-                            type: 'correct'
+                            type: 'correct',
+                            time: 2000,
                         })
                         toast.show()
                         this.$refs.Sub.innerHTML++
                         this.isSubscribed = true
+                        this.saveVideoCollectionsList(detail)
                     }
                 })
             }
@@ -469,6 +477,8 @@ export default {
         this.$nextTick(() => {
           setTimeout(() => {
             this.commentBack()
+              // this.$refs.Count.innerHTML =  this.currentVideo[0].praisedCount
+
               this.$refs.video.currentTime = this.currentVideo[0]._currentTime
           }, 1000)
         })
@@ -476,7 +486,8 @@ export default {
       destroyed () {
             // 销毁本页面时候，把vuex的一些重置
         this.setCommentBack(false)
-        deleteCollectVideo()
+        this.deleteCollectVideo()
+        this.deleteOperationList()
       }
 
     }
