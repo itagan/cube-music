@@ -77,7 +77,7 @@
 
 <script>
     import MySearch from '../../base/search/search'
-    import albumBase from "../../base/swiper/albumbase";
+    import albumBase from "../../base/swiper/albumbase"
     export default {
         name: "album.vue",
         components: {
@@ -97,6 +97,7 @@
                 txt: '更新成功'
               },
               pullUpLoad: true,
+              scrollbar: true,
               click: false // 解决点击事件被触发两次的问题
             },
             secondStop: 0,

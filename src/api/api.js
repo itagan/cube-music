@@ -161,6 +161,9 @@ const subs = {
   albums (offset = 0) {
     return axios.get(`${base}/album/sublist?offset=${offset}`)
   },
+  singers () {
+    return axios.get(`${base}/artist/sublist`)
+  },
 }
 
 

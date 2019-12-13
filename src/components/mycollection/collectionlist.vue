@@ -1,18 +1,21 @@
 <template>
   <div class="collection">
     <my-header></my-header>
-    <album></album>
+<!--    <album></album>-->
+    <singer></singer>
   </div>
 </template>
 
 <script>
     import myHeader from './header'
-    import Album from "./album";
+    import Album from "./album"
+    import Singer from './singer'
     export default {
         name: "myCollectionList.vue",
         components: {
             myHeader,
-            Album
+            Album,
+            Singer
         }
     }
 </script>
