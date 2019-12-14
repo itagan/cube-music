@@ -1,21 +1,18 @@
 <template>
   <div class="collection">
     <my-header></my-header>
-<!--    <album></album>-->
-    <singer></singer>
+    <slider></slider>
   </div>
 </template>
 
 <script>
     import myHeader from './header'
-    import Album from "./album"
-    import Singer from './singer'
+    import Slider from './slider'
     export default {
         name: "myCollectionList.vue",
         components: {
             myHeader,
-            Album,
-            Singer
+            Slider
         }
     }
 </script>
@@ -26,5 +23,6 @@
   .collection
     position: relative
     width:375px
-
+    /*.slide*/
+    /*  margin-top:50px*/
 </style>

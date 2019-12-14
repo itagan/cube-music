@@ -5,6 +5,7 @@
         :scroll-events="scrollEvents"
         :options="options"
         @scroll="scrollHandler"
+        @before-scroll-start = "beforeScrollStart"
         @pulling-down="onPullingDown"
         @pulling-up="onPullingUp">
         <div class="content">
@@ -101,7 +102,7 @@
               click: false // 解决点击事件被触发两次的问题
             },
             secondStop: 0,
-            scrollEvents: ['scroll'],
+            scrollEvents: ['scroll','before-scroll-start'],
             pullDownY: 0
           }
         },
@@ -117,8 +118,8 @@
           },
           getAlbums () {
             this.$api.subs.albums().then(res => {
-              console.log(res.data.data)
               this.albums = res.data.data
+              this.$emit('hasNumber',res.data.count)
             })
           },
           selectItem (id) {
@@ -135,7 +136,6 @@
 
           onPullingUp () {
             setTimeout(() => {
-              // this.getAlbums()
               const contentScroll = this.$refs.contentScroll
               contentScroll.forceUpdate()
               // contentScroll.refresh();
@@ -143,8 +143,10 @@
           },
           scrollHandler (pos) {
             this.pullDownY = -pos.y
+          },
+          beforeScrollStart() {
+              this.fake = false
           }
-
         }
     }
 </script>
@@ -152,7 +154,9 @@
 <style scoped lang="stylus" rel="stylesheet/stylus" >
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-
+   .content
+     height: 100%
+     overflow: hidden
     .album-search
       width:90%
       position:relative

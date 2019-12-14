@@ -14,17 +14,11 @@
           :fake="fake"
           @query="getQuery"
           @click.native="goToSearch"
-          class="singer-search"
+          class="my-search"
         ></my-search>
-        <ul class="my-singer">
-          <li v-for="item in singers" :key="item.id" @click="selectItem(item.id)">
-            <div class="li-left">
-              <img :src="item.picUrl" alt="">
-            </div>
-            <div class="li-right">
-              {{item.name}}
-            </div>
-            <span class="li-right-alias" v-if="item.alias.length" v-for="alia in item.alias">({{alia}})</span>
+        <ul class="my-video">
+          <li v-for="(item,index) in videos" :key="index" @click="selectItem(item.vid)">
+            <sub-video :item="item"></sub-video>
           </li>
         </ul>
       </div>
@@ -50,16 +44,17 @@
           </div>
         </div>
       </template>
-      <!--        <template slot="pullup" slot-scope="props">-->
-      <!--          <div v-if="props.pullUpLoad" class="pullload">-->
-      <!--            <template>-->
-      <!--                <span v-if="props.isPullUpLoad" class="load">-->
-      <!--                   <i class="iconfont iconyinletiaodongzhuangtai"></i>-->
-      <!--                  <span> 加载中...</span>-->
-      <!--                </span>-->
-      <!--            </template>-->
-      <!--          </div>-->
-      <!--        </template>-->
+
+      <template slot="pullup" slot-scope="props">
+        <div v-if="props.pullUpLoad" class="pullload">
+          <template>
+              <span v-if="props.isPullUpLoad" class="load">
+                 <i class="iconfont iconyinletiaodongzhuangtai"></i>
+                <span> 加载中...</span>
+              </span>
+          </template>
+        </div>
+      </template>
 
     </cube-scroll>
   </div>
@@ -67,71 +62,79 @@
 
 <script>
     import MySearch from '../../base/search/search'
-
+    import subVideo from '../../base/swiper/subvideo'
     export default {
-        name: "singer.vue",
+        name: "video.vue",
         components: {
-          MySearch,
+            MySearch,
+            subVideo
         },
         data () {
-          return {
-            placeholder: '搜索歌手',
-            fake:false,
-            singers:[],
-            options: {
-              pullDownRefresh: {
-                threshold: 60,
-                stopTime: 1000,
-                txt: '更新成功'
-              },
-              pullUpLoad: true,
-              scrollbar: true,
-              click: false // 解决点击事件被触发两次的问题
-            },
-            secondStop: 0,
-            scrollEvents: ['scroll','before-scroll-start'],
-            pullDownY: 0
-          }
+            return {
+                placeholder: '搜索视频',
+                fake:false,
+                videos:[],
+                options: {
+                    pullDownRefresh: {
+                        threshold: 60,
+                        stopTime: 1000,
+                        txt: '更新成功'
+                    },
+                    pullUpLoad: true,
+                    scrollbar: true,
+                    click: false // 解决点击事件被触发两次的问题
+                },
+                secondStop: 0,
+                scrollEvents: ['scroll','before-scroll-start'],
+                pullDownY: 0,
+                offset:0,
+                hasMore:true,
+            }
         },
         created() {
-          this.getSingers()
+            this.getSubMvs(this.offset)
         },
         methods: {
-          getQuery (query) {
-            console.log(query)
-          },
-          goToSearch () {
-            this.fake = true
-          },
-          getSingers () {
-            this.$api.subs.singers().then(res => {
-              this.singers = res.data.data
-              this.$emit('hasNum',res.data.count)
-            })
-          },
-          selectItem (id) {
+            getQuery (query) {
+                console.log(query)
+            },
+            goToSearch () {
+                this.fake = true
+            },
+            getSubMvs (offset) {
+                this.$api.subs.subVideos(offset).then(res => {
+                    this.hasMore = res.data.hasMore
+                    if(this.hasMore) {
+                        this.offset++
+                        this.videos = this.videos.concat(res.data.data)
+                        console.log(this.videos)
+                    }
+                    this.$emit('hasVideo',this.videos.length)
+                })
+            },
+            selectItem (vid) {
 
-          },
-          onPullingDown () {
-            setTimeout(() => {
-              this.singers = this.singers.reverse()
-              this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
-              this.$refs.contentScroll.forceUpdate();//下拉完毕
-            }, 1000)
-          },
-          onPullingUp () {
-            setTimeout(() => {
-              const contentScroll = this.$refs.contentScroll
-              contentScroll.forceUpdate()
-              // contentScroll.refresh();
-            }, 1000)
-          },
-          scrollHandler (pos) {
-            this.pullDownY = -pos.y
-          },
-          beforeScrollStart() {
-            this.fake = false
-          }
+            },
+            onPullingDown () {
+                setTimeout(() => {
+                    this.videos = this.videos.reverse()
+                    this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
+                    this.$refs.contentScroll.forceUpdate();//下拉完毕
+                }, 1000)
+            },
+            onPullingUp () {
+                setTimeout(() => {
+                    this.getSubMvs(this.offset)
+                    const contentScroll = this.$refs.contentScroll
+                    contentScroll.forceUpdate()
+                }, 1000)
+            },
+            scrollHandler (pos) {
+                this.pullDownY = -pos.y
+            },
+            beforeScrollStart() {
+                this.fake = false
+            }
         }
     }
 </script>
@@ -143,39 +146,23 @@
   .content
     height: 100%
     overflow: hidden
-    .singer-search
+    /*padding-bottom:30px*/
+    .my-search
       width:90%
       position:relative
       left:2.5%
-    .my-singer
+    .my-video
       width:100%
       background-color:white
       padding:10px 0
       li
         height:50px
-        line-height:50px
-        display: flex
-        margin-top:13px
-        .li-left
-          margin-left:10px
-          height:50px
-          width:50px
-          img
-            width:100%
-            height:100%
-            border-radius:50%
-         .li-right
-           height:50px
-           line-height:50px
-           margin-left:10px
-           font-size:$font-size-medium-x
-         .li-right-alias
-           font-size:$font-size-medium-x
-           margin-left:5px
+        margin-bottom:20px
+
 
   .content-scroll-wrapper
     position:absolute
-    height:617px //需要除去头部高度，避免产生页面原生滚动
+    height:567px //需要除去头部高度，避免产生页面原生滚动
     width:375px
     bottom:100px
     top:50px
@@ -235,6 +222,7 @@
     position:relative
     top:0
     bottom:50px
+    margin-bottom:50px
     flex-center()
     .load
       font-size:$font-size-medium

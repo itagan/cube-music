@@ -164,8 +164,10 @@ const subs = {
   singers () {
     return axios.get(`${base}/artist/sublist`)
   },
+  subVideos (offset = 0) {
+    return axios.get(`${base}/mv/sublist?offset=${offset}`)
+  },
 }
-
 
 export default {
   login,
