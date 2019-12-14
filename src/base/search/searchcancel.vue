@@ -76,7 +76,6 @@
     width: 100%
     font-size: $font-size-medium
     .search-box
-      margin: 0 6px
       color: #666
       line-height: 30px
       text-align:center
