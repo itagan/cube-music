@@ -157,7 +157,16 @@ const subs = {
   // 给动态评论点赞
   commentDynamic (cid, threadId, is) {
     return axios.get(`${base}/comment/like?type=6&cid=${cid}&threadId=${threadId}&t=${is}`)
-  }
+  },
+  albums (offset = 0) {
+    return axios.get(`${base}/album/sublist?offset=${offset}`)
+  },
+  singers () {
+    return axios.get(`${base}/artist/sublist`)
+  },
+  subVideos (offset = 0) {
+    return axios.get(`${base}/mv/sublist?offset=${offset}`)
+  },
 }
 
 export default {

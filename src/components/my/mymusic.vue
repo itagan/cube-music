@@ -36,7 +36,7 @@
       </div>
       </router-link>
 
-        <router-link to="/find" tag="li" class="li">
+        <router-link to="/collection" tag="li" class="li">
       <div class="li-left">
         <i class="iconfont iconwodeshoucang"></i>
         <span>我的收藏</span>

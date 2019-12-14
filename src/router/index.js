@@ -11,6 +11,7 @@ import loginPhone from '../components/user/loginphone'
 import Code from '../components/user/code'
 import PassWord from '../components/user/loginpassword'
 import videoSlide from '../components/common/videoslide'
+import MyCollectionList from '../components/mycollection/collectionlist'
 
 Vue.use(Router)
 
@@ -49,11 +50,6 @@ export default new Router({
       path: '/login/cellphone/:phone',
       component: PassWord
     },
-    // { name: 'videoslide',
-    //   path: '/login/cellphone/:phone',
-    //   component: PassWord
-    // },
-
     {
       path: '/find',
       component: Find
@@ -63,8 +59,19 @@ export default new Router({
       component: Video
     },
     {
+      name:'my',
       path: '/my',
-      component: My
+      component: My,
+      // children: [
+      //   {
+      //     path:'/my/collection',
+      //     component:MyCollectionList
+      //   }
+      // ]
+    },
+    {
+      path:'/collection',
+      component:MyCollectionList
     },
     {
       path: '/village',
