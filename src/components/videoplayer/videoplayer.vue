@@ -152,7 +152,6 @@ export default {
           isPraised:false,
           redColor:'redColor',
           praisedCounts:0
-
         }
       },
       components: {

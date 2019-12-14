@@ -1,7 +1,7 @@
 <template>
   <div class="song-base">
     <div class="num" v-show="!checkbox">
-      <span v-show="!playing">11</span>
+      <span v-show="!playing">{{index + +1}}</span>
       <i class="iconfont iconlaba" v-show="playing"></i>
     </div>
     <div class="num" v-show="checkbox">
@@ -9,14 +9,14 @@
     </div>
     <div class="song-base-content">
       <div class="title" :class="[playing ? 'activeColor' : '']">
-        <span class="title-left"></span>
-        <span class="title-right"></span>
+        <span class="title-left">{{item.name}}</span>
+        <span class="title-right" v-if="item.tns && item.tns.length">({{item.tns[0]}})</span>
       </div>
       <div class="desc">
         <img src="" alt="" class="sq">
-        <span class="nickname"></span>
+        <span class="nickname">{{item.ar[0].name}}</span>
 
-        <span class="name"></span>
+        <span class="name">{{item.al.name}}</span>
       </div>
     </div>
 
@@ -42,6 +42,16 @@
                 checkbox:false,
                 activeColor:'activeColor'
             }
+        },
+        props: {
+            item: {
+                type:Object,
+                default:{}
+            },
+            index: {
+                type:Number,
+                default: 0
+            }
         }
     }
 </script>
@@ -52,42 +62,48 @@
   .song-base
     display:flex
     width:100%
-    height:60px
+    height:50px
     position:relative
     .num
-      width: 50px
-      height:60px
+      width: 40px
+      height:50px
       flex-center()
-      position:absolute
-      left:10px
+      color:gray
     .song-base-content
-      margin-left:5px
-      height:60px
+      height:50px
       position:absolute
-      left:60px
-      width:auto
+      left:40px
+      max-width:250px
       .title
         font-size:$font-size-medium-x
         ellipsis()
+        max-width:250px
+        height:28px
+        line-height:28px
+        margin-left:3px
         .title-right
           color:gray
       .desc
         font-size:$font-size-small
         color:gray
         ellipsis()
+        max-width:250px
+        /*height:22px*/
+        /*line-height:22px*/
     .playing
-      width: 60px
-      height:60px
+      width: 40px
+      height:50px
       flex-center()
       position:absolute
-      right:60px
+      right:30px
+      color:gray
     .more
-      width: 60px
-      height:60px
+      width: 40px
+      height:50px
       flex-center()
       position:absolute
-      right:5px
-
+      right:0
+      color:gray
 
   .activeColor
     color:red !important

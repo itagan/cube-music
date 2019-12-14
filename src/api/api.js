@@ -168,6 +168,12 @@ const subs = {
     return axios.get(`${base}/mv/sublist?offset=${offset}`)
   },
 }
+//歌单有关
+const songLists = {
+  songList (id = 2410346874) {
+    return axios.get(`${base}/playlist/detail?id=${id}`)
+  }
+}
 
 export default {
   login,
@@ -176,5 +182,6 @@ export default {
   users,
   playlists,
   likes,
-  subs
+  subs,
+  songLists
 }
