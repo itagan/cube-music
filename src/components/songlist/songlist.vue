@@ -1,18 +1,10 @@
 <template>
   <div class="song-list">
-<!--      <transition name="slide-fade">-->
-<!--        <my-header class="my-header" ref="header" v-show="isShow"></my-header>-->
-<!--      </transition>-->
-<!--      <my-search-->
-<!--        :placeholder="placeholder"-->
-<!--        :fake="fake"-->
-<!--        @query="getQuery"-->
-<!--        @click.native="goToSearch"-->
-<!--        :class="{'my-search-leave': this.searchLeave ,'my-search-enter' : this.searchEnter}"-->
-<!--        class="my-search"-->
-<!--      >-->
-<!--      </my-search>-->
-<!--      <message class="my-message"></message>-->
+
+    <div class="song-list-background">
+      <img width="100%" height="100%" :src="playlist.coverImgUrl" alt="">
+    </div>
+
     <transition name="slide-fade">
       <my-header class="my-header" ref="header" v-show="isShow"></my-header>
     </transition>
@@ -38,7 +30,7 @@
             class="my-search"
           >
           </my-search>
-          <message class="my-message" :messages="messages"></message>
+          <message class="my-message" :messages="messages" :playlist="playlist"></message>
 
           <cube-sticky-ele>
             <ul class="sticky-header">
@@ -51,32 +43,28 @@
                     播放全部
                   </span>
                   <span class="play-all-num">
-                    (共222首)
+                    (共{{tracks.length}}首)
                   </span>
               </li>
 
               <li class="play-sub">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
-                <span>21212</span>
+                <span class="sub-num">({{playlist.subscribedCount}})</span>
               </li>
             </ul>
           </cube-sticky-ele>
+          <list :tracks="tracks" class="my-list"></list>
+          <ul class="song-list-collection">
+            <li class="li-img" v-for="item in subs" :key="item.userId">
+              <img :src="item.avatarUrl" alt="">
+            </li>
 
-          <list :tracks="tracks"></list>
-
-<!--          <template slot="pullup" slot-scope="props">-->
-<!--            <div v-if="props.pullUpLoad" class="pullload">-->
-<!--              <template v-if="loadisshow">-->
-<!--                <span v-if="props.isPullUpLoad" class="load">-->
-<!--                   <i class="iconfont iconyinletiaodongzhuangtai"></i>-->
-<!--                  <span> 加载中...</span>-->
-<!--                </span>-->
-<!--                <span v-else>更新成功</span>-->
-<!--              </template>-->
-<!--            </div>-->
-<!--          </template>-->
-
+            <li class="collection-num">{{subs.length}}人收藏</li>
+            <li class="collection-icon">
+              <i class="iconfont iconiconfontyoujiantou"></i>
+            </li>
+          </ul>
         </cube-scroll>
       </cube-sticky>
     </div>
@@ -110,14 +98,17 @@
             pullUpLoadMoreTxt: '加载中…………',
             pullUpLoadNoMoreTxt: '没有更多数据了~',
             tracks:[],
-            messages:{}
+            messages:{},
+            playlist:{},
+            subs:[]
           }
         },
         computed: {
             options () {
                 return {
                     pullUpLoad: this.pullUpLoadObj,
-                    scrollbar: true
+                    scrollbar: true,
+                    startY:-50
                 }
             },
             pullUpLoadObj: function () {
@@ -137,14 +128,9 @@
           getList () {
             this.$api.songLists.songList().then(res => {
                 console.log(res.data)
+                this.playlist = res.data.playlist
                 this.tracks = res.data.playlist.tracks
-                this.messages.playCount = res.data.playlist.playCount
-                this.messages.coverImgUrl = res.data.playlist.coverImgUrl
-                this.messages.name = res.data.playlist.name
-                this.messages.description = res.data.playlist.description
-                this.messages.shareCount = res.data.playlist.shareCount
-                this.messages.commentCount = res.data.playlist.commentCount
-                this.messages.tags = res.data.playlist.tags
+                this.subs = res.data.playlist.subscribers
                 this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
                 this.messages.nickname = res.data.playlist.creator.nickname
             })
@@ -167,6 +153,7 @@
           scrollHandler ({ y }) {
               this.scrollY = -y
               console.log(this.scrollY)
+              
           },
           scrollStartHandler () {
 
@@ -187,10 +174,48 @@
 
   .song-list
     background-color:rgba(128,128,128,.8) !important
-
+    .my-header
+      z-index:-2
+  /*.my-search*/
+    /*  position:fixed*/
+    /*  z-index:9999*/
     .my-message
-      margin:15px auto
-
+      margin-top:25px
+      margin-bottom:15px
+    .song-list-background
+      position: absolute
+      width: 100%
+      height: 100%
+      top:0
+      left:0
+      z-index: -1
+      opacity: 0.7
+      filter: blur(18px)
+    .song-list-collection
+      display:flex
+      position:relative
+      li
+        height:40px
+      .li-img
+        margin-left: 10px
+        height:30px
+        width:30px
+        border-radius:50%
+        img
+          height:30px
+          width:30px
+          border-radius:50%
+      .collection-num
+        font-size:$font-size-small
+        color:gray
+        position:absolute
+        right:20px
+        width:auto
+      .collection-icon
+        font-size:$font-size-large-x
+        color:gray
+        position:absolute
+        right:5px
 
 
   .sticky-view-container
@@ -220,19 +245,23 @@
           font-size:$font-size-medium
       .play-sub
         font-size:$font-size-small
-        width:110px
+        max-width:120px
         height:35px
         border-radius:16px
         background-color:red
         color:white
         margin-right:10px
-        flex-center()
+        line-height:35px
+        i
+          margin-left:5px
+        .sub-num
+          margin-right:5px
+          width:auto
+
 
     /*.cube-sticky*/
       /*padding: 0 10px*/
     .scroll-ele
-      /*height: 100%*/
-      /*overflow: auto*/
       -webkit-overflow-scrolling: touch //滚动回弹效果
 
 
@@ -262,7 +291,7 @@
 
 
    .my-search-leave
-     transform: translateY(-50px)
+     transform: translateY(-10px)
      transition:transform 0.3s ease
 
   .my-search-enter

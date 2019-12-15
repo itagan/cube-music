@@ -2,15 +2,15 @@
   <div class="song-list-message">
     <div class="song-message">
       <div class="song-message-left">
-        <img :src="messages.coverImgUrl" alt="">
+        <img :src="playlist.coverImgUrl" alt="">
         <span>
             <i class="iconfont iconCell-PlayVolume"></i>
-            {{messages.playCount}}
+            {{playlist.playCount}}
           </span>
       </div>
       <div class="song-message-right">
         <div class="song-title">
-          {{messages.name}}
+          {{playlist.name}}
         </div>
         <div class="song-create">
           <img :src="messages.avatarUrl" alt="">
@@ -18,7 +18,7 @@
           <i class="iconfont iconiconfontyoujiantou"></i>
         </div>
         <div class="song-desc">
-          <span>{{messages.description}}</span>
+          <span>{{playlist.description}}</span>
           <i class="iconfont iconiconfontyoujiantou"></i>
         </div>
       </div>
@@ -26,11 +26,11 @@
     <ul class="song-opera">
       <li>
         <i class="iconfont iconpinglun"></i>
-        <span>{{messages.commentCount}}</span>
+        <span>{{playlist.commentCount}}</span>
       </li>
       <li >
         <i class="iconfont iconfenxiang"></i>
-        <span>{{messages.shareCount}}</span>
+        <span>{{playlist.shareCount}}</span>
       </li>
       <li>
         <i class="iconfont iconxiazaigequ"></i>
@@ -51,6 +51,10 @@
         name: "songMessage.vue",
         props: {
             messages: {
+                type:Object,
+                default:{}
+            },
+            playlist: {
                 type:Object,
                 default:{}
             }
@@ -91,6 +95,7 @@
           line-height:1.3
           multiline-ellipsis($num=2)
           font-size:$font-size-medium-x
+          color:white
         .song-create
           margin-top:8px
           margin-bottom:17px
@@ -108,6 +113,7 @@
             height:30px
             line-height:30px
             margin-left:5px
+            color:white
             ellipsis()
           i
             margin-left:10px
@@ -117,6 +123,7 @@
           font-size:$font-size-small
           flex-between()
           margin-top:10px
+          color:gray
           span
             multiline-ellipsis($num=2)
             height:40px
@@ -129,6 +136,7 @@
       height:40px
       width:100%
       margin-top:20px
+      color:white
       li
         width:25%
         flex:1

@@ -49,7 +49,8 @@
 
   .header
     font-size:$font-size-large
-    /*color:white*/
+    background-color:transparent
+    font-weight:bold
     .song-list
       overflow:hidden
     .song-img

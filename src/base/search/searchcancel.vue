@@ -51,6 +51,7 @@
             },
             cancel() {
                 this.fake = false
+                this.clear()
             }
         },
         watch: {
@@ -82,7 +83,7 @@
       font-size:$font-size-medium
       width:100%
       height:100%
-      background-color: rgba(238,238,238,.9)
+      background-color: rgba(238,238,238,.1)
       border-radius: 15px
       .icon-search
         margin-right:3px
@@ -106,7 +107,7 @@
         height:30px
         flex:1
         /*margin: 0 6px*/
-        position:relative
+        /*position:relative*/
         .my-input
           width:100%
           color: #666
