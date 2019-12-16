@@ -5,6 +5,8 @@
       <img width="100%" height="100%" :src="playlist.coverImgUrl" alt="">
     </div>
 
+    <div class="song-list-white" :style="{height:whiteHeight + 'px'}"></div>
+
     <transition name="slide-fade">
       <my-header class="my-header" ref="header" v-show="isShow"></my-header>
     </transition>
@@ -62,7 +64,7 @@
             </ul>
           </cube-sticky-ele>
           <list :tracks="tracks" class="my-list"></list>
-          <ul class="song-list-collection">
+          <ul class="song-list-collection" ref="subTop">
             <li class="li-img" v-for="item in subs" :key="item.userId">
               <img :src="item.avatarUrl" alt="">
             </li>
@@ -109,7 +111,8 @@
             tracks:[],
             messages:{},
             playlist:{},
-            subs:[]
+            subs:[],
+            whiteHeight:200
           }
         },
         computed: {
@@ -165,7 +168,8 @@
           },
           scrollHandler ({ y }) {
               this.scrollY = -y
-              // console.log(this.scrollY)
+              this.whiteHeight = 610 - this.$refs.subTop.getBoundingClientRect().bottom  + 100
+              // console.log(this.whiteHeight)
 
           },
           scrollStartHandler () {
@@ -204,6 +208,14 @@
       z-index: -1
       opacity: 0.7
       filter: blur(18px)
+    .song-list-white
+      position: absolute
+      width: 100%
+      height:40%
+      left:0
+      bottom:0
+      z-index: -1
+      background-color:white
     .song-list-collection
       display:flex
       position:relative
