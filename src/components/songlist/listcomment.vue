@@ -12,11 +12,13 @@
     </my-header>
 
     <div class="sticky-view-container">
-      <cube-sticky :pos="scrollY" @diff-change="diffChange">
+      <cube-sticky :pos="scrollY">
         <cube-scroll
           :scroll-events="scrollEvents"
           @scroll="scrollHandler"
-          ref="scrollCube"
+          @pulling-up="onPullingUp"
+          :options="options"
+          ref="contentScroll"
         >
           <ul class="comment-message">
             <li>
@@ -42,7 +44,7 @@
             </ul>
           </cube-sticky-ele>
           <ul class="new-comment">
-            <li v-for="newItem in comments" :key="newItem.commentId">
+            <li v-for="(newItem,index) in comments" :key="index">
               <base-comment :item="newItem"></base-comment>
             </li>
           </ul>
@@ -52,6 +54,18 @@
             <li>{{props.current}}</li>
           </ul>
         </template>
+
+        <template slot="pullup" slot-scope="props">
+          <div v-if="props.pullUpLoad" class="pull-load">
+            <template>
+              <span v-if="props.isPullUpLoad" class="load">
+                 <i class="iconfont iconyinletiaodongzhuangtai"></i>
+                <span> 加载中...</span>
+              </span>
+            </template>
+          </div>
+        </template>
+
       </cube-sticky>
     </div>
 
@@ -85,57 +99,64 @@
               hotComments:[],
               scrollY: 0,
               scrollEvents: ['scroll'],
-              pullUpLoad: true,
-              pullUpLoadThreshold: 0,
-              pullUpLoadMoreTxt: '加载中…………',
-              pullUpLoadNoMoreTxt: '没有更多数据了~',
-              totals:0
+              totals:0,
+              options: {
+                  pullUpLoad: true,
+                  scrollbar: true,
+                  click: false // 解决点击事件被触发两次的问题
+              },
+              secondStop: 0,
+              pullDownY: 0,
+              offset:0,
+              hasMore:true,
+              moreHot:false
           }
         },
         props: {
           id:{
             type:Number,
-            default:2410346874
+            default:705123491
           }
         },
         created() {
-            this.getComment()
-            this.getHeight()
-        },
-        computed: {
-          options () {
-              return {
-                pullUpLoad: this.pullUpLoadObj,
-                scrollbar: true,
-                startY:0
-              }
-          },
-          pullUpLoadObj: function () {
-              return this.pullUpLoad ? {
-                threshold: parseInt(this.pullUpLoadThreshold),
-                txt: {
-                  more: this.pullUpLoadMoreTxt,
-                  noMore: this.pullUpLoadNoMoreTxt
-                }
-              } : false
-          }
+            this.getComment(705123491,this.offset)
         },
         methods: {
-          getComment () {
-              this.$api.songLists.songListComment().then(res => {
-                  console.log(res.data)
-                  this.total = res.data.total
-                  this.comments = res.data.comments
-                  this.hotComments = res.data.hotComments
-                  for (let i = 0; i < this.comments.length; i++) {
-                      this.comments[i].time = timestampOther(this.comments[i].time)
-                  }
-                  this.totals = res.data.hotComments.length
-                  // console.log(this.totals)
-                  for (let i = 0; i < this.hotComments.length; i++) {
-                      this.hotComments[i].time = timestampOther(this.hotComments[i].time)
+          getComment (id,offset) {
+              this.$api.songLists.songListComment(id,offset).then(res => {
+                  this.hasMore = res.data.more
+                  this.moreHot = res.data.moreHot
 
+                  if(this.hasMore) {
+                      this.offset++
+                      this.comments = this.comments.concat(res.data.comments)
+                      for (let i = 0; i < this.comments.length; i++) {
+                          this.comments[i].time = timestampOther(this.comments[i].time)
+                      }
+                      console.log(this.comments)
+                  }else {
+                      this.comments = res.data.comments
                   }
+
+                  if(this.moreHot) {
+                      this.hotComments = this.hotComments.concat(res.data.hotComments)
+                      for (let i = 0; i < this.hotComments.length; i++) {
+                          this.hotComments[i].time = timestampOther(this.hotComments[i].time)
+                      }
+                      console.log(this.hotComments)
+                  }else {
+                      this.hotComments = res.data.hotComments !== 'undefined' ? res.data.hotComments : []
+                      if(this.hotComments) {
+                          for (let i = 0; i < this.hotComments.length; i++) {
+                              this.hotComments[i].time = timestampOther(this.hotComments[i].time)
+                          }
+                      }
+                  }
+
+                  // this.hotComments = res.data.hotComments
+                  // for (let i = 0; i < this.hotComments.length; i++) {
+                  //     this.hotComments[i].time = timestampOther(this.hotComments[i].time)
+                  // }
               })
           },
           toBack () {
@@ -151,13 +172,11 @@
               this.scrollY = -y
           },
           onPullingUp () {
-
-          },
-          diffChange () {
-
-          },
-          getHeight () {
-              console.log(this.totals)
+            setTimeout(() => {
+              this.getComment (705123491,this.offset)
+              const contentScroll = this.$refs.contentScroll
+              contentScroll.forceUpdate()
+            }, 1000)
           }
         },
         beforeMount() {
@@ -169,7 +188,7 @@
 
                 this.$refs.stickyHeight.style.height = 300 + 'px'
                 // console.log(this.totals)
-                this.$refs.scrollCube.refresh()
+                this.$refs.contentScroll.refresh()
             })
         },
         mounted() {
@@ -242,7 +261,7 @@
 
 
     //上拉加载中相关样式
-    .pullload
+    .pull-load
       width:100%
       height:50px
       margin-top:1px

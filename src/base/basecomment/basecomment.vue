@@ -1,7 +1,7 @@
 <template>
   <div class="base-comment" @click="remind">
     <div class="base-comment-top">
-      <img :src="item.user.avatarUrl" @click="toUser">
+      <img v-lazy="item.user.avatarUrl" @click="toUser">
       <div class="base-comment-time">
         <span class="user-name">{{item.user.nickname}}</span>
         <span class="user-time">{{item.time}}</span>
