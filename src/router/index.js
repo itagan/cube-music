@@ -12,7 +12,9 @@ import Code from '../components/user/code'
 import PassWord from '../components/user/loginpassword'
 import videoSlide from '../components/common/videoslide'
 import MyCollectionList from '../components/mycollection/collectionlist'
-import SongList from "../components/songlist/songlist";
+import SongList from "../components/songlist/songlist"
+import SongListComment from "../components/songlist/listcomment"
+
 
 Vue.use(Router)
 
@@ -93,7 +95,10 @@ export default new Router({
     {
       path: '/songlist',
       component: SongList
+    },
+    {
+      path: '/songlistcomment',
+      component: SongListComment
     }
-
   ]
 })

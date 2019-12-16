@@ -637,6 +637,9 @@ export default {
         height 100%
         flex:1
         margin-left:10px
+        border: 0
+        outline: none
+        background-color: rgba(0, 0, 0, 0)
       div
         height: 100%
         width:40px

@@ -172,6 +172,9 @@ const subs = {
 const songLists = {
   songList (id = 2410346874) {
     return axios.get(`${base}/playlist/detail?id=${id}`)
+  },
+  songListComment (id = 705123491,offset = 0) {
+    return axios.get(`${base}/comment/playlist?id=${id}&offset=${offset}`)
   }
 }
 

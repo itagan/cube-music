@@ -9,6 +9,13 @@
       <my-header class="my-header" ref="header" v-show="isShow"></my-header>
     </transition>
 
+    <div v-if="!this.tracks" class="pull-load-top">
+       <span class="load">
+          <i class="iconfont iconyinletiaodongzhuangtai"></i>
+          <span> 正在加载...</span>
+       </span>
+    </div>
+
     <div class="sticky-view-container">
       <cube-sticky :pos="scrollY">
 
@@ -30,7 +37,7 @@
             class="my-search"
           >
           </my-search>
-          <message class="my-message" :messages="messages" :playlist="playlist"></message>
+          <message class="my-message" :messages="messages" :playlist="playlist" @saveComment="saveComment"></message>
 
           <cube-sticky-ele>
             <ul class="sticky-header">
@@ -65,6 +72,8 @@
               <i class="iconfont iconiconfontyoujiantou"></i>
             </li>
           </ul>
+
+
         </cube-scroll>
       </cube-sticky>
     </div>
@@ -126,11 +135,12 @@
         },
         methods: {
           getList () {
-            this.$api.songLists.songList().then(res => {
+            this.$api.songLists.songList(705123491).then(res => {
                 console.log(res.data)
                 this.playlist = res.data.playlist
-                this.tracks = res.data.playlist.tracks
-                this.subs = res.data.playlist.subscribers
+                // this.tracks = res.data.playlist.tracks
+                this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0,100) : res.data.playlist.tracks
+                this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0,4) : res.data.playlist.subscribers
                 this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
                 this.messages.nickname = res.data.playlist.creator.nickname
             })
@@ -150,10 +160,13 @@
               this.fake = true
             }
           },
+          saveComment() {
+
+          },
           scrollHandler ({ y }) {
               this.scrollY = -y
-              console.log(this.scrollY)
-              
+              // console.log(this.scrollY)
+
           },
           scrollStartHandler () {
 
@@ -194,16 +207,19 @@
     .song-list-collection
       display:flex
       position:relative
+      background-color:white
+      padding:10px auto
       li
-        height:40px
+        height:25px
+        line-height:25px
       .li-img
         margin-left: 10px
-        height:30px
-        width:30px
+        height:25px
+        width:25px
         border-radius:50%
         img
-          height:30px
-          width:30px
+          height:25px
+          width:25px
           border-radius:50%
       .collection-num
         font-size:$font-size-small
@@ -217,7 +233,6 @@
         position:absolute
         right:5px
 
-
   .sticky-view-container
     position: absolute
     top: 50px
@@ -225,6 +240,8 @@
     left: 0
     width: 100%
     font-size:$font-size-medium
+    border-top-left-radius:20px
+    border-top-right-radius:20px
     .sticky-header
       flex-between()
       height:50px
@@ -265,18 +282,42 @@
       -webkit-overflow-scrolling: touch //滚动回弹效果
 
 
+
     //磁贴后样式
-    /*.cube-sticky-fixed*/
-        //flex-between()
-        /*margin:auto 10px*/
+    .cube-sticky-fixed
+      border-top-left-radius:20px !important
+      border-top-right-radius:20px !important
+      .cube-sticky-content
+        border-top-left-radius:20px
+        border-top-right-radius:20pxs
 
 
 
+    //磁贴后样式
+    .cube-sticky-fixed
+      border-top-left-radius:20px !important
+      border-top-right-radius:20px !important
+      .sticky-header
+        border-top-left-radius:20px !important
+        border-top-right-radius:20px !important
 
 
 
-
-
+    //上方加载中相关样式
+    .pull-load-top
+      width:100%
+      height:100%
+      margin-top:50px
+      background-color:white
+      /*position:relative*/
+      /*bottom:50px*/
+      flex-center()
+      .load
+        font-size:$font-size-medium
+        i
+          color:red
+        span
+          color:gray
 
 
   .slide-fade-enter-active

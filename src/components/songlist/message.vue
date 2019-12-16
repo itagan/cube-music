@@ -24,7 +24,7 @@
       </div>
     </div>
     <ul class="song-opera">
-      <li>
+      <li @click="toComment">
         <i class="iconfont iconpinglun"></i>
         <span>{{playlist.commentCount}}</span>
       </li>
@@ -57,6 +57,14 @@
             playlist: {
                 type:Object,
                 default:{}
+            }
+        },
+        methods: {
+            toComment () {
+                this.$emit('saveComment')
+                this.$router.push({
+                    path:'songlistcomment'
+                })
             }
         }
     }
