@@ -34,7 +34,7 @@
           <div ref="stickyHeight">
             <ul class="hot-comment" ref="ulHeight">
               <li v-for="item in hotComments" :key="item.commentId">
-                <base-comment :item="item"></base-comment>
+                <base-comment :item="item" class="base-comment"></base-comment>
               </li>
             </ul>
           </div>
@@ -45,25 +45,27 @@
           </cube-sticky-ele>
           <ul class="new-comment">
             <li v-for="(newItem,index) in comments" :key="index">
-              <base-comment :item="newItem"></base-comment>
+              <base-comment :item="newItem" class="base-comment"></base-comment>
             </li>
           </ul>
+
+
+          <template slot="pullup" slot-scope="props">
+            <div v-if="props.pullUpLoad" class="pull-load">
+              <template>
+              <span v-if="props.isPullUpLoad" class="load">
+                 <i class="iconfont iconyinletiaodongzhuangtai"></i>
+                <span> 加载中...</span>
+              </span>
+              </template>
+            </div>
+          </template>
+
         </cube-scroll>
         <template slot="fixed" slot-scope="props">
           <ul class="sticky-header">
             <li>{{props.current}}</li>
           </ul>
-        </template>
-
-        <template slot="pullup" slot-scope="props">
-          <div v-if="props.pullUpLoad" class="pull-load">
-            <template>
-              <span v-if="props.isPullUpLoad" class="load">
-                 <i class="iconfont iconyinletiaodongzhuangtai"></i>
-                <span> 加载中...</span>
-              </span>
-            </template>
-          </div>
         </template>
 
       </cube-sticky>
@@ -94,22 +96,22 @@
         },
         data () {
           return {
-              total:0,
-              comments:[],
-              hotComments:[],
-              scrollY: 0,
-              scrollEvents: ['scroll'],
-              totals:0,
-              options: {
-                  pullUpLoad: true,
-                  scrollbar: true,
-                  click: false // 解决点击事件被触发两次的问题
-              },
-              secondStop: 0,
-              pullDownY: 0,
-              offset:0,
-              hasMore:true,
-              moreHot:false
+            total:0,
+            comments:[],
+            hotComments:[],
+            scrollY: 0,
+            scrollEvents: ['scroll'],
+            totals:0,
+            options: {
+              pullUpLoad: true,
+              scrollbar: true,
+              click: false // 解决点击事件被触发两次的问题
+            },
+            secondStop: 0,
+            pullDownY: 0,
+            offset:0,
+            hasMore:true,
+            moreHot:false
           }
         },
         props: {
@@ -119,45 +121,37 @@
           }
         },
         created() {
-            this.getComment(705123491,this.offset)
+          this.getComment(705123491,this.offset)
         },
         methods: {
           getComment (id,offset) {
-              this.$api.songLists.songListComment(id,offset).then(res => {
-                  this.hasMore = res.data.more
-                  this.moreHot = res.data.moreHot
-
-                  if(this.hasMore) {
-                      this.offset++
-                      this.comments = this.comments.concat(res.data.comments)
-                      for (let i = 0; i < this.comments.length; i++) {
-                          this.comments[i].time = timestampOther(this.comments[i].time)
-                      }
-                      console.log(this.comments)
-                  }else {
-                      this.comments = res.data.comments
+            this.$api.songLists.songListComment(id,offset).then(res => {
+              this.hasMore = res.data.more
+              this.moreHot = res.data.moreHot !== 'undefined' ? res.data.moreHot : 'undefined'
+              this.total = res.data.total
+              if(this.hasMore) {
+                this.offset++
+                this.comments = this.comments.concat(res.data.comments)
+                for (let i = 0; i < this.comments.length; i++) {
+                  this.comments[i].time = timestampOther(this.comments[i].time)
+                }
+              }else {
+                this.comments = res.data.comments
+              }
+              if(this.moreHot === true) {
+                this.hotComments = this.hotComments.concat(res.data.hotComments)
+                for (let i = 0; i < this.hotComments.length; i++) {
+                  this.hotComments[i].time = timestampOther(this.hotComments[i].time)
+                }
+              }else if(this.moreHot === false) {
+                this.hotComments = res.data.hotComments !== 'undefined' ? res.data.hotComments : 'undefined'
+                if(this.hotComments) {
+                  for (let i = 0; i < this.hotComments.length; i++) {
+                    this.hotComments[i].time = timestampOther(this.hotComments[i].time)
                   }
-
-                  if(this.moreHot) {
-                      this.hotComments = this.hotComments.concat(res.data.hotComments)
-                      for (let i = 0; i < this.hotComments.length; i++) {
-                          this.hotComments[i].time = timestampOther(this.hotComments[i].time)
-                      }
-                      console.log(this.hotComments)
-                  }else {
-                      this.hotComments = res.data.hotComments !== 'undefined' ? res.data.hotComments : []
-                      if(this.hotComments) {
-                          for (let i = 0; i < this.hotComments.length; i++) {
-                              this.hotComments[i].time = timestampOther(this.hotComments[i].time)
-                          }
-                      }
-                  }
-
-                  // this.hotComments = res.data.hotComments
-                  // for (let i = 0; i < this.hotComments.length; i++) {
-                  //     this.hotComments[i].time = timestampOther(this.hotComments[i].time)
-                  // }
-              })
+                }
+              }
+            })
           },
           toBack () {
             this.$router.go(-1)
@@ -169,7 +163,7 @@
 
           },
           scrollHandler ({ y }) {
-              this.scrollY = -y
+            this.scrollY = -y
           },
           onPullingUp () {
             setTimeout(() => {
@@ -180,21 +174,21 @@
           }
         },
         beforeMount() {
-            this.$nextTick(() => {
-                // let hei = document.getElementsByClassName('hot-comment')[0]
-                // let myColor= getComputedStyle(hei).height
-                // this.$refs.stickyHeight.style.height = myColor +'px'
-                // this.$refs.scrollCube.refresh()
+          this.$nextTick(() => {
+          // let hei = document.getElementsByClassName('hot-comment')[0]
+          // let myColor= getComputedStyle(hei).height
+          // this.$refs.stickyHeight.style.height = myColor +'px'
+          // this.$refs.scrollCube.refresh()
 
-                this.$refs.stickyHeight.style.height = 300 + 'px'
-                // console.log(this.totals)
-                this.$refs.contentScroll.refresh()
-            })
+          this.$refs.stickyHeight.style.height = 300 + 'px'
+          // console.log(this.totals)
+          this.$refs.contentScroll.refresh()
+          })
         },
         mounted() {
-            // this.$nextTick(() => {
-            //     this.getHeight ()
-            // })
+          // this.$nextTick(() => {
+        //     this.getHeight ()
+          // })
         }
     }
 </script>
@@ -259,24 +253,6 @@
 
 
 
-
-    //上拉加载中相关样式
-    .pull-load
-      width:100%
-      height:50px
-      margin-top:1px
-      background-color:white
-      position:relative
-      bottom:50px
-      flex-center()
-      .load
-        font-size:$font-size-medium
-        i
-          color:red
-        span
-          color:gray
-
-
   .sticky-view-container
     position: absolute
     top: 50px
@@ -285,8 +261,10 @@
     width: 100%
     .sticky-header
       font-size:$font-size-medium
-      margin:10px auto
+      /*margin:10px auto*/
+      padding-left:10px
       height:25px
+      background-color:white
       .hot-comment-top
         font-size:$font-size-medium
         margin-left:10px
@@ -296,19 +274,42 @@
         margin-left:10px
         /*padding:10px 0*/
     .cube-sticky
-      .comment-message
-        border-bottom:7px solid rgba(128,128,128,.1)
-      .cube-scroll-wrapper
-        background-color: #fff
-        .hot-comment
-          margin:auto 10px
-        .new-comment
-          margin:auto 10px
+      .pull-load
+        width:100%
+        height:50px
+        margin-top:1px
+        background-color:white
+        position:relative
+        bottom:0
+        left:50%
+        margin-left:-60px
+      flex-center()
+      .load
+        font-size:$font-size-medium
+        i
+          color:red
+        span
+          color:gray
+
+        .cube-scroll-wrapper
+          background-color: #fff
+
     .cube-sticky-fixed
       .sticky-header
-        margin: 0 10px
+        /*margin: 0 10px*/
         font-size:$font-size-medium
         background-color:white
         height:25px
 
+    .cube-sticky
+      .cube-scroll-wrapper
+        background-color: #fff
+        .cube-scroll-list-wrapper
+          .comment-message
+            border-bottom:7px solid rgba(128,128,128,.1)
+          .hot-comment
+            margin:auto 10px
+          .new-comment
+            margin:auto 10px
+            padding-bottom:10px
 </style>
