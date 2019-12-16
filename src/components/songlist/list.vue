@@ -1,7 +1,7 @@
 <template>
   <ul class="ul-list">
     <li v-for="(item, index) in tracks" :key="item.id">
-      <song-base :item="item" :index="index"></song-base>
+      <song-base :item="item" :index="index" @more="more"></song-base>
     </li>
   </ul>
 </template>
@@ -11,13 +11,18 @@
     export default {
         name: "list.vue",
         components: {
-            songBase
+          songBase
         },
         props: {
-            tracks: {
-                type:Array,
-                default:[]
-            }
+          tracks: {
+            type:Array,
+            default:[]
+          }
+        },
+        methods: {
+          more () {
+              this.$emit('more')
+          }
         }
     }
 </script>

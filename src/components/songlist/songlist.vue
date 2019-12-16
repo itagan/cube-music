@@ -23,7 +23,6 @@
 
         <cube-scroll
           :scroll-events="scrollEvents"
-          @before-scroll-start="scrollStartHandler"
           @scroll="scrollHandler"
           @pulling-up="onPullingUp"
           :options="options"
@@ -63,7 +62,7 @@
               </li>
             </ul>
           </cube-sticky-ele>
-          <list :tracks="tracks" class="my-list"></list>
+          <list :tracks="tracks" class="my-list" @more="more"></list>
           <ul class="song-list-collection" ref="subTop">
             <li class="li-img" v-for="item in subs" :key="item.userId">
               <img :src="item.avatarUrl" alt="">
@@ -74,11 +73,15 @@
               <i class="iconfont iconiconfontyoujiantou"></i>
             </li>
           </ul>
-
-
         </cube-scroll>
       </cube-sticky>
     </div>
+
+    <play-more
+      v-if="isMore"
+      @cancel="cancelMore"
+      @build="moreBuildList"
+    ></play-more>
   </div>
 </template>
 
@@ -87,13 +90,15 @@
     import mySearch from "../../base/search/searchcancel"
     import Message from "./message"
     import List from "./list"
+    import playMore from "./playmore"
     export default {
         name: "songList.vue",
         components: {
           myHeader,
           mySearch,
           Message,
-          List
+          List,
+          playMore
         },
         data () {
           return {
@@ -103,7 +108,7 @@
             searchLeave:false,
             searchEnter:false,
             scrollY: 0,
-            scrollEvents: ['scroll', 'before-scroll-start'],
+            scrollEvents: ['scroll'],
             pullUpLoad: true,
             pullUpLoadThreshold: 0,
             pullUpLoadMoreTxt: '加载中…………',
@@ -112,7 +117,9 @@
             messages:{},
             playlist:{},
             subs:[],
-            whiteHeight:200
+            whiteHeight:200,
+            isMore:false,
+            isBuild:false
           }
         },
         computed: {
@@ -172,12 +179,44 @@
               // console.log(this.whiteHeight)
 
           },
-          scrollStartHandler () {
-
-          },
           onPullingUp () {
 
-          }
+          },
+          cancel () {
+              this.isBuild = false
+          },
+          more () {
+              // 子组件提醒打开更多操作页面
+              this.isMore = true
+          },
+          moreBuildList () {
+              this.isMore = false
+              this.isBuild = true
+              // 手动调用，解决打开更多再新建歌单产生滚动现象的bug。
+              this.$nextTick(() => {
+                  this._dialog.afterOpen()
+              })
+          },
+          cancelMore () {
+              this.isMore = false
+          },
+        },
+        watch: {
+            isBuild (val) {
+                if (val) {
+                    this._dialog.afterOpen()
+                } else {
+                    this._dialog.beforeClose()
+                }
+            },
+            isMore (val) {
+                if (val) {
+                    this._dialog.afterOpen()
+                } else {
+                    this._dialog.beforeClose()
+                }
+            },
+
         },
         mounted() {
 

@@ -23,7 +23,7 @@
     <div class="playing" v-show="!checkbox">
       <i class="iconfont iconbofang5"></i>
     </div>
-    <div class="more" v-show="!checkbox">
+    <div class="more" v-show="!checkbox" @click="more">
       <i class="iconfont icongengduo"></i>
     </div>
 
@@ -37,21 +37,26 @@
     export default {
         name: "songBase.vue",
         data () {
-            return {
-                playing:false,
-                checkbox:false,
-                activeColor:'activeColor'
-            }
+          return {
+            playing:false,
+            checkbox:false,
+            activeColor:'activeColor'
+          }
         },
         props: {
-            item: {
-                type:Object,
-                default:{}
-            },
-            index: {
-                type:Number,
-                default: 0
-            }
+          item: {
+            type:Object,
+            default:{}
+          },
+          index: {
+            type:Number,
+            default: 0
+          }
+        },
+        methods :{
+          more () {
+            this.$emit('more')
+          }
         }
     }
 </script>
