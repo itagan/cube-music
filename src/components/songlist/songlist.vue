@@ -67,7 +67,6 @@
             <li class="li-img" v-for="item in subs" :key="item.userId">
               <img :src="item.avatarUrl" alt="">
             </li>
-
             <li class="collection-num">{{subs.length}}人收藏</li>
             <li class="collection-icon">
               <i class="iconfont iconiconfontyoujiantou"></i>
@@ -81,6 +80,8 @@
       v-if="isMore"
       @cancel="cancelMore"
       @build="moreBuildList"
+      :track="track"
+      ref="playMore"
     ></play-more>
   </div>
 </template>
@@ -98,7 +99,7 @@
           mySearch,
           Message,
           List,
-          playMore
+          playMore,
         },
         data () {
           return {
@@ -113,13 +114,15 @@
             pullUpLoadThreshold: 0,
             pullUpLoadMoreTxt: '加载中…………',
             pullUpLoadNoMoreTxt: '没有更多数据了~',
+            track:{},
             tracks:[],
             messages:{},
             playlist:{},
             subs:[],
             whiteHeight:200,
             isMore:false,
-            isBuild:false
+            isBuild:false,
+            visible:false,
           }
         },
         computed: {
@@ -185,10 +188,16 @@
           cancel () {
               this.isBuild = false
           },
-          more () {
+          more (index) {
               // 子组件提醒打开更多操作页面
               this.isMore = true
+              // this.visible = true
+              this.$nextTick(() => {
+                  this.$refs.playMore.show()
+              })
+              this.track = this.tracks[index]
           },
+
           moreBuildList () {
               this.isMore = false
               this.isBuild = true
@@ -198,7 +207,16 @@
               })
           },
           cancelMore () {
-              this.isMore = false
+              this.$refs.playMore.hide()
+
+              // this.isMore = false
+              // this.$nextTick(() => {
+              //     this.$refs.playMore.hide()
+              // })
+              setTimeout(() => {
+                  this.isMore = false
+              },800)
+
           },
         },
         watch: {
@@ -230,21 +248,27 @@
 
   .song-list
     background-color:rgba(128,128,128,.8) !important
+    height:667px  //必须设置高度，否则遮罩弹出层异常
+    width:100%
     .my-header
-      z-index:-2
-  /*.my-search*/
-    /*  position:fixed*/
-    /*  z-index:9999*/
+      background-color:transparent
+      color:white
+    .my-search
+      position:absolute
+      z-index 1000
+      top:0
     .my-message
-      margin-top:25px
+      margin-top:50px
       margin-bottom:15px
+      /*position: absolute*/
+      /*top:50px*/
     .song-list-background
       position: absolute
       width: 100%
       height: 100%
       top:0
       left:0
-      z-index: -1
+      z-index: 0
       opacity: 0.7
       filter: blur(18px)
     .song-list-white
@@ -253,8 +277,11 @@
       height:40%
       left:0
       bottom:0
-      z-index: -1
+      z-index: 0
       background-color:white
+    /*.my-list*/
+    /*  border-top-left-radius:20px*/
+      /*border-top-right-radius:20px*/
     .song-list-collection
       display:flex
       position:relative
@@ -290,6 +317,7 @@
     bottom: 0
     left: 0
     width: 100%
+    z-index:1
     font-size:$font-size-medium
     border-top-left-radius:20px
     border-top-right-radius:20px

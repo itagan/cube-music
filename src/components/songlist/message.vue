@@ -131,14 +131,13 @@
           font-size:$font-size-small
           flex-between()
           margin-top:10px
-          color:gray
+          color:#dcdcdc
           span
             multiline-ellipsis($num=2)
             height:40px
-            line-height:1.5
+            line-height:1.6
           i
             font-size:$font-size-large-x
-            color:gray
     .song-opera
       display:flex
       height:40px
