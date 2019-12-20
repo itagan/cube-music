@@ -8,7 +8,7 @@
     <div class="song-list-white" :style="{height:whiteHeight + 'px'}"></div>
 
     <transition name="slide-fade">
-      <my-header class="my-header" ref="header" v-show="isShow"></my-header>
+      <my-header class="my-header" ref="header" v-show="isShow" :title="title"></my-header>
     </transition>
 
     <div v-if="!this.tracks" class="pull-load-top">
@@ -38,10 +38,16 @@
             class="my-search"
           >
           </my-search>
-          <message class="my-message" :messages="messages" :playlist="playlist" @saveComment="saveComment" @share="toShare"></message>
+          <message
+            class="my-message"
+            :messages="messages"
+            :playlist="playlist"
+            @saveComment="saveComment"
+            @share="toShare"
+          ></message>
 
           <cube-sticky-ele>
-            <ul class="sticky-header">
+            <ul class="sticky-header" ref="messTop">
               <li class="play-icon">
                 <i class="iconfont iconbofang2"></i>
               </li>
@@ -131,24 +137,26 @@
             isMore:false,
             isBuild:false,
             visible:false,
+            messTop:0,
+            title:'歌单',
           }
         },
         computed: {
             options () {
-                return {
-                    pullUpLoad: this.pullUpLoadObj,
-                    scrollbar: true,
-                    startY:-50
-                }
+              return {
+                pullUpLoad: this.pullUpLoadObj,
+                scrollbar: true,
+                startY:-50
+              }
             },
             pullUpLoadObj: function () {
-                return this.pullUpLoad ? {
-                    threshold: parseInt(this.pullUpLoadThreshold),
-                    txt: {
-                        more: this.pullUpLoadMoreTxt,
-                        noMore: this.pullUpLoadNoMoreTxt
-                    }
-                } : false
+              return this.pullUpLoad ? {
+                threshold: parseInt(this.pullUpLoadThreshold),
+                txt: {
+                  more: this.pullUpLoadMoreTxt,
+                  noMore: this.pullUpLoadNoMoreTxt
+                }
+              } : false
             }
         },
         created() {
@@ -157,13 +165,13 @@
         methods: {
           getList () {
             this.$api.songLists.songList(705123491).then(res => {
-                console.log(res.data)
-                this.playlist = res.data.playlist
-                // this.tracks = res.data.playlist.tracks
-                this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0,100) : res.data.playlist.tracks
-                this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0,4) : res.data.playlist.subscribers
-                this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
-                this.messages.nickname = res.data.playlist.creator.nickname
+              console.log(res.data)
+              this.playlist = res.data.playlist
+              // this.tracks = res.data.playlist.tracks
+              this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0,100) : res.data.playlist.tracks
+              this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0,4) : res.data.playlist.subscribers
+              this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
+              this.messages.nickname = res.data.playlist.creator.nickname
             })
           },
           getQuery (query) {
@@ -185,45 +193,50 @@
 
           },
           scrollHandler ({ y }) {
-              this.scrollY = -y
-              this.whiteHeight = 610 - this.$refs.subTop.getBoundingClientRect().bottom  + 100
-              // console.log(this.whiteHeight)
-
+            this.scrollY = -y
+            this.whiteHeight = 610 - this.$refs.subTop.getBoundingClientRect().bottom  + 100
+            this.messTop = this.$refs.messTop.getBoundingClientRect().top
+              //需要添加防抖节流
+            if(this.messTop < 171) {
+              this.title = this.playlist.name
+            }else {
+              this.title = '歌单'
+            }
           },
           onPullingUp () {
 
           },
           cancel () {
-              this.isBuild = false
+            this.isBuild = false
           },
           more (index) {
-              // 子组件提醒打开更多操作页面
-              this.isMore = true
-              // this.visible = true
-              this.$nextTick(() => {
-                  this.$refs.playMore.show()
-              })
-              this.track = this.tracks[index]
+            // 子组件提醒打开更多操作页面
+            this.isMore = true
+            // this.visible = true
+            this.$nextTick(() => {
+              this.$refs.playMore.show()
+            })
+            this.track = this.tracks[index]
           },
 
           moreBuildList () {
-              this.isMore = false
-              this.isBuild = true
-              // 手动调用，解决打开更多再新建歌单产生滚动现象的bug。
-              this.$nextTick(() => {
-                  this._dialog.afterOpen()
-              })
+            this.isMore = false
+            this.isBuild = true
+            // 手动调用，解决打开更多再新建歌单产生滚动现象的bug。
+            this.$nextTick(() => {
+              this._dialog.afterOpen()
+            })
           },
           cancelMore () {
-              this.$refs.playMore.hide()
+            this.$refs.playMore.hide()
 
-              // this.isMore = false
-              // this.$nextTick(() => {
-              //     this.$refs.playMore.hide()
-              // })
-              setTimeout(() => {
-                  this.isMore = false
-              },500)
+            // this.isMore = false
+            // this.$nextTick(() => {
+            //     this.$refs.playMore.hide()
+            // })
+            setTimeout(() => {
+              this.isMore = false
+            },500)
           },
           toShare () {
             this.$refs.shareShow.show()
@@ -233,21 +246,20 @@
           }
         },
         watch: {
-            isBuild (val) {
-                if (val) {
-                    this._dialog.afterOpen()
-                } else {
-                    this._dialog.beforeClose()
-                }
-            },
-            isMore (val) {
-                if (val) {
-                    this._dialog.afterOpen()
-                } else {
-                    this._dialog.beforeClose()
-                }
-            },
-
+          isBuild (val) {
+            if (val) {
+                this._dialog.afterOpen()
+            } else {
+                this._dialog.beforeClose()
+            }
+          },
+          isMore (val) {
+            if (val) {
+                this._dialog.afterOpen()
+            } else {
+                this._dialog.beforeClose()
+            }
+          },
         },
         mounted() {
 
