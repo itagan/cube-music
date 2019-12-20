@@ -23,28 +23,26 @@
     export default {
         name: "setRing.vue",
         data() {
-            return {}
+          return {}
         },
         created() {
-            // this.ringDialog= this.$createRingDialog()
             // this.subscribeDialog = this.$createSubscribeDialog()
         },
         methods: {
-            show () {
-                this.$refs.popup.show()
-            },
-            hide () {
-                this.$refs.popup.hide()
-            },
-            ring () {
-                // this.$createRingDialog().show()
-                this.$createSubscribeDialog().show()
-            },
-            subscribe () {
-                // this.subscribeDialog.show()
-                // console.log(this.$createSubscribeDialog())
-                this.$createSubscribeDialog().show()
-            },
+          show () {
+            this.$refs.popup.show()
+          },
+          hide () {
+            this.$refs.popup.hide()
+          },
+          ring () {
+            this.$createSubscribeDialog().show()
+            this.hide ()
+          },
+          subscribe () {
+            this.$createSubscribeDialog().show()
+            this.hide ()
+          },
         },
     }
 </script>
