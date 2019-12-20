@@ -28,7 +28,7 @@
         <i class="iconfont iconpinglun"></i>
         <span>{{playlist.commentCount}}</span>
       </li>
-      <li >
+      <li @click="toShare">
         <i class="iconfont iconfenxiang"></i>
         <span>{{playlist.shareCount}}</span>
       </li>
@@ -65,6 +65,9 @@
                 this.$router.push({
                     path:'songlistcomment'
                 })
+            },
+            toShare () {
+              this.$emit('share')
             }
         }
     }

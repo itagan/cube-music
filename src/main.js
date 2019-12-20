@@ -11,8 +11,14 @@ import dialog from './assets/js/dialog'
 import {debounce} from './assets/js/debounce'
 import VueLazyload from 'vue-lazyload'
 import fastclick from 'fastclick'
-fastclick.attach(document.body)
 
+import RingDialog from "./components/common/ringdialog"
+import SubscribeDialog from "./components/common/subscribe-dialog"
+import { createAPI } from 'cube-ui'
+createAPI(Vue, RingDialog, [], true)
+createAPI(Vue, SubscribeDialog, [], true)
+
+fastclick.attach(document.body)
 Vue.use(VueLazyload)
 Vue.use(Cube) // 全局引入注册cube-ui
 // Vue.use(Toast);

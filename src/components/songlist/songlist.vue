@@ -38,7 +38,7 @@
             class="my-search"
           >
           </my-search>
-          <message class="my-message" :messages="messages" :playlist="playlist" @saveComment="saveComment"></message>
+          <message class="my-message" :messages="messages" :playlist="playlist" @saveComment="saveComment" @share="toShare"></message>
 
           <cube-sticky-ele>
             <ul class="sticky-header">
@@ -80,9 +80,13 @@
       v-if="isMore"
       @cancel="cancelMore"
       @build="moreBuildList"
+      @share="toShare"
+      @ring="setRing"
       :track="track"
       ref="playMore"
     ></play-more>
+    <share-dialog ref="shareShow"></share-dialog>
+    <set-ring ref="setRingShow"></set-ring>
   </div>
 </template>
 
@@ -92,6 +96,8 @@
     import Message from "./message"
     import List from "./list"
     import playMore from "./playmore"
+    import shareDialog from "../common/sharedialog"
+    import setRing from "../common/setring"
     export default {
         name: "songList.vue",
         components: {
@@ -100,6 +106,8 @@
           Message,
           List,
           playMore,
+          shareDialog,
+          setRing
         },
         data () {
           return {
@@ -215,9 +223,14 @@
               // })
               setTimeout(() => {
                   this.isMore = false
-              },800)
-
+              },500)
           },
+          toShare () {
+            this.$refs.shareShow.show()
+          },
+          setRing () {
+            this.$refs.setRingShow.show()
+          }
         },
         watch: {
             isBuild (val) {

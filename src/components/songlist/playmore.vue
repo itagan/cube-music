@@ -66,7 +66,7 @@
             <span>评论</span>
           </div>
         </li>
-        <li>
+        <li @click="toShare">
           <div class="build-icon">
             <i class="iconfont iconfenxiang"></i>
           </div>
@@ -98,7 +98,7 @@
             <span>单曲购买</span>
           </div>
         </li>
-        <li>
+        <li @click="ring">
           <div class="build-icon">
             <i class="iconfont iconcailingdingzhi"></i>
           </div>
@@ -171,7 +171,16 @@
           },
           hide () {
             this.visible = false
+          },
+          toShare () {
+              this.$emit('share')
+              this.$emit('cancel')
+          },
+          ring () {
+            this.$emit('ring')
+            this.$emit('cancel')
           }
+
         },
         watch: {
             // visible(vis) {
