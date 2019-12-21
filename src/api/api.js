@@ -168,6 +168,19 @@ const subs = {
     return axios.get(`${base}/mv/sublist?offset=${offset}`)
   },
 }
+//歌单有关
+const songLists = {
+  songList (id = 2410346874) {
+    return axios.get(`${base}/playlist/detail?id=${id}`)
+  },
+  songListComment (id = 705123491,offset = 0) {
+    return axios.get(`${base}/comment/playlist?id=${id}&offset=${offset}`)
+  },
+  //歌单收藏
+  subscribe (is, id) {
+    return axios.get(`${base}/playlist/subscribe?t=${is}&id=${id}`)
+  }
+}
 
 export default {
   login,
@@ -176,5 +189,6 @@ export default {
   users,
   playlists,
   likes,
-  subs
+  subs,
+  songLists
 }

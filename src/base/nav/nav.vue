@@ -1,7 +1,7 @@
 <template>
   <div class="nav-flex">
 <!--    注意，下边的to一定要有，不然报错。-->
-    <router-link tab="div" class="nav-item" v-for="item in result" :key="item.id" v-if="result.length" to="/my">
+    <router-link tab="div" class="nav-item" v-for="item in result" :key="item.id" v-if="result.length" to="/songlist">
       <div class="nav-div">
         <img :src="item.picUrl" class="nav-img">
         <div class="nav-img-div">
