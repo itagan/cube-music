@@ -289,7 +289,8 @@
           },
           stickyTop () {
             this.$nextTick(() => {
-              this.$refs.scroll.scrollToElement('.toTop', 250, 0, -50)
+              // this.$refs.scroll.scrollToElement('.toTop', 250, 0, -50)
+                this.$refs.scroll.scrollTo(0,-280,250)
             })
           },
           toComplete () {

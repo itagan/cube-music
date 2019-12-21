@@ -30,7 +30,7 @@
     </li>
 
     <cube-checkbox-group v-model="checkList" @input="Input">
-    <li v-for="(item, index) in tracks" :key="item.id">
+    <li v-for="(item, index) in tracks" :key="item.id" v-if="checkbox">
       <cube-checkbox :option="{value:index+ +1}" class="checkbox-css">
 
       <div class="song-base">
