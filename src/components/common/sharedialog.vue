@@ -128,20 +128,19 @@
     export default {
         name: "playMore.vue",
         data() {
-            return {
-                options: {
-                    scrollbar: true
-                }}
+          return {
+            options: {
+              scrollbar: true
+          }}
         },
         methods: {
-            show () {
-                this.$refs.popup.show()
-            },
-            hide () {
-                this.$refs.popup.hide()
-            }
+          show () {
+            this.$refs.popup.show()
+          },
+          hide () {
+            this.$refs.popup.hide()
+          }
         }
-
     }
 </script>
 

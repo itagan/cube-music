@@ -35,12 +35,12 @@
     export default {
         name: 'subscribe-dialog',
         methods: {
-            show () {
-                this.$refs.popup.show()
-            },
-            hide () {
-                this.$refs.popup.hide()
-            }
+          show () {
+            this.$refs.popup.show()
+          },
+          hide () {
+            this.$refs.popup.hide()
+          }
         }
     }
 </script>

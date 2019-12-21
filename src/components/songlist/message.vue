@@ -60,18 +60,18 @@
           }
         },
         methods: {
-            toComment () {
-              this.$emit('saveComment')
-              this.$router.push({
-                path:'songlistcomment'
-              })
-            },
-            toShare () {
-              this.$emit('share')
-            },
-            chcekMore () {
-              this.$emit('check')
-            }
+          toComment () {
+            this.$emit('saveComment')
+            this.$router.push({
+              path:'songlistcomment'
+            })
+          },
+          toShare () {
+            this.$emit('share')
+          },
+          chcekMore () {
+            this.$emit('check')
+          }
         }
     }
 </script>

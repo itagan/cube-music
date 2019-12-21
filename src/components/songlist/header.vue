@@ -16,29 +16,29 @@
     export default {
         name: 'header.vue',
         components: {
-            MyHeader
+          MyHeader
         },
         data () {
-            return {
-                isComplete: true
-            }
+          return {
+              isComplete: true
+          }
         },
         props: {
-            title:{
-                type:String,
-                default:'歌单'
-            }
+          title:{
+            type:String,
+            default:'歌单'
+          }
         },
         methods: {
-            toBack () {
-                this.$router.go(-1)
-            },
-            more () {
+          toBack () {
+            this.$router.go(-1)
+          },
+          more () {
 
-            },
-            music () {
+          },
+          music () {
 
-            }
+          }
         }
     }
 </script>

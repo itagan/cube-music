@@ -135,32 +135,27 @@
     export default {
         name: "playMore.vue",
         data() {
-            return {
-                visible:false,
-                options: {
-                    scrollbar: true
-                }
+          return {
+            visible:false,
+            options: {
+              scrollbar: true
             }
+          }
         },
         props: {
-            title: {
-                type: String,
-                default: ''
-            },
-            isVip : {
-                type:Boolean,
-                default:true
-            },
-            // visible : {
-            //     type:Boolean,
-            //     default:false
-            // }
-            track: {
-                type:Object,
-                default:{}
-            }
+          title: {
+            type: String,
+            default: ''
+          },
+          isVip : {
+            type:Boolean,
+            default:true
+          },
+          track: {
+            type:Object,
+            default:{}
+          }
         },
-
         methods: {
           cancel () {
             // 触摸到遮罩层就取消本组件
@@ -173,23 +168,13 @@
             this.visible = false
           },
           toShare () {
-              this.$emit('share')
-              this.$emit('cancel')
+            this.$emit('share')
+            this.$emit('cancel')
           },
           ring () {
             this.$emit('ring')
             this.$emit('cancel')
           }
-
-        },
-        watch: {
-            // visible(vis) {
-            //     if(vis) {
-            //         this.show()
-            //     }else {
-            //         this.hide()
-            //     }
-            // }
         }
     }
 </script>

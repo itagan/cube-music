@@ -65,7 +65,7 @@
           ></message>
 
           <cube-sticky-ele>
-            <ul class="sticky-header toTop" ref="messTop" v-show="!allShow">
+            <ul class="sticky-header" ref="messTop" v-show="!allShow">
               <li class="play-icon">
                 <i class="iconfont iconbofang2"></i>
               </li>
@@ -289,57 +289,49 @@
           },
           stickyTop () {
             this.$nextTick(() => {
-              // this.$refs.scroll.scrollToElement('.toTop', 250, 0, -50)
-                this.$refs.scroll.scrollTo(0,-280,250)
+            // this.$refs.scroll.scrollToElement('.toTop', 250, 0, -50)
+              this.$refs.scroll.scrollTo(0,-280,250)
             })
           },
           toComplete () {
-              this.allShow = false
-              this.checked = false
-              this.$refs.ToCheck.allToCheckNo()
+            this.allShow = false
+            this.checked = false
+            this.$refs.ToCheck.allToCheckNo()
           },
           allCheck () {
             this.checked = !this.checked
             if(this.checked) {
-                // this.checkedChild = true
-                this.$refs.ToCheck.allToChecked()
+              // this.checkedChild = true
+              this.$refs.ToCheck.allToChecked()
             }else {
-                // this.checkedChild = false
-                this.$refs.ToCheck.allToCheckNo()
+              // this.checkedChild = false
+              this.$refs.ToCheck.allToCheckNo()
 
             }
           },
           toAllChecked (val) {
-              if(val === 1) {
-                  this.checked = true
-              }else if(val === 0){
-                  this.checked = false
-              }
+            if(val === 1) {
+              this.checked = true
+            }else if(val === 0){
+              this.checked = false
+            }
           }
         },
         watch: {
           isBuild (val) {
             if (val) {
-                this._dialog.afterOpen()
+              this._dialog.afterOpen()
             } else {
-                this._dialog.beforeClose()
+              this._dialog.beforeClose()
             }
           },
           isMore (val) {
             if (val) {
-                this._dialog.afterOpen()
+              this._dialog.afterOpen()
             } else {
-                this._dialog.beforeClose()
+              this._dialog.beforeClose()
             }
-          },
-          // checked (val) {
-          //     if(val) {
-          //         this.checkedChild = true
-          //         console.log(this.checkedChild)
-          //     }else {
-          //         this.checkedChild = false
-          //     }
-          // }
+          }
         },
         mounted() {
 
@@ -528,7 +520,7 @@
           color:red
         span
           color:gray
-          
+
   /*深度选择器*/
   .cube-checkbox_checked >>>
   .cube-checkbox-ui
