@@ -185,7 +185,13 @@
     position:relative
     .song-base
       left:-40px
-
+  .cube-checkbox
+    color:black
+/*深度选择器*/
+  .cube-checkbox_checked >>>
+    .cube-checkbox-ui
+      i
+        color:red !important
 
   .activeColor
     color:red !important

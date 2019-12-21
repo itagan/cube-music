@@ -528,7 +528,12 @@
           color:red
         span
           color:gray
-
+          
+  /*深度选择器*/
+  .cube-checkbox_checked >>>
+  .cube-checkbox-ui
+    i
+      color:red !important
 
   .slide-fade-enter-active
     transition: all .3s ease
