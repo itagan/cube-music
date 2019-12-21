@@ -78,10 +78,15 @@
                     (共{{tracks.length}}首)
                   </span>
               </li>
-              <li class="play-sub">
+              <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
-                <span class="sub-num">({{playlist.subscribedCount}})</span>
+                (<span class="sub-num" ref="Sub">{{playlist.subscribedCount}}</span>)
+              </li>
+
+              <li class="play-sub-ok" v-if="this.isSubscribed" @click="toSubscribed">
+                <i class="iconfont iconshoucangchenggong"></i>
+                <span class="sub-num" ref="Sub">{{playlist.subscribedCount}}</span>
               </li>
             </ul>
 
@@ -177,6 +182,7 @@
             checked: false,
             allShow:false,
             complete:false,
+            isSubscribed:false,
           }
         },
         computed: {
@@ -205,6 +211,7 @@
             this.$api.songLists.songList(705123491).then(res => {
               console.log(res.data)
               this.playlist = res.data.playlist
+              this.isSubscribed = this.playlist.subscribed
               // this.tracks = res.data.playlist.tracks
               this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0,10) : res.data.playlist.tracks
               this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0,4) : res.data.playlist.subscribers
@@ -301,12 +308,9 @@
           allCheck () {
             this.checked = !this.checked
             if(this.checked) {
-              // this.checkedChild = true
               this.$refs.ToCheck.allToChecked()
             }else {
-              // this.checkedChild = false
               this.$refs.ToCheck.allToCheckNo()
-
             }
           },
           toAllChecked (val) {
@@ -315,7 +319,56 @@
             }else if(val === 0){
               this.checked = false
             }
-          }
+          },
+            //收藏功能
+          toSubscribed() {
+            if(this.isSubscribed) {
+              this.$createDialog({
+                type: 'confirm',
+                title: '确定不再收藏该歌单？',
+                confirmBtn: {
+                  text: '确定',
+                  active: true,
+                  disabled: false,
+                  href: 'javascript:;'
+                },
+                cancelBtn: {
+                  text: '取消',
+                  active: false,
+                  disabled: false,
+                  href: 'javascript:;'
+                },
+                onConfirm: () => {
+                  this.$api.songLists.subscribe(2, this.playlist.id).then(res => {
+                      console.log(res)
+                    if(res.status === 200) {
+                      this.$createToast({
+                        type: 'text',
+                        time: 1000,
+                        txt: '歌单已取消收藏'
+                      }).show()
+                      this.$refs.Sub.innerHTML--
+                      this.isSubscribed = false
+                    }
+                  })
+                }
+              }).show()
+            }else {
+              this.$api.songLists.subscribe(1, this.playlist.id).then(res => {
+                  console.log(res)
+                if(res.status === 200) {
+                  const toast = this.$createToast({
+                    txt: '歌单已收藏',
+                    type: 'correct',
+                    time: 2000,
+                  })
+                  toast.show()
+                  this.$refs.Sub.innerHTML++
+                  this.isSubscribed = true
+                }
+              })
+            }
+          },
         },
         watch: {
           isBuild (val) {
@@ -467,11 +520,16 @@
         color:white
         margin-right:10px
         line-height:35px
+        padding-right:5px
         i
           margin-left:5px
         .sub-num
-          margin-right:5px
+          /*margin-right:5px*/
           width:auto
+      .play-sub-ok
+        font-size:$font-size-small
+        color:gray
+        margin-right:10px
       .complete
         height:100%
         width:50px

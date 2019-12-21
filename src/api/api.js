@@ -175,6 +175,10 @@ const songLists = {
   },
   songListComment (id = 705123491,offset = 0) {
     return axios.get(`${base}/comment/playlist?id=${id}&offset=${offset}`)
+  },
+  //歌单收藏
+  subscribe (is, id) {
+    return axios.get(`${base}/playlist/subscribe?t=${is}&id=${id}`)
   }
 }
 
