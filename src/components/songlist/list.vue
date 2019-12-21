@@ -1,15 +1,12 @@
 <template>
   <ul class="ul-list">
-    <li v-for="(item, index) in tracks" :key="item.id">
-<!--      <song-base :item="item" :index="index" @more="more"></song-base>-->
+    <li v-for="(item, index) in tracks" :key="item.id" v-if="!checkbox">
       <div class="song-base">
-        <div class="num" v-show="!checkbox">
+        <div class="num">
           <span v-show="!playing">{{index + +1}}</span>
           <i class="iconfont iconlaba" v-show="playing"></i>
         </div>
-        <div class="num" v-show="checkbox">
-          <i class="iconfont iconshoucangchenggong"></i>
-        </div>
+
         <div class="song-base-content">
           <div class="title" :class="[playing ? 'activeColor' : '']">
             <span class="title-left">{{item.name}}</span>
@@ -23,18 +20,39 @@
           </div>
         </div>
 
-        <div class="playing" v-show="!checkbox">
+        <div class="playing">
           <i class="iconfont iconbofang5"></i>
         </div>
-        <div class="more" v-show="!checkbox" @click="more(index)">
+        <div class="more" @click="more(index)">
           <i class="iconfont icongengduo"></i>
-        </div>
-
-        <div v-show="checkbox" class="checkbox">
-          <i class="iconfont icontuozhuai"></i>
         </div>
       </div>
     </li>
+
+    <cube-checkbox-group v-model="checkList" @input="Input">
+    <li v-for="(item, index) in tracks" :key="item.id">
+      <cube-checkbox :option="{value:index+ +1}" class="checkbox-css">
+
+      <div class="song-base">
+        <div class="song-base-content">
+          <div class="title" :class="[playing ? 'activeColor' : '']">
+            <span class="title-left">{{item.name}}</span>
+            <span class="title-right" v-if="item.tns && item.tns.length">({{item.tns[0]}})</span>
+          </div>
+          <div class="desc">
+            <img src="" alt="" class="sq">
+            <span class="nickname">{{item.ar[0].name}}</span>
+            <span class="name">{{item.al.name}}</span>
+          </div>
+        </div>
+        <div  class="drag-drop">
+          <i class="iconfont icontuozhuai"></i>
+        </div>
+      </div>
+
+      </cube-checkbox>
+    </li>
+    </cube-checkbox-group>
   </ul>
 </template>
 
@@ -45,18 +63,60 @@
           return {
             playing:false,
             checkbox:false,
-            activeColor:'activeColor'
+            activeColor:'activeColor',
+            checkList:[],
+            val:1
           }
         },
         props: {
           tracks: {
             type:Array,
             default:[]
+          },
+          complete: {
+            type:Boolean,
+            default:false
+          },
+          allShow: {
+            type:Boolean,
+            default:false
+          },
+          allCheckbox:{
+            type:Boolean,
+            default:false
+          }
+        },
+        watch: {
+          complete (_com) {
+
+          },
+          allShow (val) {
+            this.checkbox = val
           }
         },
         methods: {
           more (index) {
             this.$emit('more',index)
+          },
+          Input () {
+            if(this.checkList.length === this.tracks.length) {
+               this.$emit('toAll',1)
+            }else {
+              this.$emit('toAll',0)
+            }
+          },
+          allToCheck () {
+            let arr = []
+              for(let i = 1;i <= this.tracks.length; i++) {
+                arr.push(i)
+              }
+              return arr
+          },
+          allToChecked () {
+            this.checkList = [...this.allToCheck()]
+          },
+          allToCheckNo () {
+            this.checkList = []
           }
         }
     }
@@ -71,7 +131,7 @@
     background-color:white
     .song-base
       display:flex
-      width:100%
+      width:375px
       height:50px
       position:relative
       .num
@@ -114,6 +174,18 @@
         position:absolute
         right:0
         color:gray
+      .drag-drop
+        position:absolute
+        right:20px
+        color:gray
+        i
+          font-size:$font-size-large-x
+
+  .checkbox-css
+    position:relative
+    .song-base
+      left:-40px
+
 
   .activeColor
     color:red !important

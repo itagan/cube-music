@@ -6,7 +6,24 @@
     </div>
 
     <div class="song-list-white" :style="{height:whiteHeight + 'px'}"></div>
-
+    <ul class="check-footer" v-show="allShow">
+      <li>
+        <div class="check-footer-icon"><i class="iconfont iconbofang"></i></div>
+        <div class="check-footer-text">下一首播放</div>
+      </li>
+      <li>
+        <div class="check-footer-icon"><i class="iconfont iconwodeshoucang"></i></div>
+        <div class="check-footer-text">收藏到歌单</div>
+      </li>
+      <li>
+        <div class="check-footer-icon"><i class="iconfont iconxiazaigequ"></i></div>
+        <div class="check-footer-text">下载</div>
+      </li>
+      <li>
+        <div class="check-footer-icon"><i class="iconfont iconquxiao"></i></div>
+        <div class="check-footer-text">删除下载</div>
+      </li>
+    </ul>
     <transition name="slide-fade">
       <my-header class="my-header" ref="header" v-show="isShow" :title="title"></my-header>
     </transition>
@@ -44,10 +61,11 @@
             :playlist="playlist"
             @saveComment="saveComment"
             @share="toShare"
+            @check="toCheck"
           ></message>
 
           <cube-sticky-ele>
-            <ul class="sticky-header" ref="messTop">
+            <ul class="sticky-header toTop" ref="messTop" v-show="!allShow">
               <li class="play-icon">
                 <i class="iconfont iconbofang2"></i>
               </li>
@@ -60,15 +78,32 @@
                     (共{{tracks.length}}首)
                   </span>
               </li>
-
               <li class="play-sub">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
                 <span class="sub-num">({{playlist.subscribedCount}})</span>
               </li>
             </ul>
+
+            <ul class="sticky-header" v-show="allShow" @click.self="allCheck">
+              <li @click="allCheck">
+                <cube-checkbox v-model="checked">
+                  全选
+                </cube-checkbox>
+              </li>
+              <li class="complete" @click.self="toComplete">完成</li>
+            </ul>
+
           </cube-sticky-ele>
-          <list :tracks="tracks" class="my-list" @more="more"></list>
+          <list
+            class="my-list"
+            :tracks="tracks"
+            @more="more"
+            @toAll="toAllChecked"
+            :complete="complete"
+            :allShow="allShow"
+            ref="ToCheck"
+          ></list>
           <ul class="song-list-collection" ref="subTop">
             <li class="li-img" v-for="item in subs" :key="item.userId">
               <img :src="item.avatarUrl" alt="">
@@ -139,6 +174,9 @@
             visible:false,
             messTop:0,
             title:'歌单',
+            checked: false,
+            allShow:false,
+            complete:false,
           }
         },
         computed: {
@@ -168,7 +206,7 @@
               console.log(res.data)
               this.playlist = res.data.playlist
               // this.tracks = res.data.playlist.tracks
-              this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0,100) : res.data.playlist.tracks
+              this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0,10) : res.data.playlist.tracks
               this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0,4) : res.data.playlist.subscribers
               this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
               this.messages.nickname = res.data.playlist.creator.nickname
@@ -243,6 +281,39 @@
           },
           setRing () {
             this.$refs.setRingShow.show()
+          },
+            //全选功能
+          toCheck () {
+            this.allShow = true
+            this.stickyTop()
+          },
+          stickyTop () {
+            this.$nextTick(() => {
+              this.$refs.scroll.scrollToElement('.toTop', 250, 0, -50)
+            })
+          },
+          toComplete () {
+              this.allShow = false
+              this.checked = false
+              this.$refs.ToCheck.allToCheckNo()
+          },
+          allCheck () {
+            this.checked = !this.checked
+            if(this.checked) {
+                // this.checkedChild = true
+                this.$refs.ToCheck.allToChecked()
+            }else {
+                // this.checkedChild = false
+                this.$refs.ToCheck.allToCheckNo()
+
+            }
+          },
+          toAllChecked (val) {
+              if(val === 1) {
+                  this.checked = true
+              }else if(val === 0){
+                  this.checked = false
+              }
           }
         },
         watch: {
@@ -260,6 +331,14 @@
                 this._dialog.beforeClose()
             }
           },
+          // checked (val) {
+          //     if(val) {
+          //         this.checkedChild = true
+          //         console.log(this.checkedChild)
+          //     }else {
+          //         this.checkedChild = false
+          //     }
+          // }
         },
         mounted() {
 
@@ -304,9 +383,31 @@
       bottom:0
       z-index: 0
       background-color:white
-    /*.my-list*/
-    /*  border-top-left-radius:20px*/
-      /*border-top-right-radius:20px*/
+    .check-footer
+      position:fixed
+      bottom:0
+      z-index:2001
+      height:50px
+      width:100%
+      display:flex
+      font-size:$font-size-small
+      color:dimgray
+      li
+        width:25%
+        flex:1
+        background-color:#dcdcdc
+        height:50px
+        text-align:center
+        .check-footer-icon
+          height:30px
+          line-height:30px
+          i
+            font-size:$font-size-large-x
+        .check-footer-text
+          height:20px
+          line-height:1.5
+
+
     .song-list-collection
       display:flex
       position:relative
@@ -378,7 +479,11 @@
         .sub-num
           margin-right:5px
           width:auto
-
+      .complete
+        height:100%
+        width:50px
+        line-height:50px
+        color:red
 
     /*.cube-sticky*/
       /*padding: 0 10px*/

@@ -36,7 +36,7 @@
         <i class="iconfont iconxiazaigequ"></i>
         <span>下载</span>
       </li>
-      <li>
+      <li @click="chcekMore">
         <i class="iconfont iconhuaban"></i>
         <span>多选</span>
       </li>
@@ -50,24 +50,27 @@
     export default {
         name: "songMessage.vue",
         props: {
-            messages: {
-                type:Object,
-                default:{}
-            },
-            playlist: {
-                type:Object,
-                default:{}
-            }
+          messages: {
+            type:Object,
+            default:{}
+          },
+          playlist: {
+            type:Object,
+            default:{}
+          }
         },
         methods: {
             toComment () {
-                this.$emit('saveComment')
-                this.$router.push({
-                    path:'songlistcomment'
-                })
+              this.$emit('saveComment')
+              this.$router.push({
+                path:'songlistcomment'
+              })
             },
             toShare () {
               this.$emit('share')
+            },
+            chcekMore () {
+              this.$emit('check')
             }
         }
     }
