@@ -107,11 +107,39 @@
       </li>
     </ul>
     
+    <div class="home-page-comment">
+      <div class="home-page-comment-who">TA的评论
+        <span>11</span>
+      </div>
+      <ul class="home-page-comment-ul">
+        <li class="li-top-left">
+          <img src="../user/img/login1.png" alt="">
+        </li>
+        <li class="li-top-center">
+          单曲 一曲肝肠断，何处匿知音
+        </li>
+        <li class="li-top-right">
+          <span>111</span>
+           <i class="iconfont iconzan1"></i>
+        </li>
+      </ul>
+      <div class="home-page-comment-content">
+        那些年吃西瓜的小女孩
+      </div>
+      <div class="home-page-comment-time">
+        2019年1月1日
+      </div>
+       <div class="home-page-comment-more">
+        <span>更多评论</span>
+        <i class="iconfont iconleft-arrow"></i>
+      </div>
+     </div>
   </div>
 </template>
 
 <script>
-    import songListBase from "../../base/song/songlistbase";
+    import songListBase from "../../base/song/songlistbase"
+    import userBase from "../../base/basecomment/userbase"
     export default {
         name: "homepage.vue",
         data() {
@@ -124,7 +152,8 @@
             }
         },
         components: {
-            songListBase
+            songListBase,
+            userBase
         },
         props: {
             profile:{
@@ -265,7 +294,56 @@
         font-size:$font-size-medium
         color:gray
         text-align:center
-
+    .home-page-comment
+      .home-page-comment-who
+        height:30px
+        line-height:30px
+        font-size:$font-size-medium-x
+        margin-left:10px
+        span 
+          color:gray
+          font-size:$font-size-small
+      .home-page-comment-ul 
+        height 20px
+        line-height:20px
+        width:100%
+        display:flex
+        position:relative
+        margin:10px auto
+        li
+          height 20px
+          line-height:20px
+          color:gray
+        .li-top-left
+          margin:auto 10px
+          max-width:30px
+          img 
+            height 20px
+            width:20px
+        .li-top-center
+          font-size:$font-size-small
+          ellipsis()
+          width:auto
+          flex:1
+        .li-top-right
+          position:absolute
+          right:10px
+          width:20px  
+          margin-right:10px 
+      .home-page-comment-content
+        height:auto
+        margin:10px
+        font-size:$font-size-medium   
+      .home-page-comment-time
+        font-size:$font-size-small  
+        color:gray
+        margin:auto 10px
+      .home-page-comment-more
+        height:40px
+        line-height:40px
+        font-size:$font-size-medium
+        color:gray
+        text-align:center
   .home-page-img
     width:50px
     height:50px
