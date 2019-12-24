@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="user"> 
     <my-header :profile="profile" :isShow="isShow" class="my-header" ref="myHeader"></my-header>
-    <div class="user-background">
-      <img width="100%" :src="profile.backgroundUrl" alt="">
+    <div class="user-background" ref="bgEnlarge">
+      <img width="100%" height="100%" :src="profile.backgroundUrl" alt="" ref="Enlarge">
     </div>
     <div class="sticky-view-container">
       <cube-sticky :pos="scrollY">
@@ -121,7 +121,7 @@
                 this.scrollY = -y
                 // console.log(this.scrollY)              
                 this.messTop = this.$refs.messTop.getBoundingClientRect().top
-                // console.log(this.messTop)
+                console.log(this.messTop)
                 if(this.messTop <= 112) {
                  let opac = 1 - (this.messTop - 62) * 0.02
                  this.$refs.myHeader.opacityHeader(opac)
@@ -133,6 +133,16 @@
                   this.$refs.myMessage.opacityHeader(opac)
                 }else {
                   this.$refs.myMessage.opacityHeader(1)
+                }
+                if(this.messTop > 280) {
+                  // this.$refs.bgEnlarge.style.height = '100%'
+                  let scale = 1 + ((this.messTop - 280) / 320)
+                  this.$refs.Enlarge.style['transform'] = `scaleX(${scale})`
+                  this.$refs.bgEnlarge.style.height = 320 + this.messTop - 280 + 'px'
+
+                }else {
+                  this.$refs.bgEnlarge.style.height = '320px'
+                  // this.$refs.Enlarge.style['transform'].scale = 1
                 }
               
             },
@@ -149,23 +159,31 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
+ .user
+    overflow: hidden
+    width:375px
+    height:675px
   .my-header
     background-color:transparent !important
     color:white
   .user-background
     position: absolute
     width: 100%
-    height: 320px
+    // height:100%
+    height:320px
+    // height:auto
     top:0
     left:0
     z-index: 0
     opacity:1
     filter:brightness(.6) //调整背景暗度
-    -webkit-filter:brightness(.6);//兼容不同浏览器
-    -o-filter:brightness(.6);
-    -moz-filter:brightness(.6);
+    -webkit-filter:brightness(.6)//兼容不同浏览器
+    -o-filter:brightness(.6)
+    -moz-filter:brightness(.6)
+    overflow: hidden //避免图片放大影响整体布局
     img
       width: 100%
+      // height: 320px
       height: 100%
 
   .sticky-view-container
