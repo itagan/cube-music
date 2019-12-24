@@ -19,6 +19,29 @@
         <i class="iconfont iconleft-arrow"></i>
       </div>
     </div>
+    <div class="home-page-mlog">
+        <div class="home-page-mlog-num">Mlog <span></span></div>
+        <ul>
+          <li>
+            <img src="../user/img/login1.png" alt="">
+            <div class="home-page-mlog-message">
+              <div class="home-page-mlog-title">说唱机关枪转型滴滴滴滴滴滴</div>
+              <span class="home-page-mlog-like">28赞</span>
+            </div>
+          </li>
+          <li>
+            <img src="../user/img/login1.png" alt="">
+            <div class="home-page-mlog-message">
+              <div class="home-page-mlog-title">说唱机关枪转型滴滴滴滴滴滴</div>
+              <span class="home-page-mlog-like">28赞</span>
+            </div>
+          </li>
+        </ul>
+        <div class="home-page-mlog-more">
+          <span>更多Mlog</span>
+          <i class="iconfont iconleft-arrow"></i>
+        </div>
+    </div>
     <div class="home-page-music">
       <song-list-base>
         <div slot="left" class="home-page-music-rank">
@@ -35,6 +58,22 @@
         <span slot="bottom">{{trackCountLike}}首，播放{{playCountLike}}次</span>
       </song-list-base>
     </div>
+     <ul class="home-page-song-list" v-if="this.playlist.length">
+      <li class="home-page-song-list-create">音乐专栏
+      <span>(1个，被评论112次)</span>
+      </li>
+      <li class="home-page-song-list-li">
+        <song-list-base>
+          <img src="../user/img/login1.png" alt="" slot="left" class="home-page-img">
+          <span slot="top">拿索斯古典音乐</span>
+          <span slot="bottom">共80期，最近更新2019-12-30</span>
+        </song-list-base>
+      </li>
+      <li class="home-page-song-list-more">
+        <span>更多专栏</span>
+        <i class="iconfont iconleft-arrow"></i>
+      </li>
+    </ul>
     <ul class="home-page-song-list" v-if="this.playlist.length">
       <li class="home-page-song-list-create">创建的歌单
       <span>({{this.playlist.length}}个，被收藏112次)</span>
@@ -142,6 +181,49 @@
           height:20px
           line-height:20px
       .home-page-message-more
+        height:40px
+        line-height:40px
+        font-size:$font-size-medium
+        color:gray
+        text-align:center
+    .home-page-mlog
+      .home-page-mlog-num
+        height:30px
+        line-height:30px
+        font-size:$font-size-medium-x
+        margin-left:10px
+        span 
+          font-size:$font-size-small
+          color:gray
+      ul
+        flex-between()
+        margin:10px
+        li
+          height:220px
+          width:172.5px
+          position:relative 
+          border-radius:10px
+          img 
+            width:100%
+            height 100%
+            border-radius:10px
+          .home-page-mlog-message
+            position:absolute
+            bottom 10px
+            margin:auto 10px
+            width:153px
+            height:30px
+            .home-page-mlog-title
+              font-size: $font-size-medium
+              color:white
+              ellipsis()
+              width:153px
+              height 20px
+              line-height:20px
+            .home-page-mlog-like
+              font-size: $font-size-small
+              color:gray
+      .home-page-mlog-more        
         height:40px
         line-height:40px
         font-size:$font-size-medium
