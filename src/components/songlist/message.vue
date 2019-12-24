@@ -12,7 +12,7 @@
         <div class="song-title">
           {{playlist.name}}
         </div>
-        <div class="song-create">
+        <div class="song-create" @click="toUser">
           <img :src="messages.avatarUrl" alt="">
           <span>{{messages.nickname}}</span>
           <i class="iconfont iconiconfontyoujiantou"></i>
@@ -71,6 +71,12 @@
           },
           chcekMore () {
             this.$emit('check')
+          },
+          toUser () {
+              let id = 477726475
+              this.$router.push({
+                  path: `/user/${id}`
+              })
           }
         }
     }

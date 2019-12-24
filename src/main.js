@@ -26,6 +26,11 @@ Vue.prototype._dialog = dialog
 
 Vue.config.productionTip = false
 
+// const originalPush = Router.prototype.push
+// Router.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
