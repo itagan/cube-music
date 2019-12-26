@@ -110,8 +110,12 @@ const users = {
   // 获取用户歌单
   playlist (uid) {
     return axios.get(`${base}/user/playlist?uid=${uid}`)
+  },
+  //获取用户动态
+  getDynamic (uid,limit=30,lasttime=-1) {
+    return axios.get(`${base}/user/event?uid=${uid}&limit=${limit}&lasttime=${lasttime}`)
   }
-}
+ }
 
 // 歌单有关
 const playlists = {

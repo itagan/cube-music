@@ -48,8 +48,7 @@
             </cube-slide-item>
 
             <cube-slide-item :index="1">
-<!--              <play-list></play-list>-->
-              <div>帅气的你</div>
+              <user-dynamic></user-dynamic>
             </cube-slide-item>
 
           </cube-slide>
@@ -66,14 +65,16 @@
     import myHeader from "./header"
     import myMessage from "./message"
     import playList from "./playlist"
-    import homePage from "./homepage";
+    import homePage from "./homepage"
+    import userDynamic from "./userdynamic"
     export default {
         name: "user.vue",
         components: {
             myHeader,
             myMessage,
             playList,
-            homePage
+            homePage,
+            userDynamic
         },
         data() {
             return {
@@ -121,7 +122,7 @@
                 this.scrollY = -y
                 // console.log(this.scrollY)              
                 this.messTop = this.$refs.messTop.getBoundingClientRect().top
-                console.log(this.messTop)
+                // console.log(this.messTop)
                 if(this.messTop <= 112) {
                  let opac = 1 - (this.messTop - 62) * 0.02
                  this.$refs.myHeader.opacityHeader(opac)
