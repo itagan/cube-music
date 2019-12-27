@@ -10,6 +10,9 @@
       <div class="li-right-bottom" v-if="$slots.bottom">
         <slot name="bottom"></slot>
       </div>
+      <div class="li-right-right" v-if="$slots.liRight">
+        <slot name="liRight"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -37,8 +40,6 @@ export default {
     display:flex
     height:50px
     line-height:50px
-    // width:290px
-    // background-color:rgba(128,128,128,.2)
     width:100%
     border-radius:10px
     .li-left
@@ -50,7 +51,6 @@ export default {
     .li-right
       flex:1
       margin-left:10px
-      margin-top:10px
       height:50px
       line-height:50px
       max-width:235px
@@ -59,10 +59,16 @@ export default {
         height:20px
         line-height:20px
         ellipsis()
+        margin-top:6px
       .li-right-bottom
         font-size:$font-size-small
         height:20px
         line-height:20px
         color:gray
+        ellipsis()
+      .li-right-right
+        font-size:$font-size-medium
+        height:50px
+        line-height:50px
         ellipsis()
 </style>

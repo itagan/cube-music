@@ -23,13 +23,14 @@ export default {
   computed: {},
   methods: {
     getDynamic () {
-      this.$api.users.getDynamic(477726475,30,-1).then(res => {
+      this.$api.users.getDynamic(477726475,100,-1).then(res => {
         this.jsons = res.data.events.map(item => {
           return eval('(' + item.json + ')')
         })
         this.events = res.data.events
-        
+
         console.log(this.jsons)
+        console.log(this.events)
       })
     }
   },
