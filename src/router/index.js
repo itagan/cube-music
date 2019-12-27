@@ -14,6 +14,8 @@ import videoSlide from '../components/common/videoslide'
 import MyCollectionList from '../components/mycollection/collectionlist'
 import SongList from "../components/songlist/songlist"
 import SongListComment from "../components/songlist/listcomment"
+import User from "../components/others/user"
+import BaseMessage from "../components/others/basemessage"
 
 
 Vue.use(Router)
@@ -99,6 +101,14 @@ export default new Router({
     {
       path: '/songlistcomment',
       component: SongListComment
-    }
+    },
+    {
+      path: '/user/:id',
+      component: User
+    },
+    {
+      path: '/basemessage',
+      component: BaseMessage
+    },
   ]
 })
