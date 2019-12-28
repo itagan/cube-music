@@ -29,7 +29,7 @@
                 </span>
         </div>
         <ul  class="hot-ul" v-else>
-          <li v-for="item in comments" class="hot-li">
+          <li v-for="(item, index) in comments" class="hot-li" :key="index">
             <base-comment :item="item"></base-comment>
           </li>
         </ul>

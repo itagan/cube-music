@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import myDynamic from "../common/dynamic"
+import myDynamic from "../dynamic/dynamic"
 export default {
   components: {
     myDynamic
@@ -28,7 +28,7 @@ export default {
           return eval('(' + item.json + ')')
         })
         this.events = res.data.events
-
+        
         console.log(this.jsons)
         console.log(this.events)
       })

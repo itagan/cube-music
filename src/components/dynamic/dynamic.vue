@@ -308,7 +308,7 @@
     </div>
 
       <ul class="dynamic-bottom-icon">
-        <li class="li-one">
+        <li class="li-one" @click="forward">
           <i class="iconfont iconxin"></i>
           <span>转发
             {{events[index].info.commentThread.shareCount}}
@@ -331,6 +331,7 @@
         </li>
       </ul>
     </div>
+    <!-- <for-ward ref=Forward></for-ward> -->
   </div>
 </template>
 
@@ -338,11 +339,12 @@
 import shareBase from "../../base/share/sharebase"
 import shareVideo from "../../base/video/sharevideo"
 import shareComment from "../../base/share/sharecomment"
+import forWard from "./forward"
 export default {
   components: {
     shareBase,
     shareVideo,
-    shareComment
+    shareComment,
   },
   props: {
     item: {
@@ -361,7 +363,8 @@ export default {
   data() {
     return {
       song:false,
-      flag: false,
+      evId:'',
+      uid:0,
     }
   },
   watch: {
@@ -461,12 +464,16 @@ export default {
             return arr
           }
         }
+      },
+      forward () {
+        this.uid = 477726475
+        this.evId = this.events[this.index].id
+        this.$router.push({
+          path:`/forward/${this.uid}/${this.evId}`
+        })
       }   
-  
   },
-  created() {
-    this.flag = true
-  },
+  created() {},
   mounted() {}
 }
 </script>

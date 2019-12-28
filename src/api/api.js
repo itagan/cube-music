@@ -114,7 +114,11 @@ const users = {
   //获取用户动态
   getDynamic (uid,limit=30,lasttime=-1) {
     return axios.get(`${base}/user/event?uid=${uid}&limit=${limit}&lasttime=${lasttime}`)
-  }
+  },
+  //转发动态
+  forWardDynamic (evId,uid,forwards) {
+    return axios.get(`${base}/event/forward?evId=${evId}&uid=${uid}&forwards=${forwards}`)
+  },
  }
 
 // 歌单有关

@@ -16,6 +16,7 @@ import SongList from "../components/songlist/songlist"
 import SongListComment from "../components/songlist/listcomment"
 import User from "../components/others/user"
 import BaseMessage from "../components/others/basemessage"
+import ForWard from "../components/dynamic/forward"
 
 
 Vue.use(Router)
@@ -109,6 +110,10 @@ export default new Router({
     {
       path: '/basemessage',
       component: BaseMessage
+    },
+    {
+      path: '/forward/:uid/:evId',
+      component: ForWard
     },
   ]
 })
