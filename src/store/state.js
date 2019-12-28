@@ -15,6 +15,7 @@ const state = {
   videoState: [{vid: '', praise: false, collection: false, share: false}], // 视频资源是否操作了
   videoCollectionsList:[],
   currentVideo:[],
-  operation:[]
+  operation:[],
+  dynamic:{}
 }
 export default state

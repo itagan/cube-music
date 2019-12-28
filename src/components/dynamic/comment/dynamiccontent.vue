@@ -2,335 +2,314 @@
   <div class="wrapper">
     <div class="dynamic-top">
       <div class="dynamic-top-img">
-        <img :src="events[index].user.avatarUrl" alt="">
+        <img :src="item.user.avatarUrl" alt="">
       </div>
       <div class="dynamic-right-top">
         <div class="dynamic-right-title">
-          <span class="dynamic-right-name">{{events[index].user.nickname}}</span>
-          <span>{{Test(events[index].type)}}</span>
+          <span class="dynamic-right-name">{{item.user.nickname}}</span>
+          <span>{{Test(item.type)}}</span>
         </div>
         <div class="dynamic-right-time">昨天19：20</div>
       </div>
     </div>
     <div class="dynamic-bottom">
       <div class="dynamic-content">
-        <!-- <span v-if="events[index].actName">
+        <!-- <span v-if="item.actName">
         {{item.msg.substring(0,FindStr(item.msg)[0])}}
         <span style="color:#87CEEB">
           {{item.msg.substring(FindStr(item.msg)[0],FindStr(item.msg)[1]+1)}}
         </span>
         {{item.msg.substring(FindStr(item.msg)[1]+1)}}		
         </span>
-        <span v-if="!events[index].actName">{{item.msg}}</span> -->
-        <span>{{item.msg}}</span>
+        <span v-if="!item.actName">{{item.msg}}</span> -->
+        <span>{{EvalJson(item.json).msg}}</span>
         <span v-if= "item.event && item.event.type === 31">
           //
-          <span style="color:#87ceeb">{{'@'+ item.event.user.nickname}}</span>
-          <span>{{Test(item.event.type)}}</span>
-          <span>{{EvalJson(item.event.json).msg}}</span>
+          <span style="color:#87ceeb">{{'@'+ EvalJson(item.json).event.user.nickname}}</span>
+          <span>{{Test(EvalJson(item.json).event.type)}}</span>
+          <span>{{EvalJson(EvalJson(item.json).event.json).msg}}</span>
         </span>
       </div>
       <!-- 动态：图文形式 -->
-      <!-- v-if="events[index].type === 35" -->
+      <!-- v-if="item.type === 35" -->
       <div class="dynamic-center-content">
-        <div v-if="events[index].pics.length === 1" class="dynamic-center-content-img-one">
-          <img :src="events[index].pics[0].originUrl" alt="" :style="{height:145 / events[index].pics[0].width * events[index].pics[0].height}" >
+        <div v-if="item.pics.length === 1" class="dynamic-center-content-img-one">
+          <img :src="item.pics[0].originUrl" alt="" :style="{height:145 / item.pics[0].width * item.pics[0].height}" >
         </div>
-         <div v-if="events[index].pics.length === 2" class="dynamic-center-content-img-two">
-          <img :src="events[index].pics[0].squareUrl" alt="" >
-          <img :src="events[index].pics[1].squareUrl" alt="" >
+         <div v-if="item.pics.length === 2" class="dynamic-center-content-img-two">
+          <img :src="item.pics[0].squareUrl" alt="" >
+          <img :src="item.pics[1].squareUrl" alt="" >
         </div>
-         <div v-if="events[index].pics.length === 3" class="dynamic-center-content-img-three">
-          <img :src="events[index].pics[0].squareUrl" alt="" >
-          <img :src="events[index].pics[1].squareUrl" alt="" >
-          <img :src="events[index].pics[2].squareUrl" alt="" >
+         <div v-if="item.pics.length === 3" class="dynamic-center-content-img-three">
+          <img :src="item.pics[0].squareUrl" alt="" >
+          <img :src="item.pics[1].squareUrl" alt="" >
+          <img :src="item.pics[2].squareUrl" alt="" >
         </div>
-        <div v-if="events[index].pics.length === 4" class="dynamic-center-content-img-four">
+        <div v-if="item.pics.length === 4" class="dynamic-center-content-img-four">
           <div>
-            <img :src="events[index].pics[0].squareUrl" alt="" >
-            <img :src="events[index].pics[1].squareUrl" alt="" >
-            <img :src="events[index].pics[2].squareUrl" alt="" >
-            <img :src="events[index].pics[3].squareUrl" alt="" >
+            <img :src="item.pics[0].squareUrl" alt="" >
+            <img :src="item.pics[1].squareUrl" alt="" >
+            <img :src="item.pics[2].squareUrl" alt="" >
+            <img :src="item.pics[3].squareUrl" alt="" >
           </div>
         </div>
-         <div v-if="events[index].pics.length === 5" class="dynamic-center-content-img-five">
+         <div v-if="item.pics.length === 5" class="dynamic-center-content-img-five">
           <div class="five-img-top">
-            <img :src="events[index].pics[0].squareUrl" alt="" >
-            <img :src="events[index].pics[1].squareUrl" alt="" >
+            <img :src="item.pics[0].squareUrl" alt="" >
+            <img :src="item.pics[1].squareUrl" alt="" >
           </div>
           <div class="five-img-bottom">
-            <img :src="events[index].pics[2].squareUrl" alt="" >
-            <img :src="events[index].pics[3].squareUrl" alt="" >
-            <img :src="events[index].pics[4].squareUrl" alt="" >
+            <img :src="item.pics[2].squareUrl" alt="" >
+            <img :src="item.pics[3].squareUrl" alt="" >
+            <img :src="item.pics[4].squareUrl" alt="" >
           </div>
         </div>
-        <div v-if="events[index].pics.length === 6" class="dynamic-center-content-img-six">
-            <img :src="events[index].pics[0].squareUrl" alt="" >
-            <img :src="events[index].pics[1].squareUrl" alt="" >
-            <img :src="events[index].pics[2].squareUrl" alt="" >
-            <img :src="events[index].pics[3].squareUrl" alt="" >
-            <img :src="events[index].pics[4].squareUrl" alt="" >
-            <img :src="events[index].pics[5].squareUrl" alt="" >
+        <div v-if="item.pics.length === 6" class="dynamic-center-content-img-six">
+            <img :src="item.pics[0].squareUrl" alt="" >
+            <img :src="item.pics[1].squareUrl" alt="" >
+            <img :src="item.pics[2].squareUrl" alt="" >
+            <img :src="item.pics[3].squareUrl" alt="" >
+            <img :src="item.pics[4].squareUrl" alt="" >
+            <img :src="item.pics[5].squareUrl" alt="" >
         </div>
       </div>
       <!-- 分享歌曲 -->
-      <div class="dynamic-center-content" v-if="item.song">
+      <div class="dynamic-center-content" v-if="EvalJson(item.json).song">
         <share-base class="dynamic-center-content-share">
           <div slot="left" class="share-base-left">
-            <img :src="item.song.album.picUrl" alt="">
+            <img :src="EvalJson(item.json).song.album.picUrl" alt="">
             <div>
               <i class="iconfont iconbofang3"></i>
             </div>
           </div>
-          <span slot="top" >{{item.song.name}}  {{TransName(item.song.transNames)}}</span>
-          <span slot="bottom">{{Artist(item.song.artists)}}</span>
+          <span slot="top" >{{EvalJson(item.json).song.name}}  {{TransName(EvalJson(item.json).song.transNames)}}</span>
+          <span slot="bottom">{{Artist(EvalJson(item.json).song.artists)}}</span>
         </share-base>
       </div>
       <!-- 分享节目 -->
-      <div class="dynamic-center-content" v-if="item.program">
+      <div class="dynamic-center-content" v-if="EvalJson(item.json).program">
         <share-base class="dynamic-center-content-share">
           <div slot="left" class="share-base-left">
-            <img :src="item.program.coverUrl" alt="">
+            <img :src="EvalJson(item.json).program.coverUrl" alt="">
             <div>
               <i class="iconfont iconbofang3"></i>
             </div>
           </div>
-          <span slot="top" >{{item.program.name}}</span>
-          <span slot="bottom"><span class="music-story">{{item.program.channels[0]}}</span><span>{{item.program.radio.name}}</span></span>
+          <span slot="top" >{{EvalJson(item.json).program.name}}</span>
+          <span slot="bottom"><span class="music-story">{{EvalJson(item.json).program.channels[0]}}</span><span>{{EvalJson(item.json).program.radio.name}}</span></span>
         </share-base>
       </div>
        <!-- 分享歌手 -->
-      <div class="dynamic-center-content" v-if="events[index].type === 36">
+      <div class="dynamic-center-content" v-if="item.type === 36">
         <share-base class="dynamic-center-content-share">
           <div slot="left" class="share-base-left">
-            <img :src="item.resource.picUrl" alt="">
+            <img :src="EvalJson(item.json).resource.picUrl" alt="">
           </div>
-          <span slot="liRight">歌手:{{item.resource.name}}</span>
+          <span slot="liRight">歌手:{{EvalJson(item.json).resource.name}}</span>
         </share-base>
       </div>
       <!-- 分享歌单 -->
-      <div class="dynamic-center-content" v-if="item.playlist">
+      <div class="dynamic-center-content" v-if="EvalJson(item.json).playlist">
         <share-base class="dynamic-center-content-share">
           <div slot="left" class="share-base-left">
-            <img :src="item.playlist.coverImgUrl" alt="">
+            <img :src="EvalJson(item.json).playlist.coverImgUrl" alt="">
           </div>
           <div slot="top" class="share-base-songlist">
             <div class="share-base-list">歌单</div>
-            <div class="share-base-list-name">{{item.playlist.name}}</div>
+            <div class="share-base-list-name">{{EvalJson(item.json).playlist.name}}</div>
           </div>
-          <span slot="bottom">by {{item.playlist.creator.nickname}}</span>
+          <span slot="bottom">by {{EvalJson(item.json).playlist.creator.nickname}}</span>
         </share-base>
       </div>   
        <!-- 分享专辑 -->
-      <div class="dynamic-center-content" v-if="item.album">
+      <div class="dynamic-center-content" v-if="EvalJson(item.json).album">
         <share-base class="dynamic-center-content-share">
           <div slot="left" class="share-base-left">
-            <img :src="item.album.picUrl" alt="">
+            <img :src="EvalJson(item.json).album.picUrl" alt="">
             <div>
               <i class="iconfont iconbofang3"></i>
             </div>
           </div>
-          <span slot="top" >{{item.album.name}}  {{TransName(item.album.transNames)}}</span>
-          <span slot="bottom">{{Artist(item.album.artists)}}</span>
+          <span slot="top" >{{EvalJson(item.json).album.name}}  {{TransName(EvalJson(item.json).album.transNames)}}</span>
+          <span slot="bottom">{{Artist(EvalJson(item.json).album.artists)}}</span>
         </share-base>
       </div>
       <!-- 分享视频 -->
-      <div class="dynamic-center-content" v-if="item.video">
+      <div class="dynamic-center-content" v-if="EvalJson(item.json).video">
         <share-video class="dynamic-center-content-video">
-          <img :src="item.video.coverUrl" alt="" slot="wrapBottom">
-          <span slot="wrapLeft">{{serializeNum(item.video.playTime)}}</span>
-          <span slot="wrapRight">{{durationsTrans(item.video.durationms)}}</span>
+          <img :src="EvalJson(item.json).video.coverUrl" alt="" slot="wrapBottom">
+          <span slot="wrapLeft">{{serializeNum(EvalJson(item.json).video.playTime)}}</span>
+          <span slot="wrapRight">{{durationsTrans(EvalJson(item.json).video.durationms)}}</span>
         </share-video> 
       </div>
       <!-- 分享评论 -->
-      <div class="dynamic-center-content dynamic-comment" v-if="events[index].type === 31">
+      <div class="dynamic-center-content dynamic-comment" v-if="item.type === 31">
         <div class="dynamic-comment-marks">”</div>
         <div class="dynamic-comment-content">
-          <span>{{'@'+ item.resource.user.nickname+':'}}</span>
-          <span>{{item.resource.content}}</span>
-          {{item.resource.resourceType}}
+          <span>{{'@'+ EvalJson(item.json).resource.user.nickname+':'}}</span>
+          <span>{{EvalJson(item.json).resource.content}}</span>
+          {{EvalJson(item.json).resource.resourceType}}
         </div>
-        <share-comment class="dynamic-comment-content-base" v-if="item.resource.resourceType === 0 || item.resource.resourceType === 3">
-          <img :src="EvalJson(item.resource.resourceJson).imgUrl" alt="" slot="leftImg">
-          <div slot="right" class="dynamic-comment-content-base-right">{{item.resource.resourceName}}</div>
+        <share-comment class="dynamic-comment-content-base" v-if="EvalJson(item.json).resource.resourceType === 0 || EvalJson(item.json).resource.resourceType === 3">
+          <img :src="EvalJson(EvalJson(item.json).resource.resourceJson).imgUrl" alt="" slot="leftImg">
+          <div slot="right" class="dynamic-comment-content-base-right">{{EvalJson(item.json).resource.resourceName}}</div>
         </share-comment>
-        <share-comment class="dynamic-comment-content-base" v-if="item.resource.resourceType === 4">
-          <img :src="EvalJson(item.resource.resourceInfo).album.img80x80" alt="" slot="leftMusic">
-          <div slot="right" class="dynamic-comment-content-base-right">{{item.resource.resourceName}}</div>
+        <share-comment class="dynamic-comment-content-base" v-if="EvalJson(item.json).resource.resourceType === 4">
+          <img :src="EvalJson(EvalJson(item.json).resource.resourceInfo).album.img80x80" alt="" slot="leftMusic">
+          <div slot="right" class="dynamic-comment-content-base-right">{{EvalJson(item.json).resource.resourceName}}</div>
         </share-comment>
-        <share-comment class="dynamic-comment-content-base" v-if="item.resource.resourceType === 62">
-          <img :src="EvalJson(item.resource.resourceJson).imgUrl" alt="" slot="leftVideo">
-          <div slot="right" class="dynamic-comment-content-base-right-video">{{item.resource.resourceName}}</div>
+        <share-comment class="dynamic-comment-content-base" v-if="EvalJson(item.json).resource.resourceType === 62">
+          <img :src="EvalJson(EvalJson(item.json).resource.resourceJson).imgUrl" alt="" slot="leftVideo">
+          <div slot="right" class="dynamic-comment-content-base-right-video">{{EvalJson(item.json).resource.resourceName}}</div>
         </share-comment>
         
       </div>
       <!-- 转发动态 -->
-    <div class="dynamic-center-content-event" v-if="item.event">
-      <div class="dynamic-content-event" v-if="item.event.type !== 31">
-        <span>{{'@'+ item.event.user.nickname}}</span>
-        <span>{{Test(item.event.type)}}</span>
-        <span>{{EvalJson(item.event.json).msg}}</span>
+    <div class="dynamic-center-content-event" v-if="EvalJson(item.json).event">
+      <div class="dynamic-content-event" v-if="EvalJson(item.json).event.type !== 31">
+        <span>{{'@'+ EvalJson(item.json).event.user.nickname}}</span>
+        <span>{{Test(EvalJson(item.json).event.type)}}</span>
+        <span>{{EvalJson(EvalJson(item.json).event.json).msg}}</span>
       </div>
       <!-- 转发图文展示 -->
       <div class="dynamic-center-content">
-        <div v-if="item.event.pics.length === 1" class="dynamic-center-content-img-one dynamic-center-content-img-forward">
-          <img :src="item.event.pics[0].originUrl" alt="" :style="{height:145 / item.event.pics[0].width * item.event.pics[0].height}" >
+        <div v-if="EvalJson(item.json).event.pics.length === 1" class="dynamic-center-content-img-one dynamic-center-content-img-forward">
+          <img :src="EvalJson(item.json).event.pics[0].originUrl" alt="" :style="{height:145 / EvalJson(item.json).event.pics[0].width * EvalJson(item.json).event.pics[0].height}" >
         </div>
-         <div v-if="item.event.pics.length === 2" class="dynamic-center-content-img-two dynamic-center-content-img-forward">
-          <img :src="item.event.pics[0].squareUrl" alt="" >
-          <img :src="item.event.pics[1].squareUrl" alt="" >
+         <div v-if="EvalJson(item.json).event.pics.length === 2" class="dynamic-center-content-img-two dynamic-center-content-img-forward">
+          <img :src="EvalJson(item.json).event.pics[0].squareUrl" alt="" >
+          <img :src="EvalJson(item.json).event.pics[1].squareUrl" alt="" >
         </div>
-         <div v-if="item.event.pics.length === 3" class="dynamic-center-content-img-three dynamic-center-content-img-forward">
-          <img :src="item.event.pics[0].squareUrl" alt="" >
-          <img :src="item.event.pics[1].squareUrl" alt="" >
-          <img :src="item.event.pics[2].squareUrl" alt="" >
+         <div v-if="EvalJson(item.json).event.pics.length === 3" class="dynamic-center-content-img-three dynamic-center-content-img-forward">
+          <img :src="EvalJson(item.json).event.pics[0].squareUrl" alt="" >
+          <img :src="EvalJson(item.json).event.pics[1].squareUrl" alt="" >
+          <img :src="EvalJson(item.json).event.pics[2].squareUrl" alt="" >
         </div>
-        <div v-if="item.event.pics.length === 4" class="dynamic-center-content-img-four dynamic-center-content-img-forward">
+        <div v-if="EvalJson(item.json).event.pics.length === 4" class="dynamic-center-content-img-four dynamic-center-content-img-forward">
           <div>
-            <img :src="item.event.pics[0].squareUrl" alt="" >
-            <img :src="item.event.pics[1].squareUrl" alt="" >
-            <img :src="item.event.pics[2].squareUrl" alt="" >
-            <img :src="item.event.pics[3].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[0].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[1].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[2].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[3].squareUrl" alt="" >
           </div>
         </div>
-         <div v-if="item.event.pics.length === 5" class="dynamic-center-content-img-five dynamic-center-content-img-forward">
+         <div v-if="EvalJson(item.json).event.pics.length === 5" class="dynamic-center-content-img-five dynamic-center-content-img-forward">
           <div class="five-img-top">
-            <img :src="item.event.pics[0].squareUrl" alt="" >
-            <img :src="item.event.pics[1].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[0].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[1].squareUrl" alt="" >
           </div>
           <div class="five-img-bottom">
-            <img :src="item.event.pics[2].squareUrl" alt="" >
-            <img :src="item.event.pics[3].squareUrl" alt="" >
-            <img :src="item.event.pics[4].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[2].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[3].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[4].squareUrl" alt="" >
           </div>
         </div>
-        <div v-if="item.event.pics.length === 6" class="dynamic-center-content-img-six dynamic-center-content-img-forward">
-            <img :src="item.event.pics[0].squareUrl" alt="" >
-            <img :src="item.event.pics[1].squareUrl" alt="" >
-            <img :src="item.event.pics[2].squareUrl" alt="" >
-            <img :src="item.event.pics[3].squareUrl" alt="" >
-            <img :src="item.event.pics[4].squareUrl" alt="" >
-            <img :src="item.event.pics[5].squareUrl" alt="" >
+        <div v-if="EvalJson(item.json).event.pics.length === 6" class="dynamic-center-content-img-six dynamic-center-content-img-forward">
+            <img :src="EvalJson(item.json).event.pics[0].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[1].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[2].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[3].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[4].squareUrl" alt="" >
+            <img :src="EvalJson(item.json).event.pics[5].squareUrl" alt="" >
         </div>
       </div>
        <!-- 转发评论 -->
-      <div class="dynamic-center-content dynamic-comment" v-if="item.event.type === 31">
+      <div class="dynamic-center-content dynamic-comment" v-if="EvalJson(item.json).event.type === 31">
         <div class="dynamic-comment-marks">”</div>
         <div class="dynamic-comment-content">
-          <span>{{'@'+ EvalJson(item.event.json).resource.user.nickname+':'}}</span>
-          <span>{{EvalJson(item.event.json).resource.content}}</span>
+          <span>{{'@'+ EvalJson(EvalJson(item.json).event.json).resource.user.nickname+':'}}</span>
+          <span>{{EvalJson(EvalJson(item.json).event.json).resource.content}}</span>
         </div>
-        <share-comment class="dynamic-comment-content-base" v-if="EvalJson(item.event.json).resource.resourceType === 0 || EvalJson(item.event.json).resource.resourceType === 3">
-          <img :src="EvalJson(EvalJson(item.event.json).resource.resourceJson).imgUrl" alt="" slot="leftImg">
-          <div slot="right" class="dynamic-comment-content-base-right">{{EvalJson(item.event.json).resource.resourceName}}</div>
+        <share-comment class="dynamic-comment-content-base" v-if="EvalJson(EvalJson(item.json).event.json).resource.resourceType === 0 || EvalJson(EvalJson(item.json).event.json).resource.resourceType === 3">
+          <img :src="EvalJson(EvalJson(EvalJson(item.json).event.json).resource.resourceJson).imgUrl" alt="" slot="leftImg">
+          <div slot="right" class="dynamic-comment-content-base-right">{{EvalJson(EvalJson(item.json).event.json).resource.resourceName}}</div>
         </share-comment>
-        <share-comment class="dynamic-comment-content-base" v-if="EvalJson(item.event.json).resource.resourceType === 4">
-          <img :src="EvalJson(EvalJson(item.event.json).resource.resourceInfo).album.img80x80" alt="" slot="leftMusic">
-          <div slot="right" class="dynamic-comment-content-base-right">{{EvalJson(item.event.json).resource.resourceName}}</div>
+        <share-comment class="dynamic-comment-content-base" v-if="EvalJson(EvalJson(item.json).event.json).resource.resourceType === 4">
+          <img :src="EvalJson(EvalJson(EvalJson(item.json).event.json).resource.resourceInfo).album.img80x80" alt="" slot="leftMusic">
+          <div slot="right" class="dynamic-comment-content-base-right">{{EvalJson(EvalJson(item.json).event.json).resource.resourceName}}</div>
         </share-comment>
-        <share-comment class="dynamic-comment-content-base" v-if="EvalJson(item.event.json).resource.resourceType === 62">
-          <img :src="EvalJson(EvalJson(item.event.json).resource.resourceJson).imgUrl" alt="" slot="leftVideo">
-          <div slot="right" class="dynamic-comment-content-base-right-video">{{EvalJson(item.event.json).resource.resourceName}}</div>
+        <share-comment class="dynamic-comment-content-base" v-if="EvalJson(EvalJson(item.json).event.json).resource.resourceType === 62">
+          <img :src="EvalJson(EvalJson(EvalJson(item.json).event.json).resource.resourceJson).imgUrl" alt="" slot="leftVideo">
+          <div slot="right" class="dynamic-comment-content-base-right-video">{{EvalJson(EvalJson(item.json).event.json).resource.resourceName}}</div>
         </share-comment>
       </div>
       <!-- 转发视频 -->
-      <div class="dynamic-center-content-event-content" v-if="EvalJson(item.event.json).video">
+      <div class="dynamic-center-content-event-content" v-if="EvalJson(EvalJson(item.json).event.json).video">
         <share-video class="dynamic-center-content-event-video">
-          <img :src="EvalJson(item.event.json).video.coverUrl" alt="" slot="wrapBottom">
+          <img :src="EvalJson(EvalJson(item.json).event.json).video.coverUrl" alt="" slot="wrapBottom">
           <span slot="wrapLeft">
-            {{serializeNum(EvalJson(item.event.json).video.playTime)}}
+            {{serializeNum(EvalJson(EvalJson(item.json).event.json).video.playTime)}}
           </span>
-          <span slot="wrapRight">{{durationsTrans(EvalJson(item.event.json).video.durationms)}}</span>
+          <span slot="wrapRight">{{durationsTrans(EvalJson(EvalJson(item.json).event.json).video.durationms)}}</span>
         </share-video> 
       </div>
       <!-- 转发分享的歌手动态 -->
-       <div class="dynamic-center-content-event-content" v-if="item.event.type === 36">
+       <div class="dynamic-center-content-event-content" v-if="EvalJson(item.json).event.type === 36">
        
         <share-base class="dynamic-center-content-share-forward">
           <div slot="left" class="share-base-left">
-            <img :src="EvalJson(item.event.json).resource.picUrl" alt="">
+            <img :src="EvalJson(EvalJson(item.json).event.json).resource.picUrl" alt="">
           </div>
-          <span slot="liRight" >歌手:{{EvalJson(item.event.json).resource.name}}</span>
+          <span slot="liRight" >歌手:{{EvalJson(EvalJson(item.json).event.json).resource.name}}</span>
         </share-base>
       </div>
       <!-- 转发歌曲 -->
-      <div class="dynamic-center-content-event-content" v-if="EvalJson(item.event.json).song">
+      <div class="dynamic-center-content-event-content" v-if="EvalJson(EvalJson(item.json).event.json).song">
         <share-base class="dynamic-center-content-share-forward">
           <div slot="left" class="share-base-left">
-            <img :src="EvalJson(item.event.json).song.album.picUrl" alt="">
+            <img :src="EvalJson(EvalJson(item.json).event.json).song.album.picUrl" alt="">
             <div>
               <i class="iconfont iconbofang3"></i>
             </div>
           </div>
-          <span slot="top" >{{EvalJson(item.event.json).song.name}}  {{TransName(EvalJson(item.event.json).song.transNames)}}</span>
-          <span slot="bottom">{{Artist(EvalJson(item.event.json).song.artists)}}</span>
+          <span slot="top" >{{EvalJson(EvalJson(item.json).event.json).song.name}}  {{TransName(EvalJson(EvalJson(item.json).event.json).song.transNames)}}</span>
+          <span slot="bottom">{{Artist(EvalJson(EvalJson(item.json).event.json).song.artists)}}</span>
         </share-base>
       </div>
       <!-- 转发歌单 -->
-      <div class="dynamic-center-content-event-content" v-if="EvalJson(item.event.json).playlist">
+      <div class="dynamic-center-content-event-content" v-if="EvalJson(EvalJson(item.json).event.json).playlist">
          <share-base class="dynamic-center-content-share-forward">
           <div slot="left" class="share-base-left">
-            <img :src="EvalJson(item.event.json).playlist.coverImgUrl" alt="">
+            <img :src="EvalJson(EvalJson(item.json).event.json).playlist.coverImgUrl" alt="">
           </div>
           <div slot="top" class="share-base-songlist">
             <div class="share-base-list">歌单</div>
-            <div class="share-base-list-name">{{EvalJson(item.event.json).playlist.name}}</div>
+            <div class="share-base-list-name">{{EvalJson(EvalJson(item.json).event.json).playlist.name}}</div>
           </div>
-          <span slot="bottom">by {{EvalJson(item.event.json).playlist.creator.nickname}}</span>
+          <span slot="bottom">by {{EvalJson(EvalJson(item.json).event.json).playlist.creator.nickname}}</span>
         </share-base>
       </div>
       <!-- 转发专辑 -->
-      <div class="dynamic-center-content-event-content" v-if="EvalJson(item.event.json).album">
+      <div class="dynamic-center-content-event-content" v-if="EvalJson(EvalJson(item.json).event.json).album">
         <share-base class="dynamic-center-content-share-forward">
           <div slot="left" class="share-base-left">
-            <img :src="EvalJson(item.event.json).album.picUrl" alt="">
+            <img :src="EvalJson(EvalJson(item.json).event.json).album.picUrl" alt="">
             <div>
               <i class="iconfont iconbofang3"></i>
             </div>
           </div>
-          <span slot="top" >{{EvalJson(item.event.json).album.name}}  {{TransName(EvalJson(item.event.json).album.transNames)}}</span>
-          <span slot="bottom">{{Artist(EvalJson(item.event.json).album.artists)}}</span>
+          <span slot="top" >{{EvalJson(EvalJson(item.json).event.json).album.name}}  {{TransName(EvalJson(EvalJson(item.json).event.json).album.transNames)}}</span>
+          <span slot="bottom">{{Artist(EvalJson(EvalJson(item.json).event.json).album.artists)}}</span>
         </share-base>
       </div>
       <!-- 转发节目 -->
-      <div class="dynamic-center-content-event-content" v-if="EvalJson(item.event.json).program">
+      <div class="dynamic-center-content-event-content" v-if="EvalJson(EvalJson(item.json).event.json).program">
         <share-base class="dynamic-center-content-share-forward">
           <div slot="left" class="share-base-left">
-            <img :src="EvalJson(item.event.json).program.coverUrl" alt="">
+            <img :src="EvalJson(EvalJson(item.json).event.json).program.coverUrl" alt="">
             <div>
               <i class="iconfont iconbofang3"></i>
             </div>
           </div>
-          <span slot="top" >{{EvalJson(item.event.json).program.name}}</span>
-          <span slot="bottom"> <span class="music-story">{{EvalJson(item.event.json).program.channels[0]}}</span> <span>{{EvalJson(item.event.json).program.radio.name}}</span></span>
+          <span slot="top" >{{EvalJson(EvalJson(item.json).event.json).program.name}}</span>
+          <span slot="bottom"> <span class="music-story">{{EvalJson(EvalJson(item.json).event.json).program.channels[0]}}</span> <span>{{EvalJson(EvalJson(item.json).event.json).program.radio.name}}</span></span>
         </share-base>
       </div>
     </div>
 
-      <ul class="dynamic-bottom-icon">
-        <li class="li-one" @click="forward">
-          <i class="iconfont iconxin"></i>
-          <span>转发
-            {{events[index].info.commentThread.shareCount}}
-          </span>
-        </li>
-        <li @click="comment">
-          <i class="iconfont iconpinglun"></i>
-          <span>评论
-            {{events[index].info.commentThread.commentCount}}
-          </span>
-        </li>
-        <li>
-          <i class="iconfont iconzan1"></i>
-          <span>
-            {{events[index].info.commentThread.likedCount}}
-          </span>
-        </li>
-        <li class="li-four">
-          <i class="iconfont icongengduo"></i>
-        </li>
-      </ul>
+     
     </div>
+    <!-- <for-ward ref=Forward></for-ward> -->
   </div>
 </template>
 
@@ -346,18 +325,18 @@ export default {
     shareComment,
   },
   props: {
-    item: {
-      type:Object,
-      default:{}
-    },
-    events: {
-      type:Array,
-      default:[]
-    },
-    index: {
-      type:Number,
-      default:-1
-    },
+    // item: {
+    //   type:Object,
+    //   default:{}
+    // },
+    // events: {
+    //   type:Array,
+    //   default:[]
+    // },
+    // index: {
+    //   type:Number,
+    //   default:-1
+    // },
   },
   data() {
     return {
@@ -464,19 +443,7 @@ export default {
           }
         }
       },
-      forward () {
-        this.uid = 477726475
-        this.evId = this.events[this.index].id
-        this.$router.push({
-          path:`/forward/${this.uid}/${this.evId}`
-        })
-      },
-      comment () {
-        console.log(this)
-        this.$router.push({
-          path:`/dynamiccomment`
-        })
-      }   
+      
   },
   created() {},
   mounted() {}
@@ -517,7 +484,7 @@ export default {
           // line-height:20px
     .dynamic-bottom
       height:auto
-      margin:0 10px 10px 70px    
+      margin:10px 
       .dynamic-content  
         height:auto
         font-size:$font-size-medium
@@ -566,24 +533,7 @@ export default {
             .share-base-list-name
               ellipsis()
               width:200px
-      .dynamic-bottom-icon
-        display:flex
-        height 30px
-        line-height:30px
-        margin-top:10px
-        position: relative
-        li
-          width:55px
-          margin-left:30px
-          font-size:$font-size-small
-          span 
-           margin-left:3px
-        .li-one
-          margin-left:0   
-        .li-four
-          position:absolute 
-          right:0
-          text-align:right 
+      
 
       .dynamic-center-content
         .dynamic-center-content-video
@@ -774,10 +724,7 @@ export default {
               ellipsis()
             .dynamic-comment-content-base-right-video
               max-width:210px
-              ellipsis()  
-    
-
-                
+              ellipsis()      
 
 
 </style>

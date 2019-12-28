@@ -50,6 +50,7 @@ const mutations = {
   },
   [types.SET_OPERATION] (state, operation) {
     state.operation = operation
-  }
+  },
+  
 }
 export default mutations

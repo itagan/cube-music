@@ -17,6 +17,7 @@ import SongListComment from "../components/songlist/listcomment"
 import User from "../components/others/user"
 import BaseMessage from "../components/others/basemessage"
 import ForWard from "../components/dynamic/forward"
+import DynamicComment from "../components/dynamic/comment/dynamiccomment"
 
 
 Vue.use(Router)
@@ -114,6 +115,10 @@ export default new Router({
     {
       path: '/forward/:uid/:evId',
       component: ForWard
+    },
+    {
+      path: '/dynamiccomment',
+      component: DynamicComment
     },
   ]
 })
