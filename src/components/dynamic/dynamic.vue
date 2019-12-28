@@ -339,6 +339,8 @@ import shareBase from "../../base/share/sharebase"
 import shareVideo from "../../base/video/sharevideo"
 import shareComment from "../../base/share/sharecomment"
 import forWard from "./forward"
+import {mapGetters, mapMutations, mapActions} from 'vuex'
+
 export default {
   components: {
     shareBase,
@@ -472,11 +474,15 @@ export default {
         })
       },
       comment () {
-        console.log(this)
+        // console.log(this)
+        this.setDynamic([this.events[this.index]])
         this.$router.push({
           path:`/dynamiccomment`
         })
-      }   
+      },
+      ...mapMutations({
+        setDynamic: 'SET_DYNAMIC'
+      }),   
   },
   created() {},
   mounted() {}

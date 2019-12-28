@@ -1,5 +1,5 @@
 import Video from '../common/js/video'
-import { loadCurrentVideo, loadOperation } from '../common/js/goodstorage'
+import { loadCurrentVideo, loadOperation,loadCurrentDynamic } from '../common/js/goodstorage'
 
 
 export const token = state => state.token
@@ -35,4 +35,11 @@ export const operation = (state) => {
     return loadOperation()
   }
   return state.operation
+}
+
+export const dynamic = (state) => {
+  if(!state.dynamic.length) {
+    return loadCurrentDynamic()
+  }
+  return state.dynamic
 }

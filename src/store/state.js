@@ -16,6 +16,6 @@ const state = {
   videoCollectionsList:[],
   currentVideo:[],
   operation:[],
-  dynamic:{}
+  dynamic:[]
 }
 export default state

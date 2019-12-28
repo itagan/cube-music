@@ -306,18 +306,17 @@
         </share-base>
       </div>
     </div>
-
      
     </div>
-    <!-- <for-ward ref=Forward></for-ward> -->
   </div>
 </template>
 
 <script>
-import shareBase from "../../base/share/sharebase"
-import shareVideo from "../../base/video/sharevideo"
-import shareComment from "../../base/share/sharecomment"
-import forWard from "./forward"
+import shareBase from "../../../base/share/sharebase"
+import shareVideo from "../../../base/video/sharevideo"
+import shareComment from "../../../base/share/sharecomment"
+import {mapGetters} from 'vuex'
+
 export default {
   components: {
     shareBase,
@@ -340,17 +339,24 @@ export default {
   },
   data() {
     return {
-      song:false,
-      evId:'',
-      uid:0,
+      item:{}
     }
   },
   watch: {
-    // events (evs) {
-      
-    // }
+    Dynamic (dynamic) {
+      if(dynamic) {
+         this.getData()
+      }
+    }
   },
-  computed: {},
+  computed: {
+    ...mapGetters([
+      'dynamic'
+    ]),
+    Dynamic () {
+      return this.dynamic
+    }
+  },
   methods: {
     Test (num) {
       let type = ''
@@ -387,71 +393,77 @@ export default {
       }
       return type
     },
-      Artist (artists) {
-        if(!artists) return
-        let arr = []
-        for(let i = 0; i < artists.length; i++) {
-          arr.push(artists[i].name)
+    Artist (artists) {
+      if(!artists) return
+      let arr = []
+      for(let i = 0; i < artists.length; i++) {
+        arr.push(artists[i].name)
+      }
+      return arr.join('/')
+    },
+    TransName(transNames) {
+      if(!transNames) return
+      let arr = []
+      for(let i = 0; i < transNames.length; i++) {
+        arr.push(transNames[i])
+      }
+      return arr.join('/')
+    },
+    durationsTrans (durations) {
+      durations = durations / 1000
+      durations = durations | 0
+      let minute = durations / 60 | 0
+      minute = minute < 10 ? '0' + minute : minute
+      let second = durations % 60
+      second = second < 10 ? '0' + second : second
+      return `${minute}:${second}`
+    },
+    serializeNum (Num) {
+      let numStr = Num.toString()
+      if (numStr.length < 5) {
+        return numStr
+      } else if (numStr.length > 8) {
+        let decimal = numStr.substring(numStr.length - 8, numStr.length - 8)
+        return parseFloat(parseInt(Num / 100000000) + '.' + decimal) + '亿'
+      } else if (numStr.length > 4) {
+        let decimal = numStr.substring(numStr.length - 3, numStr.length - 3)
+        return parseFloat(parseInt(Num / 10000) + '.' + decimal) + '万'
+      }
+    },
+    EvalJson (str) {
+      // return eval('(' + item.json + ')')
+      // return str.parseJSON()
+      return JSON.parse(str)
+    },
+    FindStr (str) {
+      let arr = []
+      let ind = str.indexOf('#')
+      while(ind !== -1) {
+        arr.push(ind)
+        ind = str.indexOf('#',ind + 1)
+      }
+      if(arr.length >= 2) {
+        if(arr.length-1 === arr[1]) return
+        if(str.substring(arr[0],arr[1]+1)) {
+          return arr
         }
-        return arr.join('/')
-      },
-      TransName(transNames) {
-        if(!transNames) return
-        let arr = []
-        for(let i = 0; i < transNames.length; i++) {
-          arr.push(transNames[i])
-        }
-        return arr.join('/')
-      },
-      durationsTrans (durations) {
-        durations = durations / 1000
-        durations = durations | 0
-        let minute = durations / 60 | 0
-        minute = minute < 10 ? '0' + minute : minute
-        let second = durations % 60
-        second = second < 10 ? '0' + second : second
-        return `${minute}:${second}`
-      },
-      serializeNum (Num) {
-        let numStr = Num.toString()
-        if (numStr.length < 5) {
-          return numStr
-        } else if (numStr.length > 8) {
-          let decimal = numStr.substring(numStr.length - 8, numStr.length - 8)
-          return parseFloat(parseInt(Num / 100000000) + '.' + decimal) + '亿'
-        } else if (numStr.length > 4) {
-          let decimal = numStr.substring(numStr.length - 3, numStr.length - 3)
-          return parseFloat(parseInt(Num / 10000) + '.' + decimal) + '万'
-        }
-      },
-      EvalJson (str) {
-        // return eval('(' + item.json + ')')
-        // return str.parseJSON()
-        return JSON.parse(str)
-      },
-      FindStr (str) {
-        let arr = []
-        let ind = str.indexOf('#')
-        while(ind !== -1) {
-          arr.push(ind)
-          ind = str.indexOf('#',ind + 1)
-        }
-        if(arr.length >= 2) {
-          if(arr.length-1 === arr[1]) return
-          if(str.substring(arr[0],arr[1]+1)) {
-            return arr
-          }
-        }
-      },
+      }
+    },
+    getData() {
+      this.item = this.dynamic[0]
+      console.log(this.dynamic)
+    }
       
   },
-  created() {},
+  created() {
+    this.getData()
+  },
   mounted() {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/variable"
-  @import "../../common/stylus/mixin"
+  @import "../../../common/stylus/variable"
+  @import "../../../common/stylus/mixin"
  
   .wrapper
     height:auto
@@ -484,7 +496,7 @@ export default {
           // line-height:20px
     .dynamic-bottom
       height:auto
-      margin:10px 
+      margin:5px 10px 
       .dynamic-content  
         height:auto
         font-size:$font-size-medium

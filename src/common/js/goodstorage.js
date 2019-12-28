@@ -12,6 +12,8 @@ const CURRENT_VIDEO_KEY = '__current-video__'
 const CURRENT_VIDEO_LEN = 1
 const CURRENT_OPERATION_KEY = '__current-operation__'
 const CURRENT_OPERATION_LEN = 1
+const CURRENT_DYNAMIC_KEY = '__dynamic__'
+const CURRENT_DYNAMIC_LEN = 1
 
 //公共方法设置
 function insertArray (arr, val, compare, maxLen) {
@@ -95,4 +97,24 @@ export function deleteOperation(value) {
 }
 export function loadOperation() {
   return storage.get(CURRENT_OPERATION_KEY, [])
+}
+//当前动态
+export function saveCurrentDynamic (dynamic) {
+  let _currentDynamic = storage.get(CURRENT_DYNAMIC_KEY, [])
+  insertArray( _currentDynamic, dynamic, (item) => {
+    return item.id === dynamic.id
+  }, CURRENT_DYNAMIC_LEN)
+  storage.set(CURRENT_DYNAMIC_KEY, _currentDynamic)
+  return _currentDynamic
+}
+export function deleteCurrentDynamic (dynamic) {
+  let _currentDynamic = storage.get(CURRENT_DYNAMIC_KEY, [])
+  deleteFromArray( _currentDynamic, (item) => {
+    return item.id === dynamic.id
+  })
+  storage.set(CURRENT_DYNAMIC_KEY, _currentDynamic)
+  return _currentDynamic
+}
+export function loadCurrentDynamic () {
+  return storage.get(CURRENT_DYNAMIC_KEY, [])
 }

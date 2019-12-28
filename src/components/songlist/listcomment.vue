@@ -30,9 +30,8 @@
               <li class="hot-comment-top">精彩评论</li>
             </ul>
           </cube-sticky-ele>
-<!--          <ul style="height: 300px" class="hot-comment" ref="stickyHeight">-->
-          <div ref="stickyHeight">
-            <ul class="hot-comment" ref="ulHeight">
+          <div ref="stickyHeight" style="height:auto">
+            <ul class="hot-comment">
               <li v-for="item in hotComments" :key="item.commentId">
                 <base-comment :item="item" class="base-comment"></base-comment>
               </li>

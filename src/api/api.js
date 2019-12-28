@@ -119,6 +119,10 @@ const users = {
   forWardDynamic (evId,uid,forwards) {
     return axios.get(`${base}/event/forward?evId=${evId}&uid=${uid}&forwards=${forwards}`)
   },
+  //获取动态评论
+  dynamicComment (threadId) {
+    return axios.get(`${base}/comment/event?threadId=${threadId}`)
+  },
  }
 
 // 歌单有关

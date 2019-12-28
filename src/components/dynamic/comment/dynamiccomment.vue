@@ -12,9 +12,7 @@
           ref="scroll"
           class="scroll-ele"
         >
-          <div class="top-content" style="height:150px">
-            啦啦啦啦
-          </div>
+          <dynamic-content style="height:auto"></dynamic-content>
 
           <cube-sticky-ele>
             <ul class="sticky-header" ref="messTop">
@@ -74,11 +72,13 @@
 
 <script>
     import myHeader from "./header"
+    import dynamicContent from "./dynamiccontent"
     
     export default {
         name: "user.vue",
         components: {
             myHeader,
+            dynamicContent
             
         },
         data() {
@@ -159,7 +159,7 @@
   @import "../../../common/stylus/variable"
   @import "../../../common/stylus/mixin"
  .forward-comment
-    overflow: hidden
+    background-color: white
     width:375px
     height:675px
   // .my-header
