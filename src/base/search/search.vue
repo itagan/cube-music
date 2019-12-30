@@ -39,7 +39,7 @@
      },
      methods: {
        focus () {
-           this.$refs.input && this.$refs.input.focus()
+         this.$refs.input && this.$refs.input.focus()
        },
        clear () {
          this.query = ''
@@ -53,11 +53,11 @@
        query: debounce(function () {
          this.$emit('query', this.query)
        }),
-       fake(isShow) {
-         if(isShow) {
-             this.$nextTick(() => {
-                 this.focus()
-             })
+       fake (isShow) {
+         if (isShow) {
+           this.$nextTick(() => {
+             this.focus()
+           })
          }
        }
      }

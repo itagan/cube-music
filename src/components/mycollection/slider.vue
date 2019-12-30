@@ -49,69 +49,69 @@
 </template>
 
 <script>
-    import Album from "./album"
+    import Album from './album'
     import Singer from './singer'
     import myVideo from './video'
     import myColumn from './specialcolumn'
-    import myLog from "./mlog"
+    import myLog from './mlog'
     export default {
-        name: 'app',
-        data () {
-            return {
-                activeClass: 'nav-item-active',
-                errorClass: '',
-                numberColor:'nav-number',
-                currentPage: 0,
-                objs: [
-                    {
-                        text: '专辑',
-                        number:1
-                    },
-                    {
-                        text: '歌手',
-                        number:1
-                    },
-                    {
-                        text: '视频',
-                        number:1
-                    },
-                    {
-                        text: '专栏',
-                        number:1
-                    },
-                    {
-                        text: 'Mlog',
-                        number:1
-                    }
+      name: 'app',
+      data () {
+        return {
+          activeClass: 'nav-item-active',
+          errorClass: '',
+          numberColor: 'nav-number',
+          currentPage: 0,
+          objs: [
+            {
+              text: '专辑',
+              number: 1
+            },
+            {
+              text: '歌手',
+              number: 1
+            },
+            {
+              text: '视频',
+              number: 1
+            },
+            {
+              text: '专栏',
+              number: 1
+            },
+            {
+              text: 'Mlog',
+              number: 1
+            }
 
-                ]
-            }
-        },
-        components: {
-            Album,
-            Singer,
-            myVideo,
-            myColumn,
-            myLog
-        },
-        methods: {
-            toggles (item, index) {
-                this.currentPage = index
-                console.log(index)
-            },
-            slideChange (index) {
-                this.currentPage = index
-            },
-            hasNumber(num) {
-                this.objs[0].number = num
-            },
-            hasNum(num) {
-                this.objs[1].number = num
-            },
-            hasVideo (num) {
-                this.objs[2].number = num
-            }
+          ]
         }
+      },
+      components: {
+        Album,
+        Singer,
+        myVideo,
+        myColumn,
+        myLog
+      },
+      methods: {
+        toggles (item, index) {
+          this.currentPage = index
+          console.log(index)
+        },
+        slideChange (index) {
+          this.currentPage = index
+        },
+        hasNumber (num) {
+          this.objs[0].number = num
+        },
+        hasNum (num) {
+          this.objs[1].number = num
+        },
+        hasVideo (num) {
+          this.objs[2].number = num
+        }
+      }
     }
 </script>
 

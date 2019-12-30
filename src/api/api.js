@@ -111,19 +111,19 @@ const users = {
   playlist (uid) {
     return axios.get(`${base}/user/playlist?uid=${uid}`)
   },
-  //获取用户动态
-  getDynamic (uid,limit=30,lasttime=-1) {
+  // 获取用户动态
+  getDynamic (uid, limit = 30, lasttime = -1) {
     return axios.get(`${base}/user/event?uid=${uid}&limit=${limit}&lasttime=${lasttime}`)
   },
-  //转发动态
-  forWardDynamic (evId,uid,forwards) {
+  // 转发动态
+  forWardDynamic (evId, uid, forwards) {
     return axios.get(`${base}/event/forward?evId=${evId}&uid=${uid}&forwards=${forwards}`)
   },
-  //获取动态评论
+  // 获取动态评论
   dynamicComment (threadId) {
     return axios.get(`${base}/comment/event?threadId=${threadId}`)
-  },
- }
+  }
+}
 
 // 歌单有关
 const playlists = {
@@ -152,7 +152,7 @@ const likes = {
     return axios.get(`${base}/comment/like?type=6&cid=${cid}&threadId=${threadId}&t=${is}`)
   }
 }
-//收藏功能
+// 收藏功能
 const subs = {
   // 资源点赞( MV,电台,视频) t: 操作,1 为点赞,其他未取消点赞
   isVideoSub (is, id) {
@@ -178,17 +178,17 @@ const subs = {
   },
   subVideos (offset = 0) {
     return axios.get(`${base}/mv/sublist?offset=${offset}`)
-  },
+  }
 }
-//歌单有关
+// 歌单有关
 const songLists = {
   songList (id = 2410346874) {
     return axios.get(`${base}/playlist/detail?id=${id}`)
   },
-  songListComment (id = 705123491,offset = 0) {
+  songListComment (id = 705123491, offset = 0) {
     return axios.get(`${base}/comment/playlist?id=${id}&offset=${offset}`)
   },
-  //歌单收藏
+  // 歌单收藏
   subscribe (is, id) {
     return axios.get(`${base}/playlist/subscribe?t=${is}&id=${id}`)
   }

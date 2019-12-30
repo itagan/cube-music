@@ -14,32 +14,32 @@
 <script>
     import MyHeader from '../../base/navbar/navbar'
     export default {
-        name: 'header.vue',
-        components: {
-          MyHeader
-        },
-        data () {
-          return {
-              isComplete: true
-          }
-        },
-        props: {
-          title:{
-            type:String,
-            default:'歌单'
-          }
-        },
-        methods: {
-          toBack () {
-            this.$router.go(-1)
-          },
-          more () {
-
-          },
-          music () {
-
-          }
+      name: 'header.vue',
+      components: {
+        MyHeader
+      },
+      data () {
+        return {
+          isComplete: true
         }
+      },
+      props: {
+        title: {
+          type: String,
+          default: '歌单'
+        }
+      },
+      methods: {
+        toBack () {
+          this.$router.go(-1)
+        },
+        more () {
+
+        },
+        music () {
+
+        }
+      }
     }
 </script>
 

@@ -33,15 +33,15 @@
 
 <script>
     export default {
-        name: 'subscribe-dialog',
-        methods: {
-          show () {
-            this.$refs.popup.show()
-          },
-          hide () {
-            this.$refs.popup.hide()
-          }
+      name: 'subscribe-dialog',
+      methods: {
+        show () {
+          this.$refs.popup.show()
+        },
+        hide () {
+          this.$refs.popup.hide()
         }
+      }
     }
 </script>
 

@@ -1,5 +1,5 @@
 export default class Video {
-  constructor({vid, url}) {
+  constructor ({vid, url}) {
     this.vid = vid
     this.url = url
   }

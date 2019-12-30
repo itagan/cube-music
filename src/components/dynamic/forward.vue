@@ -25,15 +25,15 @@ export default {
     MyHeader
   },
   props: {},
-  data() {
+  data () {
     return {
       visible: false,
       value: '',
       placeholder: '一起聊聊吧',
       autofocus: true,
       clearable: {
-      visible: true,
-      blurHidden: true
+        visible: true,
+        blurHidden: true
       }
     }
   },
@@ -43,19 +43,19 @@ export default {
     forWardDynamic () {
       this.uid = this.$route.params.uid
       this.evId = this.$route.params.evId
-        this.$api.users.forWardDynamic(this.evId,this.uid,this.value).then(res => {
-          console.log(res)
-          if(res.data && res.data.code === 200) {
-            this.value = ''
-            this.cancel()
-            const toast = this.$createToast({
-              txt: '转发成功',
-              type: 'correct',
-              zIndex:2002
-            })
-            toast.show()
-          }
-        })
+      this.$api.users.forWardDynamic(this.evId, this.uid, this.value).then(res => {
+        console.log(res)
+        if (res.data && res.data.code === 200) {
+          this.value = ''
+          this.cancel()
+          const toast = this.$createToast({
+            txt: '转发成功',
+            type: 'correct',
+            zIndex: 2002
+          })
+          toast.show()
+        }
+      })
     },
     cancel () {
       this.visible = false
@@ -68,18 +68,18 @@ export default {
             // 输入中
       if (val.length > 140) {
         const toast = this.$createToast({
-              zIndex:2002,
-              txt: '超出字数限制',
-              type: 'error',
-            })
-            toast.show()
+          zIndex: 2002,
+          txt: '超出字数限制',
+          type: 'error'
+        })
+        toast.show()
       }
-    },
+    }
   },
-  created() {
+  created () {
     this.visible = true
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <<style scoped lang="stylus" rel="stylesheet/stylus">

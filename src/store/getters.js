@@ -1,6 +1,5 @@
 import Video from '../common/js/video'
-import { loadCurrentVideo, loadOperation,loadCurrentDynamic } from '../common/js/goodstorage'
-
+import { loadCurrentVideo, loadOperation, loadCurrentDynamic } from '../common/js/goodstorage'
 
 export const token = state => state.token
 export const loginState = state => state.loginState
@@ -21,24 +20,24 @@ export const videoCollectionsList = (state) => {
   })
 }
 // export const currentVideo = state => state.currentVideo
-//解决刷新vuex清空页面报错问题，从本地存储获取值。组件watch值变化，从而更新
+// 解决刷新vuex清空页面报错问题，从本地存储获取值。组件watch值变化，从而更新
 export const currentVideo = (state) => {
-    if(!state.currentVideo.length) {
+  if (!state.currentVideo.length) {
       // state.currentVideo = loadCurrentVideo() 这样做将改变vuex导致警告报错
-      return loadCurrentVideo()
-    }
-    return state.currentVideo
+    return loadCurrentVideo()
+  }
+  return state.currentVideo
 }
 
 export const operation = (state) => {
-  if(!state.operation.length) {
+  if (!state.operation.length) {
     return loadOperation()
   }
   return state.operation
 }
 
 export const dynamic = (state) => {
-  if(!state.dynamic.length) {
+  if (!state.dynamic.length) {
     return loadCurrentDynamic()
   }
   return state.dynamic

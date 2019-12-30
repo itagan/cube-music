@@ -311,7 +311,7 @@
         <li class="li-one" @click="forward">
           <i class="iconfont iconxin"></i>
           <span>转发
-            {{events[index].info.commentThread.shareCount}}
+            {{events[index].insiteForwardCount}}
           </span>
         </li>
         <li @click="comment">
@@ -331,46 +331,48 @@
         </li>
       </ul>
     </div>
+
+    
   </div>
 </template>
 
 <script>
-import shareBase from "../../base/share/sharebase"
-import shareVideo from "../../base/video/sharevideo"
-import shareComment from "../../base/share/sharecomment"
-import forWard from "./forward"
+import shareBase from '../../base/share/sharebase'
+import shareVideo from '../../base/video/sharevideo'
+import shareComment from '../../base/share/sharecomment'
+import forWard from './forward'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   components: {
     shareBase,
     shareVideo,
-    shareComment,
+    shareComment
   },
   props: {
     item: {
-      type:Object,
-      default:{}
+      type: Object,
+      default: {}
     },
     events: {
-      type:Array,
-      default:[]
+      type: Array,
+      default: []
     },
     index: {
-      type:Number,
-      default:-1
-    },
+      type: Number,
+      default: -1
+    }
   },
-  data() {
+  data () {
     return {
-      song:false,
-      evId:'',
-      uid:0,
+      song: false,
+      evId: '',
+      uid: 0
     }
   },
   watch: {
     // events (evs) {
-      
+
     // }
   },
   computed: {},
@@ -379,113 +381,113 @@ export default {
       let type = ''
       switch (num) {
         case 13:
-          type = "分享歌单:"
+          type = '分享歌单:'
           break
         case 18:
-          type = "分享单曲:"
+          type = '分享单曲:'
           break
         case 19:
-          type = "分享专辑:"
+          type = '分享专辑:'
           break
         case 22:
-        type = "转发:"
+          type = '转发:'
           break
         case 31:
-        type = "分享评论:"
+          type = '分享评论:'
           break
         case 35:
-        type = ":"
+          type = ':'
           break
         case 36:
-        type = "分享歌手:"
+          type = '分享歌手:'
           break
         case 39:
-        type = "发布视频:"
+          type = '发布视频:'
           break
         case 41:
-          type = "分享视频:"
+          type = '分享视频:'
           break
-        default: 
-          type = ":"
+        default:
+          type = ':'
       }
       return type
     },
-      Artist (artists) {
-        if(!artists) return
-        let arr = []
-        for(let i = 0; i < artists.length; i++) {
-          arr.push(artists[i].name)
-        }
-        return arr.join('/')
-      },
-      TransName(transNames) {
-        if(!transNames) return
-        let arr = []
-        for(let i = 0; i < transNames.length; i++) {
-          arr.push(transNames[i])
-        }
-        return arr.join('/')
-      },
-      durationsTrans (durations) {
-        durations = durations / 1000
-        durations = durations | 0
-        let minute = durations / 60 | 0
-        minute = minute < 10 ? '0' + minute : minute
-        let second = durations % 60
-        second = second < 10 ? '0' + second : second
-        return `${minute}:${second}`
-      },
-      serializeNum (Num) {
-        let numStr = Num.toString()
-        if (numStr.length < 5) {
-          return numStr
-        } else if (numStr.length > 8) {
-          let decimal = numStr.substring(numStr.length - 8, numStr.length - 8)
-          return parseFloat(parseInt(Num / 100000000) + '.' + decimal) + '亿'
-        } else if (numStr.length > 4) {
-          let decimal = numStr.substring(numStr.length - 3, numStr.length - 3)
-          return parseFloat(parseInt(Num / 10000) + '.' + decimal) + '万'
-        }
-      },
-      EvalJson (str) {
+    Artist (artists) {
+      if (!artists) return
+      let arr = []
+      for (let i = 0; i < artists.length; i++) {
+        arr.push(artists[i].name)
+      }
+      return arr.join('/')
+    },
+    TransName (transNames) {
+      if (!transNames) return
+      let arr = []
+      for (let i = 0; i < transNames.length; i++) {
+        arr.push(transNames[i])
+      }
+      return arr.join('/')
+    },
+    durationsTrans (durations) {
+      durations = durations / 1000
+      durations = durations | 0
+      let minute = durations / 60 | 0
+      minute = minute < 10 ? '0' + minute : minute
+      let second = durations % 60
+      second = second < 10 ? '0' + second : second
+      return `${minute}:${second}`
+    },
+    serializeNum (Num) {
+      let numStr = Num.toString()
+      if (numStr.length < 5) {
+        return numStr
+      } else if (numStr.length > 8) {
+        let decimal = numStr.substring(numStr.length - 8, numStr.length - 8)
+        return parseFloat(parseInt(Num / 100000000) + '.' + decimal) + '亿'
+      } else if (numStr.length > 4) {
+        let decimal = numStr.substring(numStr.length - 3, numStr.length - 3)
+        return parseFloat(parseInt(Num / 10000) + '.' + decimal) + '万'
+      }
+    },
+    EvalJson (str) {
         // return eval('(' + item.json + ')')
         // return str.parseJSON()
-        return JSON.parse(str)
-      },
-      FindStr (str) {
-        let arr = []
-        let ind = str.indexOf('#')
-        while(ind !== -1) {
-          arr.push(ind)
-          ind = str.indexOf('#',ind + 1)
+      return JSON.parse(str)
+    },
+    FindStr (str) {
+      let arr = []
+      let ind = str.indexOf('#')
+      while (ind !== -1) {
+        arr.push(ind)
+        ind = str.indexOf('#', ind + 1)
+      }
+      if (arr.length >= 2) {
+        if (arr.length - 1 === arr[1]) return
+        if (str.substring(arr[0], arr[1] + 1)) {
+          return arr
         }
-        if(arr.length >= 2) {
-          if(arr.length-1 === arr[1]) return
-          if(str.substring(arr[0],arr[1]+1)) {
-            return arr
-          }
-        }
-      },
-      forward () {
-        this.uid = 477726475
-        this.evId = this.events[this.index].id
-        this.$router.push({
-          path:`/forward/${this.uid}/${this.evId}`
-        })
-      },
-      comment () {
+      }
+    },
+    forward () {
+      this.uid = 477726475
+      this.evId = this.events[this.index].id
+      this.$router.push({
+        path: `/forward/${this.uid}/${this.evId}`
+      })
+    },
+    comment () {
         // console.log(this)
-        this.setDynamic([this.events[this.index]])
-        this.$router.push({
-          path:`/dynamiccomment`
-        })
-      },
-      ...mapMutations({
-        setDynamic: 'SET_DYNAMIC'
-      }),   
+      this.setDynamic([this.events[this.index]])
+      this.$router.push({
+        path: `/dynamiccomment`
+      })
+    },
+    ...mapMutations({
+      setDynamic: 'SET_DYNAMIC'
+    })
   },
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

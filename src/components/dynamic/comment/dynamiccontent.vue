@@ -312,16 +312,16 @@
 </template>
 
 <script>
-import shareBase from "../../../base/share/sharebase"
-import shareVideo from "../../../base/video/sharevideo"
-import shareComment from "../../../base/share/sharecomment"
+import shareBase from '../../../base/share/sharebase'
+import shareVideo from '../../../base/video/sharevideo'
+import shareComment from '../../../base/share/sharecomment'
 import {mapGetters} from 'vuex'
 
 export default {
   components: {
     shareBase,
     shareVideo,
-    shareComment,
+    shareComment
   },
   props: {
     // item: {
@@ -337,15 +337,15 @@ export default {
     //   default:-1
     // },
   },
-  data() {
+  data () {
     return {
-      item:{}
+      item: {}
     }
   },
   watch: {
     Dynamic (dynamic) {
-      if(dynamic) {
-         this.getData()
+      if (dynamic) {
+        this.getData()
       }
     }
   },
@@ -362,49 +362,49 @@ export default {
       let type = ''
       switch (num) {
         case 13:
-          type = "分享歌单:"
+          type = '分享歌单:'
           break
         case 18:
-          type = "分享单曲:"
+          type = '分享单曲:'
           break
         case 19:
-          type = "分享专辑:"
+          type = '分享专辑:'
           break
         case 22:
-        type = "转发:"
+          type = '转发:'
           break
         case 31:
-        type = "分享评论:"
+          type = '分享评论:'
           break
         case 35:
-        type = ":"
+          type = ':'
           break
         case 36:
-        type = "分享歌手:"
+          type = '分享歌手:'
           break
         case 39:
-        type = "发布视频:"
+          type = '发布视频:'
           break
         case 41:
-          type = "分享视频:"
+          type = '分享视频:'
           break
-        default: 
-          type = ":"
+        default:
+          type = ':'
       }
       return type
     },
     Artist (artists) {
-      if(!artists) return
+      if (!artists) return
       let arr = []
-      for(let i = 0; i < artists.length; i++) {
+      for (let i = 0; i < artists.length; i++) {
         arr.push(artists[i].name)
       }
       return arr.join('/')
     },
-    TransName(transNames) {
-      if(!transNames) return
+    TransName (transNames) {
+      if (!transNames) return
       let arr = []
-      for(let i = 0; i < transNames.length; i++) {
+      for (let i = 0; i < transNames.length; i++) {
         arr.push(transNames[i])
       }
       return arr.join('/')
@@ -438,27 +438,27 @@ export default {
     FindStr (str) {
       let arr = []
       let ind = str.indexOf('#')
-      while(ind !== -1) {
+      while (ind !== -1) {
         arr.push(ind)
-        ind = str.indexOf('#',ind + 1)
+        ind = str.indexOf('#', ind + 1)
       }
-      if(arr.length >= 2) {
-        if(arr.length-1 === arr[1]) return
-        if(str.substring(arr[0],arr[1]+1)) {
+      if (arr.length >= 2) {
+        if (arr.length - 1 === arr[1]) return
+        if (str.substring(arr[0], arr[1] + 1)) {
           return arr
         }
       }
     },
-    getData() {
+    getData () {
       this.item = this.dynamic[0]
-      console.log(this.dynamic)
+      // console.log(this.dynamic)
     }
-      
+
   },
-  created() {
+  created () {
     this.getData()
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
@@ -628,9 +628,9 @@ export default {
           width:145px
           max-height:230px
           img
-           width:145px
-           border-radius:5px
-           max-height:230px  
+            width:145px
+            border-radius:5px
+            max-height:230px  
         .dynamic-center-content-img-two
           width:140px
           height:140px
@@ -642,9 +642,9 @@ export default {
           width:90px
           height:90px
           img
-           width:100%
-           height:100%
-           border-radius:5px  
+            width:100%
+            height:100%
+            border-radius:5px  
         .dynamic-center-content-img-four
           div
             height:210px

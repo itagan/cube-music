@@ -148,10 +148,10 @@ export default {
           timerOne: null,
           timerTwo: null,
           timerThree: null,
-          isSubscribed:false,
-          isPraised:false,
-          redColor:'redColor',
-          praisedCounts:0
+          isSubscribed: false,
+          isPraised: false,
+          redColor: 'redColor',
+          praisedCounts: 0
         }
       },
       components: {
@@ -166,7 +166,7 @@ export default {
           return this.show ? 'iconshixinxiasanjiao' : 'iconshangsanjiao'
         },
         iconSubscribed () {
-            return this.isSubscribed ? 'iconshoucangchenggong' : 'iconshoucang'
+          return this.isSubscribed ? 'iconshoucangchenggong' : 'iconshoucang'
         },
         colorToggle () {
           return this.isPraised === true ? 'redColor' : ''
@@ -177,7 +177,7 @@ export default {
           'currentVideo',
           'operation'
         ]),
-        Operation() {
+        Operation () {
           return this.operation
         },
         CurrentVideo () {
@@ -223,20 +223,20 @@ export default {
             }
           })
         },
-        Operation(newOperation) {
+        Operation (newOperation) {
             // this.defaultOperation()
 
-            if(newOperation[0].id === this.currentVideo[0].vid) {
-                if(newOperation[0].isPraised) {
-                    this.$refs.praise.classList.add('redColor')
-                    this.$refs.Count.innerHTML++
-                    console.log('详情加')
-                }else {
-                    this.$refs.praise.classList.remove('redColor')
-                    this.$refs.Count.innerHTML--
-                    console.log('详情减')
-                }
+          if (newOperation[0].id === this.currentVideo[0].vid) {
+            if (newOperation[0].isPraised) {
+              this.$refs.praise.classList.add('redColor')
+              this.$refs.Count.innerHTML++
+              console.log('详情加')
+            } else {
+              this.$refs.praise.classList.remove('redColor')
+              this.$refs.Count.innerHTML--
+              console.log('详情减')
             }
+          }
         }
       },
       methods: {
@@ -266,10 +266,10 @@ export default {
         },
         getVideo () {
           this.$api.video.video(this.currentVideo[0].vid).then(res => {
-          this.detail = res.data.data
-          this.detail.playTime = serializeNumber(res.data.data.playTime)
-          this.detail.publishTime = timestamp(this.detail.publishTime)
-          this.detail.durationms = durationsTransformation(this.detail.durationms)
+            this.detail = res.data.data
+            this.detail.playTime = serializeNumber(res.data.data.playTime)
+            this.detail.publishTime = timestamp(this.detail.publishTime)
+            this.detail.durationms = durationsTransformation(this.detail.durationms)
           })
         },
             // 获取播放地址
@@ -278,15 +278,15 @@ export default {
             this.videoUrl = res.data.urls[0].url
           })
         },
-        //加载页面时判断是否操作过如点赞
+        // 加载页面时判断是否操作过如点赞
         defaultOperation () {
           this.isSubscribed = this.currentVideo[0].subscribed
-            if(this.operation.length && this.operation[0].id === this.currentVideo[0].vid) {
-                this.isPraised = this.operation[0].isPraised
-            }else {
-                this.isPraised = this.currentVideo[0].praised
-                console.log('该我了')
-            }
+          if (this.operation.length && this.operation[0].id === this.currentVideo[0].vid) {
+            this.isPraised = this.operation[0].isPraised
+          } else {
+            this.isPraised = this.currentVideo[0].praised
+            console.log('该我了')
+          }
           // this.isPraised = this.operation[0].isPraised
         },
             // 展开还是隐藏视频描述等
@@ -375,14 +375,13 @@ export default {
           this.currentTime = e.target.currentTime
         },
         praisedCount (detail) {
-          if(this.operation.length && this.operation[0].id === detail.vid) {
-              this.isPraised = this.operation[0].isPraised
-          }else {
-              this.isPraised = this.currentVideo[0].praised
-              console.log('还不存在')
+          if (this.operation.length && this.operation[0].id === detail.vid) {
+            this.isPraised = this.operation[0].isPraised
+          } else {
+            this.isPraised = this.currentVideo[0].praised
+            console.log('还不存在')
           }
           // this.isPraised = this.operation[0].isPraised
-
 
           let obj = {}
           obj.id = detail.vid
@@ -390,86 +389,86 @@ export default {
           obj.followed = detail.creator.followed
 
           if (this.isPraised) {
-              this.$api.likes.isLike(0, 5, detail.vid).then(res => {
-                  if (res.data.code === 200) {
+            this.$api.likes.isLike(0, 5, detail.vid).then(res => {
+              if (res.data.code === 200) {
                       // this.$refs.praise.classList.remove('redColor')
                       // this.$refs.Count.innerHTML--
-                      obj.isPraised = false
+                obj.isPraised = false
                       // saveOperation(obj)
-                      this.saveOperationList(obj)
-                      this.isPraised = false
-                  }
-              })
+                this.saveOperationList(obj)
+                this.isPraised = false
+              }
+            })
           } else {
-              this.$api.likes.isLike(1, 5, detail.vid).then(res => {
-                  if (res.data.code === 200) {
+            this.$api.likes.isLike(1, 5, detail.vid).then(res => {
+              if (res.data.code === 200) {
                       // this.$refs.praise.classList.add('redColor')
                       // this.$refs.Count.innerHTML++
-                      obj.isPraised = true
+                obj.isPraised = true
                       // saveOperation(obj)
-                      this.saveOperationList(obj)
-                      this.isPraised = true
-                  }
-              })
+                this.saveOperationList(obj)
+                this.isPraised = true
+              }
+            })
           }
         },
-        toSubscribed(detail) {
-            if(this.isSubscribed) {
-                this.$createDialog({
-                    type: 'confirm',
-                    title: '确定不再收藏该视频？',
-                    confirmBtn: {
-                        text: '确定',
-                        active: true,
-                        disabled: false,
-                        href: 'javascript:;'
-                    },
-                    cancelBtn: {
-                        text: '取消',
-                        active: false,
-                        disabled: false,
-                        href: 'javascript:;'
-                    },
-                    onConfirm: () => {
-                        this.$api.subs.isVideoSub(0, detail.vid).then(res => {
-                            if(res.status === 200) {
-                                this.$createToast({
-                                    type: 'text',
-                                    time: 1000,
-                                    txt: '视频已取消收藏'
-                                }).show()
-                                this.$refs.Sub.innerHTML--
-                                this.isSubscribed = false
-                                this.deleteVideoCollectionsList(detail)
-                            }
-                        })
-                    }
-                }).show()
-            }else {
-                this.$api.subs.isVideoSub(1, detail.vid).then(res => {
-                    if(res.status === 200) {
-                        const toast = this.$createToast({
-                            txt: '视频已收藏',
-                            type: 'correct',
-                            time: 2000,
-                        })
-                        toast.show()
-                        this.$refs.Sub.innerHTML++
-                        this.isSubscribed = true
-                        this.saveVideoCollectionsList(detail)
-                    }
+        toSubscribed (detail) {
+          if (this.isSubscribed) {
+            this.$createDialog({
+              type: 'confirm',
+              title: '确定不再收藏该视频？',
+              confirmBtn: {
+                text: '确定',
+                active: true,
+                disabled: false,
+                href: 'javascript:;'
+              },
+              cancelBtn: {
+                text: '取消',
+                active: false,
+                disabled: false,
+                href: 'javascript:;'
+              },
+              onConfirm: () => {
+                this.$api.subs.isVideoSub(0, detail.vid).then(res => {
+                  if (res.status === 200) {
+                    this.$createToast({
+                      type: 'text',
+                      time: 1000,
+                      txt: '视频已取消收藏'
+                    }).show()
+                    this.$refs.Sub.innerHTML--
+                    this.isSubscribed = false
+                    this.deleteVideoCollectionsList(detail)
+                  }
                 })
-            }
+              }
+            }).show()
+          } else {
+            this.$api.subs.isVideoSub(1, detail.vid).then(res => {
+              if (res.status === 200) {
+                const toast = this.$createToast({
+                  txt: '视频已收藏',
+                  type: 'correct',
+                  time: 2000
+                })
+                toast.show()
+                this.$refs.Sub.innerHTML++
+                this.isSubscribed = true
+                this.saveVideoCollectionsList(detail)
+              }
+            })
+          }
         },
-          ...mapMutations({
+        ...mapMutations({
           setLimit: 'SET_LIMIT',
           setCommentBack: 'SET_BACK'
         }),
-          ...mapActions([
-            'saveOperationList',
-            'saveVideoCollectionsList',
-            'deleteVideoCollectionsList'
-        ]),
+        ...mapActions([
+          'saveOperationList',
+          'saveVideoCollectionsList',
+          'deleteVideoCollectionsList'
+        ])
       },
       mounted () {
             // 确保DOM结构渲染完成才能滚动。延时确保滚动结构距离正常
@@ -478,7 +477,7 @@ export default {
             this.commentBack()
               // this.$refs.Count.innerHTML =  this.currentVideo[0].praisedCount
 
-              this.$refs.video.currentTime = this.currentVideo[0]._currentTime
+            this.$refs.video.currentTime = this.currentVideo[0]._currentTime
           }, 1000)
         })
       },

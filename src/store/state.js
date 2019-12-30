@@ -13,9 +13,9 @@ const state = {
   uid: 477726475, // 用户Id信息
   videoGroupId: 0,
   videoState: [{vid: '', praise: false, collection: false, share: false}], // 视频资源是否操作了
-  videoCollectionsList:[],
-  currentVideo:[],
-  operation:[],
-  dynamic:[]
+  videoCollectionsList: [],
+  currentVideo: [],
+  operation: [],
+  dynamic: []
 }
 export default state

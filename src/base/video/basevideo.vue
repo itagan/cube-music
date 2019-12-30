@@ -115,7 +115,7 @@
           timerOne: null,
           timerTwo: null,
           timerThree: null,
-          redColor:'redColor'
+          redColor: 'redColor'
         }
       },
       props: {
@@ -152,8 +152,8 @@
           'back',
           'operation'
         ]),
-        Operation() {
-            return this.operation
+        Operation () {
+          return this.operation
         }
       },
       watch: {
@@ -195,16 +195,15 @@
             }
           }
         },
-          Operation(newOperation) {
-
-              if(newOperation[0].isPraised) {
-                  this.$refs.praise.classList.add('redColor')
-                  this.$refs.Count.innerHTML++
-              }else {
-                  this.$refs.praise.classList.remove('redColor')
-                  this.$refs.Count.innerHTML--
-              }
+        Operation (newOperation) {
+          if (newOperation[0].isPraised) {
+            this.$refs.praise.classList.add('redColor')
+            this.$refs.Count.innerHTML++
+          } else {
+            this.$refs.praise.classList.remove('redColor')
+            this.$refs.Count.innerHTML--
           }
+        }
       },
       methods: {
         playVideo (item, index, e) {
@@ -395,28 +394,28 @@
           obj.followed = item.data.creator.followed
           let isPra = this.$refs.praise.className === 'wrap-bottom-left redColor'
           if (isPra) {
-              this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
-                  if (res.data.code === 200) {
+            this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
+              if (res.data.code === 200) {
                       // this.$refs.praise[index].classList.remove('redColor')
                       // this.$refs.Count[index].innerHTML--
-                      obj.isPraised = false
-                      this.saveOperationList(obj)
+                obj.isPraised = false
+                this.saveOperationList(obj)
 
                       // saveOperation(obj)
                       // this.isPraiseing = false
-                  }
-              })
+              }
+            })
           } else {
-              this.$api.likes.isLike(1, 5, item.data.vid).then(res => {
-                  if (res.data.code === 200) {
+            this.$api.likes.isLike(1, 5, item.data.vid).then(res => {
+              if (res.data.code === 200) {
                       // this.$refs.praise[index].classList.add('redColor')
                       // this.$refs.Count[index].innerHTML++
-                      obj.isPraised = true
+                obj.isPraised = true
                       // saveOperation(obj)
-                      this.saveOperationList(obj)
+                this.saveOperationList(obj)
                       // this.isPraiseing = true
-                  }
-              })
+              }
+            })
           }
         },
         details (vid) {

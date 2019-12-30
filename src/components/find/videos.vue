@@ -52,7 +52,7 @@
       data () {
         return {
           videos: [],
-          redColor:'redColor'
+          redColor: 'redColor'
         }
       },
       created () {
@@ -60,28 +60,28 @@
       },
       computed: {
         ...mapGetters([
-                'operation'
-          ]),
-        Operation() {
+          'operation'
+        ]),
+        Operation () {
           return this.operation
         }
       },
-      watch:{
-        Operation(newOperation) {
-            let index = this.videos.findIndex(item => {
-                return item.data.vid === this.operation[0].id
-            })
-            if(newOperation[0].id === this.videos[index].data.vid) {
-                if(newOperation[0].isPraised) {
-                    this.$refs.praise[index].classList.add('redColor')
-                    this.$refs.Count[index].innerHTML++
-                    console.log('详情加')
-                }else {
-                    this.$refs.praise[index].classList.remove('redColor')
-                    this.$refs.Count[index].innerHTML--
-                    console.log('详情减')
-                }
+      watch: {
+        Operation (newOperation) {
+          let index = this.videos.findIndex(item => {
+            return item.data.vid === this.operation[0].id
+          })
+          if (newOperation[0].id === this.videos[index].data.vid) {
+            if (newOperation[0].isPraised) {
+              this.$refs.praise[index].classList.add('redColor')
+              this.$refs.Count[index].innerHTML++
+              console.log('详情加')
+            } else {
+              this.$refs.praise[index].classList.remove('redColor')
+              this.$refs.Count[index].innerHTML--
+              console.log('详情减')
             }
+          }
         }
       },
       methods: {
@@ -131,18 +131,18 @@
           obj.followed = item.data.creator.followed
           let isPra = this.$refs.praise[index].className === 'wrap-bottom-left redColor'
           if (isPra) {
-              this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
-                  if (res.data.code === 200) {
+            this.$api.likes.isLike(0, 5, item.data.vid).then(res => {
+              if (res.data.code === 200) {
                       // this.$refs.praise[index].classList.remove('redColor')
                       // this.$refs.Count[index].innerHTML--
-                      obj.isPraised = false
+                obj.isPraised = false
 
-                      this.saveOperationList(obj)
+                this.saveOperationList(obj)
 
                       // saveOperation(obj)
                       // this.isPraiseing = false
-                  }
-              })
+              }
+            })
           } else {
             this.$api.likes.isLike(1, 5, item.data.vid).then(res => {
               if (res.data.code === 200) {
@@ -156,7 +156,7 @@
             })
           }
         },
-        details (vid,index) {
+        details (vid, index) {
                 // 视频详情页，自动把底部评论提前
           this.$router.push({
             path: `videoplayer`
@@ -172,7 +172,6 @@
           // obj.id = item.data.vid
           // obj.isSubscribed = item.data.subscribed
           // obj.followed = item.data.creator.followed
-
         },
         more () {
                 // 更多

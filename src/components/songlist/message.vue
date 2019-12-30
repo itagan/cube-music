@@ -46,39 +46,38 @@
 </template>
 
 <script>
-
     export default {
-        name: "songMessage.vue",
-        props: {
-          messages: {
-            type:Object,
-            default:{}
-          },
-          playlist: {
-            type:Object,
-            default:{}
-          }
+      name: 'songMessage.vue',
+      props: {
+        messages: {
+          type: Object,
+          default: {}
         },
-        methods: {
-          toComment () {
-            this.$emit('saveComment')
-            this.$router.push({
-              path:'songlistcomment'
-            })
-          },
-          toShare () {
-            this.$emit('share')
-          },
-          chcekMore () {
-            this.$emit('check')
-          },
-          toUser () {
-              let id = 477726475
-              this.$router.push({
-                  path: `/user/${id}`
-              })
-          }
+        playlist: {
+          type: Object,
+          default: {}
         }
+      },
+      methods: {
+        toComment () {
+          this.$emit('saveComment')
+          this.$router.push({
+            path: 'songlistcomment'
+          })
+        },
+        toShare () {
+          this.$emit('share')
+        },
+        chcekMore () {
+          this.$emit('check')
+        },
+        toUser () {
+          let id = 477726475
+          this.$router.push({
+            path: `/user/${id}`
+          })
+        }
+      }
     }
 </script>
 

@@ -78,76 +78,76 @@
 
 <script>
     import MySearch from '../../base/search/search'
-    import albumBase from "../../base/swiper/albumbase"
+    import albumBase from '../../base/swiper/albumbase'
     export default {
-        name: "album.vue",
-        components: {
-          MySearch,
-          albumBase
-        },
-        data () {
-          return {
-            placeholder: '搜索专辑',
-            fake:false,
-            albums:[],
-            item:{},
-            options: {
-              pullDownRefresh: {
-                threshold: 60,
-                stopTime: 1000,
-                txt: '更新成功'
-              },
-              pullUpLoad: true,
-              scrollbar: true,
-              click: false // 解决点击事件被触发两次的问题
+      name: 'album.vue',
+      components: {
+        MySearch,
+        albumBase
+      },
+      data () {
+        return {
+          placeholder: '搜索专辑',
+          fake: false,
+          albums: [],
+          item: {},
+          options: {
+            pullDownRefresh: {
+              threshold: 60,
+              stopTime: 1000,
+              txt: '更新成功'
             },
-            secondStop: 0,
-            scrollEvents: ['scroll','before-scroll-start'],
-            pullDownY: 0
-          }
-        },
-        created() {
-          this.getAlbums()
-        },
-        methods: {
-          getQuery (query) {
-            console.log(query)
+            pullUpLoad: true,
+            scrollbar: true,
+            click: false // 解决点击事件被触发两次的问题
           },
-          goToSearch () {
-            this.fake = true
-          },
-          getAlbums () {
-            this.$api.subs.albums().then(res => {
-              this.albums = res.data.data
-              this.$emit('hasNumber',res.data.count)
-            })
-          },
-          selectItem (id) {
-
-          },
-          onPullingDown () {
-            setTimeout(() => {
-              this.albums = this.albums.reverse()
-                // this.getAlbums()
-              this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
-              this.$refs.contentScroll.forceUpdate();//下拉完毕
-            }, 1000)
-          },
-
-          onPullingUp () {
-            setTimeout(() => {
-              const contentScroll = this.$refs.contentScroll
-              contentScroll.forceUpdate()
-              // contentScroll.refresh();
-            }, 1000)
-          },
-          scrollHandler (pos) {
-            this.pullDownY = -pos.y
-          },
-          beforeScrollStart() {
-              this.fake = false
-          }
+          secondStop: 0,
+          scrollEvents: ['scroll', 'before-scroll-start'],
+          pullDownY: 0
         }
+      },
+      created () {
+        this.getAlbums()
+      },
+      methods: {
+        getQuery (query) {
+          console.log(query)
+        },
+        goToSearch () {
+          this.fake = true
+        },
+        getAlbums () {
+          this.$api.subs.albums().then(res => {
+            this.albums = res.data.data
+            this.$emit('hasNumber', res.data.count)
+          })
+        },
+        selectItem (id) {
+
+        },
+        onPullingDown () {
+          setTimeout(() => {
+            this.albums = this.albums.reverse()
+                // this.getAlbums()
+            this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
+            this.$refs.contentScroll.forceUpdate()// 下拉完毕
+          }, 1000)
+        },
+
+        onPullingUp () {
+          setTimeout(() => {
+            const contentScroll = this.$refs.contentScroll
+            contentScroll.forceUpdate()
+              // contentScroll.refresh();
+          }, 1000)
+        },
+        scrollHandler (pos) {
+          this.pullDownY = -pos.y
+        },
+        beforeScrollStart () {
+          this.fake = false
+        }
+      }
     }
 </script>
 

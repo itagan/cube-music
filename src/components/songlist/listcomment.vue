@@ -82,98 +82,98 @@
 
 <script>
     import MyHeader from '../../base/navbar/navbar'
-    import songListComment from "../../base/swiper/songlistcomment"
-    import baseComment from "../../base/basecomment/basecomment"
+    import songListComment from '../../base/swiper/songlistcomment'
+    import baseComment from '../../base/basecomment/basecomment'
     import {timestampOther} from '../../assets/js/timestamp'
 
     export default {
-        name: "listComment.vue",
-        components: {
-          MyHeader,
-          songListComment,
-          baseComment
-        },
-        data () {
-          return {
-            total:0,
-            comments:[],
-            hotComments:[],
-            scrollY: 0,
-            scrollEvents: ['scroll'],
-            totals:0,
-            options: {
-              pullUpLoad: true,
-              scrollbar: true,
-              click: false // 解决点击事件被触发两次的问题
-            },
-            secondStop: 0,
-            pullDownY: 0,
-            offset:0,
-            hasMore:true,
-            moreHot:false
-          }
-        },
-        props: {
-          id:{
-            type:Number,
-            default:705123491
-          }
-        },
-        created() {
-          this.getComment(705123491,this.offset)
-        },
-        methods: {
-          getComment (id,offset) {
-            this.$api.songLists.songListComment(id,offset).then(res => {
-              this.hasMore = res.data.more
-              this.moreHot = res.data.moreHot !== 'undefined' ? res.data.moreHot : 'undefined'
-              this.total = res.data.total
-              if(this.hasMore) {
-                this.offset++
-                this.comments = this.comments.concat(res.data.comments)
-                for (let i = 0; i < this.comments.length; i++) {
-                  this.comments[i].time = timestampOther(this.comments[i].time)
-                }
-              }else {
-                this.comments = res.data.comments
+      name: 'listComment.vue',
+      components: {
+        MyHeader,
+        songListComment,
+        baseComment
+      },
+      data () {
+        return {
+          total: 0,
+          comments: [],
+          hotComments: [],
+          scrollY: 0,
+          scrollEvents: ['scroll'],
+          totals: 0,
+          options: {
+            pullUpLoad: true,
+            scrollbar: true,
+            click: false // 解决点击事件被触发两次的问题
+          },
+          secondStop: 0,
+          pullDownY: 0,
+          offset: 0,
+          hasMore: true,
+          moreHot: false
+        }
+      },
+      props: {
+        id: {
+          type: Number,
+          default: 705123491
+        }
+      },
+      created () {
+        this.getComment(705123491, this.offset)
+      },
+      methods: {
+        getComment (id, offset) {
+          this.$api.songLists.songListComment(id, offset).then(res => {
+            this.hasMore = res.data.more
+            this.moreHot = res.data.moreHot !== 'undefined' ? res.data.moreHot : 'undefined'
+            this.total = res.data.total
+            if (this.hasMore) {
+              this.offset++
+              this.comments = this.comments.concat(res.data.comments)
+              for (let i = 0; i < this.comments.length; i++) {
+                this.comments[i].time = timestampOther(this.comments[i].time)
               }
-              if(this.moreHot === true) {
-                this.hotComments = this.hotComments.concat(res.data.hotComments)
+            } else {
+              this.comments = res.data.comments
+            }
+            if (this.moreHot === true) {
+              this.hotComments = this.hotComments.concat(res.data.hotComments)
+              for (let i = 0; i < this.hotComments.length; i++) {
+                this.hotComments[i].time = timestampOther(this.hotComments[i].time)
+              }
+            } else if (this.moreHot === false) {
+              this.hotComments = res.data.hotComments !== 'undefined' ? res.data.hotComments : 'undefined'
+              if (this.hotComments) {
                 for (let i = 0; i < this.hotComments.length; i++) {
                   this.hotComments[i].time = timestampOther(this.hotComments[i].time)
                 }
-              }else if(this.moreHot === false) {
-                this.hotComments = res.data.hotComments !== 'undefined' ? res.data.hotComments : 'undefined'
-                if(this.hotComments) {
-                  for (let i = 0; i < this.hotComments.length; i++) {
-                    this.hotComments[i].time = timestampOther(this.hotComments[i].time)
-                  }
-                }
               }
-            })
-          },
-          toBack () {
-            this.$router.go(-1)
-          },
-          share () {
-
-          },
-          music () {
-
-          },
-          scrollHandler ({ y }) {
-            this.scrollY = -y
-          },
-          onPullingUp () {
-            setTimeout(() => {
-              this.getComment (705123491,this.offset)
-              const contentScroll = this.$refs.contentScroll
-              contentScroll.forceUpdate()
-            }, 1000)
-          }
+            }
+          })
         },
-        beforeMount() {
-          this.$nextTick(() => {
+        toBack () {
+          this.$router.go(-1)
+        },
+        share () {
+
+        },
+        music () {
+
+        },
+        scrollHandler ({ y }) {
+          this.scrollY = -y
+        },
+        onPullingUp () {
+          setTimeout(() => {
+            this.getComment(705123491, this.offset)
+            const contentScroll = this.$refs.contentScroll
+            contentScroll.forceUpdate()
+          }, 1000)
+        }
+      },
+      beforeMount () {
+        this.$nextTick(() => {
           // let hei = document.getElementsByClassName('hot-comment')[0]
           // let myColor= getComputedStyle(hei).height
           // this.$refs.stickyHeight.style.height = myColor +'px'
@@ -182,13 +182,13 @@
           this.$refs.stickyHeight.style.height = 300 + 'px'
           // console.log(this.totals)
           this.$refs.contentScroll.refresh()
-          })
-        },
-        mounted() {
+        })
+      },
+      mounted () {
           // this.$nextTick(() => {
         //     this.getHeight ()
           // })
-        }
+      }
     }
 </script>
 

@@ -35,29 +35,29 @@
 
 <script>
     export default {
-        name: "songBase.vue",
-        data () {
-          return {
-            playing:false,
-            checkbox:false,
-            activeColor:'activeColor'
-          }
-        },
-        props: {
-          item: {
-            type:Object,
-            default:{}
-          },
-          index: {
-            type:Number,
-            default: 0
-          }
-        },
-        methods :{
-          more () {
-            this.$emit('more')
-          }
+      name: 'songBase.vue',
+      data () {
+        return {
+          playing: false,
+          checkbox: false,
+          activeColor: 'activeColor'
         }
+      },
+      props: {
+        item: {
+          type: Object,
+          default: {}
+        },
+        index: {
+          type: Number,
+          default: 0
+        }
+      },
+      methods: {
+        more () {
+          this.$emit('more')
+        }
+      }
     }
 </script>
 

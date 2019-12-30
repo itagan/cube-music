@@ -19,10 +19,10 @@
 
 <script>
     export default {
-        name: "songListComment.vue",
-        props: {
+      name: 'songListComment.vue',
+      props: {
 
-        }
+      }
     }
 </script>
 

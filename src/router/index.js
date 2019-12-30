@@ -12,13 +12,12 @@ import Code from '../components/user/code'
 import PassWord from '../components/user/loginpassword'
 import videoSlide from '../components/common/videoslide'
 import MyCollectionList from '../components/mycollection/collectionlist'
-import SongList from "../components/songlist/songlist"
-import SongListComment from "../components/songlist/listcomment"
-import User from "../components/others/user"
-import BaseMessage from "../components/others/basemessage"
-import ForWard from "../components/dynamic/forward"
-import DynamicComment from "../components/dynamic/comment/dynamiccomment"
-
+import SongList from '../components/songlist/songlist'
+import SongListComment from '../components/songlist/listcomment'
+import User from '../components/others/user'
+import BaseMessage from '../components/others/basemessage'
+import ForWard from '../components/dynamic/forward'
+import DynamicComment from '../components/dynamic/comment/dynamiccomment'
 
 Vue.use(Router)
 
@@ -66,9 +65,9 @@ export default new Router({
       component: Video
     },
     {
-      name:'my',
+      name: 'my',
       path: '/my',
-      component: My,
+      component: My
       // children: [
       //   {
       //     path:'/my/collection',
@@ -77,8 +76,8 @@ export default new Router({
       // ]
     },
     {
-      path:'/collection',
-      component:MyCollectionList
+      path: '/collection',
+      component: MyCollectionList
     },
     {
       path: '/village',
@@ -107,6 +106,17 @@ export default new Router({
     {
       path: '/user/:id',
       component: User
+      // redirect: "/user/:id",
+      // children: [
+      //   {
+      //     path: '/',
+      //     component: User
+      //   },
+      //   {
+      //     path: 'basemessage',
+      //     component: BaseMessage
+      //   }
+      // ]
     },
     {
       path: '/basemessage',
@@ -119,6 +129,6 @@ export default new Router({
     {
       path: '/dynamiccomment',
       component: DynamicComment
-    },
+    }
   ]
 })

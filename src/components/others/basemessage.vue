@@ -58,35 +58,35 @@
 <script>
     import MyHeader from '../../base/navbar/navbar'
     export default {
-        name: 'baseMessage.vue',
-        components: {
-            MyHeader
-        },
-        data () {
-            return {
-                authentication: false,
-                brief:false,
-                level:0,
-                profile:{}
-            }
-        },
-        created () {
-            this.getUser()
-        },
-        methods: {
-            getUser () {
-                this.$api.users.userdetail(32953014).then(res => {
-                    this.profile = res.data.profile
-                    this.level = res.data.level
-                })
-            },
-            toBack () {
-                this.$router.go(-1)
-            },
-            music () {
-
-            }
+      name: 'baseMessage.vue',
+      components: {
+        MyHeader
+      },
+      data () {
+        return {
+          authentication: false,
+          brief: false,
+          level: 0,
+          profile: {}
         }
+      },
+      created () {
+        this.getUser()
+      },
+      methods: {
+        getUser () {
+          this.$api.users.userdetail(32953014).then(res => {
+            this.profile = res.data.profile
+            this.level = res.data.level
+          })
+        },
+        toBack () {
+          this.$router.go(-1)
+        },
+        music () {
+
+        }
+      }
     }
 </script>
 

@@ -15,12 +15,12 @@ const CURRENT_OPERATION_LEN = 1
 const CURRENT_DYNAMIC_KEY = '__dynamic__'
 const CURRENT_DYNAMIC_LEN = 1
 
-//公共方法设置
+// 公共方法设置
 function insertArray (arr, val, compare, maxLen) {
   const index = arr.findIndex(compare)
   if (index === 0) {
     return
-  }  //解决刚开始为空的问题，所以不能-1
+  }  // 解决刚开始为空的问题，所以不能-1
   if (index > 0) {
     arr.splice(index, 1)
   }
@@ -35,13 +35,13 @@ function deleteFromArray (arr, compare) {
     arr.splice(index, 1)
   }
 }
-function Operation() {
+function Operation () {
 
 }
-//当前视频
+// 当前视频
 export function saveCurrentVideo (video) {
   let _currentVideo = storage.get(CURRENT_VIDEO_KEY, [])
-  insertArray( _currentVideo, video, (item) => {
+  insertArray(_currentVideo, video, (item) => {
     return item.vid === video.vid
   }, CURRENT_VIDEO_LEN)
   storage.set(CURRENT_VIDEO_KEY, _currentVideo)
@@ -49,7 +49,7 @@ export function saveCurrentVideo (video) {
 }
 export function deleteCurrentVideo (video) {
   let _currentVideo = storage.get(CURRENT_VIDEO_KEY, [])
-  deleteFromArray( _currentVideo, (item) => {
+  deleteFromArray(_currentVideo, (item) => {
     return item.vid === video.vid
   })
   storage.set(CURRENT_VIDEO_KEY, _currentVideo)
@@ -58,7 +58,7 @@ export function deleteCurrentVideo (video) {
 export function loadCurrentVideo () {
   return storage.get(CURRENT_VIDEO_KEY, [])
 }
-//视频收藏历史记录
+// 视频收藏历史记录
 export function saveCollectVideo (video) {
   let videoCollections = storage.get(COLLECT_VIDEO_KEY, [])
   insertArray(videoCollections, video, (item) => {
@@ -78,30 +78,30 @@ export function deleteCollectVideo (video) {
 export function loadCollectVideo () {
   return storage.get(COLLECT_VIDEO_KEY, [])
 }
-//是否已经对当前视频等资源操作过，如点赞，收藏,关注，播放进度等
-export function saveOperation(value) {
+// 是否已经对当前视频等资源操作过，如点赞，收藏,关注，播放进度等
+export function saveOperation (value) {
   let _currentOperation = storage.get(CURRENT_VIDEO_KEY, [])
-  insertArray( _currentOperation, value, (item) => {
+  insertArray(_currentOperation, value, (item) => {
     return item.id === value.id
   }, CURRENT_OPERATION_LEN)
   storage.set(CURRENT_OPERATION_KEY, _currentOperation)
   return _currentOperation
 }
-export function deleteOperation(value) {
+export function deleteOperation (value) {
   let _currentOperation = storage.get(CURRENT_OPERATION_KEY, [])
-  deleteFromArray( _currentOperation, (item) => {
+  deleteFromArray(_currentOperation, (item) => {
     return item.id === value.id
   })
   storage.set(CURRENT_OPERATION_KEY, _currentOperation)
   return _currentOperation
 }
-export function loadOperation() {
+export function loadOperation () {
   return storage.get(CURRENT_OPERATION_KEY, [])
 }
-//当前动态
+// 当前动态
 export function saveCurrentDynamic (dynamic) {
   let _currentDynamic = storage.get(CURRENT_DYNAMIC_KEY, [])
-  insertArray( _currentDynamic, dynamic, (item) => {
+  insertArray(_currentDynamic, dynamic, (item) => {
     return item.id === dynamic.id
   }, CURRENT_DYNAMIC_LEN)
   storage.set(CURRENT_DYNAMIC_KEY, _currentDynamic)
@@ -109,7 +109,7 @@ export function saveCurrentDynamic (dynamic) {
 }
 export function deleteCurrentDynamic (dynamic) {
   let _currentDynamic = storage.get(CURRENT_DYNAMIC_KEY, [])
-  deleteFromArray( _currentDynamic, (item) => {
+  deleteFromArray(_currentDynamic, (item) => {
     return item.id === dynamic.id
   })
   storage.set(CURRENT_DYNAMIC_KEY, _currentDynamic)

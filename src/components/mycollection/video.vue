@@ -64,78 +64,78 @@
     import MySearch from '../../base/search/search'
     import subVideo from '../../base/swiper/subvideo'
     export default {
-        name: "video.vue",
-        components: {
-            MySearch,
-            subVideo
-        },
-        data () {
-            return {
-                placeholder: '搜索视频',
-                fake:false,
-                videos:[],
-                options: {
-                    pullDownRefresh: {
-                        threshold: 60,
-                        stopTime: 1000,
-                        txt: '更新成功'
-                    },
-                    pullUpLoad: true,
-                    scrollbar: true,
-                    click: false // 解决点击事件被触发两次的问题
-                },
-                secondStop: 0,
-                scrollEvents: ['scroll','before-scroll-start'],
-                pullDownY: 0,
-                offset:0,
-                hasMore:true,
-            }
-        },
-        created() {
-            this.getSubMvs(this.offset)
-        },
-        methods: {
-            getQuery (query) {
-                console.log(query)
+      name: 'video.vue',
+      components: {
+        MySearch,
+        subVideo
+      },
+      data () {
+        return {
+          placeholder: '搜索视频',
+          fake: false,
+          videos: [],
+          options: {
+            pullDownRefresh: {
+              threshold: 60,
+              stopTime: 1000,
+              txt: '更新成功'
             },
-            goToSearch () {
-                this.fake = true
-            },
-            getSubMvs (offset) {
-                this.$api.subs.subVideos(offset).then(res => {
-                    this.hasMore = res.data.hasMore
-                    if(this.hasMore) {
-                        this.offset++
-                        this.videos = this.videos.concat(res.data.data)
-                        console.log(this.videos)
-                    }
-                    this.$emit('hasVideo',this.videos.length)
-                })
-            },
-            selectItem (vid) {
-
-            },
-            onPullingDown () {
-                setTimeout(() => {
-                    this.videos = this.videos.reverse()
-                    this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
-                    this.$refs.contentScroll.forceUpdate();//下拉完毕
-                }, 1000)
-            },
-            onPullingUp () {
-                setTimeout(() => {
-                    this.getSubMvs(this.offset)
-                    const contentScroll = this.$refs.contentScroll
-                    contentScroll.forceUpdate()
-                }, 1000)
-            },
-            scrollHandler (pos) {
-                this.pullDownY = -pos.y
-            },
-            beforeScrollStart() {
-                this.fake = false
-            }
+            pullUpLoad: true,
+            scrollbar: true,
+            click: false // 解决点击事件被触发两次的问题
+          },
+          secondStop: 0,
+          scrollEvents: ['scroll', 'before-scroll-start'],
+          pullDownY: 0,
+          offset: 0,
+          hasMore: true
         }
+      },
+      created () {
+        this.getSubMvs(this.offset)
+      },
+      methods: {
+        getQuery (query) {
+          console.log(query)
+        },
+        goToSearch () {
+          this.fake = true
+        },
+        getSubMvs (offset) {
+          this.$api.subs.subVideos(offset).then(res => {
+            this.hasMore = res.data.hasMore
+            if (this.hasMore) {
+              this.offset++
+              this.videos = this.videos.concat(res.data.data)
+              console.log(this.videos)
+            }
+            this.$emit('hasVideo', this.videos.length)
+          })
+        },
+        selectItem (vid) {
+
+        },
+        onPullingDown () {
+          setTimeout(() => {
+            this.videos = this.videos.reverse()
+            this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
+            this.$refs.contentScroll.forceUpdate()// 下拉完毕
+          }, 1000)
+        },
+        onPullingUp () {
+          setTimeout(() => {
+            this.getSubMvs(this.offset)
+            const contentScroll = this.$refs.contentScroll
+            contentScroll.forceUpdate()
+          }, 1000)
+        },
+        scrollHandler (pos) {
+          this.pullDownY = -pos.y
+        },
+        beforeScrollStart () {
+          this.fake = false
+        }
+      }
     }
 </script>
 

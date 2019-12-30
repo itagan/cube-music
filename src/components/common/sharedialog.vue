@@ -126,21 +126,21 @@
 
 <script>
     export default {
-        name: "playMore.vue",
-        data() {
-          return {
-            options: {
-              scrollbar: true
+      name: 'playMore.vue',
+      data () {
+        return {
+          options: {
+            scrollbar: true
           }}
+      },
+      methods: {
+        show () {
+          this.$refs.popup.show()
         },
-        methods: {
-          show () {
-            this.$refs.popup.show()
-          },
-          hide () {
-            this.$refs.popup.hide()
-          }
+        hide () {
+          this.$refs.popup.hide()
         }
+      }
     }
 </script>
 

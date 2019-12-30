@@ -9,23 +9,23 @@
 <script>
     import MyHeader from '../../base/navbar/navbar'
     export default {
-        name: 'header.vue',
-        components: {
-            MyHeader
-        },
-        data () {
-            return {
-                isComplete: true
-            }
-        },
-        methods: {
-            toBack () {
-                this.$router.go(-1)
-            },
-            music () {
-
-            }
+      name: 'header.vue',
+      components: {
+        MyHeader
+      },
+      data () {
+        return {
+          isComplete: true
         }
+      },
+      methods: {
+        toBack () {
+          this.$router.go(-1)
+        },
+        music () {
+
+        }
+      }
     }
 </script>
 

@@ -25,7 +25,7 @@
 
 <script>
     export default {
-        name: "logBase.vue"
+      name: 'logBase.vue'
     }
 </script>
 

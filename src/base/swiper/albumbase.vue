@@ -19,13 +19,13 @@
 
 <script>
     export default {
-        name: "albumBase.vue",
-        props: {
-            item: {
-                type:Object,
-                default:{}
-            }
+      name: 'albumBase.vue',
+      props: {
+        item: {
+          type: Object,
+          default: {}
         }
+      }
     }
 </script>
 
