@@ -7,7 +7,8 @@
       <div class="wrapper-right">
         {{user.nickname}}
       </div>  
-    </li>    
+    </li>  
+    <li class="no-user"  v-if="!users.length">还没有赞</li>  
   </ul>
 </template>
 
@@ -47,7 +48,7 @@ export default {
   methods: {
     getUser (uid) {
       this.$api.users.userdetail(uid).then(res => {
-        this.users.push(res.data.profile)
+        this.users.unshift(res.data.profile)
         console.log(this.users)
       })
     },
@@ -103,5 +104,12 @@ export default {
         height:40px
         line-height:40px
         margin:auto 10px
-        font-size:$font-size-medium   
+        font-size:$font-size-medium  
+    .no-user
+      text-align:center
+      margin-top:50px
+      color:gray  
+      display:block  
+      border-bottom:none
+
 </style>

@@ -1,8 +1,18 @@
 <template>
     <ul class="comment">
-      <li v-for="item in comments" :key="item.commentId">
+      <li class="comment-header" v-if="hotComments.length">精彩评论
+        <span>{{hotComments.length}}</span>
+      </li>
+      <li v-for="item in hotComments" :key="item.commentId">
         <base-comment :item="item" class="base-comment"></base-comment>
       </li>
+      <li class="comment-header">最新评论 
+        <span>{{newComments.length}}</span>
+        </li>
+      <li v-for="item in newComments" :key="item.commentId">
+        <base-comment :item="item" class="base-comment"></base-comment>
+      </li>
+      <li class="no-comment" v-if="!newComments.length">还没有评论</li>
     </ul>
 </template>
 
@@ -12,19 +22,30 @@ export default {
   components: {
     baseComment
   },
-  props: {},
-  data () {
-    return {
-      comments: []
+  props: {
+    item: {
+      type: Object,
+      default: {}
     }
   },
-  watch: {},
+  data () {
+    return {
+      newComments: [],
+      hotComments:[]
+    }
+  },
+  watch: {
+    item () {
+        this.getComment()
+      }
+  },
   computed: {},
   methods: {
     getComment () {
-      this.$api.users.dynamicComment('A_EV_2_6559519868_32953014').then(res => {
-        this.comments = res.data.comments
-        console.log(this.comments)
+      this.threadId = this.item.info.threadId
+      this.$api.users.dynamicComment(this.threadId).then(res => {
+        this.newComments = res.data.comments
+        this.hotComments = res.data.hotComments
       })
     }
   },
@@ -40,7 +61,20 @@ export default {
   .comment
     width:375px
     height:auto
+    .comment-header
+      height:40px
+      padding-left:15px
+      line-height:40px
+      background-color:white
+      span 
+       color:gray
+       font-size:$font-size-small
     li
      height:auto
      margin:auto 10px
+     font-size:$font-size-medium
+    .no-comment
+      text-align:center
+      margin-top:50px
+      color:gray 
 </style>

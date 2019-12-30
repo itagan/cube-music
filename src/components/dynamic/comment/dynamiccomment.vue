@@ -21,7 +21,7 @@
                 <div :index="0" @click="toggles(0)" :class="[currentPage === 0 ? activeClass : '', errorClass]">
                   <span> 评论 </span>
                 </div>
-                <span :style="[currentPage === 0 ? {color:'red'} : {color:'gray'}]">{{item.info.commentCount}}</span>
+                <span :style="[currentPage === 0 ? {color:'red'} : {color:'gray'}]" v-show="commentShow">{{commentCount}}</span>
               </li>
             
 
@@ -29,7 +29,7 @@
                 <div :index="0" @click="toggles(1)" :class="[currentPage === 1 ? activeClass : '', errorClass]">
                   <span> 转发 </span>
                 </div>
-                <span :style="[currentPage === 1 ? {color:'red'} : {color:'gray'}]">{{item.insiteForwardCount}}</span>
+                <span :style="[currentPage === 1 ? {color:'red'} : {color:'gray'}]" v-show="forwardShow">{{forwardCount}}</span>
               </li>
 
                <li>
@@ -75,12 +75,9 @@
              <div class="comment-header">精彩评论</div>
             </cube-sticky-ele> -->
 
-             <div class="comment-header" ref="commentHeader">精彩评论</div>
-             <comment-base></comment-base>
-             <div class="comment-header">最新评论</div>
-             <comment-base></comment-base>
-             <comment-base></comment-base>
-
+             <!-- <div class="comment-header" ref="commentHeader">精彩评论</div> -->
+             <comment-base :item="item"></comment-base>
+             <!-- <div class="comment-header">最新评论</div> -->
             </cube-slide-item>
 
             <cube-slide-item :index="1">
@@ -156,7 +153,11 @@
           isLike: false,
           isadd: [],
           likeShow: true,
-          likedCount:0
+          likedCount:0,
+          commentShow:true,
+          commentCount:0,
+          forwardShow:true,
+          forwardCount:0,
         }
       },
       created () {
@@ -201,7 +202,7 @@
                 //   this.$refs.myHeader.opacityHeader(1)
                 // }
 
-          this.commentHeader = this.$refs.commentHeader.getBoundingClientRect().top
+          // this.commentHeader = this.$refs.commentHeader.getBoundingClientRect().top
                 // console.log(this.commentHeader)
           // if (this.commentHeader < 88) {
           //   this.$refs.commentHeader.style.position = 'fixed'
@@ -220,6 +221,10 @@
           this.item = this.dynamic[0]
           this.isLike = this.item.info.liked
           this.likedCount = this.item.info.likedCount
+          this.forwardCount = this.item.insiteForwardCount
+          this.commentCount = this.item.info.commentCount
+          this.forwardShow = this.forwardCount ? true : false
+          this.commentShow = this.commentCount ? true : false
           if(this.likedCount === 0) {
             this.likeShow = false
           }else {
@@ -297,7 +302,8 @@
  .forward-comment
     background-color: white
     width:375px
-    height:675px
+    height:667px
+    overflow-y:hidden
   // .my-header
   //   background-color:transparent !important
   //   color:white
@@ -333,12 +339,7 @@
         //  font-size:$font-size-small
 
 
-  .comment-header
-    height 40px
-    padding-left:15px
-    line-height:40px
-    background-color:white
-    // top:100px
+  
 
   .comment-bottom
       position:fixed
@@ -367,6 +368,10 @@
           height:100%
           margin-top:13px
           margin-right:10px
+
+  .cube-slide
+    margin-bottom:50px    
+    min-height:515px   
 
   .nav-item-active
     color: red

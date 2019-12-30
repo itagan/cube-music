@@ -161,7 +161,7 @@
  .user
     overflow: hidden
     width:375px
-    height:675px
+    height:667px
   .my-header
     background-color:transparent !important
     color:white
