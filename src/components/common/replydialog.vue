@@ -5,7 +5,7 @@
         <div class="triangle-top" v-if="diaTop"></div>
         <div class="triangle-bottom" v-if="!diaTop"></div>
         <ul class="ring-dialog-container">
-          <li>
+          <li @click="Reply">
             <i class="iconfont iconhuifu"></i>
             <span>回复</span>
           </li>
@@ -50,6 +50,11 @@ export default {
     },
     _diaTopChange () {
       this.diaTop = false
+    },
+    Reply () {
+      //回复
+      this.$emit('reply')
+      this.hide()
     }
   },
   created() {},
@@ -92,6 +97,10 @@ export default {
          height:50%
          width:50px 
          flex-center()
+      li:nth-child(2) 
+        margin-left:5px
+      li:nth-child(3) 
+        margin-left:5px     
     .triangle-top
       width: 0
       height: 0

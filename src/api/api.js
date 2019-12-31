@@ -193,6 +193,27 @@ const songLists = {
     return axios.get(`${base}/playlist/subscribe?t=${is}&id=${id}`)
   }
 }
+// 评论功能
+const commentFeature = {
+  dynamicSend (threadId, content) {
+    return axios.get(`${base}/comment?t=1&type=6&threadId=${threadId}&content=${content}`)
+  },
+  dynamicReply (threadId, commentId, content) {
+    return axios.get(`${base}/comment?t=2&type=6&threadId=${threadId}&commentId=${commentId}&content=${content}`)
+  },
+  dynamicDelete (threadId, commentId) {
+    return axios.get(`${base}/comment?t=0&type=6&threadId=${threadId}&commentId=${commentId}`)
+  },
+  commentSend (type, id, content) {
+    return axios.get(`${base}/comment?t=1&type=${type}&id=${id}&content=${content}`)
+  },
+  commentReply (type, id, commentId, content) {
+    return axios.get(`${base}/comment?t=2&type=${type}&id=${id}&commentId=${commentId}&content=${content}`)
+  },
+  commentDelete (type, commentId) {
+    return axios.get(`${base}/comment?t=0&type=${type}&id=5436712&commentId=${commentId}`)
+  }
+}
 
 export default {
   login,
@@ -202,5 +223,6 @@ export default {
   playlists,
   likes,
   subs,
-  songLists
+  songLists,
+  commentFeature
 }

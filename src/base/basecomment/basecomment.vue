@@ -1,5 +1,5 @@
 <template>
-  <div class="base-comment" @click="remind">
+  <div class="base-comment" @click="remind" v-if="!item.beReplied.length">
     <div class="base-comment-top">
       <img v-lazy="item.user.avatarUrl" @click="toUser">
       <div class="base-comment-time">
@@ -21,9 +21,9 @@
           </span>
         </div>
       </div>
-      <div class="reply" @click="reply" v-if="replyShow">
+      <div class="reply" @click="reply" v-show="item && showReply(item)!== -1 ? true : false">
         <span>5条回复</span>
-        <i class="iconfont iconzan1"></i>
+        <i class="iconfont iconiconfontyoujiantou"></i>
       </div>
     </div>
   </div>
@@ -36,11 +36,29 @@
       item: {
         type: Object,
         default: {}
+      },
+      arr: {
+        type: Array,
+        default: []
       }
     },
     data () {
       return {
-        replyShow: false
+        replyShow: false,
+        showOr:-1,
+      }
+    },
+    created() {
+      this.showReply()
+    },
+    computed:{
+      // arr() {
+      //   this.showReply() 
+      // }
+    },
+    watch:{
+      arr (val) {
+
       }
     },
     methods: {
@@ -54,7 +72,15 @@
                 // 点赞
       },
       reply () {
-                // 回复
+                
+                // item.beReplied && item.beReplied[0].beRepliedCommentId === item.commentId 
+      },
+      showReply (item) {
+        if(item.commentId) {
+          return this.arr.findIndex(num => {
+          return item.commentId && num === item.commentId
+          })
+        }
       }
     }
   }
@@ -126,6 +152,7 @@
           margin-right:5px
         .be-replied-content
           line-height:1.5
+          white-space: normal
           .be-replied-name
             color:dodgerblue
       .reply

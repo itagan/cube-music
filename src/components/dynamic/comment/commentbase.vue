@@ -3,14 +3,14 @@
       <li class="comment-header" v-if="hotComments.length">精彩评论
         <span>{{hotComments.length}}</span>
       </li>
-      <li v-for="item in hotComments" :key="item.commentId">
-        <base-comment :item="item" class="base-comment"></base-comment>
+      <li v-for="_item in hotComments" :key="_item.commentId">
+        <base-comment :item="_item" class="base-comment"></base-comment>
       </li>
       <li class="comment-header">最新评论 
         <span>{{newComments.length}}</span>
         </li>
-      <li v-for="(item,index) in newComments" :key="item.commentId" @click="Reply(index)" ref="liOffset">
-        <base-comment :item="item" class="base-comment"></base-comment>
+      <li v-for="(_item,index) in newComments" :key="_item.commentId" @click="Reply(index)" ref="liOffset">
+        <base-comment :item="_item" :arr="arr" v-if="arr.length" class="base-comment"></base-comment>
       </li>
       <li class="no-comment" v-if="!newComments.length">还没有评论</li>
     </ul>
@@ -33,7 +33,9 @@ export default {
   data () {
     return {
       newComments: [],
-      hotComments:[]
+      hotComments:[],
+      _item:{},
+      arr:[]
     }
   },
   watch: {
@@ -48,6 +50,7 @@ export default {
       this.$api.users.dynamicComment(this.threadId).then(res => {
         this.newComments = res.data.comments
         this.hotComments = res.data.hotComments
+         this.showReply()
       })
     },
     Reply (index) {
@@ -60,8 +63,20 @@ export default {
       }else {
         proup.style.top = -(667 - liTop+30) + 'px'
       }
-      this.$emit('showDialog',liTop)
-    }
+      let user = this.newComments[index].user.nickname,
+          commentId = this.newComments[index].commentId,
+          threadId = this.threadId
+      this.$emit('showDialog',liTop,user,commentId,threadId)
+    },
+    showReply () {
+        for(let i =0; i < this.newComments.length;i++) {
+          if(this.newComments[i].beReplied.length) {
+            this.arr.push(this.newComments[i].beReplied[0].beRepliedCommentId)
+          }
+        }
+        this.arr = [...new Set(this.arr)] 
+         console.log(this.arr)
+      }
   },
   created () {
     this.getComment()

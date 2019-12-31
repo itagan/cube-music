@@ -96,14 +96,14 @@
     </div>
    
     <div class="comment-bottom">
-      <input type="text" placeholder="发表评论">
+      <input type="text" :placeholder="placeholder" ref="Input" v-model="value" @input="input">
       <div class="comment-icon">
         <i class="iconfont iconzan1" :style="[isLike === true ? {color:'red'} : {color:''}]" @click="toLike"></i>
         <i class="iconfont iconpinglun" @click="Forward"></i>
       </div>
     </div>
 
-    <reply-dialog ref="showDia" ></reply-dialog>
+    <reply-dialog ref="showDia" @reply="replyComment"></reply-dialog>
   </div>
   <!-- </router-view> -->
 </template>
@@ -162,6 +162,11 @@
           commentCount:0,
           forwardShow:true,
           forwardCount:0,
+          placeholder:"发表评论",
+          user:"",
+          commentId:-1,
+          threadId:'',
+          value:''
         }
       },
       created () {
@@ -262,13 +267,33 @@
             path: `/forward/${this.uid}/${this.evId}`
           })
         },
-        showDialog (liTop) {
+        showDialog (liTop,user,commentId,threadId) {
           this.$refs.showDia.show()
           if(liTop < 144){
             this.$refs.showDia.diaTopChange()
           }else {
             this.$refs.showDia._diaTopChange()
           }
+          this.user = user
+          this.threadId = threadId
+          this.commentId = commentId
+          console.log(user,commentId,threadId)
+        },
+        replyComment () {
+          this.placeholder = '回复' + this.user + ':'
+          this.Input()
+        },
+        Input () {
+          this.$refs.Input.focus()
+        },
+        replyUser () {
+          this.$api.commentFeature.dynamicReply(threadId, commentId, content).then(res => {
+            console.log(res)
+          })
+        },
+        input () {
+          console.log(this.value.length)
+
         }
         // handleScroll () {
         //   var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
