@@ -6,7 +6,9 @@
     <ul slot="center" class="user-list" ref="Header" v-if="isShow">
         <li class="user-list-name">
           <img src="../../user/img/login1.png" alt="" class="img">
-          <span class="user-list-name-nick">宝粉帮</span>
+        </li>
+        <li class="user-list-name-nick">
+          宝粉帮
         </li>
     </ul>
     <div class="user-list-forward" slot="center" v-if="!isShow" ref="Header">
@@ -63,6 +65,12 @@
         _show () {
           this.isShow = false
         }
+      },
+      mounted() {
+        this.$nextTick(() => {
+          //初始化显示  "动态" 。css则为0
+          this.$refs.Header.style.opacity = 1
+        })
       }
     }
 </script>
@@ -77,21 +85,23 @@
     .user-list
       display:flex
       opacity:0
+      height:100%
+      line-height:50px
       .user-list-name
-        height:100%
-        width:auto
-        font-size:$font-size-medium-x
+        flex-center()
+        height: 50px
         .img
           width:26px
           height:26px
           border-radius:50%
-        .user-list-name-nick
-          margin-left:10px
-          height: 50px
-          line-height:50px
+      .user-list-name-nick
+        margin-left:10px
+        height: 50px
+        flex-center()
+        font-size:$font-size-medium-x
     .user-list-forward
       font-size:$font-size-medium-x
-      opacity:1
+      opacity:0
       height:50px
       line-height:50px
 

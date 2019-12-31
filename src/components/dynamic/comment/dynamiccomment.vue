@@ -186,26 +186,20 @@
         scrollHandler ({ y }) {
           this.scrollY = -y
           this.messTop = this.$refs.messTop.getTop()
-                // console.log(this.scrollY)
-                 console.log(this.messTop)
-
-                if(this.messTop >= 25) {
-                this.$refs.myHeader.show()
-                 let opac = 1 - (this.messTop - 180) * 0.05
-                 this.$refs.myHeader.opacityHeader(opac)
-                }else if(this.messTop > 199) {
-                  this.$refs.myHeader.opacityHeader(1)
-                  this.$refs.myHeader._show()
-                }
-                if(this.messTop >= 160 && this.messTop < 180) {
-                 this.$refs.myHeader.show()
-                 let opac = -(this.messTop - 180) * 0.05
-                 this.$refs.myHeader.opacityHeader(opac)
-                }else if(this.messTop < 160) {
-                  this.$refs.myHeader.show()
-                  this.$refs.myHeader.opacityHeader(1)
-                }
-
+          // console.log(this.scrollY)
+          if(this.messTop >= 25) {
+          this.$refs.myHeader._show()
+            let opac = 1 - (55 - this.messTop) * 0.034
+            this.$refs.myHeader.opacityHeader(opac)
+          }
+          else if(this.messTop >= 0){
+            let opac = 1 - this.messTop * 0.04
+            this.$refs.myHeader.opacityHeader(opac)
+            this.$refs.myHeader.show()
+          }else {
+            this.$refs.myHeader.show()
+            this.$refs.myHeader.opacityHeader(1)
+          }
           // this.commentHeader = this.$refs.commentHeader.getBoundingClientRect().top
                 // console.log(this.commentHeader)
           // if (this.commentHeader < 88) {
