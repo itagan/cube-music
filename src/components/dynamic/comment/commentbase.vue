@@ -9,7 +9,7 @@
       <li class="comment-header">最新评论 
         <span>{{newComments.length}}</span>
         </li>
-      <li v-for="item in newComments" :key="item.commentId">
+      <li v-for="(item,index) in newComments" :key="item.commentId" @click="Reply(index)" ref="liOffset">
         <base-comment :item="item" class="base-comment"></base-comment>
       </li>
       <li class="no-comment" v-if="!newComments.length">还没有评论</li>
@@ -18,9 +18,11 @@
 
 <script>
 import baseComment from '../../../base/basecomment/basecomment'
+import replyDialog from '../../common/replydialog'
 export default {
   components: {
-    baseComment
+    baseComment,
+    replyDialog
   },
   props: {
     item: {
@@ -47,6 +49,18 @@ export default {
         this.newComments = res.data.comments
         this.hotComments = res.data.hotComments
       })
+    },
+    Reply (index) {
+      let proup = document.getElementsByClassName('cube-popup-content')[0],
+      liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
+      Hei = this.$refs.liOffset[index].offsetHeight
+      if(liTop < 144){
+        let _liTop = liTop + Hei
+        proup.style.top = -(667 - _liTop - 30) + 'px'
+      }else {
+        proup.style.top = -(667 - liTop+30) + 'px'
+      }
+      this.$emit('showDialog',liTop)
     }
   },
   created () {

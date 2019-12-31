@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="dynamic-top">
+    <div class="dynamic-top" ref="Top">
       <div class="dynamic-top-img">
         <img :src="item.user.avatarUrl" alt="">
       </div>
@@ -452,6 +452,9 @@ export default {
     getData () {
       this.item = this.dynamic[0]
       // console.log(this.dynamic)
+    },
+    getTop () {
+      return this.$refs.Top.getBoundingClientRect().top
     }
 
   },

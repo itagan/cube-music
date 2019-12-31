@@ -111,7 +111,7 @@
         /*position:relative*/
         /*right:40px*/
         line-height:1.5
-        overflow-wrap:break-word
+        white-space: normal
         width:100%
         display:inline-block
       .be-replied

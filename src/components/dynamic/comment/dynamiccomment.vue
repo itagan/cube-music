@@ -1,7 +1,7 @@
 <template>
 <!-- <router-view> -->
   <div class="forward-comment"> 
-    <my-header :profile="profile" :isShow="isShow" class="my-header" ref="myHeader"></my-header>
+    <my-header :profile="profile" class="my-header" ref="myHeader"></my-header>
    
     <div class="sticky-view-container">
       <cube-sticky :pos="scrollY">
@@ -13,10 +13,10 @@
           ref="scroll"
           class="scroll-ele"
         >
-          <dynamic-content style="height:auto"></dynamic-content>
+          <dynamic-content style="height:auto" ref="messTop"></dynamic-content>
 
           <cube-sticky-ele>
-            <ul class="sticky-header" ref="messTop">
+            <ul class="sticky-header">
               <li>
                 <div :index="0" @click="toggles(0)" :class="[currentPage === 0 ? activeClass : '', errorClass]">
                   <span> 评论 </span>
@@ -76,7 +76,7 @@
             </cube-sticky-ele> -->
 
              <!-- <div class="comment-header" ref="commentHeader">精彩评论</div> -->
-             <comment-base :item="item"></comment-base>
+             <comment-base :item="item" @showDialog="showDialog"></comment-base>
              <!-- <div class="comment-header">最新评论</div> -->
             </cube-slide-item>
 
@@ -102,6 +102,8 @@
         <i class="iconfont iconpinglun" @click="Forward"></i>
       </div>
     </div>
+
+    <reply-dialog ref="showDia" ></reply-dialog>
   </div>
   <!-- </router-view> -->
 </template>
@@ -113,6 +115,7 @@
     import commentBase from './commentbase'
     import forwardUser from './forwarduser'
     import likeUser from './likeuser'
+    import replyDialog from '../../common/replydialog'
     import {mapGetters} from 'vuex'
     export default {
       name: 'user.vue',
@@ -122,7 +125,8 @@
         myComment,
         commentBase,
         forwardUser,
-        likeUser
+        likeUser,
+        replyDialog
     
       },
       data () {
@@ -181,26 +185,26 @@
       methods: {
         scrollHandler ({ y }) {
           this.scrollY = -y
-          this.messTop = this.$refs.messTop.getBoundingClientRect().top
+          this.messTop = this.$refs.messTop.getTop()
                 // console.log(this.scrollY)
-                //  console.log(this.messTop)
+                 console.log(this.messTop)
 
-                // if(this.messTop >= 180 && this.messTop <= 199) {
-                // this.isShow = false
-                //  let opac = 1 - (this.messTop - 180) * 0.05
-                //  this.$refs.myHeader.opacityHeader(opac)
-                // }else if(this.messTop > 199) {
-                //   this.$refs.myHeader.opacityHeader(1)
-                //   this.isShow = false
-                // }
-                // if(this.messTop >= 160 && this.messTop < 180) {
-                //  this.isShow = true
-                //  let opac = -(this.messTop - 180) * 0.05
-                //  this.$refs.myHeader.opacityHeader(opac)
-                // }else if(this.messTop < 160) {
-                //   this.isShow = true
-                //   this.$refs.myHeader.opacityHeader(1)
-                // }
+                if(this.messTop >= 25) {
+                this.$refs.myHeader.show()
+                 let opac = 1 - (this.messTop - 180) * 0.05
+                 this.$refs.myHeader.opacityHeader(opac)
+                }else if(this.messTop > 199) {
+                  this.$refs.myHeader.opacityHeader(1)
+                  this.$refs.myHeader._show()
+                }
+                if(this.messTop >= 160 && this.messTop < 180) {
+                 this.$refs.myHeader.show()
+                 let opac = -(this.messTop - 180) * 0.05
+                 this.$refs.myHeader.opacityHeader(opac)
+                }else if(this.messTop < 160) {
+                  this.$refs.myHeader.show()
+                  this.$refs.myHeader.opacityHeader(1)
+                }
 
           // this.commentHeader = this.$refs.commentHeader.getBoundingClientRect().top
                 // console.log(this.commentHeader)
@@ -225,11 +229,7 @@
           this.commentCount = this.item.info.commentCount
           this.forwardShow = this.forwardCount ? true : false
           this.commentShow = this.commentCount ? true : false
-          if(this.likedCount === 0) {
-            this.likeShow = false
-          }else {
-            this.likeShow = true
-          }
+          this.likeShow = this.likedCount ? true : false
         },
         toLike () {
           if (this.isLike) {
@@ -243,7 +243,6 @@
                 this.likeShow = true
                 if(this.likedCount === 0) {
                   this.likeShow = false
-                  console.log("隐藏")
                 }
               }
             })
@@ -268,6 +267,14 @@
           this.$router.push({
             path: `/forward/${this.uid}/${this.evId}`
           })
+        },
+        showDialog (liTop) {
+          this.$refs.showDia.show()
+          if(liTop < 144){
+            this.$refs.showDia.diaTopChange()
+          }else {
+            this.$refs.showDia._diaTopChange()
+          }
         }
         // handleScroll () {
         //   var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -347,7 +354,7 @@
       height:45px
       width:100%
       background-color:white
-      z-index:2020
+      z-index:2001
       border-top:1px solid #dcdcdc
       font-size:$font-size-medium
       flex-between()

@@ -30,6 +30,7 @@
       },
       data () {
         return {
+          isShow:false
         }
       },
       props: {
@@ -37,10 +38,10 @@
           type: Object,
           default: {}
         },
-        isShow: {
-          type: Boolean,
-          default: false
-        }
+        // isShow: {
+        //   type: Boolean,
+        //   default: false
+        // }
       },
       methods: {
         toBack () {
@@ -55,6 +56,12 @@
         opacityHeader (opac) {
           this.$refs.Header.style.opacity = opac
             // this.$refs.otherHeader.style.opacity = Math.abs(1 - opac)
+        },
+        show () {
+          this.isShow = true
+        },
+        _show () {
+          this.isShow = false
         }
       }
     }
