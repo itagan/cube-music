@@ -20,7 +20,7 @@
             ref="contentScroll"
           >
             <div class="reply-container">
-              <reply-content :item="item" class="reply-content"></reply-content>
+              <reply-content :item="item" :key="item.commentId" class="reply-content"></reply-content>
             </div>
 
             <cube-sticky-ele>
@@ -28,14 +28,11 @@
                 <li class="hot-comment-top">全部回复</li>
               </ul>
             </cube-sticky-ele>
-            <div ref="stickyHeight" style="height:600px">
-
-              <!-- <ul class="hot-comment">
-                <li v-for="item in hotComments" :key="item.commentId">
-                  <base-comment :item="item" class="base-comment"></base-comment>
-                </li>
-              </ul> -->
-            </div>
+            <ul class="reply-all">
+              <li v-for="item in items" :key="item.commentId">
+                <reply-all :item="item"></reply-all>
+              </li>
+            </ul>
 
             <!-- <template slot="pullup" slot-scope="props">
               <div v-if="props.pullUpLoad" class="pull-load">
@@ -66,10 +63,12 @@
 import MyHeader from '../../base/navbar/navbar'
 import baseComment from '../../base/basecomment/basecomment'
 import replyContent from '../../base/basecomment/replycontent'
+import replyAll from '../../base/basecomment/replyallcomment'
 export default {
   components: {
     MyHeader,
-    replyContent
+    replyContent,
+    replyAll
   },
   props: {},
   data() {
@@ -84,7 +83,8 @@ export default {
         scrollbar: true,
         click: false // 解决点击事件被触发两次的问题
       },
-      item:{}
+      item:{},
+      items:[]
     }
   },
   watch: {
@@ -102,8 +102,13 @@ export default {
     },
     getParams () {
       // this.item = this.$route.params.item  //刷新后不能获取参数。该方法需要改造或者采用查询参数形式
-      this.item = JSON.parse(this.$route.query.item) //传参获取参数都使用json方法转换，避免刷新时候报错
+      this.items = JSON.parse(this.$route.query.item) //传参获取参数都使用json方法转换，避免刷新时候报错
+      console.log(this.items)
+      this.item = this.items.filter(item => {
+        return item.parentCommentId === item.beReplied[0].beRepliedCommentId
+      })[0].beReplied[0]
       console.log(this.item)
+      
     }
   },
   created() {
@@ -183,5 +188,9 @@ export default {
         background-color:white
         border-bottom:7px solid rgba(128,128,128,.1)
         margin:auto 10px
+      .reply-all
+        margin:10px auto  
+        li
+         margin:auto 10px
 
 </style>

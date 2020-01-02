@@ -1,5 +1,5 @@
 <template>
-  <div class="base-comment" @click="remind" v-if="!item.beReplied.length">
+  <div class="base-comment" @click="remind">
     <div class="base-comment-top">
       <img v-lazy="item.user.avatarUrl" @click="toUser">
       <div class="base-comment-time">
@@ -13,17 +13,12 @@
     </div>
     <div class="base-comment-bottom">
       <span class="comment">{{item.content}}</span>
-      <div v-if="item.beReplied.length" class="be-replied">
+      <div v-if="item.beReplied.length && item.beReplied[0].beRepliedCommentId !== item.parentCommentId" class="be-replied">
         <div class="line"></div>
         <div class="be-replied-content">
           <span class="be-replied-name">@{{item.beReplied[0].user.nickname}}</span>
             {{item.beReplied[0].content}}
         </div>
-      </div>
-      <div class="reply" @click="reply" v-if="ReplyNum(item) !== -1 ? true : false">
-        <!-- v-show="item && showReply(item)!== -1 ? true : false" -->
-        <span>{{_ReplyNum(item).length}}条回复</span>
-        <i class="iconfont iconiconfontyoujiantou"></i>
       </div>
     </div>
   </div> 
@@ -31,28 +26,15 @@
 
 <script>
   export default {
-    name: 'baseComment.vue',
+    name: 'replyallcomment.vue',
     props: {
       item: {
         type: Object,
         default: {}
-      },
-      // arr: {
-      //   type: Array,
-      //   default: []
-      // },
-      hasReplyArr: {
-        type: Array,
-        default: []
       }
     },
     data () {
-      return {
-        replyShow: false,
-        showOr:-1,
-        // hasReplyArr:[],
-        ReplyArr:[]
-      }
+      return {}
     },
     created() {
       // this.showReply()
@@ -86,27 +68,6 @@
           }
         })    
       },
-      //方法分开写，v-if去重数组 避免出现可能无限循环报错
-      ReplyNum (item) {
-        return [...new Set(this.hasReplyArr)].findIndex(ele => {
-          return item.commentId === ele.parentCommentId
-        })
-      },
-      _ReplyNum (item) {
-        if(item.beReplied.length !== 0) return
-        this.ReplyArr = this.hasReplyArr.filter(ele => {
-          return item.commentId === ele.parentCommentId
-        })
-        console.log(this.ReplyArr)
-        return this.ReplyArr
-      },
-      // showReply (item) {
-      //   if(item.commentId) {
-      //     return this.arr.findIndex(num => {
-      //     return num === item.commentId
-      //     })
-      //   }
-      // }
     }
   }
 </script>
@@ -192,8 +153,5 @@
         i 
           font-size:$font-size-large-x
           margin-left:-7px
-
-
-
 
 </style>

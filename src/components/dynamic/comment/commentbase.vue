@@ -84,15 +84,6 @@ export default {
     //   this.arr = [...new Set(this.arr)] 
     //   //  console.log(this.arr)
     // },
-    ReplyNum (item) {
-      // this.hasReplyArr = arr.filter(item => {
-      //   return item.parentCommentId !== 0
-      // }) 
-      this.ReplyArr = this.hasReplyArr.slice().forEach(ele => {
-        item.commentId === ele.parentCommentId
-      })
-      return this.ReplyArr.length
-    }
   },
   created () {
     this.getComment()
