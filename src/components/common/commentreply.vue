@@ -93,9 +93,7 @@ export default {
   computed: {},
   methods: {
     toBack () {
-      // this.$router.back(-1)
       this.$router.go(-1)
-      console.log('触发返回')
     },
     music () {
     },

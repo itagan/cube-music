@@ -10,7 +10,7 @@
         <span>{{newComments.length}}</span>
         </li>
       <li v-for="(_item, index) in newComments" :key="_item.commentId" @click="Reply(index)" ref="liOffset">
-        <base-comment :item="_item" class="base-comment" :arr="arr"></base-comment>
+        <base-comment :item="_item" class="base-comment" :hasReplyArr="hasReplyArr"></base-comment>
       </li>
       <li class="no-comment" v-if="!newComments.length">还没有评论</li>
     </ul>
@@ -35,7 +35,9 @@ export default {
       newComments: [],
       hotComments:[],
       _item:{},
-      arr:[]
+      arr:[],
+      hasReplyArr:[],
+      ReplyArr:[]
     }
   },
   watch: {
@@ -50,8 +52,12 @@ export default {
       this.$api.users.dynamicComment(this.threadId).then(res => {
         this.newComments = res.data.comments
         this.hotComments = res.data.hotComments
-         this.showReply()
+        // this.showReply()
         // console.log(this.newComments)
+        this.hasReplyArr = this.newComments.filter(item => {
+        return item.parentCommentId !== 0
+        }) 
+        // console.log(this.hasReplyArr)
       })
     },
     Reply (index) {
@@ -69,15 +75,24 @@ export default {
           threadId = this.threadId
       this.$emit('showDialog',liTop,user,commentId,threadId)
     },
-    showReply () {
-        for(let i =0; i < this.newComments.length;i++) {
-          if(this.newComments[i].beReplied.length) {
-            this.arr.push(this.newComments[i].beReplied[0].beRepliedCommentId)
-          }
-        }
-        this.arr = [...new Set(this.arr)] 
-        //  console.log(this.arr)
-      }
+    // showReply () {
+    //   for(let i =0; i < this.newComments.length;i++) {
+    //     if(this.newComments[i].beReplied.length) {
+    //       this.arr.push(this.newComments[i].beReplied[0].beRepliedCommentId)
+    //     }
+    //   }
+    //   this.arr = [...new Set(this.arr)] 
+    //   //  console.log(this.arr)
+    // },
+    ReplyNum (item) {
+      // this.hasReplyArr = arr.filter(item => {
+      //   return item.parentCommentId !== 0
+      // }) 
+      this.ReplyArr = this.hasReplyArr.slice().forEach(ele => {
+        item.commentId === ele.parentCommentId
+      })
+      return this.ReplyArr.length
+    }
   },
   created () {
     this.getComment()

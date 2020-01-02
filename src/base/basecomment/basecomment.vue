@@ -20,13 +20,13 @@
             {{item.beReplied[0].content}}
         </div>
       </div>
-      <div class="reply" @click="reply" v-show="showReply(item)!== -1 ? true : false">
+      <div class="reply" @click="reply" v-if="ReplyNum(item) && ReplyNum(item).length ? true : false">
         <!-- v-show="item && showReply(item)!== -1 ? true : false" -->
-        <span>5111条回复</span>
+        <span>{{ReplyNum(item).length}}条回复</span>
         <i class="iconfont iconiconfontyoujiantou"></i>
       </div>
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -37,7 +37,11 @@
         type: Object,
         default: {}
       },
-      arr: {
+      // arr: {
+      //   type: Array,
+      //   default: []
+      // },
+      hasReplyArr: {
         type: Array,
         default: []
       }
@@ -46,6 +50,8 @@
       return {
         replyShow: false,
         showOr:-1,
+        // hasReplyArr:[],
+        ReplyArr:[]
       }
     },
     created() {
@@ -80,13 +86,21 @@
           }
         })    
       },
-      showReply (item) {
-        if(item.commentId) {
-          return this.arr.findIndex(num => {
-          return num === item.commentId
-          })
-        }
-      }
+      ReplyNum (item) {
+        // if(item.beReplied.length !== 0) return
+        this.ReplyArr = this.hasReplyArr.slice().filter(ele => {
+          return item.commentId === ele.parentCommentId
+        })
+        console.log(this.ReplyArr)
+        return this.ReplyArr
+      },
+      // showReply (item) {
+      //   if(item.commentId) {
+      //     return this.arr.findIndex(num => {
+      //     return num === item.commentId
+      //     })
+      //   }
+      // }
     }
   }
 </script>
