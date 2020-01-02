@@ -2,7 +2,6 @@
 <!-- <router-view> -->
   <div class="forward-comment"> 
     <my-header :profile="profile" class="my-header" ref="myHeader"></my-header>
-   
     <div class="sticky-view-container">
       <cube-sticky :pos="scrollY">
 
@@ -51,33 +50,7 @@
             @change="slideChange">
 
             <cube-slide-item :index="0">
-              <!-- <div style="height:700px">11111</div> -->
-              <!-- <my-Comment></my-Comment> -->
-
-            <!-- <cube-sticky-ele >
-              <ul>
-                <li>222</li>
-              </ul>
-            </cube-sticky-ele>
-            <div style="height:200px">
-              哆啦A梦啦啦啦啦啦啦啦啦啦啦啦
-            </div>
-            <cube-sticky-ele >
-              <ul>
-                <li>111</li>
-              </ul>
-            </cube-sticky-ele>
-            <div style="height:600px">
-              玩那啦啦啦啦啦
-            </div> -->
-            
-             <!-- <cube-sticky-ele>
-             <div class="comment-header">精彩评论</div>
-            </cube-sticky-ele> -->
-
-             <!-- <div class="comment-header" ref="commentHeader">精彩评论</div> -->
              <comment-base :item="item" @showDialog="showDialog"></comment-base>
-             <!-- <div class="comment-header">最新评论</div> -->
             </cube-slide-item>
 
             <cube-slide-item :index="1">
@@ -87,10 +60,7 @@
              <cube-slide-item :index="2">
                <like-user :item="item" :isadd="isadd" ref="likeUserChange"> </like-user>
             </cube-slide-item>
-
           </cube-slide>
-
-
         </cube-scroll>
       </cube-sticky>
     </div>
@@ -277,7 +247,7 @@
           this.user = user
           this.threadId = threadId
           this.commentId = commentId
-          console.log(user,commentId,threadId)
+          // console.log(user,commentId,threadId)
         },
         replyComment () {
           this.placeholder = '回复' + this.user + ':'
@@ -293,7 +263,6 @@
         },
         input () {
           console.log(this.value.length)
-
         }
         // handleScroll () {
         //   var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop

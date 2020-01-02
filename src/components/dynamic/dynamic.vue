@@ -331,17 +331,14 @@
         </li>
       </ul>
     </div>
-
-    
   </div>
 </template>
-
 <script>
 import shareBase from '../../base/share/sharebase'
 import shareVideo from '../../base/video/sharevideo'
 import shareComment from '../../base/share/sharecomment'
 import forWard from './forward'
-import {mapGetters, mapMutations, mapActions} from 'vuex'
+import {mapActions} from 'vuex'
 
 export default {
   components: {
@@ -370,11 +367,7 @@ export default {
       uid: 0
     }
   },
-  watch: {
-    // events (evs) {
-
-    // }
-  },
+  watch: {},
   computed: {},
   methods: {
     Test (num) {
@@ -476,15 +469,14 @@ export default {
       })
     },
     comment () {
-        // console.log(this)
-      this.setDynamic([this.events[this.index]])
+      this.saveDynamic(this.events[this.index])
       this.$router.push({
         path: `/dynamiccomment`
       })
     },
-    ...mapMutations({
-      setDynamic: 'SET_DYNAMIC'
-    })
+    ...mapActions([
+      'saveDynamic'
+    ])
   },
   created () {},
   mounted () {}

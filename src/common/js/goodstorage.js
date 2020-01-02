@@ -35,9 +35,7 @@ function deleteFromArray (arr, compare) {
     arr.splice(index, 1)
   }
 }
-function Operation () {
 
-}
 // 当前视频
 export function saveCurrentVideo (video) {
   let _currentVideo = storage.get(CURRENT_VIDEO_KEY, [])

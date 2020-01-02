@@ -49,7 +49,7 @@ export default {
     getUser (uid) {
       this.$api.users.userdetail(uid).then(res => {
         this.users.unshift(res.data.profile)
-        console.log(this.users)
+        // console.log(this.users)
       })
     },
     getUsers (item) {

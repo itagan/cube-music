@@ -323,20 +323,7 @@ export default {
     shareVideo,
     shareComment
   },
-  props: {
-    // item: {
-    //   type:Object,
-    //   default:{}
-    // },
-    // events: {
-    //   type:Array,
-    //   default:[]
-    // },
-    // index: {
-    //   type:Number,
-    //   default:-1
-    // },
-  },
+  props: {},
   data () {
     return {
       item: {}

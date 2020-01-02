@@ -120,8 +120,8 @@ const users = {
     return axios.get(`${base}/event/forward?evId=${evId}&uid=${uid}&forwards=${forwards}`)
   },
   // 获取动态评论
-  dynamicComment (threadId) {
-    return axios.get(`${base}/comment/event?threadId=${threadId}`)
+  dynamicComment (threadId, limit = 50) {
+    return axios.get(`${base}/comment/event?threadId=${threadId}&limit=${limit}`)
   }
 }
 

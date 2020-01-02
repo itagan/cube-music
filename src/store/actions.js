@@ -1,5 +1,5 @@
 import * as types from './mutations-types'
-import { saveCollectVideo, deleteCollectVideo, saveCurrentVideo, deleteCurrentVideo, saveOperation, deleteOperation } from '../common/js/goodstorage'
+import { saveCollectVideo, deleteCollectVideo, saveCurrentVideo, deleteCurrentVideo, saveOperation, deleteOperation, saveCurrentDynamic } from '../common/js/goodstorage'
 
 function findIndex (list, video) {
   return list.findIndex((item) => {
@@ -64,4 +64,9 @@ export const saveOperationList = function ({commit, state}, operation) {
 
 export const deleteOperationList = function ({commit, state}, operation) {
   commit(types.SET_OPERATION, deleteOperation(operation))
+}
+
+// 动态
+export const saveDynamic = function ({commit}, dynamic) {
+  commit(types.SET_DYNAMIC, saveCurrentDynamic(dynamic))
 }

@@ -17,12 +17,12 @@
         <div class="line"></div>
         <div class="be-replied-content">
           <span class="be-replied-name">@{{item.beReplied[0].user.nickname}}</span>
-          {{item.beReplied[0].content}}
-          </span>
+            {{item.beReplied[0].content}}
         </div>
       </div>
-      <div class="reply" @click="reply" v-show="item && showReply(item)!== -1 ? true : false">
-        <span>5条回复</span>
+      <div class="reply" @click="reply" v-show="showReply(item)!== -1 ? true : false">
+        <!-- v-show="item && showReply(item)!== -1 ? true : false" -->
+        <span>5111条回复</span>
         <i class="iconfont iconiconfontyoujiantou"></i>
       </div>
     </div>
@@ -49,18 +49,14 @@
       }
     },
     created() {
-      this.showReply()
+      // this.showReply()
     },
     computed:{
       // arr() {
       //   this.showReply() 
       // }
     },
-    watch:{
-      arr (val) {
-
-      }
-    },
+    watch:{},
     methods: {
       remind () {
                 // 点击评论提醒该要什么
@@ -72,13 +68,22 @@
                 // 点赞
       },
       reply () {
-                
-                // item.beReplied && item.beReplied[0].beRepliedCommentId === item.commentId 
+        this.$router.push({
+          // path:`/commentreply:${this.item}`
+          path: 'commentreply', 
+          name:'commentreply',
+          // params: { 
+          //    item:this.item
+          // }
+          query: { 
+             item:JSON.stringify(this.item)  //传参获取参数都使用json方法转换，避免刷新时候报错
+          }
+        })    
       },
       showReply (item) {
         if(item.commentId) {
           return this.arr.findIndex(num => {
-          return item.commentId && num === item.commentId
+          return num === item.commentId
           })
         }
       }
@@ -157,10 +162,18 @@
             color:dodgerblue
       .reply
         color:dodgerblue
-        margin-top:5px
-        padding-top:5px
-        padding-bottom:15px
+        height:30px
+        display:flex
+        line-height:30px
         span
           margin-right:5px
+          display:flex
+          width:auto
+        i 
+          font-size:$font-size-large-x
+          margin-left:-7px
+
+
+
 
 </style>

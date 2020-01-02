@@ -9,8 +9,8 @@
       <li class="comment-header">最新评论 
         <span>{{newComments.length}}</span>
         </li>
-      <li v-for="(_item,index) in newComments" :key="_item.commentId" @click="Reply(index)" ref="liOffset">
-        <base-comment :item="_item" :arr="arr" v-if="arr.length" class="base-comment"></base-comment>
+      <li v-for="(_item, index) in newComments" :key="_item.commentId" @click="Reply(index)" ref="liOffset">
+        <base-comment :item="_item" class="base-comment" :arr="arr"></base-comment>
       </li>
       <li class="no-comment" v-if="!newComments.length">还没有评论</li>
     </ul>
@@ -51,6 +51,7 @@ export default {
         this.newComments = res.data.comments
         this.hotComments = res.data.hotComments
          this.showReply()
+        // console.log(this.newComments)
       })
     },
     Reply (index) {
@@ -75,7 +76,7 @@ export default {
           }
         }
         this.arr = [...new Set(this.arr)] 
-         console.log(this.arr)
+        //  console.log(this.arr)
       }
   },
   created () {

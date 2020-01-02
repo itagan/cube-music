@@ -18,6 +18,7 @@ import User from '../components/others/user'
 import BaseMessage from '../components/others/basemessage'
 import ForWard from '../components/dynamic/forward'
 import DynamicComment from '../components/dynamic/comment/dynamiccomment'
+import CommentReply from '../components/common/commentreply'
 
 Vue.use(Router)
 
@@ -30,15 +31,24 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/Find'
+      redirect: '/Find',
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/login',
-      component: Login
+      component: Login,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/login/phone',
-      component: loginPhone
+      component: loginPhone,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
       // children:[
       //   {
       //     path:':phone',
@@ -49,25 +59,40 @@ export default new Router({
     // 非父子关系组件~把号码通过路由传值。
     { name: 'code',
       path: '/login/phone/:phone',
-      component: Code
+      component: Code,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     // 非父子关系组件~把号码通过路由传值。
     { name: 'password',
       path: '/login/cellphone/:phone',
-      component: PassWord
+      component: PassWord,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/find',
-      component: Find
+      component: Find,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/video',
-      component: Video
+      component: Video,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       name: 'my',
       path: '/my',
-      component: My
+      component: My,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
       // children: [
       //   {
       //     path:'/my/collection',
@@ -77,35 +102,59 @@ export default new Router({
     },
     {
       path: '/collection',
-      component: MyCollectionList
+      component: MyCollectionList,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/village',
-      component: Village
+      component: Village,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/account',
-      component: Account
+      component: Account,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/videoplayer',
-      component: Videoplayer
+      component: Videoplayer,
+      meta: {
+        keepAlive: false // 不被缓存
+      }
     },
     {
       path: '/videoslide',
-      component: videoSlide
+      component: videoSlide,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/songlist',
-      component: SongList
+      component: SongList,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/songlistcomment',
-      component: SongListComment
+      component: SongListComment,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/user/:id',
-      component: User
+      component: User,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
       // redirect: "/user/:id",
       // children: [
       //   {
@@ -120,15 +169,29 @@ export default new Router({
     },
     {
       path: '/basemessage',
-      component: BaseMessage
+      component: BaseMessage,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/forward/:uid/:evId',
-      component: ForWard
+      component: ForWard,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/dynamiccomment',
       component: DynamicComment
+    },
+    {
+      path: '/commentreply',
+      name: 'commentreply',
+      component: CommentReply,
+      meta: {
+        keepAlive: false // 不需要缓存
+      }
     }
   ]
 })
