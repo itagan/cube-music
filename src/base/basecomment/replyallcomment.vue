@@ -3,8 +3,11 @@
     <div class="base-comment-top">
       <img v-lazy="item.user.avatarUrl" @click="toUser">
       <div class="base-comment-time">
-        <span class="user-name">{{item.user.nickname}}</span>
-        <span class="user-time">{{item.time}}</span>
+        <div class="base-comment-name">
+          <div class="user-name">{{item.user.nickname}}</div>
+          <div class="user-author" v-if="this.author[0].userId === item.user.userId"><span class="user-author-name">作者</span></div>
+        </div>
+        <span class="user-time">{{timestamp(item.time)}}</span>
       </div>
       <div class="user-praise">
         <span @click="liked">{{item.likedCount}}</span>
@@ -25,6 +28,8 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
+  import {timestampOther} from '../../assets/js/timestamp'
   export default {
     name: 'replyallcomment.vue',
     props: {
@@ -40,9 +45,9 @@
       // this.showReply()
     },
     computed:{
-      // arr() {
-      //   this.showReply() 
-      // }
+      ...mapGetters([
+        'author'
+      ])
     },
     watch:{},
     methods: {
@@ -55,19 +60,9 @@
       liked () {
                 // 点赞
       },
-      reply () {
-        this.$router.push({
-          // path:`/commentreply:${this.item}`
-          path: 'commentreply', 
-          name:'commentreply',
-          // params: { 
-          //    item:this.item
-          // }
-          query: { 
-             item:JSON.stringify(this.ReplyArr)  //传参获取参数都使用json方法转换，避免刷新时候报错
-          }
-        })    
-      },
+      timestamp (time) {
+        return timestampOther(time)
+      }
     }
   }
 </script>
@@ -97,13 +92,36 @@
         align-items: flex-start
         position:absolute
         left:40px
-        .user-name
-          font-size:$font-size-small-s
-          color:gray
-          margin-bottom:3px
+        .base-comment-name
+          display:flex
+          .user-name
+            font-size:$font-size-small
+            color:gray
+            margin-bottom:3px
+            margin-right:5px
+          .user-author
+            width:25px
+            background-color:#ff6eb4
+            color:#ffc1c1
+            border-radius:3px
+            height:10px
+            flex-center()
+            padding-left:3px
+            .user-author-name  
+              flex-center()
+              width:100%
+              height:100%
+              text-align:center
+              font-size:$font-size-small 
+              -webkit-transform-origin-x: 0
+              -webkit-transform: scale(0.80)
+              transform: scale(0.80)
         .user-time
           font-size:$font-size-small-ss
           color:#dcdcdc
+          -webkit-transform-origin-x: 0
+          -webkit-transform: scale(0.80)
+          transform: scale(0.80)
       .user-praise
         font-size:$font-size-small-s
         height:100%
@@ -140,18 +158,7 @@
           line-height:1.5
           white-space: normal
           .be-replied-name
-            color:dodgerblue
-      .reply
-        color:dodgerblue
-        height:30px
-        display:flex
-        line-height:30px
-        span
-          margin-right:5px
-          display:flex
-          width:auto
-        i 
-          font-size:$font-size-large-x
-          margin-left:-7px
+            color:#4A8FCD
+      
 
 </style>

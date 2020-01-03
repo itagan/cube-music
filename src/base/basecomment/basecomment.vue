@@ -1,13 +1,18 @@
 <template>
-  <div class="base-comment" @click="remind" v-if="!item.beReplied.length">
+  <div class="base-comment" v-if="!item.beReplied.length">
     <div class="base-comment-top">
       <img v-lazy="item.user.avatarUrl" @click="toUser">
       <div class="base-comment-time">
-        <span class="user-name">{{item.user.nickname}}</span>
-        <span class="user-time">{{item.time}}</span>
+        <div class="base-comment-name">
+          <div class="user-name">{{item.user.nickname}}</div>
+          <div class="user-author" v-if="this.author[0].userId === item.user.userId"><span class="user-author-name">作者</span></div>
+        </div>
+        <span class="user-time">{{timestamp(item.time)}}</span>
       </div>
-      <div class="user-praise">
-        <span @click="liked">{{item.likedCount}}</span>
+      <div class="user-praise" @click.stop="toLike" :style="[item.likedCount.length > 0 ? {color:'red'} : {color:''}]">
+        <!-- v-bind:class="[itme.liked === true ? active : error]" -->
+         <!-- <span>{{item.liked}}</span> -->
+        <span ref="likeCount" v-show="item.likedCount > 0">{{item.likedCount}}</span>
         <i class="iconfont iconzan1"></i>
       </div>
     </div>
@@ -30,6 +35,8 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+import {timestampOther} from '../../assets/js/timestamp'
   export default {
     name: 'baseComment.vue',
     props: {
@@ -51,27 +58,33 @@
         replyShow: false,
         showOr:-1,
         // hasReplyArr:[],
-        ReplyArr:[]
+        ReplyArr:[],
+        isLike: true,
+        active:'activeColor',
+        error:''
       }
     },
     created() {
       // this.showReply()
     },
     computed:{
-      // arr() {
-      //   this.showReply() 
-      // }
+       ...mapGetters([
+        'author',
+        'dynamic'
+      ])
     },
     watch:{},
     methods: {
-      remind () {
-                // 点击评论提醒该要什么
-      },
       toUser () {
                 // 去用户个人中心页面
       },
-      liked () {
-                // 点赞
+      toLike () {
+        this.$api.likes.commentDynamic(this.item.commentId, this.dynamic[0].info.threadId, 1).then(res => {
+          console.log(res)
+          if(res.status === 200) {
+            this.$refs.likeCount.innerHTML++
+          }
+        })
       },
       reply () {
         this.$router.push({
@@ -82,9 +95,13 @@
           //    item:this.item
           // }
           query: { 
-             item:JSON.stringify(this.ReplyArr)  //传参获取参数都使用json方法转换，避免刷新时候报错
+             item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
+             _item:JSON.stringify(this.item),
+             threadId:this.dynamic[0].info.threadId
           }
         })    
+
+        console.log(this.item)
       },
       //方法分开写，v-if去重数组 避免出现可能无限循环报错
       ReplyNum (item) {
@@ -97,9 +114,16 @@
         this.ReplyArr = this.hasReplyArr.filter(ele => {
           return item.commentId === ele.parentCommentId
         })
+        // this.ReplyArr.push(item)
         console.log(this.ReplyArr)
         return this.ReplyArr
       },
+      timestamp (time) {
+        return timestampOther(time)
+      }
+      // isShow (id) {
+      //   return id === this.author[0].userId
+      // }
       // showReply (item) {
       //   if(item.commentId) {
       //     return this.arr.findIndex(num => {
@@ -136,13 +160,37 @@
         align-items: flex-start
         position:absolute
         left:40px
-        .user-name
-          font-size:$font-size-small-s
-          color:gray
-          margin-bottom:3px
+        .base-comment-name
+          display:flex
+          .user-name
+            font-size:$font-size-small
+            color:gray
+            margin-bottom:3px
+            margin-right:5px
+          .user-author
+            width:25px
+            background-color:#ff6eb4
+            color:#ffc1c1
+            border-radius:3px
+            height:10px
+            flex-center()
+            .user-author-name  
+              flex-center()
+              width:100%
+              height:100%
+              text-align:center
+              font-size:$font-size-small 
+              -webkit-transform-origin-x: 0
+              -webkit-transform: scale(0.80)
+              transform: scale(0.80)
+              margin-left:3px
         .user-time
-          font-size:$font-size-small-ss
+          font-size:$font-size-small
           color:#dcdcdc
+          margin-top:2px
+          // font-size:12px; 
+          -webkit-transform-origin-x: 0
+          -webkit-transform: scale(0.80)
       .user-praise
         font-size:$font-size-small-s
         height:100%
@@ -181,7 +229,7 @@
           .be-replied-name
             color:dodgerblue
       .reply
-        color:dodgerblue
+        color:#4A8FCD
         height:30px
         display:flex
         line-height:30px
@@ -194,6 +242,7 @@
           margin-left:-7px
 
 
-
+  .activeColor
+    color:red
 
 </style>

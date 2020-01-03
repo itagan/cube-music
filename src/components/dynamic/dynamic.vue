@@ -470,12 +470,16 @@ export default {
     },
     comment () {
       this.saveDynamic(this.events[this.index])
+      let obj = {}
+      obj = this.events[this.index].user
+      this.saveAuthor(obj)
       this.$router.push({
         path: `/dynamiccomment`
       })
     },
     ...mapActions([
-      'saveDynamic'
+      'saveDynamic',
+      'saveAuthor'
     ])
   },
   created () {},

@@ -1,5 +1,5 @@
 import Video from '../common/js/video'
-import { loadCurrentVideo, loadOperation, loadCurrentDynamic } from '../common/js/goodstorage'
+import { loadCurrentVideo, loadOperation, loadCurrentDynamic, loadCurrentAuthor } from '../common/js/goodstorage'
 
 export const token = state => state.token
 export const loginState = state => state.loginState
@@ -41,4 +41,11 @@ export const dynamic = (state) => {
     return loadCurrentDynamic()
   }
   return state.dynamic
+}
+
+export const author = (state) => {
+  if (!state.author.length) {
+    return loadCurrentAuthor()
+  }
+  return state.author
 }

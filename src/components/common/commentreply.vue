@@ -4,7 +4,7 @@
       <div slot="left" class="header-left">
         <i class="iconfont iconfanhui" @click="toBack"></i>
         <span>回复</span>
-        <span>(11)</span>
+        <span>({{this.items.length}})</span>
       </div>
         <div  slot="right" class="header-right">
           <i class="iconfont iconbofangzhuangtaizanting" @click="music"></i>
@@ -19,8 +19,8 @@
             :options="options"
             ref="contentScroll"
           >
-            <div class="reply-container">
-              <reply-content :item="item" :key="item.commentId" class="reply-content"></reply-content>
+            <div class="reply-container" @click="_Reply" ref="replyContainer">
+              <reply-content :item="_item" :key="_item.commentId" class="reply-content"></reply-content>
             </div>
 
             <cube-sticky-ele>
@@ -29,7 +29,7 @@
               </ul>
             </cube-sticky-ele>
             <ul class="reply-all">
-              <li v-for="item in items" :key="item.commentId">
+              <li v-for="(item, index) in items" :key="item.commentId" @click="Reply(index)" ref="liOffset">
                 <reply-all :item="item"></reply-all>
               </li>
             </ul>
@@ -55,8 +55,10 @@
           <i class="iconfont iconzan1"></i>
           <i class="iconfont iconpinglun"></i>
         </div>
-      </div>
     </div>
+
+    <reply-dialog ref="showDia" @reply="replyComment"></reply-dialog>
+  </div>
 </template>
 
 <script>
@@ -64,11 +66,14 @@ import MyHeader from '../../base/navbar/navbar'
 import baseComment from '../../base/basecomment/basecomment'
 import replyContent from '../../base/basecomment/replycontent'
 import replyAll from '../../base/basecomment/replyallcomment'
+import replyDialog from './replydialog'
+
 export default {
   components: {
     MyHeader,
     replyContent,
-    replyAll
+    replyAll,
+    replyDialog
   },
   props: {},
   data() {
@@ -83,8 +88,12 @@ export default {
         scrollbar: true,
         click: false // 解决点击事件被触发两次的问题
       },
-      item:{},
-      items:[]
+      _item:{},
+      items:[],
+      user:'',
+      commentId:-1,
+      threadId:'',
+      value:''
     }
   },
   watch: {
@@ -102,14 +111,70 @@ export default {
     },
     getParams () {
       // this.item = this.$route.params.item  //刷新后不能获取参数。该方法需要改造或者采用查询参数形式
-      this.items = JSON.parse(this.$route.query.item) //传参获取参数都使用json方法转换，避免刷新时候报错
-      console.log(this.items)
-      this.item = this.items.filter(item => {
-        return item.parentCommentId === item.beReplied[0].beRepliedCommentId
-      })[0].beReplied[0]
-      console.log(this.item)
-      
-    }
+      this.items = JSON.parse(this.$route.query.item).reverse() //传参获取参数都使用json方法转换，避免刷新时候报错
+      this._item = JSON.parse(this.$route.query._item)
+      this.threadId = this.$route.query.threadId
+    },
+    showDialog (liTop,user,commentId,threadId) {
+      this.$refs.showDia.show()
+      if(liTop === null) {
+        this.$refs.showDia.diaTopChange()
+      }
+      if(liTop < 144){
+        this.$refs.showDia.diaTopChange()
+      }else {
+        this.$refs.showDia._diaTopChange()
+      }
+      this.user = user
+      this.threadId = threadId
+      this.commentId = commentId
+    },
+    replyComment () {
+      this.placeholder = '回复' + this.user + ':'
+      this.Input()
+    },
+    Input () {
+      this.$refs.Input.focus()
+    },
+    replyUser () {
+      this.$api.commentFeature.dynamicReply(this.threadId, this.commentId, content).then(res => {
+        console.log(res)
+      })
+    },
+    input () {
+      console.log(this.value.length)
+    },
+    _Reply () {
+      let proup = document.getElementsByClassName('cube-popup-content')[0],
+      Top = this.$refs.replyContainer.getBoundingClientRect().top,
+      Hei = this.$refs.replyContainer.offsetHeight
+      this.$refs.showDia.show()
+      this.$refs.showDia.diaTopChange()
+      proup.style.top = -(667 - Hei - Top - 20) + 'px'
+      this.user = this._item.user.nickname
+      this.commentId = this._item.commentId
+    },
+    Reply (index) {
+      let proup = document.getElementsByClassName('cube-popup-content')[0],
+      liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
+      Hei = this.$refs.liOffset[index].offsetHeight
+      if(liTop < 144){
+        let _liTop = liTop + Hei
+        proup.style.top = -(667 - _liTop - 30) + 'px'
+      }else {
+        proup.style.top = -(667 - liTop + 30) + 'px'
+      }
+
+      this.$refs.showDia.show()
+      if(liTop < 144){
+        this.$refs.showDia.diaTopChange()
+      }else {
+        this.$refs.showDia._diaTopChange()
+      }
+      this.user = this.items[index].user.nickname
+      this.commentId = this.items[index].commentId
+      console.log(this.threadId, this.commentId)
+    },
   },
   created() {
     this.getParams()

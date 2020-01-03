@@ -111,10 +111,10 @@
           currentPage: 0,
           objs: [
             {
-              text: '主页'
+              text: '评论'
             },
             {
-              text: '动态'
+              text: '转发'
             },
             {
               text: '赞'

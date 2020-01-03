@@ -7,7 +7,7 @@
       </div>
       <div class="my-name">
         <div class="name">
-          <span>{{personals.profile.nickname}}</span>
+          <span v-if="personals.profile">{{personals.profile.nickname}}</span>
           <i class="iconfont iconzan1"></i>
         </div>
         <div class="grade">Lv8</div>
@@ -28,15 +28,15 @@
 
     <ul class="center">
       <li>
-        <span>{{personals.profile.eventCount}}</span>
+        <span v-if="personals.profile">{{personals.profile.eventCount}}</span>
         <span>动态</span>
       </li>
       <li>
-        <span>{{personals.profile.follows}}</span>
+        <span v-if="personals.profile">{{personals.profile.follows}}</span>
         <span>关注</span>
       </li>
       <li>
-        <span>{{personals.profile.followeds}}</span>
+        <span v-if="personals.profile">{{personals.profile.followeds}}</span>
         <span>粉丝</span>
       </li>
       <li>

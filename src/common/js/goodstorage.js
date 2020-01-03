@@ -14,6 +14,8 @@ const CURRENT_OPERATION_KEY = '__current-operation__'
 const CURRENT_OPERATION_LEN = 1
 const CURRENT_DYNAMIC_KEY = '__dynamic__'
 const CURRENT_DYNAMIC_LEN = 1
+const CURRENT_AUTHOR_KEY = '__author__'
+const CURRENT_AUTHOR_LEN = 1
 
 // 公共方法设置
 function insertArray (arr, val, compare, maxLen) {
@@ -115,4 +117,25 @@ export function deleteCurrentDynamic (dynamic) {
 }
 export function loadCurrentDynamic () {
   return storage.get(CURRENT_DYNAMIC_KEY, [])
+}
+
+// 当前作者
+export function saveCurrentAuthor (author) {
+  let _currentAuthor = storage.get(CURRENT_AUTHOR_KEY, [])
+  insertArray(_currentAuthor, author, (item) => {
+    return item.userId === author.userId
+  }, CURRENT_AUTHOR_LEN)
+  storage.set(CURRENT_AUTHOR_KEY, _currentAuthor)
+  return _currentAuthor
+}
+export function deleteCurrentAuthor (author) {
+  let _currentAuthor = storage.get(CURRENT_AUTHOR_KEY, [])
+  deleteFromArray(_currentAuthor, (item) => {
+    return item.userId === author.userId
+  })
+  storage.set(CURRENT_AUTHOR_KEY, _currentAuthor)
+  return _currentAuthor
+}
+export function loadCurrentAuthor () {
+  return storage.get(CURRENT_AUTHOR_KEY, [])
 }

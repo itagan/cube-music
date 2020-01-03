@@ -1,5 +1,5 @@
 import * as types from './mutations-types'
-import { saveCollectVideo, deleteCollectVideo, saveCurrentVideo, deleteCurrentVideo, saveOperation, deleteOperation, saveCurrentDynamic } from '../common/js/goodstorage'
+import { saveCollectVideo, deleteCollectVideo, saveCurrentVideo, deleteCurrentVideo, saveOperation, deleteOperation, saveCurrentDynamic, saveCurrentAuthor } from '../common/js/goodstorage'
 
 function findIndex (list, video) {
   return list.findIndex((item) => {
@@ -69,4 +69,8 @@ export const deleteOperationList = function ({commit, state}, operation) {
 // 动态
 export const saveDynamic = function ({commit}, dynamic) {
   commit(types.SET_DYNAMIC, saveCurrentDynamic(dynamic))
+}
+// 判断评论是否作者
+export const saveAuthor = function ({commit}, author) {
+  commit(types.SET_AUTHOR, saveCurrentAuthor(author))
 }

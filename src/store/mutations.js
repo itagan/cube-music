@@ -53,6 +53,9 @@ const mutations = {
   },
   [types.SET_DYNAMIC] (state, dynamic) {
     state.dynamic = dynamic
+  },
+  [types.SET_AUTHOR] (state, author) {
+    state.author = author
   }
 }
 export default mutations

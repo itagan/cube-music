@@ -3,8 +3,11 @@
     <div class="base-comment-top">
       <img v-if="item.user.avatarUrl" v-lazy="item.user.avatarUrl" @click="toUser">
       <div class="base-comment-time">
-        <span class="user-name">{{item.user.nickname}}</span>
-        <span class="user-time">{{item.time}}</span>
+        <div class="base-comment-name">
+          <div class="user-name">{{item.user.nickname}}</div>
+          <div class="user-author" v-if="this.author[0].userId === item.user.userId"><span class="user-author-name">作者</span></div>
+        </div>
+         <span class="user-time">{{timestamp(item.time)}}</span>
       </div>
       <div class="user-praise">
         <span @click="liked">{{item.likedCount}}</span>
@@ -18,6 +21,8 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+import {timestampOther} from '../../assets/js/timestamp'
   export default {
     name: 'baseComment.vue',
     props: {
@@ -29,10 +34,12 @@
     data () {
       return {}
     },
-    created() {
-      // this.showReply()
+    created() {},
+    computed:{
+      ...mapGetters([
+        'author'
+      ])
     },
-    computed:{},
     watch:{},
     methods: {
       toUser () {
@@ -40,6 +47,9 @@
       },
       liked () {
                 // 点赞
+      },
+      timestamp (time) {
+        return timestampOther(time)
       }
     }
   }
@@ -66,10 +76,30 @@
         align-items: flex-start
         position:absolute
         left:40px
-        .user-name
-          font-size:$font-size-small-s
-          color:gray
-          margin-bottom:3px
+        .base-comment-name
+          display:flex
+          .user-name
+            font-size:$font-size-small
+            color:gray
+            margin-bottom:3px
+            margin-right:5px
+          .user-author
+            width:25px
+            background-color:#ff6eb4
+            color:#ffc1c1
+            border-radius:3px
+            height:10px
+            flex-center()
+            padding-left:3px
+            .user-author-name  
+              flex-center()
+              width:100%
+              height:100%
+              text-align:center
+              font-size:$font-size-small 
+              -webkit-transform-origin-x: 0
+              -webkit-transform: scale(0.80)
+              transform: scale(0.80)
         .user-time
           font-size:$font-size-small-ss
           color:#dcdcdc
