@@ -69,70 +69,70 @@
     import MySearch from '../../base/search/search'
 
     export default {
-        name: "singer.vue",
-        components: {
-          MySearch,
-        },
-        data () {
-          return {
-            placeholder: '搜索歌手',
-            fake:false,
-            singers:[],
-            options: {
-              pullDownRefresh: {
-                threshold: 60,
-                stopTime: 1000,
-                txt: '更新成功'
-              },
-              pullUpLoad: true,
-              scrollbar: true,
-              click: false // 解决点击事件被触发两次的问题
+      name: 'singer.vue',
+      components: {
+        MySearch
+      },
+      data () {
+        return {
+          placeholder: '搜索歌手',
+          fake: false,
+          singers: [],
+          options: {
+            pullDownRefresh: {
+              threshold: 60,
+              stopTime: 1000,
+              txt: '更新成功'
             },
-            secondStop: 0,
-            scrollEvents: ['scroll','before-scroll-start'],
-            pullDownY: 0
-          }
-        },
-        created() {
-          this.getSingers()
-        },
-        methods: {
-          getQuery (query) {
-            console.log(query)
+            pullUpLoad: true,
+            scrollbar: true,
+            click: false // 解决点击事件被触发两次的问题
           },
-          goToSearch () {
-            this.fake = true
-          },
-          getSingers () {
-            this.$api.subs.singers().then(res => {
-              this.singers = res.data.data
-              this.$emit('hasNum',res.data.count)
-            })
-          },
-          selectItem (id) {
-
-          },
-          onPullingDown () {
-            setTimeout(() => {
-              this.singers = this.singers.reverse()
-              this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
-              this.$refs.contentScroll.forceUpdate();//下拉完毕
-            }, 1000)
-          },
-          onPullingUp () {
-            setTimeout(() => {
-              const contentScroll = this.$refs.contentScroll
-              contentScroll.forceUpdate()
-              // contentScroll.refresh();
-            }, 1000)
-          },
-          scrollHandler (pos) {
-            this.pullDownY = -pos.y
-          },
-          beforeScrollStart() {
-            this.fake = false
-          }
+          secondStop: 0,
+          scrollEvents: ['scroll', 'before-scroll-start'],
+          pullDownY: 0
         }
+      },
+      created () {
+        this.getSingers()
+      },
+      methods: {
+        getQuery (query) {
+          console.log(query)
+        },
+        goToSearch () {
+          this.fake = true
+        },
+        getSingers () {
+          this.$api.subs.singers().then(res => {
+            this.singers = res.data.data
+            this.$emit('hasNum', res.data.count)
+          })
+        },
+        selectItem (id) {
+
+        },
+        onPullingDown () {
+          setTimeout(() => {
+            this.singers = this.singers.reverse()
+            this.$refs.contentScroll.scrollTo(0, this.secondStop, 300)
+            this.$refs.contentScroll.forceUpdate()// 下拉完毕
+          }, 1000)
+        },
+        onPullingUp () {
+          setTimeout(() => {
+            const contentScroll = this.$refs.contentScroll
+            contentScroll.forceUpdate()
+              // contentScroll.refresh();
+          }, 1000)
+        },
+        scrollHandler (pos) {
+          this.pullDownY = -pos.y
+        },
+        beforeScrollStart () {
+          this.fake = false
+        }
+      }
     }
 </script>
 

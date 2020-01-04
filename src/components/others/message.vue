@@ -46,28 +46,27 @@
 </template>
 
 <script>
-
     export default {
-        name: "userMessage.vue",
-        data() {
-            return {
-                man:true
-            }
+      name: 'userMessage.vue',
+      data () {
+        return {
+          man: true
+        }
+      },
+      props: {
+        profile: {
+          type: Object,
+          default: {}
         },
-        props: {
-          profile: {
-            type:Object,
-            default:{}
-          },
-          level: {
-            type:Number,
-            default:0
-          }
-        },
-        methods: {
-          opacityHeader (opac) {
-            this.$refs.Message.style.opacity = opac
-          }
+        level: {
+          type: Number,
+          default: 0
+        }
+      },
+      methods: {
+        opacityHeader (opac) {
+          this.$refs.Message.style.opacity = opac
+        }
         //   toComment () {
         //     this.$emit('saveComment')
         //     this.$router.push({
@@ -86,7 +85,7 @@
         //           path: `/user/${id}`
         //       })
         //   }
-        }
+      }
     }
 </script>
 

@@ -9,12 +9,12 @@
 </template>
 
 <script>
-    import logBase from "../../base/swiper/logbase";
-    export default {
-        name: "mLog.vue",
-        components: {
-            logBase
-        }
+    import logBase from '../../base/swiper/logbase'
+export default {
+      name: 'mLog.vue',
+      components: {
+        logBase
+      }
     }
 </script>
 

@@ -21,51 +21,51 @@
 <script>
     import {debounce} from '../../assets/js/debounce'
     export default {
-        name: 'search.vue',
-        data () {
-            return {
+      name: 'search.vue',
+      data () {
+        return {
                 // 双向数据绑定：输入框input的value发生变化，v-model中query相应发生变化；反之也是；
-                query: ''
-            }
-        },
-        props: {
-            placeholder: {
-                type: String,
-                default: '请输入需要搜索的歌曲'
-            },
-            fake: {
-                type: Boolean,
-                default: false
-            }
-        },
-        methods: {
-            focus () {
-                this.$refs.input && this.$refs.input.focus()
-            },
-            clear () {
-                this.query = ''
-            },
-            reset () {
-                this.clear()
-                this.focus()
-            },
-            cancel() {
-                this.fake = false
-                this.clear()
-            }
-        },
-        watch: {
-            query: debounce(function () {
-                this.$emit('query', this.query)
-            }),
-            fake(isShow) {
-                if(isShow) {
-                    this.$nextTick(() => {
-                        this.focus()
-                    })
-                }
-            }
+          query: ''
         }
+      },
+      props: {
+        placeholder: {
+          type: String,
+          default: '请输入需要搜索的歌曲'
+        },
+        fake: {
+          type: Boolean,
+          default: false
+        }
+      },
+      methods: {
+        focus () {
+          this.$refs.input && this.$refs.input.focus()
+        },
+        clear () {
+          this.query = ''
+        },
+        reset () {
+          this.clear()
+          this.focus()
+        },
+        cancel () {
+          this.fake = false
+          this.clear()
+        }
+      },
+      watch: {
+        query: debounce(function () {
+          this.$emit('query', this.query)
+        }),
+        fake (isShow) {
+          if (isShow) {
+            this.$nextTick(() => {
+              this.focus()
+            })
+          }
+        }
+      }
     }
 </script>
 

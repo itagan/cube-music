@@ -62,98 +62,96 @@
 </template>
 
 <script>
-    import myHeader from "./header"
-    import myMessage from "./message"
-    import playList from "./playlist"
-    import homePage from "./homepage"
-    import userDynamic from "./userdynamic"
+    import myHeader from './header'
+    import myMessage from './message'
+    import playList from './playlist'
+    import homePage from './homepage'
+    import userDynamic from './userdynamic'
     export default {
-        name: "user.vue",
-        components: {
-            myHeader,
-            myMessage,
-            playList,
-            homePage,
-            userDynamic
-        },
-        data() {
-            return {
-                title:'',
-                isShow:true,
-                scrollEvents: ['scroll'],
-                scrollY: 0,
-                activeClass: 'nav-item-active',
-                errorClass: '',
-                numberColor:'nav-number',
-                currentPage: 0,
-                objs: [
-                    {
-                        text: '主页'
-                    },
-                    {
-                        text: '动态'
-                    }
-                ],
-                profile:{},
-                level:0,
-                messTop:0
+      name: 'user.vue',
+      components: {
+        myHeader,
+        myMessage,
+        playList,
+        homePage,
+        userDynamic
+      },
+      data () {
+        return {
+          title: '',
+          isShow: true,
+          scrollEvents: ['scroll'],
+          scrollY: 0,
+          activeClass: 'nav-item-active',
+          errorClass: '',
+          numberColor: 'nav-number',
+          currentPage: 0,
+          objs: [
+            {
+              text: '主页'
+            },
+            {
+              text: '动态'
+            }
+          ],
+          profile: {},
+          level: 0,
+          messTop: 0
 
-            }
-        },
-        created () {
-          this.getUser()
-        },
-        computed: {
-            options () {
-                return {
-                    scrollbar: true,
-                    click:false, //解决触发两次点击事件的bug
-                }
-            }
-        },
-        methods: {
-            getUser () {
-                this.$api.users.userdetail(32953014).then(res => {
-                    this.profile = res.data.profile
-                    this.level = res.data.level
-                })
-            },
-            scrollHandler ({ y }) {
-                this.scrollY = -y
-                // console.log(this.scrollY)              
-                this.messTop = this.$refs.messTop.getBoundingClientRect().top
-                // console.log(this.messTop)
-                if(this.messTop <= 112) {
-                 let opac = 1 - (this.messTop - 62) * 0.02
-                 this.$refs.myHeader.opacityHeader(opac)
-                }else {
-                  this.$refs.myHeader.opacityHeader(0)
-                }
-                if(this.messTop < 279) {
-                  let opac =(this.messTop - 69) * 0.005
-                  this.$refs.myMessage.opacityHeader(opac)
-                }else {
-                  this.$refs.myMessage.opacityHeader(1)
-                }
-                if(this.messTop > 280) {
-                  // this.$refs.bgEnlarge.style.height = '100%'
-                  let scale = 1 + ((this.messTop - 280) / 320)
-                  this.$refs.Enlarge.style['transform'] = `scaleX(${scale})`
-                  this.$refs.bgEnlarge.style.height = 320 + this.messTop - 280 + 'px'
-
-                }else {
-                  this.$refs.bgEnlarge.style.height = '320px'
-                  // this.$refs.Enlarge.style['transform'].scale = 1
-                }
-              
-            },
-            toggles (index) {
-                this.currentPage = index
-            },
-            slideChange (index) {
-                this.currentPage = index
-            }
         }
+      },
+      created () {
+        this.getUser()
+      },
+      computed: {
+        options () {
+          return {
+            scrollbar: true,
+            click: false // 解决触发两次点击事件的bug
+          }
+        }
+      },
+      methods: {
+        getUser () {
+          this.$api.users.userdetail(32953014).then(res => {
+            this.profile = res.data.profile
+            this.level = res.data.level
+          })
+        },
+        scrollHandler ({ y }) {
+          this.scrollY = -y
+                // console.log(this.scrollY)
+          this.messTop = this.$refs.messTop.getBoundingClientRect().top
+                // console.log(this.messTop)
+          if (this.messTop <= 112) {
+            let opac = 1 - (this.messTop - 62) * 0.02
+            this.$refs.myHeader.opacityHeader(opac)
+          } else {
+            this.$refs.myHeader.opacityHeader(0)
+          }
+          if (this.messTop < 279) {
+            let opac = (this.messTop - 69) * 0.005
+            this.$refs.myMessage.opacityHeader(opac)
+          } else {
+            this.$refs.myMessage.opacityHeader(1)
+          }
+          if (this.messTop > 280) {
+                  // this.$refs.bgEnlarge.style.height = '100%'
+            let scale = 1 + ((this.messTop - 280) / 320)
+            this.$refs.Enlarge.style['transform'] = `scaleX(${scale})`
+            this.$refs.bgEnlarge.style.height = 320 + this.messTop - 280 + 'px'
+          } else {
+            this.$refs.bgEnlarge.style.height = '320px'
+                  // this.$refs.Enlarge.style['transform'].scale = 1
+          }
+        },
+        toggles (index) {
+          this.currentPage = index
+        },
+        slideChange (index) {
+          this.currentPage = index
+        }
+      }
     }
 </script>
 
@@ -163,7 +161,7 @@
  .user
     overflow: hidden
     width:375px
-    height:675px
+    height:667px
   .my-header
     background-color:transparent !important
     color:white

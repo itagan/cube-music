@@ -22,17 +22,36 @@ export const timestamp = (timestamp) => {
 export const timestampOther = (timestamp) => {
   let date
   if (timestamp.toString().length === 10) {
-    date = new Date(timestamp * 1000)// 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    date = new Date(timestamp * 1000) // 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    timestamp = timestamp * 1000
   } else {
-    date = new Date(timestamp)// 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    date = new Date(timestamp)
   }
+  let timeNow = new Date().getTime()
+  let DaysBefore = new Date().setHours(0, 0, 0, 0) - 1 * 24 * 60 * 60 * 1000
+  let YearBefore = new Date('2020-1-1 0:0:0').getTime()
+  let todayStart = new Date().setHours(0, 0, 0, 0)
+
   let Y = date.getFullYear() + '年'
   let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '月'
   let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '日'
-  // let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
-  // let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
-  // let s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
-  return Y + M + D
+  let H = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
+  let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
+  // let S = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
+  if ((timeNow - timestamp) <= 60 * 1000) {
+    return '刚刚'
+  } else if ((timeNow - timestamp) <= 60 * 60 * 1000) {
+    let m = Math.floor((timeNow - timestamp) / 1000) / 60 | 0
+    return m + '分钟前'
+  } else if ((timeNow - timestamp) > 60 * 60 * 1000 && todayStart < timestamp) {
+    return H + m
+  } else if (timestamp > DaysBefore) {
+    return '昨天' + H + m
+  } else if (timestamp <= DaysBefore && timestamp > YearBefore) {
+    return M + D
+  } else if (YearBefore > timestamp) {
+    return Y + M + D
+  }
 }
 
 // 播放时长转换

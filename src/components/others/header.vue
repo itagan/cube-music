@@ -27,39 +27,39 @@
 <script>
     import MyHeader from '../../base/navbar/navbar'
     export default {
-        name: 'header.vue',
-        components: {
-          MyHeader
-        },
-        data () {
-          return {
-            isComplete: true
-          }
-        },
-        props: {
-          profile:{
-            type:Object,
-            default:{}
-          },
-          isShow: {
-            type:Boolean,
-            default: false
-          }
-        },
-        methods: {
-          toBack () {
-            this.$router.go(-1)
-          },
-          more () {
-
-          },
-          music () {
-
-          },
-          opacityHeader (opac) {
-            this.$refs.Header.style.opacity = opac
-          }
+      name: 'header.vue',
+      components: {
+        MyHeader
+      },
+      data () {
+        return {
+          isComplete: true
         }
+      },
+      props: {
+        profile: {
+          type: Object,
+          default: {}
+        },
+        isShow: {
+          type: Boolean,
+          default: false
+        }
+      },
+      methods: {
+        toBack () {
+          this.$router.go(-1)
+        },
+        more () {
+
+        },
+        music () {
+
+        },
+        opacityHeader (opac) {
+          this.$refs.Header.style.opacity = opac
+        }
+      }
     }
 </script>
 

@@ -17,12 +17,12 @@
       <li class="li">
         <div class="li-item">
           <div class="li-left">
-            <img :src="playlist[0].coverImgUrl">
+            <img :src="playlist[0].coverImgUrl" v-if="playlist[0]">
           </div>
 
           <div class="li-right">
             <div class="li-right-top">我喜欢的音乐</div>
-            <div class="li-right-bottom">{{playlist[0].trackCount}}首</div>
+            <div class="li-right-bottom" v-if="playlist[0]">{{playlist[0].trackCount}}首</div>
           </div>
 
           <div class="beckoning">
@@ -37,12 +37,12 @@
 <!--          <div class="li-item" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">-->
 
           <div class="li-left">
-            <img :src="item.coverImgUrl">
+            <img :src="item.coverImgUrl" v-if="item">
           </div>
 
           <div class="li-right">
             <div class="li-right-top">{{item.name}}</div>
-            <div class="li-right-bottom">{{item.trackCount}}首</div>
+            <div class="li-right-bottom" v-if="item">{{item.trackCount}}首</div>
           </div>
 
           <div class="playing">
@@ -72,12 +72,12 @@
         <li class="li" v-for="item in collection" :key="item.id">
           <div class="li-item">
             <div class="li-left">
-              <img :src="item.coverImgUrl">
+              <img :src="item.coverImgUrl" v-if="item">
             </div>
 
             <div class="li-right">
               <div class="li-right-top">{{item.name}}</div>
-              <div class="li-right-bottom">{{item.trackCount}}首，by {{item.creator.nickname}}</div>
+              <div class="li-right-bottom" v-if="item">{{item.trackCount}}首，by {{item.creator.nickname}}</div>
             </div>
 
             <div class="playing">

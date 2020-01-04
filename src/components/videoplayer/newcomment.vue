@@ -5,16 +5,14 @@
       <span>{{total}}</span>
     </div>
     <ul class="new-ul">
-      <li v-for="item in comments" class="new-li">
-        <base-comment :item="item"></base-comment>
+      <li v-for="(item, index) in comments" :key="item.commentId" class="new-li" @click="Reply(index)" ref="liOffset">
+        <base-comment :item="item" :hasReplyArr="hasReplyArr"></base-comment>
       </li>
     </ul>
-  </div>
+  </div> 
 </template>
 <script>
     import BaseComment from '../../base/basecomment/basecomment'
-    import {timestampOther} from '../../assets/js/timestamp'
-
     export default {
       name: 'newComment.vue',
       components: {
@@ -24,7 +22,8 @@
         return {
           comments: [],
           item: {},
-          total: ''
+          total: '',
+          hasReplyArr:[]
         }
       },
       props: {
@@ -55,9 +54,9 @@
           this.$api.video.newcomment(this.detail.vid, this.limits).then(res => {
             this.comments = res.data.comments
             this.total = res.data.total
-            for (let i = 0; i < this.comments.length; i++) {
-              this.comments[i].time = timestampOther(this.comments[i].time)
-            }
+            this.hasReplyArr = this.comments.filter(item => {
+              return item.parentCommentId !== 0
+            }) 
           })
         },
         Limits () {
@@ -76,7 +75,23 @@
               this.$emit('Limits', true)
             }
           }, 1000)
-        }
+        },
+        Reply (index) {
+          let proup = document.getElementsByClassName('cube-popup-content')[0],
+          liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
+          Hei = this.$refs.liOffset[index].offsetHeight
+          if(liTop < 350){
+            let _liTop = liTop + Hei
+            proup.style.top = -(667 - _liTop - 30) + 'px'
+          }else {
+            proup.style.top = -(667 - liTop+30) + 'px'
+          }
+          let user = this.comments[index].user.nickname,
+              commentId = this.comments[index].commentId,
+              threadId = this.threadId
+          this.$emit('showDialog',liTop,user,commentId,threadId)
+        },
+        
       }
     }
 </script>

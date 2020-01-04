@@ -29,8 +29,8 @@
                 </span>
         </div>
         <ul  class="hot-ul" v-else>
-          <li v-for="item in comments" class="hot-li">
-            <base-comment :item="item"></base-comment>
+          <li v-for="(item, index) in comments" class="hot-li" :key="item.commentId" @click="Reply(index)" ref="liOffset_">
+            <base-comment :item="item" :hasReplyArr="hasReplyArr"></base-comment>
           </li>
         </ul>
         <template slot="pullup" slot-scope="props">
@@ -52,7 +52,6 @@
 <script>
     import {mapGetters, mapMutations} from 'vuex'
     import BaseComment from '../../base/basecomment/basecomment'
-    import {timestampOther} from '../../assets/js/timestamp'
 
     export default {
       name: 'hotComment.vue',
@@ -92,7 +91,8 @@
           return {
             pullUpLoad: this.pullUpLoadObj,
             scrollbar: true,
-            probeType: 1
+            probeType: 1,
+            click:false
           }
         },
         pullUpLoadObj: function () {
@@ -114,12 +114,12 @@
             this.total = res.data.total
             if (this.isPullUpLoad) {
               this.comments = [] // 清空数据，以防重复渲染
-            };
+            }
 
             this.comments = res.data.hotComments
-            for (let i = 0; i < this.comments.length; i++) {
-              this.comments[i].time = timestampOther(this.comments[i].time)
-            }
+            this.hasReplyArr = this.comments.filter(item => {
+              return item.parentCommentId !== 0
+            }) 
           })
         },
         scrollHandler (pos) {
@@ -173,6 +173,21 @@
           this.setHotLimit(20)
             // 页面数据也清空
             // this.comments = [];
+        },
+        Reply (index) {
+          let proup = document.getElementsByClassName('cube-popup-content')[0],
+          liTop = this.$refs.liOffset_[index].getBoundingClientRect().top,
+          Hei = this.$refs.liOffset_[index].offsetHeight
+          if(liTop < 350){
+            let _liTop = liTop + Hei
+            proup.style.top = -(667 - _liTop - 30) + 'px'
+          }else {
+            proup.style.top = -(667 - liTop+30) + 'px'
+          }
+          let user = this.comments[index].user.nickname,
+              commentId = this.comments[index].commentId,
+              threadId = this.threadId
+          this.$emit('showDialog',liTop,user,commentId,threadId)
         },
         ...mapMutations({
           setHotLimit: 'SET_HOT_LIMIT'

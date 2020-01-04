@@ -58,67 +58,67 @@
 
 <script>
     export default {
-        name: "list.vue",
-        data () {
-          return {
-            playing:false,
-            checkbox:false,
-            activeColor:'activeColor',
-            checkList:[],
-            val:1
-          }
-        },
-        props: {
-          tracks: {
-            type:Array,
-            default:[]
-          },
-          complete: {
-            type:Boolean,
-            default:false
-          },
-          allShow: {
-            type:Boolean,
-            default:false
-          },
-          allCheckbox:{
-            type:Boolean,
-            default:false
-          }
-        },
-        watch: {
-          complete (_com) {
-
-          },
-          allShow (val) {
-            this.checkbox = val
-          }
-        },
-        methods: {
-          more (index) {
-            this.$emit('more',index)
-          },
-          Input () {
-            if(this.checkList.length === this.tracks.length) {
-               this.$emit('toAll',1)
-            }else {
-              this.$emit('toAll',0)
-            }
-          },
-          allToCheck () {
-            let arr = []
-              for(let i = 1;i <= this.tracks.length; i++) {
-                arr.push(i)
-              }
-              return arr
-          },
-          allToChecked () {
-            this.checkList = [...this.allToCheck()]
-          },
-          allToCheckNo () {
-            this.checkList = []
-          }
+      name: 'list.vue',
+      data () {
+        return {
+          playing: false,
+          checkbox: false,
+          activeColor: 'activeColor',
+          checkList: [],
+          val: 1
         }
+      },
+      props: {
+        tracks: {
+          type: Array,
+          default: []
+        },
+        complete: {
+          type: Boolean,
+          default: false
+        },
+        allShow: {
+          type: Boolean,
+          default: false
+        },
+        allCheckbox: {
+          type: Boolean,
+          default: false
+        }
+      },
+      watch: {
+        complete (_com) {
+
+        },
+        allShow (val) {
+          this.checkbox = val
+        }
+      },
+      methods: {
+        more (index) {
+          this.$emit('more', index)
+        },
+        Input () {
+          if (this.checkList.length === this.tracks.length) {
+            this.$emit('toAll', 1)
+          } else {
+            this.$emit('toAll', 0)
+          }
+        },
+        allToCheck () {
+          let arr = []
+          for (let i = 1; i <= this.tracks.length; i++) {
+            arr.push(i)
+          }
+          return arr
+        },
+        allToChecked () {
+          this.checkList = [...this.allToCheck()]
+        },
+        allToCheckNo () {
+          this.checkList = []
+        }
+      }
     }
 </script>
 

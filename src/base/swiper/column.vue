@@ -20,19 +20,19 @@
     import {durationsTransformation} from '../../assets/js/timestamp'
 
     export default {
-        name: 'subColumn.vue',
-        data () {
-            return {
+      name: 'subColumn.vue',
+      data () {
+        return {
                 // playTime:serializeNumber(this.item.playTime ),
                 // durations:durationsTransformation(this.item.durationms)
-            }
-        },
-        props: {
+        }
+      },
+      props: {
             // item: {
             //     type:Object,
             //     default:{}
             // }
-        }
+      }
     }
 </script>
 

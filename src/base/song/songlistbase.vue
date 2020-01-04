@@ -16,7 +16,7 @@
 
 <script>
     export default {
-        name: "songListBase.vue"
+      name: 'songListBase.vue'
     }
 </script>
 

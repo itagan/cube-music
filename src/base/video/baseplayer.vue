@@ -89,7 +89,7 @@
           timerOne: null,
           timerTwo: null,
           timerThree: null,
-          isAutoPlay:true
+          isAutoPlay: true
         }
       },
       props: {
@@ -118,9 +118,9 @@
           'currentVideo',
           'operation'
         ]),
-          CurrentVideo () {
-              return this.currentVideo
-          },
+        CurrentVideo () {
+          return this.currentVideo
+        }
       },
       watch: {
         percent (newPercent) {
@@ -130,7 +130,7 @@
             this.$refs.speed.style.width = `${offsetWidth}px`
             this.$refs.controlBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)`
           }
-        },
+        }
           // CurrentVideo() {
           //     this.$nextTick(() => {
           //         this.autoPlay()
@@ -150,7 +150,7 @@
           }
           console.log(this.isAutoPlay)
           console.log(this.currentVideo[0]._currentTime)
-          if(this.currentVideo[0]._currentTime && this.isAutoPlay) {
+          if (this.currentVideo[0]._currentTime && this.isAutoPlay) {
             // this.videoDom.currentTime = this.currentVideo[0]._currentTime
             this.autoPlay()
             this.isAutoPlay = false
@@ -226,9 +226,9 @@
           this.currentTime = e.target.currentTime // 播放的时候派发事件，能够获得当前播放时间 ***注意写法
           this.speedWidth = this.percent * 375
         },
-        autoPlay() {
-            this.videoDom.currentTime = this.currentVideo[0]._currentTime
-            this.videoDom.play()
+        autoPlay () {
+          this.videoDom.currentTime = this.currentVideo[0]._currentTime
+          this.videoDom.play()
         },
         Durations (durations) {
           durations = durations | 0
@@ -296,7 +296,7 @@
           this.$router.go(-1)
           setTimeout(() => {
             this.setCommentBack(false)
-              this.isAutoPlay = true
+            this.isAutoPlay = true
               // let currentVideo = this.currentVideo
               // currentVideo._currentTime = this.currentTime
               // this.saveCurrentVideoList(currentVideo)

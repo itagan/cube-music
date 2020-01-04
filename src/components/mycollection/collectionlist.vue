@@ -9,11 +9,11 @@
     import myHeader from './header'
     import Slider from './slider'
     export default {
-        name: "myCollectionList.vue",
-        components: {
-            myHeader,
-            Slider
-        }
+      name: 'myCollectionList.vue',
+      components: {
+        myHeader,
+        Slider
+      }
     }
 </script>
 

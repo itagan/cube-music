@@ -24,15 +24,15 @@
 export default {
   components: {},
   props: {},
-  data() {
+  data () {
     return {
     }
   },
   watch: {},
   computed: {},
   methods: {},
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

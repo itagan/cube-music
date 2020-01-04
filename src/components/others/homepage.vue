@@ -14,10 +14,10 @@
           地区：广东 广州
         </li>
       </ul>
-      <div class="home-page-message-more" @click.stop="moreMessage">
+      <router-link class="home-page-message-more" to="/basemessage">
         <span>更多信息</span>
         <i class="iconfont iconleft-arrow"></i>
-      </div>
+      </router-link>
     </div>
     <div class="home-page-mlog">
         <div class="home-page-mlog-num">Mlog <span></span></div>
@@ -138,52 +138,52 @@
 </template>
 
 <script>
-    import songListBase from "../../base/song/songlistbase"
-    import userBase from "../../base/basecomment/userbase"
+    import songListBase from '../../base/song/songlistbase'
+    import userBase from '../../base/basecomment/userbase'
     export default {
-        name: "homepage.vue",
-        data() {
-            return {
-                authentication:false,
-                playlist:[],
-                collection:[],
-                trackCountLike:0,
-                playCountLike:0
-            }
-        },
-        components: {
-            songListBase,
-            userBase
-        },
-        props: {
-            profile:{
-                type:Object,
-                default:{}
-            }
-        },
-        created () {
-            this.getPlaylist()
-        },
-        methods: {
-            getPlaylist () {
-                this.$api.users.playlist(477726475).then(res => {
-                    this.playlist = res.data.playlist.filter((item) => {
-                        return item.subscribed === false
-                    })
-                    this.collection = res.data.playlist.filter((item) => {
-                        return item.subscribed === true
-                    })
-                    this.trackCountLike = this.playlist[0].trackCount
-                    this.playCountLike = this.playlist[0].playCount
-                })
-            },
-            moreMessage () {
-                this.$router.push({
-                    path:'/basemessage'
-                })
-                console.log('11')
-            }
+      name: 'homepage.vue',
+      data () {
+        return {
+          authentication: false,
+          playlist: [],
+          collection: [],
+          trackCountLike: 0,
+          playCountLike: 0
         }
+      },
+      components: {
+        songListBase,
+        userBase
+      },
+      props: {
+        profile: {
+          type: Object,
+          default: {}
+        }
+      },
+      created () {
+        this.getPlaylist()
+      },
+      methods: {
+        getPlaylist () {
+          this.$api.users.playlist(477726475).then(res => {
+            this.playlist = res.data.playlist.filter((item) => {
+              return item.subscribed === false
+            })
+            this.collection = res.data.playlist.filter((item) => {
+              return item.subscribed === true
+            })
+            this.trackCountLike = this.playlist[0].trackCount
+            this.playCountLike = this.playlist[0].playCount
+          })
+        },
+        moreMessage () {
+          this.$router.push({
+            path: '/basemessage'
+          })
+          console.log('11')
+        }
+      }
 
     }
 </script>

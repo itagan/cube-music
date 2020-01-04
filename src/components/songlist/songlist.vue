@@ -137,258 +137,258 @@
 </template>
 
 <script>
-    import myHeader from "./header"
-    import mySearch from "../../base/search/searchcancel"
-    import Message from "./message"
-    import List from "./list"
-    import playMore from "./playmore"
-    import shareDialog from "../common/sharedialog"
-    import setRing from "../common/setring"
+    import myHeader from './header'
+    import mySearch from '../../base/search/searchcancel'
+    import Message from './message'
+    import List from './list'
+    import playMore from './playmore'
+    import shareDialog from '../common/sharedialog'
+    import setRing from '../common/setring'
     export default {
-        name: "songList.vue",
-        components: {
-          myHeader,
-          mySearch,
-          Message,
-          List,
-          playMore,
-          shareDialog,
-          setRing
-        },
-        data () {
+      name: 'songList.vue',
+      components: {
+        myHeader,
+        mySearch,
+        Message,
+        List,
+        playMore,
+        shareDialog,
+        setRing
+      },
+      data () {
+        return {
+          placeholder: '搜索歌单内歌曲',
+          fake: false,
+          isShow: true,
+          searchLeave: false,
+          searchEnter: false,
+          scrollY: 0,
+          scrollEvents: ['scroll'],
+          pullUpLoad: true,
+          pullUpLoadThreshold: 0,
+          pullUpLoadMoreTxt: '加载中…………',
+          pullUpLoadNoMoreTxt: '没有更多数据了~',
+          track: {},
+          tracks: [],
+          messages: {},
+          playlist: {},
+          subs: [],
+          whiteHeight: 200,
+          isMore: false,
+          isBuild: false,
+          visible: false,
+          messTop: 0,
+          title: '歌单',
+          checked: false,
+          allShow: false,
+          complete: false,
+          isSubscribed: false
+        }
+      },
+      computed: {
+        options () {
           return {
-            placeholder: '搜索歌单内歌曲',
-            fake:false,
-            isShow:true,
-            searchLeave:false,
-            searchEnter:false,
-            scrollY: 0,
-            scrollEvents: ['scroll'],
-            pullUpLoad: true,
-            pullUpLoadThreshold: 0,
-            pullUpLoadMoreTxt: '加载中…………',
-            pullUpLoadNoMoreTxt: '没有更多数据了~',
-            track:{},
-            tracks:[],
-            messages:{},
-            playlist:{},
-            subs:[],
-            whiteHeight:200,
-            isMore:false,
-            isBuild:false,
-            visible:false,
-            messTop:0,
-            title:'歌单',
-            checked: false,
-            allShow:false,
-            complete:false,
-            isSubscribed:false,
+            pullUpLoad: this.pullUpLoadObj,
+            scrollbar: true,
+            startY: -50
           }
         },
-        computed: {
-            options () {
-              return {
-                pullUpLoad: this.pullUpLoadObj,
-                scrollbar: true,
-                startY:-50
-              }
-            },
-            pullUpLoadObj: function () {
-              return this.pullUpLoad ? {
-                threshold: parseInt(this.pullUpLoadThreshold),
-                txt: {
-                  more: this.pullUpLoadMoreTxt,
-                  noMore: this.pullUpLoadNoMoreTxt
-                }
-              } : false
+        pullUpLoadObj: function () {
+          return this.pullUpLoad ? {
+            threshold: parseInt(this.pullUpLoadThreshold),
+            txt: {
+              more: this.pullUpLoadMoreTxt,
+              noMore: this.pullUpLoadNoMoreTxt
             }
-        },
-        created() {
-            this.getList()
-        },
-        methods: {
-          getList () {
-            this.$api.songLists.songList(705123491).then(res => {
-              console.log(res.data)
-              this.playlist = res.data.playlist
-              this.isSubscribed = this.playlist.subscribed
+          } : false
+        }
+      },
+      created () {
+        this.getList()
+      },
+      methods: {
+        getList () {
+          this.$api.songLists.songList(705123491).then(res => {
+            console.log(res.data)
+            this.playlist = res.data.playlist
+            this.isSubscribed = this.playlist.subscribed
               // this.tracks = res.data.playlist.tracks
-              this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0,10) : res.data.playlist.tracks
-              this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0,4) : res.data.playlist.subscribers
-              this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
-              this.messages.nickname = res.data.playlist.creator.nickname
-            })
-          },
-          getQuery (query) {
-            console.log(query)
-          },
-          goToSearch () {
-            this.isShow = !this.isShow
-            if(this.isShow) {
-              this.fake = false
-              this.searchEnter = true
-              this.searchLeave = false
-            }else {
-              this.searchLeave = true
-              this.searchEnter = false
-              this.fake = true
-            }
-          },
-          saveComment() {
+            this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0, 10) : res.data.playlist.tracks
+            this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0, 4) : res.data.playlist.subscribers
+            this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
+            this.messages.nickname = res.data.playlist.creator.nickname
+          })
+        },
+        getQuery (query) {
+          console.log(query)
+        },
+        goToSearch () {
+          this.isShow = !this.isShow
+          if (this.isShow) {
+            this.fake = false
+            this.searchEnter = true
+            this.searchLeave = false
+          } else {
+            this.searchLeave = true
+            this.searchEnter = false
+            this.fake = true
+          }
+        },
+        saveComment () {
 
-          },
-          scrollHandler ({ y }) {
-            this.scrollY = -y
-            this.whiteHeight = 610 - this.$refs.subTop.getBoundingClientRect().bottom  + 100
-            this.messTop = this.$refs.messTop.getBoundingClientRect().top
-              //需要添加防抖节流
-            if(this.messTop < 171) {
-              this.title = this.playlist.name
-            }else {
-              this.title = '歌单'
-            }
-          },
-          onPullingUp () {
+        },
+        scrollHandler ({ y }) {
+          this.scrollY = -y
+          this.whiteHeight = 610 - this.$refs.subTop.getBoundingClientRect().bottom + 100
+          this.messTop = this.$refs.messTop.getBoundingClientRect().top
+              // 需要添加防抖节流
+          if (this.messTop < 171) {
+            this.title = this.playlist.name
+          } else {
+            this.title = '歌单'
+          }
+        },
+        onPullingUp () {
 
-          },
-          cancel () {
-            this.isBuild = false
-          },
-          more (index) {
+        },
+        cancel () {
+          this.isBuild = false
+        },
+        more (index) {
             // 子组件提醒打开更多操作页面
-            this.isMore = true
+          this.isMore = true
             // this.visible = true
-            this.$nextTick(() => {
-              this.$refs.playMore.show()
-            })
-            this.track = this.tracks[index]
-          },
+          this.$nextTick(() => {
+            this.$refs.playMore.show()
+          })
+          this.track = this.tracks[index]
+        },
 
-          moreBuildList () {
-            this.isMore = false
-            this.isBuild = true
+        moreBuildList () {
+          this.isMore = false
+          this.isBuild = true
             // 手动调用，解决打开更多再新建歌单产生滚动现象的bug。
-            this.$nextTick(() => {
-              this._dialog.afterOpen()
-            })
-          },
-          cancelMore () {
-            this.$refs.playMore.hide()
+          this.$nextTick(() => {
+            this._dialog.afterOpen()
+          })
+        },
+        cancelMore () {
+          this.$refs.playMore.hide()
 
             // this.isMore = false
             // this.$nextTick(() => {
             //     this.$refs.playMore.hide()
             // })
-            setTimeout(() => {
-              this.isMore = false
-            },500)
-          },
-          toShare () {
-            this.$refs.shareShow.show()
-          },
-          setRing () {
-            this.$refs.setRingShow.show()
-          },
-            //全选功能
-          toCheck () {
-            this.allShow = true
-            this.stickyTop()
-          },
-          stickyTop () {
-            this.$nextTick(() => {
-            // this.$refs.scroll.scrollToElement('.toTop', 250, 0, -50)
-              this.$refs.scroll.scrollTo(0,-280,250)
-            })
-          },
-          toComplete () {
-            this.allShow = false
-            this.checked = false
-            this.$refs.ToCheck.allToCheckNo()
-          },
-          allCheck () {
-            this.checked = !this.checked
-            if(this.checked) {
-              this.$refs.ToCheck.allToChecked()
-            }else {
-              this.$refs.ToCheck.allToCheckNo()
-            }
-          },
-          toAllChecked (val) {
-            if(val === 1) {
-              this.checked = true
-            }else if(val === 0){
-              this.checked = false
-            }
-          },
-            //收藏功能
-          toSubscribed() {
-            if(this.isSubscribed) {
-              this.$createDialog({
-                type: 'confirm',
-                title: '确定不再收藏该歌单？',
-                confirmBtn: {
-                  text: '确定',
-                  active: true,
-                  disabled: false,
-                  href: 'javascript:;'
-                },
-                cancelBtn: {
-                  text: '取消',
-                  active: false,
-                  disabled: false,
-                  href: 'javascript:;'
-                },
-                onConfirm: () => {
-                  this.$api.songLists.subscribe(2, this.playlist.id).then(res => {
-                      console.log(res)
-                    if(res.status === 200) {
-                      this.$createToast({
-                        type: 'text',
-                        time: 1000,
-                        txt: '歌单已取消收藏'
-                      }).show()
-                      this.$refs.Sub.innerHTML--
-                      this.isSubscribed = false
-                    }
-                  })
-                }
-              }).show()
-            }else {
-              this.$api.songLists.subscribe(1, this.playlist.id).then(res => {
-                  console.log(res)
-                if(res.status === 200) {
-                  const toast = this.$createToast({
-                    txt: '歌单已收藏',
-                    type: 'correct',
-                    time: 2000,
-                  })
-                  toast.show()
-                  this.$refs.Sub.innerHTML++
-                  this.isSubscribed = true
-                }
-              })
-            }
-          },
+          setTimeout(() => {
+            this.isMore = false
+          }, 500)
         },
-        watch: {
-          isBuild (val) {
-            if (val) {
-              this._dialog.afterOpen()
-            } else {
-              this._dialog.beforeClose()
-            }
-          },
-          isMore (val) {
-            if (val) {
-              this._dialog.afterOpen()
-            } else {
-              this._dialog.beforeClose()
-            }
+        toShare () {
+          this.$refs.shareShow.show()
+        },
+        setRing () {
+          this.$refs.setRingShow.show()
+        },
+            // 全选功能
+        toCheck () {
+          this.allShow = true
+          this.stickyTop()
+        },
+        stickyTop () {
+          this.$nextTick(() => {
+            // this.$refs.scroll.scrollToElement('.toTop', 250, 0, -50)
+            this.$refs.scroll.scrollTo(0, -280, 250)
+          })
+        },
+        toComplete () {
+          this.allShow = false
+          this.checked = false
+          this.$refs.ToCheck.allToCheckNo()
+        },
+        allCheck () {
+          this.checked = !this.checked
+          if (this.checked) {
+            this.$refs.ToCheck.allToChecked()
+          } else {
+            this.$refs.ToCheck.allToCheckNo()
           }
         },
-        mounted() {
-
+        toAllChecked (val) {
+          if (val === 1) {
+            this.checked = true
+          } else if (val === 0) {
+            this.checked = false
+          }
+        },
+            // 收藏功能
+        toSubscribed () {
+          if (this.isSubscribed) {
+            this.$createDialog({
+              type: 'confirm',
+              title: '确定不再收藏该歌单？',
+              confirmBtn: {
+                text: '确定',
+                active: true,
+                disabled: false,
+                href: 'javascript:;'
+              },
+              cancelBtn: {
+                text: '取消',
+                active: false,
+                disabled: false,
+                href: 'javascript:;'
+              },
+              onConfirm: () => {
+                this.$api.songLists.subscribe(2, this.playlist.id).then(res => {
+                  console.log(res)
+                  if (res.status === 200) {
+                    this.$createToast({
+                      type: 'text',
+                      time: 1000,
+                      txt: '歌单已取消收藏'
+                    }).show()
+                    this.$refs.Sub.innerHTML--
+                    this.isSubscribed = false
+                  }
+                })
+              }
+            }).show()
+          } else {
+            this.$api.songLists.subscribe(1, this.playlist.id).then(res => {
+              console.log(res)
+              if (res.status === 200) {
+                const toast = this.$createToast({
+                  txt: '歌单已收藏',
+                  type: 'correct',
+                  time: 2000
+                })
+                toast.show()
+                this.$refs.Sub.innerHTML++
+                this.isSubscribed = true
+              }
+            })
+          }
         }
+      },
+      watch: {
+        isBuild (val) {
+          if (val) {
+            this._dialog.afterOpen()
+          } else {
+            this._dialog.beforeClose()
+          }
+        },
+        isMore (val) {
+          if (val) {
+            this._dialog.afterOpen()
+          } else {
+            this._dialog.beforeClose()
+          }
+        }
+      },
+      mounted () {
+
+      }
     }
 </script>
 

@@ -159,13 +159,13 @@
             this.pullDownY = -pos.y
           },
           toCurrentVideo (index) {
-              //不直接用item是因为额外添加了随时切换的isPlay属性导致vuex警告报错
+              // 不直接用item是因为额外添加了随时切换的isPlay属性导致vuex警告报错
             let currentVideo = this.videos[index].data
             this.saveCurrentVideoList(currentVideo)
           },
           ...mapActions([
-              'saveCurrentVideoList'
-          ]),
+            'saveCurrentVideoList'
+          ])
         }
       }
 </script>

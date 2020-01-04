@@ -21,29 +21,29 @@
 
 <script>
     export default {
-        name: "setRing.vue",
-        data() {
-          return {}
-        },
-        created() {
+      name: 'setRing.vue',
+      data () {
+        return {}
+      },
+      created () {
             // this.subscribeDialog = this.$createSubscribeDialog()
+      },
+      methods: {
+        show () {
+          this.$refs.popup.show()
         },
-        methods: {
-          show () {
-            this.$refs.popup.show()
-          },
-          hide () {
-            this.$refs.popup.hide()
-          },
-          ring () {
-            this.$createSubscribeDialog().show()
-            this.hide ()
-          },
-          subscribe () {
-            this.$createSubscribeDialog().show()
-            this.hide ()
-          },
+        hide () {
+          this.$refs.popup.hide()
         },
+        ring () {
+          this.$createSubscribeDialog().show()
+          this.hide()
+        },
+        subscribe () {
+          this.$createSubscribeDialog().show()
+          this.hide()
+        }
+      }
     }
 </script>
 

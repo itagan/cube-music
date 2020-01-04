@@ -7,25 +7,26 @@
 </template>
 
 <script>
-import myDynamic from "../common/dynamic"
+import myDynamic from '../dynamic/dynamic'
 export default {
   components: {
     myDynamic
   },
   props: {},
-  data() {
+  data () {
     return {
-      events:[],
-      jsons:[]
+      events: [],
+      jsons: []
     }
   },
   watch: {},
   computed: {},
   methods: {
     getDynamic () {
-      this.$api.users.getDynamic(477726475,100,-1).then(res => {
+      this.$api.users.getDynamic(477726475, 100, -1).then(res => {
         this.jsons = res.data.events.map(item => {
-          return eval('(' + item.json + ')')
+          // return eval('(' + item.json + ')')
+          return JSON.parse(item.json)
         })
         this.events = res.data.events
 
@@ -34,10 +35,10 @@ export default {
       })
     }
   },
-  created() {
+  created () {
     this.getDynamic()
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

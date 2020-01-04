@@ -5,17 +5,17 @@
 </template>
 
 <script>
-    import Header from "./header"
+    import Header from './header'
     export default {
-        name: "user.vue",
-        components: {
-            Header
-        },
-        data() {
-            return {
-                title:''
-            }
+      name: 'user.vue',
+      components: {
+        Header
+      },
+      data () {
+        return {
+          title: ''
         }
+      }
     }
 </script>
 

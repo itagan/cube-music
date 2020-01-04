@@ -1,5 +1,5 @@
 <template>
-  <div class="base-comment" v-if="!item.beReplied.length">
+  <div class="base-comment" @click="remind">
     <div class="base-comment-top">
       <img v-lazy="item.user.avatarUrl" @click="toUser">
       <div class="base-comment-time">
@@ -9,140 +9,60 @@
         </div>
         <span class="user-time">{{timestamp(item.time)}}</span>
       </div>
-      <div class="user-praise" @click.stop="toLike" :style="[item.likedCount.length > 0 ? {color:'red'} : {color:''}]">
-        <!-- v-bind:class="[itme.liked === true ? active : error]" -->
-        <span ref="likeCount" v-show="item.likedCount > 0">{{item.likedCount}}</span>
+      <div class="user-praise">
+        <span @click="liked">{{item.likedCount}}</span>
         <i class="iconfont iconzan1"></i>
       </div>
     </div>
     <div class="base-comment-bottom">
       <span class="comment">{{item.content}}</span>
-      <div v-if="item.beReplied.length" class="be-replied">
+      <div v-if="item.beReplied.length && item.beReplied[0].beRepliedCommentId !== item.parentCommentId" class="be-replied">
         <div class="line"></div>
         <div class="be-replied-content">
           <span class="be-replied-name">@{{item.beReplied[0].user.nickname}}</span>
             {{item.beReplied[0].content}}
         </div>
       </div>
-      <div class="reply" @click.stop="reply" v-if="ReplyNum(item) !== -1 ? true : false">
-        <span>{{_ReplyNum(item).length}}条回复</span>
-        <i class="iconfont iconiconfontyoujiantou"></i>
-      </div>
-
-      <!-- <div class="reply" @click="reply" v-if="show !== -1 ? true : false">
-         <span>{{_ReplyNum(item).length}}条回复</span>
-        <i class="iconfont iconiconfontyoujiantou"></i>
-      </div> -->
     </div>
   </div> 
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-import {timestampOther} from '../../assets/js/timestamp'
+  import {mapGetters} from 'vuex'
+  import {timestampOther} from '../../assets/js/timestamp'
   export default {
-    name: 'baseComment.vue',
+    name: 'replyallcomment.vue',
     props: {
       item: {
         type: Object,
         default: {}
-      },
-      hasReplyArr: {
-        type: Array,
-        default: []
-      },
-      // show: {
-      //   type:Number,
-      //   default:-1
-      // },
-      // ReplyCount: {
-      //   type:Number,
-      //   default:0
-      // }
+      }
     },
     data () {
-      return {
-        replyShow: false,
-        showOr:-1,
-        // hasReplyArr:[],
-        ReplyArr:[],
-        isLike: true,
-        active:'activeColor',
-        error:''
-      }
+      return {}
     },
     created() {
       // this.showReply()
     },
     computed:{
-       ...mapGetters([
-        'author',
-        'dynamic'
+      ...mapGetters([
+        'author'
       ])
     },
     watch:{},
     methods: {
+      remind () {
+                // 点击评论提醒该要什么
+      },
       toUser () {
                 // 去用户个人中心页面
       },
-      toLike () {
-        this.$api.likes.commentDynamic(this.item.commentId, this.dynamic[0].info.threadId, 1).then(res => {
-          console.log(res)
-          if(res.status === 200) {
-            this.$refs.likeCount.innerHTML++
-          }
-        })
-      },
-      reply () {
-        this.$router.push({
-          // path:`/commentreply:${this.item}`
-          path: 'commentreply', 
-          name:'commentreply',
-          // params: { 
-          //    item:this.item
-          // }
-          query: { 
-             item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
-             _item:JSON.stringify(this.item),
-             threadId:this.dynamic[0].info.threadId
-          }
-        })    
-
-        console.log(this.item)
-      },
-      // 方法分开写，v-if去重数组 避免出现可能无限循环报错
-      ReplyNum (item) {
-        return [...new Set(this.hasReplyArr.slice())].findIndex(ele => {
-          return item.commentId === ele.parentCommentId
-        })
-      },
-      _ReplyNum (item) {
-        item =  {...item}
-        if(item.beReplied.length !== 0) return
-        this.ReplyArr = this.hasReplyArr.slice().filter(ele => {
-          return item.commentId === ele.parentCommentId
-        })
-        // for(let i = 0; i<this.hasReplyArr.length;i++) {
-        //   if(item.commentId === this.hasReplyArr[i].parentCommentId) {
-        //     this.ReplyArr.push(item)
-        //   }
-        // }
-        console.log(this.ReplyArr)
-        return this.ReplyArr
+      liked () {
+                // 点赞
       },
       timestamp (time) {
         return timestampOther(time)
       }
-      // isShow (id) {
-      //   return id === this.author[0].userId
-      // }
-      // showReply (item) {
-      //   if(item.commentId) {
-      //     return this.arr.findIndex(num => {
-      //     return num === item.commentId
-      //     })
-      //   }
-      // }
     }
   }
 </script>
@@ -186,6 +106,7 @@ import {timestampOther} from '../../assets/js/timestamp'
             border-radius:3px
             height:10px
             flex-center()
+            padding-left:3px
             .user-author-name  
               flex-center()
               width:100%
@@ -195,14 +116,12 @@ import {timestampOther} from '../../assets/js/timestamp'
               -webkit-transform-origin-x: 0
               -webkit-transform: scale(0.80)
               transform: scale(0.80)
-              margin-left:3px
         .user-time
-          font-size:$font-size-small
+          font-size:$font-size-small-ss
           color:#dcdcdc
-          margin-top:2px
-          // font-size:12px; 
           -webkit-transform-origin-x: 0
           -webkit-transform: scale(0.80)
+          transform: scale(0.80)
       .user-praise
         font-size:$font-size-small-s
         height:100%
@@ -239,22 +158,7 @@ import {timestampOther} from '../../assets/js/timestamp'
           line-height:1.5
           white-space: normal
           .be-replied-name
-            color:dodgerblue
-      .reply
-        color:#4A8FCD
-        height:30px
-        display:flex
-        line-height:30px
-        span
-          margin-right:5px
-          display:flex
-          width:auto
-        i 
-          font-size:$font-size-large-x
-          margin-left:-7px
-
-
-  .activeColor
-    color:red
+            color:#4A8FCD
+      
 
 </style>

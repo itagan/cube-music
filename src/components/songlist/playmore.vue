@@ -133,49 +133,49 @@
 
 <script>
     export default {
-        name: "playMore.vue",
-        data() {
-          return {
-            visible:false,
-            options: {
-              scrollbar: true
-            }
-          }
-        },
-        props: {
-          title: {
-            type: String,
-            default: ''
-          },
-          isVip : {
-            type:Boolean,
-            default:true
-          },
-          track: {
-            type:Object,
-            default:{}
-          }
-        },
-        methods: {
-          cancel () {
-            // 触摸到遮罩层就取消本组件
-            this.$emit('cancel')
-          },
-          show () {
-            this.visible = true
-          },
-          hide () {
-            this.visible = false
-          },
-          toShare () {
-            this.$emit('share')
-            this.$emit('cancel')
-          },
-          ring () {
-            this.$emit('ring')
-            this.$emit('cancel')
+      name: 'playMore.vue',
+      data () {
+        return {
+          visible: false,
+          options: {
+            scrollbar: true
           }
         }
+      },
+      props: {
+        title: {
+          type: String,
+          default: ''
+        },
+        isVip: {
+          type: Boolean,
+          default: true
+        },
+        track: {
+          type: Object,
+          default: {}
+        }
+      },
+      methods: {
+        cancel () {
+            // 触摸到遮罩层就取消本组件
+          this.$emit('cancel')
+        },
+        show () {
+          this.visible = true
+        },
+        hide () {
+          this.visible = false
+        },
+        toShare () {
+          this.$emit('share')
+          this.$emit('cancel')
+        },
+        ring () {
+          this.$emit('ring')
+          this.$emit('cancel')
+        }
+      }
     }
 </script>
 

@@ -30,11 +30,10 @@
               <li class="hot-comment-top">精彩评论</li>
             </ul>
           </cube-sticky-ele>
-<!--          <ul style="height: 300px" class="hot-comment" ref="stickyHeight">-->
-          <div ref="stickyHeight">
-            <ul class="hot-comment" ref="ulHeight">
-              <li v-for="item in hotComments" :key="item.commentId">
-                <base-comment :item="item" class="base-comment"></base-comment>
+          <div ref="stickyHeight" style="height:auto">
+            <ul class="hot-comment">
+              <li v-for="(item,index) in hotComments" :key="item.commentId" ref="_liOffset" @click="_Reply(index)">
+                <base-comment :item="item" class="base-comment" :hasReplyArr="ReplyArr"></base-comment>
               </li>
             </ul>
           </div>
@@ -44,8 +43,8 @@
             </ul>
           </cube-sticky-ele>
           <ul class="new-comment">
-            <li v-for="(newItem,index) in comments" :key="index">
-              <base-comment :item="newItem" class="base-comment"></base-comment>
+            <li v-for="(newItem,index) in comments" :key="newItem.commentId" ref="liOffset" @click="Reply(index)">
+              <base-comment :item="newItem" class="base-comment" :hasReplyArr="hasReplyArr"></base-comment>
             </li>
           </ul>
 
@@ -70,111 +69,189 @@
 
       </cube-sticky>
     </div>
-
     <div class="comment">
-      <input type="text" placeholder="这一次也许就是你上热评了">
+      <!-- <input type="text" placeholder="这一次也许就是你上热评了"> -->
+      <input type="text" :placeholder="placeholder" ref="Input" v-model="value">
       <div class="comment-icon">
         <i class="iconfont iconfanhuidingbu"></i>
         <i class="iconfont iconpinglun"></i>
       </div>
     </div>
+
+    <reply-dialog ref="showDia" @reply="replyComment"></reply-dialog>
   </div>
 </template>
 
 <script>
     import MyHeader from '../../base/navbar/navbar'
-    import songListComment from "../../base/swiper/songlistcomment"
-    import baseComment from "../../base/basecomment/basecomment"
-    import {timestampOther} from '../../assets/js/timestamp'
-
+    import songListComment from '../../base/swiper/songlistcomment'
+    import baseComment from '../../base/basecomment/basecomment'
+    import replyDialog from '../common/replydialog'
     export default {
-        name: "listComment.vue",
-        components: {
-          MyHeader,
-          songListComment,
-          baseComment
-        },
-        data () {
-          return {
-            total:0,
-            comments:[],
-            hotComments:[],
-            scrollY: 0,
-            scrollEvents: ['scroll'],
-            totals:0,
-            options: {
-              pullUpLoad: true,
-              scrollbar: true,
-              click: false // 解决点击事件被触发两次的问题
-            },
-            secondStop: 0,
-            pullDownY: 0,
-            offset:0,
-            hasMore:true,
-            moreHot:false
-          }
-        },
-        props: {
-          id:{
-            type:Number,
-            default:705123491
-          }
-        },
-        created() {
-          this.getComment(705123491,this.offset)
-        },
-        methods: {
-          getComment (id,offset) {
-            this.$api.songLists.songListComment(id,offset).then(res => {
-              this.hasMore = res.data.more
-              this.moreHot = res.data.moreHot !== 'undefined' ? res.data.moreHot : 'undefined'
-              this.total = res.data.total
-              if(this.hasMore) {
-                this.offset++
-                this.comments = this.comments.concat(res.data.comments)
-                for (let i = 0; i < this.comments.length; i++) {
-                  this.comments[i].time = timestampOther(this.comments[i].time)
-                }
-              }else {
-                this.comments = res.data.comments
+      name: 'listComment.vue',
+      components: {
+        MyHeader,
+        songListComment,
+        baseComment,
+        replyDialog
+      },
+      data () {
+        return {
+          total: 0,
+          comments: [],
+          hotComments: [],
+          scrollY: 0,
+          scrollEvents: ['scroll'],
+          totals: 0,
+          options: {
+            pullUpLoad: true,
+            scrollbar: true,
+            click: false // 解决点击事件被触发两次的问题
+          },
+          secondStop: 0,
+          pullDownY: 0,
+          offset: 0,
+          hasMore: true,
+          moreHot: false,
+          hasReplyArr:[],
+          ReplyArr:[],
+          placeholder:"这一次也许就是你上热评了",
+          value:'',
+          user:'',
+          commentId:-1,
+          threadId:''
+        }
+      },
+      props: {
+        id: {
+          type: Number,
+          default: 705123491
+        }
+      },
+      created () {
+        this.getComment(705123491, this.offset)
+      },
+      methods: {
+        getComment (id, offset) {
+          this.$api.songLists.songListComment(id, offset).then(res => {
+            this.hasMore = res.data.more
+            this.moreHot = res.data.moreHot !== 'undefined' ? res.data.moreHot : 'undefined'
+            this.total = res.data.total
+            console.log(res.data.comments)
+            if (this.hasMore) {
+              this.offset += 20
+              this.comments = this.comments.concat(res.data.comments)
+              this.hasReplyArr = this.comments.slice().filter(item => {
+              return item.parentCommentId !== 0
+              })             
+            } else {
+              this.comments = res.data.comments
+              this.hasReplyArr = this.comments.filter(item => {
+              return item.parentCommentId !== 0
+              }) 
+            }
+            if (this.moreHot === true) {
+              this.hotComments = this.hotComments.concat(res.data.hotComments)
+              
+              this.ReplyArr = this.hotComments.filter(item => {
+              return item.parentCommentId !== 0
+              }) 
+            } else if (this.moreHot === false) {
+              this.hotComments = res.data.hotComments !== 'undefined' ? res.data.hotComments : 'undefined'
+              if (this.hotComments) {
+                this.ReplyArr = this.hotComments.slice().filter(item => {
+                return item.parentCommentId !== 0
+                }) 
               }
-              if(this.moreHot === true) {
-                this.hotComments = this.hotComments.concat(res.data.hotComments)
-                for (let i = 0; i < this.hotComments.length; i++) {
-                  this.hotComments[i].time = timestampOther(this.hotComments[i].time)
-                }
-              }else if(this.moreHot === false) {
-                this.hotComments = res.data.hotComments !== 'undefined' ? res.data.hotComments : 'undefined'
-                if(this.hotComments) {
-                  for (let i = 0; i < this.hotComments.length; i++) {
-                    this.hotComments[i].time = timestampOther(this.hotComments[i].time)
-                  }
-                }
-              }
-            })
-          },
-          toBack () {
-            this.$router.go(-1)
-          },
-          share () {
-
-          },
-          music () {
-
-          },
-          scrollHandler ({ y }) {
-            this.scrollY = -y
-          },
-          onPullingUp () {
-            setTimeout(() => {
-              this.getComment (705123491,this.offset)
-              const contentScroll = this.$refs.contentScroll
-              contentScroll.forceUpdate()
-            }, 1000)
-          }
+            }
+            console.log(this.hotComments)
+          })
         },
-        beforeMount() {
-          this.$nextTick(() => {
+        toBack () {
+          this.$router.go(-1)
+        },
+        share () {
+
+        },
+        music () {
+
+        },
+        scrollHandler ({ y }) {
+          this.scrollY = -y
+        },
+        onPullingUp () {
+          setTimeout(() => {
+            this.getComment(705123491, this.offset)
+            const contentScroll = this.$refs.contentScroll
+            contentScroll.forceUpdate()
+          }, 1000)
+        },
+        // ReplyNum (item) {
+        //   return [...new Set(this.hasReplyArr.slice())].findIndex(ele => {
+        //     return item.commentId === ele.parentCommentId
+        //   })
+        // }
+        Reply (index) {
+          let proup = document.getElementsByClassName('cube-popup-content')[0],
+          liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
+          Hei = this.$refs.liOffset[index].offsetHeight
+          if(liTop < 144){
+            let _liTop = liTop + Hei
+            proup.style.top = -(667 - _liTop - 30) + 'px'
+          }else {
+            proup.style.top = -(667 - liTop + 30) + 'px'
+          }
+
+          this.$refs.showDia.show()
+          if(liTop < 144){
+            this.$refs.showDia.diaTopChange()
+          }else {
+            this.$refs.showDia._diaTopChange()
+          }
+          this.user = this.comments[index].user.nickname
+          this.commentId = this.comments[index].commentId
+          console.log(this.threadId, this.commentId)
+        },
+        _Reply (index) {
+          let proup = document.getElementsByClassName('cube-popup-content')[0],
+          liTop = this.$refs._liOffset[index].getBoundingClientRect().top,
+          Hei = this.$refs._liOffset[index].offsetHeight
+          if(liTop < 144){
+            let _liTop = liTop + Hei
+            proup.style.top = -(667 - _liTop - 30) + 'px'
+          }else {
+            proup.style.top = -(667 - liTop + 30) + 'px'
+          }
+
+          this.$refs.showDia.show()
+          if(liTop < 144){
+            this.$refs.showDia.diaTopChange()
+          }else {
+            this.$refs.showDia._diaTopChange()
+          }
+          this.user = this.hotComments[index].user.nickname
+          this.commentId = this.hotComments[index].commentId
+          console.log(this.threadId, this.commentId)
+        },
+        replyComment () {
+          this.value = ''
+          this.placeholder = '回复' + this.user + ':'
+          this.Input()
+        },
+        Input () {
+          this.$refs.Input.focus()
+        },
+        replyUser () {
+          this.$api.commentFeature.dynamicReply(this.threadId, this.commentId, content).then(res => {
+            console.log(res)
+          })
+        },
+        input () {
+          console.log(this.value.length)
+        },
+      },
+      beforeMount () {
+        this.$nextTick(() => {
           // let hei = document.getElementsByClassName('hot-comment')[0]
           // let myColor= getComputedStyle(hei).height
           // this.$refs.stickyHeight.style.height = myColor +'px'
@@ -183,13 +260,13 @@
           this.$refs.stickyHeight.style.height = 300 + 'px'
           // console.log(this.totals)
           this.$refs.contentScroll.refresh()
-          })
-        },
-        mounted() {
+        })
+      },
+      mounted () {
           // this.$nextTick(() => {
         //     this.getHeight ()
           // })
-        }
+      }
     }
 </script>
 
