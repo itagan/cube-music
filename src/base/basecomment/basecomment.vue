@@ -11,7 +11,6 @@
       </div>
       <div class="user-praise" @click.stop="toLike" :style="[item.likedCount.length > 0 ? {color:'red'} : {color:''}]">
         <!-- v-bind:class="[itme.liked === true ? active : error]" -->
-         <!-- <span>{{item.liked}}</span> -->
         <span ref="likeCount" v-show="item.likedCount > 0">{{item.likedCount}}</span>
         <i class="iconfont iconzan1"></i>
       </div>
@@ -25,11 +24,15 @@
             {{item.beReplied[0].content}}
         </div>
       </div>
-      <div class="reply" @click="reply" v-if="ReplyNum(item) !== -1 ? true : false">
-        <!-- v-show="item && showReply(item)!== -1 ? true : false" -->
+      <div class="reply" @click.stop="reply" v-if="ReplyNum(item) !== -1 ? true : false">
         <span>{{_ReplyNum(item).length}}条回复</span>
         <i class="iconfont iconiconfontyoujiantou"></i>
       </div>
+
+      <!-- <div class="reply" @click="reply" v-if="show !== -1 ? true : false">
+         <span>{{_ReplyNum(item).length}}条回复</span>
+        <i class="iconfont iconiconfontyoujiantou"></i>
+      </div> -->
     </div>
   </div> 
 </template>
@@ -44,14 +47,18 @@ import {timestampOther} from '../../assets/js/timestamp'
         type: Object,
         default: {}
       },
-      // arr: {
-      //   type: Array,
-      //   default: []
-      // },
       hasReplyArr: {
         type: Array,
         default: []
-      }
+      },
+      // show: {
+      //   type:Number,
+      //   default:-1
+      // },
+      // ReplyCount: {
+      //   type:Number,
+      //   default:0
+      // }
     },
     data () {
       return {
@@ -103,18 +110,23 @@ import {timestampOther} from '../../assets/js/timestamp'
 
         console.log(this.item)
       },
-      //方法分开写，v-if去重数组 避免出现可能无限循环报错
+      // 方法分开写，v-if去重数组 避免出现可能无限循环报错
       ReplyNum (item) {
-        return [...new Set(this.hasReplyArr)].findIndex(ele => {
+        return [...new Set(this.hasReplyArr.slice())].findIndex(ele => {
           return item.commentId === ele.parentCommentId
         })
       },
       _ReplyNum (item) {
+        item =  {...item}
         if(item.beReplied.length !== 0) return
-        this.ReplyArr = this.hasReplyArr.filter(ele => {
+        this.ReplyArr = this.hasReplyArr.slice().filter(ele => {
           return item.commentId === ele.parentCommentId
         })
-        // this.ReplyArr.push(item)
+        // for(let i = 0; i<this.hasReplyArr.length;i++) {
+        //   if(item.commentId === this.hasReplyArr[i].parentCommentId) {
+        //     this.ReplyArr.push(item)
+        //   }
+        // }
         console.log(this.ReplyArr)
         return this.ReplyArr
       },

@@ -92,8 +92,7 @@ export default {
       items:[],
       user:'',
       commentId:-1,
-      threadId:'',
-      value:''
+      threadId:''
     }
   },
   watch: {
@@ -130,6 +129,7 @@ export default {
       this.commentId = commentId
     },
     replyComment () {
+      this.value = ''
       this.placeholder = '回复' + this.user + ':'
       this.Input()
     },

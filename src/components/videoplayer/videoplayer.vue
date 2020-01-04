@@ -77,8 +77,8 @@
 
 
             <recommend-swiper @select="recommendvideo" :detail="detail" @swipeNum="swipeNum" ref="getNum"></recommend-swiper>
-            <comment :detail="detail" @allHot="allhotshow" ref="tohere" class="here"></comment>
-            <new-comment :detail="detail" @Limits="newlimits" :limits="limits"></new-comment>
+            <comment :detail="detail" @allHot="allhotshow" ref="tohere" class="here" @showDialog="showDialog"></comment>
+            <new-comment :detail="detail" @Limits="newlimits" :limits="limits" @showDialog="showDialog"></new-comment>
 
             <template slot="pullup" slot-scope="props">
               <div v-if="props.pullUpLoad" class="pullload">
@@ -97,10 +97,10 @@
       </div>
     </transition>
 
-    <hot-comment :detail="detail" ref="allhotcomment" @pageshow="isshow"></hot-comment>
+    <hot-comment :detail="detail" ref="allhotcomment" @pageshow="isshow" @showDialog="showDialog"></hot-comment>
 
     <div class="comment" v-if="commit">
-      <input type="text" placeholder="发表评论">
+       <input type="text" :placeholder="placeholder" ref="Input" v-model="value" @input="input">
       <div @click="tagBacktop">
         <i class="iconfont iconfanhuidingbu" v-if="totop"></i>
         <span v-else class="liuyan">
@@ -109,6 +109,8 @@
         </span>
       </div>
     </div>
+
+     <reply-dialog ref="showDia" @reply="replyComment"></reply-dialog>
   </div>
 </template>
 
@@ -123,6 +125,7 @@
     import Comment from './comment'
     import newComment from './newcomment'
     import hotComment from './hotcomment'
+    import replyDialog from '../common/replydialog'
 
 export default {
       inject: ['reload'],
@@ -151,7 +154,12 @@ export default {
           isSubscribed: false,
           isPraised: false,
           redColor: 'redColor',
-          praisedCounts: 0
+          praisedCounts: 0,
+          placeholder:"发表评论",
+          user:"",
+          commentId:-1,
+          threadId:'',
+          value:''
         }
       },
       components: {
@@ -159,7 +167,8 @@ export default {
         Comment,
         newComment,
         hotComment,
-        basePlayer
+        basePlayer,
+        replyDialog
       },
       computed: {
         icon () {
@@ -460,6 +469,33 @@ export default {
             })
           }
         },
+        showDialog (liTop,user,commentId,threadId) {
+          this.$refs.showDia.show()
+          if(liTop < 350){
+            this.$refs.showDia.diaTopChange()
+          }else {
+            this.$refs.showDia._diaTopChange()
+          }
+          this.user = user
+          this.threadId = threadId
+          this.commentId = commentId
+          // console.log(user,commentId,threadId)
+        },
+        replyComment () {
+          this.placeholder = '回复' + this.user + ':'
+          this.Input()
+        },
+        Input () {
+          this.$refs.Input.focus()
+        },
+        replyUser () {
+          this.$api.commentFeature.dynamicReply(threadId, commentId, content).then(res => {
+            console.log(res)
+          })
+        },
+        input () {
+          console.log(this.value.length)
+        },
         ...mapMutations({
           setLimit: 'SET_LIMIT',
           setCommentBack: 'SET_BACK'
@@ -484,8 +520,8 @@ export default {
       destroyed () {
             // 销毁本页面时候，把vuex的一些重置
         this.setCommentBack(false)
-        this.deleteCollectVideo()
-        this.deleteOperationList()
+        // this.deleteCollectVideo()
+        // this.deleteOperationList()
       }
 
     }

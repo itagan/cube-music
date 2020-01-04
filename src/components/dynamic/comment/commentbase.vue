@@ -36,8 +36,7 @@ export default {
       hotComments:[],
       _item:{},
       arr:[],
-      hasReplyArr:[],
-      ReplyArr:[]
+      hasReplyArr:[]
     }
   },
   watch: {
