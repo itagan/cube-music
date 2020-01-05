@@ -2,12 +2,12 @@
   <div class="wrapper">
     <my-header class="header">
     <i class="iconfont iconfanhui" slot="left" @click="toBack"></i>
-    <div slot="center" class="follow">关注</div>
+    <div slot="center" class="follow">粉丝</div>
     <i class="iconfont iconbofangzhuangtaizanting" slot="right" @click="music"></i>
     </my-header>
 
 
-    <div class="pullloadtop" v-if="!follow.length">
+    <div class="pullloadtop" v-if="!followeds.length">
       <span class="load">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
@@ -23,17 +23,8 @@
         @pulling-up="onPullingUp"
         >
         <div class="content">
-          <ul class="follow-singer" @click="toSingerList">
-            <li class="follow-singer-left">
-              <i class="iconfont iconzhanghao"></i>
-            </li>
-            <li class="follow-singer-center">关注的歌手</li>
-            <li class="follow-singer-right">
-              <i class="iconfont iconleft-arrow"></i>
-            </li>
-          </ul>
           <ul class="follow-list">
-            <li v-for="item in follow" :key="item.userId" @click="toUser(item.userId)">
+            <li v-for="item in followeds" :key="item.userId" @click="toUser(item.userId)">
               <follow-base class="my-follow">
                 <img v-lazy="item.avatarUrl" alt="" slot="left" class="img"> 
                 <div slot="top" class="my-follow-center-top" v-if="item.signature">
@@ -51,9 +42,9 @@
                     <i class="iconfont iconnan" v-if="item.gender === 1"></i>
                   </div>
                 </div>
-                <i slot="rightShare" class="iconfont icongengduo" v-if="isUser" @click.stop="toMore"></i>
-                <div slot="rightFollow" v-if="!isUser">
-                  <div v-if="isFollow" class="my-follow-true">
+
+                <div slot="rightFollow">
+                  <div v-if="item.followed" class="my-follow-true">
                     <i class="iconfont iconhuaban"></i>
                     <span>已关注</span>
                   </div>
@@ -62,6 +53,7 @@
                     <span>关注</span>
                   </div>
                 </div>
+                 <i slot="rightShare" class="iconfont icongengduo" v-if="isUser" @click.stop="toMore"></i>
               </follow-base>
             </li>
           </ul>
@@ -95,19 +87,19 @@ export default {
   data() {
     return {
       isUser:false,
-      isFollow:true,
-      follow:[],
+      isFollow:false,
+      followeds:[],
       userId:477726475,
       options: {
-            pullUpLoad: true,
-            scrollbar: true,
-            click: false // 解决点击事件被触发两次的问题
-          },
-          secondStop: 0,
-          scrollEvents: ['scroll'],
-          pullDownY: 0,
-          offset: 0,
-          hasMore: true,
+        pullUpLoad: true,
+        scrollbar: true,
+        click: false // 解决点击事件被触发两次的问题
+      },
+      secondStop: 0,
+      scrollEvents: ['scroll'],
+      pullDownY: 0,
+      offset: 0,
+      hasMore: true,
     }
   },
   watch: {},
@@ -117,13 +109,13 @@ export default {
       this.$router.go(-1)
     },
     music () {},
-    getFollows (uid, offset) {
-      this.$api.users.userFollows(uid, offset).then(res => {
+    getFolloweds (uid) {
+      this.$api.users.userFans(uid).then(res => {
         this.hasMore = res.data.more
         if (this.hasMore) {
-          this.offset += 30
+          // this.offset += 30
         }
-         this.follow = this.follow.concat(res.data.follow)  
+         this.followeds = this.followeds.concat(res.data.followeds)  
       })
     },
     isUserOr () {
@@ -132,7 +124,7 @@ export default {
     onPullingUp () {
       if(!this.hasMore) return
       setTimeout(() => {
-        this.getFollows(477726475, this.offset)
+        this.getFolloweds(477726475)
         const contentScroll = this.$refs.contentScroll
         contentScroll.forceUpdate()
       }, 1000)
@@ -159,7 +151,7 @@ export default {
   },
   created() {
     this.isUserOr()
-    this.getFollows(477726475, 0)
+    this.getFolloweds(477726475)
   },
   mounted() {}
 }
@@ -224,13 +216,13 @@ export default {
               .iconnan
                 color:#00bfff
             .max-length-name
-              max-width:230px
+              max-width:150px
               ellipsis()  
             .max-length-name-other
               max-width:185px
               ellipsis() 
           .max-length-desc
-            max-width:265px
+            max-width:200px
             ellipsis()  
           .max-length-desc-other  
             max-width:210px

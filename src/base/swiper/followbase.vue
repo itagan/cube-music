@@ -14,11 +14,11 @@
         <slot name="liRight"></slot>
       </div>
     </div>
-    <div class="li-right-share" v-if="$slots.rightShare">
-      <slot name="rightShare"></slot>
-    </div>
     <div class="li-right-follow" v-if="$slots.rightFollow">
       <slot name="rightFollow"></slot>
+    </div>
+    <div class="li-right-share" v-if="$slots.rightShare">
+      <slot name="rightShare"></slot>
     </div>
   </div>
 </template>
@@ -84,7 +84,6 @@ export default {
        font-size:$font-size-large-x + 6  
        flex-center()
     .li-right-follow
-       width:90px
        height:50px
        margin-right:10px  
        font-size:$font-size-medium

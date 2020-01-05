@@ -35,7 +35,7 @@
         <span v-if="personals.profile">{{personals.profile.follows}}</span>
         <span>关注</span>
       </li>
-      <li>
+      <li @click.stop="toFolloweds">
         <span v-if="personals.profile">{{personals.profile.followeds}}</span>
         <span>粉丝</span>
       </li>
@@ -134,6 +134,11 @@
         toFollows () {
           this.$router.push({
             path:`follows`
+          })
+        },
+        toFolloweds () {
+          this.$router.push({
+            path:`followeds`
           })
         }
       }

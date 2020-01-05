@@ -123,7 +123,7 @@ export default {
     },
     music () {},
     getSingers () {
-      this.$api.subs.singers(477726475).then(res => {
+      this.$api.subs.singers(this.$route.params.userId).then(res => {
         this.singers = res.data.data
         console.log(this.singers)
         // this.$emit('hasNum', res.data.count)

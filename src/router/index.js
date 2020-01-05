@@ -21,6 +21,7 @@ import DynamicComment from '../components/dynamic/comment/dynamiccomment'
 import CommentReply from '../components/common/commentreply'
 import Follows from '../components/account/follows/followslist'
 import FollowSinger from '../components/account/follows/followsinger'
+import Followeds from '../components/account/follows/fans'
 Vue.use(Router)
 
 const originalPush = Router.prototype.push
@@ -130,8 +131,15 @@ export default new Router({
       }
     },
     {
-      path: '/followsinger',
+      path: '/followsinger/:userId',
       component: FollowSinger,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path: '/followeds',
+      component: Followeds,
       meta: {
         keepAlive: true // 需要被缓存
       }
