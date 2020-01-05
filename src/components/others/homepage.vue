@@ -161,12 +161,16 @@
           default: {}
         }
       },
-      created () {
-        this.getPlaylist()
+      created () {},
+      watch:{
+        profile (val) {
+          //不采用created钩子，解决props传值未到达加载错误问题
+          this.getPlaylist(val.userId)
+        }
       },
       methods: {
         getPlaylist () {
-          this.$api.users.playlist(477726475).then(res => {
+          this.$api.users.playlist(this.profile.userId).then(res => {
             this.playlist = res.data.playlist.filter((item) => {
               return item.subscribed === false
             })
@@ -181,7 +185,6 @@
           this.$router.push({
             path: '/basemessage'
           })
-          console.log('11')
         }
       }
 

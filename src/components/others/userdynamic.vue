@@ -12,18 +12,28 @@ export default {
   components: {
     myDynamic
   },
-  props: {},
+  props: {
+    profile: {
+      type: Object,
+      default: {}
+    }
+  },
   data () {
     return {
       events: [],
       jsons: []
     }
   },
-  watch: {},
+  watch: {
+    profile () {
+      this.getDynamic()
+    }
+  },
   computed: {},
   methods: {
     getDynamic () {
-      this.$api.users.getDynamic(477726475, 100, -1).then(res => {
+      console.log(this.profile.userId)
+      this.$api.users.getDynamic(this.profile.userId, 30, -1).then(res => {
         this.jsons = res.data.events.map(item => {
           // return eval('(' + item.json + ')')
           return JSON.parse(item.json)
@@ -35,9 +45,7 @@ export default {
       })
     }
   },
-  created () {
-    this.getDynamic()
-  },
+  created () {},
   mounted () {}
 }
 </script>

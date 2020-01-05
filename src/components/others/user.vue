@@ -48,7 +48,7 @@
             </cube-slide-item>
 
             <cube-slide-item :index="1">
-              <user-dynamic></user-dynamic>
+              <user-dynamic :profile="profile"></user-dynamic>
             </cube-slide-item>
 
           </cube-slide>
@@ -113,9 +113,12 @@
       },
       methods: {
         getUser () {
-          this.$api.users.userdetail(32953014).then(res => {
+          // this.$route.params.userId          
+          this.$api.users.userdetail(this.$route.params.userId).then(res => {
             this.profile = res.data.profile
             this.level = res.data.level
+
+            console.log(this.profile)
           })
         },
         scrollHandler ({ y }) {
@@ -193,6 +196,7 @@
     width: 100%
     z-index:1
     font-size:$font-size-medium
+    // background-color:white
     border-top-left-radius:20px
     border-top-right-radius:20px
     .sticky-header
@@ -221,7 +225,8 @@
           font-size:$font-size-small
 
 
-
+  .cube-slide
+    background-color:white
 
   .nav-item-active
     color: red

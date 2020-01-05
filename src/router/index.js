@@ -19,7 +19,7 @@ import BaseMessage from '../components/others/basemessage'
 import ForWard from '../components/dynamic/forward'
 import DynamicComment from '../components/dynamic/comment/dynamiccomment'
 import CommentReply from '../components/common/commentreply'
-
+import Follows from '../components/account/follows/followslist'
 Vue.use(Router)
 
 const originalPush = Router.prototype.push
@@ -122,6 +122,13 @@ export default new Router({
       }
     },
     {
+      path: '/follows',
+      component: Follows,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
       path: '/videoplayer',
       component: Videoplayer,
       meta: {
@@ -150,10 +157,10 @@ export default new Router({
       }
     },
     {
-      path: '/user/:id',
+      path: '/user/:userId',
       component: User,
       meta: {
-        keepAlive: true // 需要被缓存
+        keepAlive: false
       }
       // redirect: "/user/:id",
       // children: [
