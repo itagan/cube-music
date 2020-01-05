@@ -2,12 +2,12 @@
   <div class="wrapper">
     <my-header class="header">
     <i class="iconfont iconfanhui" slot="left" @click="toBack"></i>
-    <div slot="center" class="follow">关注</div>
+    <div slot="center" class="follow">关注的歌手</div>
     <i class="iconfont iconbofangzhuangtaizanting" slot="right" @click="music"></i>
     </my-header>
 
 
-    <div class="pullloadtop" v-if="!follow.length">
+    <div class="pullloadtop" v-if="!singers.length">
       <span class="load">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
@@ -20,24 +20,24 @@
         :scroll-events="scrollEvents"
         :options="options"
         @scroll="scrollHandler"
+        @before-scroll-start = "beforeScrollStart"
         @pulling-up="onPullingUp"
         >
         <div class="content">
-          <ul class="follow-singer" @click="toSingerList">
-            <li class="follow-singer-left">
-              <i class="iconfont iconzhanghao"></i>
-            </li>
-            <li class="follow-singer-center">关注的歌手</li>
-            <li class="follow-singer-right">
-              <i class="iconfont iconleft-arrow"></i>
-            </li>
-          </ul>
+           <my-search
+            :placeholder="placeholder"
+            :fake="fake"
+            @query="getQuery"
+            @click.native="goToSearch"
+            class="singer-search"
+          ></my-search>
+
           <ul class="follow-list">
-            <li v-for="item in follow" :key="item.userId" @click="toUser(item.userId)">
+            <li v-for="item in singers" :key="item.id" @click="toUser(item.id)">
               <follow-base class="my-follow">
-                <img v-lazy="item.avatarUrl" alt="" slot="left" class="img"> 
+                <img v-lazy="item.picUrl" alt="" slot="left" class="img"> 
                 <div slot="top" class="my-follow-center-top" v-if="item.signature">
-                  <div :class="[isUser ? 'max-length-name' : 'max-length-name-other']">{{item.nickname}}</div>
+                  <div :class="[isUser ? 'max-length-name' : 'max-length-name-other']">{{item.name}}</div>
                   <div class="sea" v-if="item.gender !== 0">
                     <i class="iconfont iconnv" v-if="item.gender === 2"></i>
                     <i class="iconfont iconnan" v-if="item.gender === 1"></i>
@@ -45,7 +45,7 @@
                 </div>
                 <div slot="bottom" :class="[isUser ? 'max-length-desc' : 'max-length-desc-other']" v-if="item.signature">{{item.signature}}</div>
                 <div slot="liRight" v-if="!item.signature" class="my-follow-center-top">
-                  <div :class="[isUser ? 'max-length-name' : 'max-length-name-other']">{{item.nickname}}</div>
+                  <div :class="[isUser ? 'max-length-name' : 'max-length-name-other']">{{item.name}}</div>
                   <div class="sea" v-if="item.gender !== 0">
                     <i class="iconfont iconnv" v-if="item.gender === 2"></i>
                     <i class="iconfont iconnan" v-if="item.gender === 1"></i>
@@ -86,10 +86,12 @@
 <script>
 import MyHeader from '../../../base/navbar/navbar'
 import followBase from '../../../base/swiper/followbase'
+import MySearch from '../../../base/search/search'
 export default {
   components: {
     MyHeader,
-    followBase
+    followBase,
+    MySearch
   },
   props: {},
   data() {
@@ -99,15 +101,18 @@ export default {
       follow:[],
       userId:477726475,
       options: {
-            pullUpLoad: true,
-            scrollbar: true,
-            click: false // 解决点击事件被触发两次的问题
-          },
-          secondStop: 0,
-          scrollEvents: ['scroll'],
-          pullDownY: 0,
-          offset: 0,
-          hasMore: true,
+        pullUpLoad: true,
+        scrollbar: true,
+        click: false // 解决点击事件被触发两次的问题
+      },
+      secondStop: 0,
+      scrollEvents: ['scroll', 'before-scroll-start'],
+      pullDownY: 0,
+      offset: 0,
+      hasMore: true,
+      placeholder: '搜索歌手',
+      fake: false,
+      singers: []
     }
   },
   watch: {},
@@ -117,13 +122,11 @@ export default {
       this.$router.go(-1)
     },
     music () {},
-    getFollows (uid, offset) {
-      this.$api.users.userFollows(uid, offset).then(res => {
-        this.hasMore = res.data.more
-        if (this.hasMore) {
-          this.offset += 30
-        }
-         this.follow = this.follow.concat(res.data.follow)  
+    getSingers () {
+      this.$api.subs.singers(477726475).then(res => {
+        this.singers = res.data.data
+        console.log(this.singers)
+        // this.$emit('hasNum', res.data.count)
       })
     },
     isUserOr () {
@@ -132,7 +135,7 @@ export default {
     onPullingUp () {
       if(!this.hasMore) return
       setTimeout(() => {
-        this.getFollows(477726475, this.offset)
+        this.getSingers()
         const contentScroll = this.$refs.contentScroll
         contentScroll.forceUpdate()
       }, 1000)
@@ -140,10 +143,13 @@ export default {
     scrollHandler (pos) {
       this.pullDownY = -pos.y
     },
+    beforeScrollStart () {
+      this.fake = false
+    },
     toUser (userId) {
-      this.$router.push({
-        path: `/user/${userId}`
-      })
+      // this.$router.push({
+      //   path: `/user/${userId}`
+      // })
     },
     toMore () {
 
@@ -151,15 +157,16 @@ export default {
     toFollow () {
       
     },
-    toSingerList () {
-      this.$router.push({
-        path: `followsinger`
-      })
-    }
+    getQuery (query) {
+      console.log(query)
+    },
+    goToSearch () {
+      this.fake = true
+    },
   },
   created() {
     this.isUserOr()
-    this.getFollows(477726475, 0)
+    this.getSingers(477726475)
   },
   mounted() {}
 }
