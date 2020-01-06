@@ -44,7 +44,7 @@
             :showDots = 'false'
             @change="slideChange">
             <cube-slide-item :index="0">
-              <home-page :profile="profile"></home-page>
+              <home-page :userMessage="userMessage"></home-page>
             </cube-slide-item>
 
             <cube-slide-item :index="1">
@@ -94,6 +94,7 @@
               text: '动态'
             }
           ],
+          userMessage:{},
           profile: {},
           level: 0,
           messTop: 0
@@ -115,10 +116,11 @@
         getUser () {
           // this.$route.params.userId          
           this.$api.users.userdetail(this.$route.params.userId).then(res => {
+            this.userMessage = res.data
             this.profile = res.data.profile
             this.level = res.data.level
 
-            console.log(this.profile)
+            console.log(this.userMessage)
           })
         },
         scrollHandler ({ y }) {

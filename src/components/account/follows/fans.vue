@@ -43,12 +43,12 @@
                   </div>
                 </div>
 
-                <div slot="rightFollow">
+                <div slot="rightFollow" @click.stop="toFollow(item.userId)">
                   <div v-if="item.followed" class="my-follow-true">
                     <i class="iconfont iconhuaban"></i>
                     <span>已关注</span>
                   </div>
-                  <div v-else class="my-follow-false" @click.stop="toFollow">
+                  <div v-else class="my-follow-false">
                     <i class="iconfont iconjia"></i>
                     <span>关注</span>
                   </div>
@@ -112,22 +112,28 @@ export default {
     getFolloweds (uid) {
       this.$api.users.userFans(uid).then(res => {
         this.hasMore = res.data.more
-        if (this.hasMore) {
-          // this.offset += 30
-        }
-         this.followeds = this.followeds.concat(res.data.followeds)  
+        // if (this.hasMore) {
+        //   // this.offset += 30
+        // }
+        //  this.followeds = this.followeds.concat(res.data.followeds)  
+        this.followeds = res.data.followeds
       })
     },
     isUserOr () {
       return this.isUser = this.userId === 477726475
     },
     onPullingUp () {
-      if(!this.hasMore) return
-      setTimeout(() => {
-        this.getFolloweds(477726475)
+      if(!this.hasMore) {
         const contentScroll = this.$refs.contentScroll
         contentScroll.forceUpdate()
+        return
+      }else {
+        setTimeout(() => {
+          this.getFolloweds(477726475)
+          const contentScroll = this.$refs.contentScroll
+          contentScroll.forceUpdate()
       }, 1000)
+      }
     },
     scrollHandler (pos) {
       this.pullDownY = -pos.y
@@ -140,8 +146,10 @@ export default {
     toMore () {
 
     },
-    toFollow () {
-      
+    toFollow (userId) {
+      this.$api.users.toFollow(userId, 1).then(res => {
+        console.log(res.data)
+      })
     },
     toSingerList () {
       this.$router.push({
@@ -164,6 +172,7 @@ export default {
     width:100%
     background-color:white !important
     .header
+      background-color:white 
       .follow
         font-size:$font-size-large
       i

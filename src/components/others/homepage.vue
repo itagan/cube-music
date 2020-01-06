@@ -2,10 +2,20 @@
   <div class="home-page">
     <div class="home-page-message">
       <div class="home-page-message-base">基本信息</div>
-      <div v-if="authentication">认证信息</div>
+      <div v-if="userMessage.profile && userMessage.profile.allAuthTypes" class="message-authentication">
+        <ul>
+          <li v-for="(item, index) in userMessage.profile.allAuthTypes" :key="index">
+            <i class="iconfont iconQQkongjian"></i>
+            <!-- <span>流行 | 华岳 | 欧美歌单达人</span> -->
+            <span>
+              {{item.desc}}
+            </span>
+          </li>
+        </ul>
+      </div>
       <ul class="home-page-message-detail" @click.stop="moreMessage">
         <li>
-          村龄：2年 （2019注册）
+          村龄：{{createYear(userMessage.createDays)}} （{{registerTime(userMessage.createTime)}}注册）
         </li>
         <li>
           年龄：90后 天秤座
@@ -14,12 +24,12 @@
           地区：广东 广州
         </li>
       </ul>
-      <router-link class="home-page-message-more" to="/basemessage">
+      <div class="home-page-message-more" @click.stop="moreMessage">
         <span>更多信息</span>
         <i class="iconfont iconleft-arrow"></i>
-      </router-link>
+      </div>
     </div>
-    <div class="home-page-mlog">
+    <div class="home-page-mlog" v-if="isLog">
         <div class="home-page-mlog-num">Mlog <span></span></div>
         <ul>
           <li>
@@ -48,17 +58,17 @@
           <i class="iconfont iconpaixingbang"></i>
         </div>
         <span slot="top">听歌排行</span>
-        <span slot="bottom">累积听歌512首</span>
+        <span slot="bottom">累积听歌{{userMessage.listenSongs}}首</span>
       </song-list-base>
       <song-list-base class="home-page-music-like">
           <div slot="left" class="home-page-music-like-heart">
             <i class="iconfont iconxin"></i>
           </div>
-        <span slot="top">{{profile.nickname}} 喜欢的音乐</span>
+        <span slot="top" v-if="userMessage.profile">{{userMessage.profile.nickname}} 喜欢的音乐</span>
         <span slot="bottom">{{trackCountLike}}首，播放{{playCountLike}}次</span>
       </song-list-base>
     </div>
-     <ul class="home-page-song-list" v-if="this.playlist.length">
+     <ul class="home-page-song-list" v-if="musiccolumn">
       <li class="home-page-song-list-create">音乐专栏
       <span>(1个，被评论112次)</span>
       </li>
@@ -98,7 +108,7 @@
         <song-list-base>
           <img :src="item.coverImgUrl" alt="" slot="left" class="home-page-img">
           <span slot="top">{{item.name}}</span>
-          <span slot="bottom">{{item.trackCount}}首，by {{item.creator.nickname}}，播放{{item.playCount}}次</span>
+          <span slot="bottom" v-if="item.creator">{{item.trackCount}}首，by {{item.creator.nickname}}，播放{{item.playCount}}次</span>
         </song-list-base>
       </li>
       <li class="home-page-song-list-more" v-if="this.collection.length > 3">
@@ -140,15 +150,17 @@
 <script>
     import songListBase from '../../base/song/songlistbase'
     import userBase from '../../base/basecomment/userbase'
+    import { serializeNumber } from '../../assets/js/number'
     export default {
       name: 'homepage.vue',
       data () {
         return {
-          authentication: false,
           playlist: [],
           collection: [],
           trackCountLike: 0,
-          playCountLike: 0
+          playCountLike: 0,
+          isLog:false,
+          musiccolumn:false
         }
       },
       components: {
@@ -156,36 +168,63 @@
         userBase
       },
       props: {
-        profile: {
+        userMessage: {
           type: Object,
           default: {}
         }
       },
       created () {},
       watch:{
-        profile (val) {
+        userMessage (val) {
           //不采用created钩子，解决props传值未到达加载错误问题
-          this.getPlaylist(val.userId)
+          this.getPlaylist(val.profile.userId)
         }
       },
       methods: {
         getPlaylist () {
-          this.$api.users.playlist(this.profile.userId).then(res => {
+          this.$api.users.playlist(this.userMessage.profile.userId).then(res => {
             this.playlist = res.data.playlist.filter((item) => {
-              return item.subscribed === false
+              return item.creator.userId === this.userMessage.profile.userId
             })
             this.collection = res.data.playlist.filter((item) => {
-              return item.subscribed === true
+              return item.creator.userId !== this.userMessage.profile.userId
             })
+            // console.log(res.data.playlist)
             this.trackCountLike = this.playlist[0].trackCount
             this.playCountLike = this.playlist[0].playCount
+            for(let i = 0;i<res.data.playlist.length; i++) {
+              res.data.playlist[i].playCount = serializeNumber(res.data.playlist[i].playCount)
+            }
+
           })
         },
         moreMessage () {
           this.$router.push({
-            path: '/basemessage'
+            // name:'Basemessage',
+            path: `/basemessage`,
+            // params:{
+            //   profile:this.profile
+            // }
+            query: {
+              profile:JSON.stringify(this.userMessage.profile),
+              level:this.userMessage.level
+            }
           })
-        }
+        },
+        createYear (day) {
+          if(day < 365) {
+            return `${day}` + '天'
+          }else {
+            return `${Math.floor(day / 365)}` + '年'
+          }
+        },
+        registerTime (timestamp) {
+          let date = new Date(timestamp)
+          let Y = date.getFullYear() + '年'
+          let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '月'
+          return Y + M 
+        },
+
       }
 
     }
@@ -206,6 +245,18 @@
         height:30px
         line-height:30px
         font-size:$font-size-medium-x
+      .message-authentication
+        margin-bottom:5px
+        color:gray
+        font-size:$font-size-small
+        ul
+          height:auto
+          // display:flex
+          li
+            height:25px
+            line-height:25px
+            i
+              color:orange  
       .home-page-message-detail
         font-size:$font-size-small
         color:gray

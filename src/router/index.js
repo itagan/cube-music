@@ -193,8 +193,9 @@ export default new Router({
     {
       path: '/basemessage',
       component: BaseMessage,
+      name: 'Basemessage',
       meta: {
-        keepAlive: true // 需要被缓存
+        keepAlive: false
       }
     },
     {

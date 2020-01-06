@@ -130,6 +130,10 @@ const users = {
   // 获取用户粉丝列表
   userFans (uid) {
     return axios.get(`${base}/user/followeds?uid=${uid}`)
+  },
+  // 关注用户
+  toFollow (uid, t) {
+    return axios.get(`${base}/follow?id=${uid}&t=${t}`)
   }
 }
 

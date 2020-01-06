@@ -18,9 +18,9 @@
           </li>
         </ul>
         <ul class="user-message-left-lv">
-          <li class="li-left">
-            <i class="iconfont iconnan" v-if="man"></i>
-            <i class="iconfont iconnv" v-else></i>
+           <li class="li-left" v-if="profile.gender !== 0" :style="[profile.gender === 1 ? {backgroundColor:'lightskyblue'} : {backgroundColor:'pink'}]">
+              <i class="iconfont iconnv" v-if="profile.gender === 2"></i>
+              <i class="iconfont iconnan" v-if="profile.gender === 1"></i>
           </li>
           <li class="li-right">
             Lv
@@ -30,10 +30,17 @@
       </div>
     </div>
     <div class="user-message-right">
+      <div v-if="profile.followed" class="user-message-right-follow-text">
+        <span>{{profile.followTime}}</span>
+      </div>
       <ul>
-        <li class="user-message-right-follow">
+        <li class="user-message-right-follow" v-if="!profile.followed">
           <i class="iconfont iconjia"></i>
           关注
+        </li>
+        <li class="user-message-right-follow-true" v-if="profile.followTime">
+          <i class="iconfont iconzhanghao"  v-if="!profile.followMe"></i>
+          <i class="iconfont iconduoren"  v-if="profile.followMe"></i>
         </li>
         <li class="user-message-private">
           <i class="iconfont iconxinxiduanxinxiaoxitixingyoujiansixinyouxiang"></i>
@@ -139,11 +146,9 @@
             width:25px
             height:15px
             border-radius:5px
-            background-color:lightskyblue
             flex-center()
             i
               font-size:10px
-              color:blue
           .li-right
             width:30px
             height:15px
@@ -157,12 +162,22 @@
       width:150px
       position:relative
       margin-right:10px
+      .user-message-right-follow-text
+        position:absolute
+        bottom:50px
+        text-align:right
+        width:100%
+        height:20px
+        span 
+           margin-right:10px
+           opacity:.7
       ul
-        display:flex
+        flex-between()
         position:absolute
         bottom:20px
         font-size:$font-size-small
         color:white
+        width:100%
         .user-message-right-follow
           width:65px
           height:25px
@@ -170,6 +185,15 @@
           background-color:red
           flex-center()
           margin-right:10px
+        .user-message-right-follow-true
+          width:25px
+          height:25px
+          border-radius:50%
+          background-color:silver
+          flex-center()
+          margin-left:30px  
+          i  
+            font-size:$font-size-small
         .user-message-private
           width:75px
           height:25px
@@ -178,6 +202,7 @@
           opacity: .5
           flex-center()
           color:white
+          margin-right:10px
 
 
 </style>

@@ -32,7 +32,7 @@ export default {
   computed: {},
   methods: {
     getDynamic () {
-      console.log(this.profile.userId)
+      // console.log(this.profile.userId)
       this.$api.users.getDynamic(this.profile.userId, 30, -1).then(res => {
         this.jsons = res.data.events.map(item => {
           // return eval('(' + item.json + ')')
@@ -40,8 +40,8 @@ export default {
         })
         this.events = res.data.events
 
-        console.log(this.jsons)
-        console.log(this.events)
+        // console.log(this.jsons)
+        // console.log(this.events)
       })
     }
   },
