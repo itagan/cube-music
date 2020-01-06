@@ -182,7 +182,8 @@
           checked: false,
           allShow: false,
           complete: false,
-          isSubscribed: false
+          isSubscribed: false,
+          id:''
         }
       },
       computed: {
@@ -208,7 +209,8 @@
       },
       methods: {
         getList () {
-          this.$api.songLists.songList(705123491).then(res => {
+          // this.id = this.$route.params.id
+          this.$api.songLists.songList(this.$route.params.id).then(res => {
             console.log(res.data)
             this.playlist = res.data.playlist
             this.isSubscribed = this.playlist.subscribed

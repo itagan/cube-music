@@ -86,32 +86,32 @@
     </ul>
     <ul class="home-page-song-list" v-if="this.playlist.length">
       <li class="home-page-song-list-create">创建的歌单
-      <span>({{this.playlist.length}}个，被收藏112次)</span>
+      <span>({{this.playlist.slice(1).length}}个，被收藏112次)</span>
       </li>
-      <li v-for="item in playlist.slice(1,4)" :key="item.id" class="home-page-song-list-li">
+      <li v-for="item in playlist.slice(1,4)" :key="item.id" class="home-page-song-list-li" @click.stop="toList(item.id)">
         <song-list-base>
           <img :src="item.coverImgUrl" alt="" slot="left" class="home-page-img">
           <span slot="top">{{item.name}}</span>
           <span slot="bottom">{{item.trackCount}}首，播放{{item.playCount}}次</span>
         </song-list-base>
       </li>
-      <li class="home-page-song-list-more" v-if="this.playlist.length > 3">
+      <li class="home-page-song-list-more" v-if="this.playlist.length > 3" @click="moreList">
         <span>更多歌单</span>
         <i class="iconfont iconleft-arrow"></i>
       </li>
     </ul>
     <ul class="home-page-song-list" v-if="this.collection.length">
       <li class="home-page-song-list-create">收藏的歌单
-        <span>(12)</span>
+        <span>({{collection.length}})</span>
       </li>
-      <li class="home-page-song-list-li" v-for="item in collection.slice(0,3)" :key="item.id">
+      <li class="home-page-song-list-li" v-for="item in collection.slice(0,3)" :key="item.id" @click.stop="toList(item.id)">
         <song-list-base>
           <img :src="item.coverImgUrl" alt="" slot="left" class="home-page-img">
           <span slot="top">{{item.name}}</span>
           <span slot="bottom" v-if="item.creator">{{item.trackCount}}首，by {{item.creator.nickname}}，播放{{item.playCount}}次</span>
         </song-list-base>
       </li>
-      <li class="home-page-song-list-more" v-if="this.collection.length > 3">
+      <li class="home-page-song-list-more" v-if="this.collection.length > 3" @click="moreList">
         <span>更多歌单</span>
         <i class="iconfont iconleft-arrow"></i>
       </li>
@@ -155,6 +155,7 @@
       name: 'homepage.vue',
       data () {
         return {
+          // playlists:[],
           playlist: [],
           collection: [],
           trackCountLike: 0,
@@ -195,6 +196,7 @@
             for(let i = 0;i<res.data.playlist.length; i++) {
               res.data.playlist[i].playCount = serializeNumber(res.data.playlist[i].playCount)
             }
+            // this.playlists = res.data.playlist
 
           })
         },
@@ -209,6 +211,23 @@
               profile:JSON.stringify(this.userMessage.profile),
               level:this.userMessage.level
             }
+          })
+        },
+        moreList () {
+          this.$router.push({
+            path: `/moresonglist`,
+            // params:{
+            //   profile:this.profile
+            // }
+            query: {
+              playlist:JSON.stringify(this.playlist),
+              collection:JSON.stringify(this.collection)
+            }
+          })
+        },
+        toList (id) {
+          this.$router.push({
+            path:`/songlist/${id}`  //注意前面加个'/' 是根路由
           })
         },
         createYear (day) {
