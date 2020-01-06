@@ -31,11 +31,11 @@
         <span v-if="personals.profile">{{personals.profile.eventCount}}</span>
         <span>动态</span>
       </li>
-      <li>
+      <li @click.stop="toFollows">
         <span v-if="personals.profile">{{personals.profile.follows}}</span>
         <span>关注</span>
       </li>
-      <li>
+      <li @click.stop="toFolloweds">
         <span v-if="personals.profile">{{personals.profile.followeds}}</span>
         <span>粉丝</span>
       </li>
@@ -129,6 +129,16 @@
         getPersonal () {
           this.$api.users.userdetail(this.uid).then(res => {
             this.personals = res.data
+          })
+        },
+        toFollows () {
+          this.$router.push({
+            path:`follows`
+          })
+        },
+        toFolloweds () {
+          this.$router.push({
+            path:`followeds`
           })
         }
       }

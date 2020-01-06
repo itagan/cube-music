@@ -122,6 +122,18 @@ const users = {
   // 获取动态评论
   dynamicComment (threadId, limit = 50) {
     return axios.get(`${base}/comment/event?threadId=${threadId}&limit=${limit}`)
+  },
+  // 获取用户关注列表
+  userFollows (uid, offset) {
+    return axios.get(`${base}/user/follows?uid=${uid}&offset=${offset}&limit=30`)
+  },
+  // 获取用户粉丝列表
+  userFans (uid) {
+    return axios.get(`${base}/user/followeds?uid=${uid}`)
+  },
+  // 关注用户
+  toFollow (uid, t) {
+    return axios.get(`${base}/follow?id=${uid}&t=${t}`)
   }
 }
 

@@ -3,8 +3,8 @@
     <div slot="left" @click="toBack" class="user-list-left">
       <i class="iconfont iconfanhui"></i>
     </div>
-    <ul slot="center" class="user-list" v-show="isShow" ref="Header">
-        <li class="user-list-name">
+    <ul slot="center" class="user-list" v-show="isShow" ref="Header" v-if="!profile.followTime">
+        <li class="user-list-name"> 
           <div class="user-list-name-nick">{{profile.nickname}}</div>
           <div class="user-list-name-fan">
             <span>{{profile.followeds}}</span>
@@ -15,6 +15,11 @@
           + 关注
         </li>
     </ul>
+    <div v-if="profile.followTime" class="user-list-only-name" slot="center" v-show="isShow" ref="Header">
+      <span>
+         {{profile.nickname}}
+      </span>
+    </div>
     <div  slot="right" class="user-img">
       <i class="iconfont icongengduo" @click="more"></i>
       <span @click="music">
@@ -98,7 +103,9 @@
         font-size:$font-size-medium
         color:white
         background-color:red
-
+    .user-list-only-name
+      font-size:$font-size-medium-x
+    
     .user-img
       flex-center()
       i

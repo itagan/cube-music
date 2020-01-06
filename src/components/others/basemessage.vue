@@ -13,14 +13,15 @@
     </my-header>
 
     <div class="message">
-      <div v-if="authentication" class="message-authentication">
+      <div v-if="profile.allAuthTypes" class="message-authentication">
         <div>认证信息</div>
         <ul>
-          <li>
+          <li v-for="(item, index) in profile.allAuthTypes" :key="index">
             <i class="iconfont iconQQkongjian"></i>
-            <span>流行 | 华岳 | 欧美歌单达人</span>
+            <span>
+              {{item.desc}}
+            </span>
           </li>
-          <li></li>
         </ul>
       </div>
       <ul class="message-detail">
@@ -32,7 +33,10 @@
           </span>
         </li>
         <li>
-          性别: <span v-text="this.profile.gender === 1 ? '男' : '女'"> </span>
+          性别: 
+          <span v-if="profile.gender === 0"></span>
+          <span v-if="profile.gender === 1">男</span>
+          <span v-if="profile.gender === 2">女</span>
         </li>
         <li>
           年龄：<span>{{profile.birthday}}</span>
@@ -46,10 +50,13 @@
       </ul>
       <div class="message-brief">
         <div class="message-brief-user">个人简介</div>
-        <div class="message-brief-detail" v-if="brief">
+        <div class="message-brief-detail" v-if="profile.signature">
+          <!-- <pre>
+          {{profile.signature}}
+          </pre> -->
           {{profile.signature}}
         </div>
-        <div v-else class="message-brief-detail">还没有填写个人介绍</div>
+        <div class="message-brief-detail" v-if="!profile.signature">还没有填写个人介绍</div>
       </div>
     </div>
   </div>
@@ -65,7 +72,6 @@
       data () {
         return {
           authentication: false,
-          brief: false,
           level: 0,
           profile: {}
         }
@@ -75,10 +81,8 @@
       },
       methods: {
         getUser () {
-          this.$api.users.userdetail(32953014).then(res => {
-            this.profile = res.data.profile
-            this.level = res.data.level
-          })
+          this.profile = JSON.parse(this.$route.query.profile)
+          this.level = this.$route.query.level
         },
         toBack () {
           this.$router.go(-1)
@@ -86,6 +90,9 @@
         music () {
 
         }
+      },
+      watch: {
+        'router':'getUser'
       }
     }
 </script>
@@ -126,7 +133,7 @@
             height:25px
             line-height:25px
             i
-              color:greenyellow
+              color:orange
       .message-detail
         margin-top:20px
         height:auto
