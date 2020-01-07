@@ -60,12 +60,13 @@
         <span slot="top">听歌排行</span>
         <span slot="bottom">累积听歌{{userMessage.listenSongs}}首</span>
       </song-list-base>
+      
       <song-list-base class="home-page-music-like">
-          <div slot="left" class="home-page-music-like-heart">
+          <div slot="left" class="home-page-music-like-heart" @click="toListLike">
             <i class="iconfont iconxin"></i>
           </div>
-        <span slot="top" v-if="userMessage.profile">{{userMessage.profile.nickname}} 喜欢的音乐</span>
-        <span slot="bottom">{{trackCountLike}}首，播放{{playCountLike}}次</span>
+        <span slot="top" v-if="userMessage.profile" @click="toListLike">{{userMessage.profile.nickname}} 喜欢的音乐</span>
+        <span slot="bottom" @click="toListLike">{{trackCountLike}}首，播放{{playCountLike}}次</span>
       </song-list-base>
     </div>
      <ul class="home-page-song-list" v-if="musiccolumn">
@@ -117,7 +118,7 @@
       </li>
     </ul>
     
-    <div class="home-page-comment">
+    <div class="home-page-comment" v-if="isComment">
       <div class="home-page-comment-who">TA的评论
         <span>11</span>
       </div>
@@ -155,13 +156,14 @@
       name: 'homepage.vue',
       data () {
         return {
-          // playlists:[],
+          playlists:[],
           playlist: [],
           collection: [],
           trackCountLike: 0,
           playCountLike: 0,
           isLog:false,
-          musiccolumn:false
+          musiccolumn:false,
+          isComment:false
         }
       },
       components: {
@@ -196,7 +198,8 @@
             for(let i = 0;i<res.data.playlist.length; i++) {
               res.data.playlist[i].playCount = serializeNumber(res.data.playlist[i].playCount)
             }
-            // this.playlists = res.data.playlist
+            this.playlists = res.data.playlist
+            // console.log(this.playlists)
 
           })
         },
@@ -228,6 +231,11 @@
         toList (id) {
           this.$router.push({
             path:`/songlist/${id}`  //注意前面加个'/' 是根路由
+          })
+        },
+        toListLike () {
+          this.$router.push({
+            path:`/songlist/${this.playlists[0].id}`  //注意前面加个'/' 是根路由
           })
         },
         createYear (day) {

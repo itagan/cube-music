@@ -112,7 +112,7 @@ const users = {
     return axios.get(`${base}/user/playlist?uid=${uid}`)
   },
   // 获取用户动态
-  getDynamic (uid, limit = 30, lasttime = -1) {
+  getDynamic (uid, limit = 10, lasttime = -1) {
     return axios.get(`${base}/user/event?uid=${uid}&limit=${limit}&lasttime=${lasttime}`)
   },
   // 转发动态

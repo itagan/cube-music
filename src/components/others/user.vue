@@ -10,6 +10,8 @@
         <cube-scroll
           :scroll-events="scrollEvents"
           @scroll="scrollHandler"
+          @scroll-end="scrollEndHandler"
+          @pulling-up="onPullingUp"
           :options="options"
           ref="scroll"
           class="scroll-ele"
@@ -30,7 +32,7 @@
                 </div>
               </li>
               <li class="li-three">
-                <span :style="[currentPage === 1 ? {color:'red'} : {color:'gray'}]" class="nav-number">10086</span>
+                <span :style="[currentPage === 1 ? {color:'red'} : {color:'gray'}]" class="nav-number">{{profile.eventCount}}</span>
               </li>
             </ul>
           </cube-sticky-ele>
@@ -42,22 +44,35 @@
             :autoPlay="false"
             :threshold="0.1"
             :showDots = 'false'
+            :options="Options"
+            @scroll="scroll"
             @change="slideChange">
             <cube-slide-item :index="0">
               <home-page :userMessage="userMessage"></home-page>
             </cube-slide-item>
 
             <cube-slide-item :index="1">
-              <user-dynamic :profile="profile"></user-dynamic>
+              <user-dynamic :profile="profile" ref="userDynamic" @Lasttime="Lasttime"></user-dynamic>
             </cube-slide-item>
 
           </cube-slide>
 
 
+          <template slot="pullup" slot-scope="props">
+          <div v-if="props.pullUpLoad" class="pullload">
+            <template>
+                <span v-if="props.isPullUpLoad" class="load">
+                  <i class="iconfont iconyinletiaodongzhuangtai" v-if="hasMore"></i>
+                  <span v-if="hasMore"> 加载中...</span>
+                  <span v-if="!hasMore"> 没有更多了呢</span>
+                </span>
+            </template>
+          </div>
+        </template>
+
         </cube-scroll>
       </cube-sticky>
     </div>
-
   </div>
 </template>
 
@@ -80,12 +95,12 @@
         return {
           title: '',
           isShow: true,
-          scrollEvents: ['scroll'],
+          scrollEvents: ['scroll','scroll-end'],
           scrollY: 0,
           activeClass: 'nav-item-active',
           errorClass: '',
           numberColor: 'nav-number',
-          currentPage: 0,
+          currentPage: 1,
           objs: [
             {
               text: '主页'
@@ -97,7 +112,17 @@
           userMessage:{},
           profile: {},
           level: 0,
-          messTop: 0
+          messTop: 0,
+          hasMore:true,
+          lasttime:-1,
+          scrollYs:{
+            leftY:0,
+            rightY:0
+          },
+          Options: {
+            listenScroll: true,
+            probeType: 3
+          }
 
         }
       },
@@ -106,9 +131,18 @@
       },
       computed: {
         options () {
-          return {
-            scrollbar: true,
-            click: false // 解决触发两次点击事件的bug
+          if(this.currentPage === 0) {
+            return {
+              pullUpLoad: false,
+              scrollbar: true,
+              click: false // 解决触发两次点击事件的bug
+            }
+          }else{
+            return {
+              pullUpLoad: true,
+              scrollbar: true,
+              click: false // 解决触发两次点击事件的bug
+            }
           }
         }
       },
@@ -119,8 +153,7 @@
             this.userMessage = res.data
             this.profile = res.data.profile
             this.level = res.data.level
-
-            console.log(this.userMessage)
+            // this.hasMore = res.data.more
           })
         },
         scrollHandler ({ y }) {
@@ -149,13 +182,75 @@
             this.$refs.bgEnlarge.style.height = '320px'
                   // this.$refs.Enlarge.style['transform'].scale = 1
           }
+
+          if(this.scrollY < 230) {
+            // if(this.scrollYs.leftY > 230 && this.scrollYs.rightY < 230) {
+            //   this.scrollYs.rightY = 230
+            // }
+
+            // if(this.scrollYs.rightY > 230 && this.scrollYs.leftY < 230) {
+            //   this.scrollYs.leftY = 230
+            // }
+
+            // if(this.scrollYs.leftY < 230 && this.scrollYs.rightY < 230) {
+            //   this.scrollYs.leftY = this.scrollY
+            //   this.scrollYs.rightY = this.scrollY
+            // }
+              this.scrollYs.leftY = this.scrollY
+              this.scrollYs.rightY = this.scrollY
+          }else {
+            if(this.currentPage === 0) {
+              this.scrollYs.leftY = this.scrollY
+            }else {
+              this.scrollYs.rightY = this.scrollY
+            }
+          }
+        },
+        scrollEndHandler ({ y }) {
+          // console.log(-y)
+          // if(-y <230) return
+          // if(this.currentPage === 0) {
+          //   this.scrollYs.leftY = -y
+          // }else {
+          //   this.scrollYs.rightY = -y
+          // }
+          console.log(this.scrollYs)
         },
         toggles (index) {
           this.currentPage = index
         },
         slideChange (index) {
           this.currentPage = index
-        }
+          if(this.currentPage === 0) {
+            this.$refs.scroll.scrollTo(0,-this.scrollYs.leftY,150)
+          }else {
+            this.$refs.scroll.scrollTo(0,-this.scrollYs.rightY,150)
+          }
+          // this.$refs.scroll.scrollTo(0,0,100)
+        },
+        scroll ({x}) {
+          // console.log(-x)
+          // if(-x > 370) {
+          //   this.$refs.scroll.scrollTo(0,-this.scrollYs.rightY,10)
+          // }else if(-x < 10) {
+          //   this.$refs.scroll.scrollTo(0,-this.scrollYs.leftY,10)
+          // }
+        },
+        Lasttime (time, more) {
+          this.lasttime = time
+          this.hasMore = more
+          console.log(this.hasMore)
+          console.log(this.lasttime)
+        },
+        onPullingUp () {
+          if(this.hasMore) {
+            this.$refs.scroll.forceUpdate()
+          setTimeout(() => {
+            this.$refs.userDynamic.getDynamic(this.profile.userId, 10, this.lasttime)
+            this.$refs.scroll.forceUpdate()
+          }, 1000)
+          }
+        },
       }
     }
 </script>
@@ -173,9 +268,7 @@
   .user-background
     position: absolute
     width: 100%
-    // height:100%
     height:320px
-    // height:auto
     top:0
     left:0
     z-index: 0
@@ -233,5 +326,25 @@
   .nav-item-active
     color: red
     border-bottom:1.5px solid red
+
+
+     //加载中相关样式
+  .pullload
+    width:100%
+    height:30px
+    margin-top:1px
+    background-color:white
+    position:relative
+    top:0
+    bottom:50px
+    flex-center()
+    // margin:10px auto
+    .load
+      font-size:$font-size-medium
+      i
+        color:red
+      span
+        color:gray
+        font-size:$font-size-medium    
 
 </style>
