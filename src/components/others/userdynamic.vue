@@ -21,25 +21,37 @@ export default {
   data () {
     return {
       events: [],
-      jsons: []
+      jsons: [],
+      lasttime:-1,
+      hasMore:true
     }
   },
   watch: {
     profile () {
-      this.getDynamic()
+      this.getDynamic(this.profile.userId, 10, -1)
     }
   },
   computed: {},
   methods: {
-    getDynamic () {
-      // console.log(this.profile.userId)
-      this.$api.users.getDynamic(this.profile.userId, 30, -1).then(res => {
-        this.jsons = res.data.events.map(item => {
-          // return eval('(' + item.json + ')')
+    getDynamic (userId, limit, lasttime) {
+      this.$api.users.getDynamic(userId, limit, lasttime).then(res => {
+        // this.lasttime = res.data.lasttime
+        // this.hasMore = res.data.more
+        if (this.hasMore) {
+          this.hasMore = res.data.more
+          this.lasttime = res.data.lasttime
+          this.$emit('Lasttime',this.lasttime, this.hasMore)
+        }
+         this.events = this.events.concat(res.data.events) 
+         this.jsons = this.events.map(item => {
           return JSON.parse(item.json)
         })
-        this.events = res.data.events
-
+        // this.jsons = res.data.events.map(item => {
+        //   // return eval('(' + item.json + ')')
+        //   return JSON.parse(item.json)
+        // })
+        // this.events = res.data.events
+        
         // console.log(this.jsons)
         // console.log(this.events)
       })

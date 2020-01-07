@@ -22,6 +22,7 @@ import CommentReply from '../components/common/commentreply'
 import Follows from '../components/account/follows/followslist'
 import FollowSinger from '../components/account/follows/followsinger'
 import Followeds from '../components/account/follows/fans'
+import MoreSongList from '../components/others/morelist/moresonglist'
 Vue.use(Router)
 
 const originalPush = Router.prototype.push
@@ -95,12 +96,6 @@ export default new Router({
       meta: {
         keepAlive: true // 需要被缓存
       }
-      // children: [
-      //   {
-      //     path:'/my/collection',
-      //     component:MyCollectionList
-      //   }
-      // ]
     },
     {
       path: '/collection',
@@ -159,17 +154,17 @@ export default new Router({
       }
     },
     {
-      path: '/songlist',
+      path: '/songlist/:id',
       component: SongList,
       meta: {
-        keepAlive: true // 需要被缓存
+        keepAlive: false
       }
     },
     {
-      path: '/songlistcomment',
+      path: '/songlistcomment/:id',
       component: SongListComment,
       meta: {
-        keepAlive: true // 需要被缓存
+        keepAlive: false
       }
     },
     {
@@ -216,6 +211,14 @@ export default new Router({
       meta: {
         keepAlive: false // 不需要缓存
       }
-    }
+    },
+    {
+      path: '/moresonglist',
+      component: MoreSongList,
+      name: 'MoreSongList',
+      meta: {
+        keepAlive: false
+      }
+    },
   ]
 })

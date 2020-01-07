@@ -62,7 +62,7 @@
         toComment () {
           this.$emit('saveComment')
           this.$router.push({
-            path: 'songlistcomment'
+            path: `/songlistcomment/${this.playlist.id}`
           })
         },
         toShare () {
@@ -72,9 +72,9 @@
           this.$emit('check')
         },
         toUser () {
-          let id = 477726475
+          let userId = 477726475
           this.$router.push({
-            path: `/user/${id}`
+            path: `/user/${this.playlist.creator.userId}`
           })
         }
       }

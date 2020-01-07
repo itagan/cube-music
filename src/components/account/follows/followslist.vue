@@ -99,15 +99,15 @@ export default {
       follow:[],
       userId:477726475,
       options: {
-            pullUpLoad: true,
-            scrollbar: true,
-            click: false // 解决点击事件被触发两次的问题
-          },
-          secondStop: 0,
-          scrollEvents: ['scroll'],
-          pullDownY: 0,
-          offset: 0,
-          hasMore: true,
+        pullUpLoad: true,
+        scrollbar: true,
+        click: false // 解决点击事件被触发两次的问题
+      },
+      secondStop: 0,
+      scrollEvents: ['scroll'],
+      pullDownY: 0,
+      offset: 0,
+      hasMore: true,
     }
   },
   watch: {},

@@ -122,14 +122,9 @@
           threadId:''
         }
       },
-      props: {
-        id: {
-          type: Number,
-          default: 705123491
-        }
-      },
+      props: {},
       created () {
-        this.getComment(705123491, this.offset)
+        this.getComment(this.$route.params.id, this.offset)
       },
       methods: {
         getComment (id, offset) {
@@ -381,6 +376,7 @@
     .cube-sticky
       .cube-scroll-wrapper
         background-color: #fff
+        width:375px
         .cube-scroll-list-wrapper
           .comment-message
             border-bottom:7px solid rgba(128,128,128,.1)
