@@ -1,5 +1,16 @@
 <template>
   <div class="wrapper">
+
+
+    <div class="pullloadtop" v-if="!albums.length">
+     <div>
+        <span class="load">
+        <i class="iconfont iconyinletiaodongzhuangtai"></i>
+        <span> 正在加载...</span>
+      </span>
+     </div>
+    </div>
+
      <div class="content-scroll-wrapper">
       <cube-scroll
         ref="contentScroll"
@@ -172,6 +183,31 @@ export default {
       span
         color:gray
         font-size:$font-size-medium    
+
+
+
+   //上方加载中相关样式
+  .pullloadtop
+    width:100%
+    height:100%
+    position: absolute
+    top:0
+    left:0
+    bottom:0
+    z-index: 10000
+    // flex-center()
+    background-color:white
+    display:flex
+    div
+      position:absolute
+      top:100px
+      left:150px
+      .load
+        font-size:$font-size-medium-x 
+        i
+          color:red
+        span
+          color:gray      
 
       
 </style>

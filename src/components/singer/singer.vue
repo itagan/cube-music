@@ -1,5 +1,15 @@
 <template>
   <div class="user"> 
+
+   <div class="pullloadtop" v-if="!userMessage">
+     <div>
+        <span class="load">
+        <i class="iconfont iconyinletiaodongzhuangtai"></i>
+        <span> 正在加载...</span>
+      </span>
+     </div>
+    </div>
+
     <my-header :profile="profile" :isShow="isShow" class="my-header" ref="myHeader"></my-header>
     <div class="user-background" ref="bgEnlarge">
       <img width="100%" height="100%" :src="profile.backgroundUrl" alt="" ref="Enlarge">
@@ -168,14 +178,12 @@
       },
       methods: {
         getUser () {
-          // this.$route.params.userId   
           this.id = this.$route.params.id     
           this.userId = this.$route.params.userId
           this.$api.users.userdetail(this.$route.params.userId).then(res => {
             this.userMessage = res.data
             this.profile = res.data.profile
             this.level = res.data.level
-            // this.hasMore = res.data.more
           })
         },
         scrollHandler ({ y }) {
@@ -336,5 +344,28 @@
       span
         color:gray
         font-size:$font-size-medium    
+
+
+      //上方加载中相关样式
+  .pullloadtop
+    width:100%
+    height:100%
+    position: absolute
+    top:0
+    left:0
+    bottom:0
+    z-index: 10000
+    // flex-center()
+    background-color:white
+    div
+      position:absolute
+      top:100px
+      left:150px
+      .load
+        font-size:$font-size-medium-x 
+        i
+          color:red
+        span
+          color:gray        
 
 </style>
