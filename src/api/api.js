@@ -227,6 +227,32 @@ const commentFeature = {
   }
 }
 
+// 歌手有关
+const singers = {
+  songList (id = 2410346874) {
+    return axios.get(`${base}/playlist/detail?id=${id}`)
+  },
+  singermusic (id = 189873) {
+    return axios.get(`${base}/artists?id=${id}`)
+  },
+  singerdesc (id = 189873) {
+    return axios.get(`${base}/artist/desc?id=${id}`)
+  },
+  singeralbum (id = 189873, limit = 20, offset = 0) {
+    return axios.get(`${base}/artist/album?id=${id}&limit=${limit}&offset=${offset}`)
+  },
+  singermv (id = 189873) {
+    return axios.get(`${base}/artist/mv?id=${id}`)
+  }
+}
+
+// 搜索
+const searchs = {
+  search (keywords, limit, offset, type) {
+    return axios.get(`${base}/search?keywords=${keywords}&limit=${limit}&offset=${offset}&type=${type}`)
+  }
+}
+
 export default {
   login,
   find,
@@ -236,5 +262,7 @@ export default {
   likes,
   subs,
   songLists,
-  commentFeature
+  commentFeature,
+  singers,
+  searchs
 }

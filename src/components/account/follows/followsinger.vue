@@ -112,7 +112,8 @@ export default {
       hasMore: true,
       placeholder: '搜索歌手',
       fake: false,
-      singers: []
+      singers: [],
+      accountId:''
     }
   },
   watch: {},
@@ -125,7 +126,9 @@ export default {
     getSingers () {
       this.$api.subs.singers(this.$route.params.userId).then(res => {
         this.singers = res.data.data
+
         console.log(this.singers)
+        
         // this.$emit('hasNum', res.data.count)
       })
     },
@@ -146,11 +149,6 @@ export default {
     beforeScrollStart () {
       this.fake = false
     },
-    toUser (userId) {
-      // this.$router.push({
-      //   path: `/user/${userId}`
-      // })
-    },
     toMore () {
 
     },
@@ -162,6 +160,32 @@ export default {
     },
     goToSearch () {
       this.fake = true
+    },
+    toUser (id) {
+      this.$api.singers.singermusic(id).then(res => {
+        if(res.data.artist.accountId) {
+          this.accountId = res.data.artist.accountId
+          let userId = this.accountId
+          this.$router.push({
+            path: `/singer/${userId}/${id}`
+            })
+        }else {
+          let userId = 477726475
+          this.$router.push({
+            path: `/singer/${userId}/${id}`
+            })
+        }
+      })
+    },
+    getAccountId () {
+      this.$api.singers.singermusic(this.id).then(res => {
+        console.log(res.data)
+        if(res.data.artist.accountId) {
+          this.accountId = res.data.artist.accountId
+        }else {
+          this.accountId = 477726475
+        }
+      })
     },
   },
   created() {
