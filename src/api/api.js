@@ -137,7 +137,7 @@ const users = {
   }
 }
 
-// 歌单有关
+// 播放歌单有关
 const playlists = {
   // 新建歌单
   createlist (name, privacy) {
@@ -246,6 +246,13 @@ const singers = {
   }
 }
 
+// 歌曲有关
+const musics = {
+  newmusic (type) {
+    return axios.get(`${base}/top/song?type=${type}`)
+  }
+}
+
 // 搜索
 const searchs = {
   search (keywords, limit, offset, type) {
@@ -264,5 +271,6 @@ export default {
   songLists,
   commentFeature,
   singers,
-  searchs
+  searchs,
+  musics
 }
