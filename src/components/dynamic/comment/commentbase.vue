@@ -4,7 +4,7 @@
         <span>{{hotComments.length}}</span>
       </li>
       <li v-for="_item in hotComments" :key="_item.commentId">
-        <base-comment :item="_item" class="base-comment"></base-comment>
+        <base-comment :item="_item" :hasReplyArr="hasReplyArrHot" class="base-comment"></base-comment>
       </li>
       <li class="comment-header">最新评论 
         <span>{{newComments.length}}</span>
@@ -36,7 +36,8 @@ export default {
       hotComments:[],
       _item:{},
       arr:[],
-      hasReplyArr:[]
+      hasReplyArr:[],
+      hasReplyArrHot:[]
     }
   },
   watch: {
@@ -54,6 +55,11 @@ export default {
         // this.showReply()
         // console.log(this.newComments)
         this.hasReplyArr = this.newComments.filter(item => {
+        return item.parentCommentId !== 0
+        }) 
+
+
+        this.hasReplyArrHot = this.hotComments.filter(item => {
         return item.parentCommentId !== 0
         }) 
         // console.log(this.hasReplyArr)

@@ -33,7 +33,7 @@
             </li>
           </ul>
           <ul class="follow-list">
-            <li v-for="item in follow" :key="item.userId" @click="toUser(item.userId)">
+            <li v-for="item in follow" :key="item.userId" @click="toUser(item.userId, item.nickname, item.userType)">
               <follow-base class="my-follow">
                 <img v-lazy="item.avatarUrl" alt="" slot="left" class="img"> 
                 <div slot="top" class="my-follow-center-top" v-if="item.signature">
@@ -124,6 +124,9 @@ export default {
           this.offset += 30
         }
          this.follow = this.follow.concat(res.data.follow)  
+         const contentScroll = this.$refs.contentScroll
+          contentScroll.forceUpdate()
+         console.log(this.follow)
       })
     },
     isUserOr () {
@@ -140,10 +143,23 @@ export default {
     scrollHandler (pos) {
       this.pullDownY = -pos.y
     },
-    toUser (userId) {
-      this.$router.push({
+    toUser (userId, nickname, userType) {
+      if(userType === 2 || userType === 4) {
+        this.$api.searchs.search(nickname, 30, 0, 100).then(res => {
+          // let artists = res.data.result.artists
+          let id = res.data.result.artists[0].id
+          this.$router.push({
+            path: `/singer/${userId}/${id}`
+          })
+        }) 
+      }else {
+        this.$router.push({
         path: `/user/${userId}`
       })
+      }
+    },
+    searchId () {
+
     },
     toMore () {
 

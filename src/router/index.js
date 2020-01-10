@@ -23,6 +23,7 @@ import Follows from '../components/account/follows/followslist'
 import FollowSinger from '../components/account/follows/followsinger'
 import Followeds from '../components/account/follows/fans'
 import MoreSongList from '../components/others/morelist/moresonglist'
+import Singer from '../components/singer/singer'
 Vue.use(Router)
 
 const originalPush = Router.prototype.push
@@ -216,6 +217,13 @@ export default new Router({
       path: '/moresonglist',
       component: MoreSongList,
       name: 'MoreSongList',
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/singer/:userId/:id',
+      component: Singer,
       meta: {
         keepAlive: false
       }

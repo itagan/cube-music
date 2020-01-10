@@ -9,7 +9,7 @@
           <span class="dynamic-right-name">{{item.user.nickname}}</span>
           <span>{{Test(item.type)}}</span>
         </div>
-        <div class="dynamic-right-time">昨天19：20</div>
+        <div class="dynamic-right-time">{{timestamp(item.eventTime)}}</div>
       </div>
     </div>
     <div class="dynamic-bottom">
@@ -316,6 +316,8 @@ import shareBase from '../../../base/share/sharebase'
 import shareVideo from '../../../base/video/sharevideo'
 import shareComment from '../../../base/share/sharecomment'
 import {mapGetters} from 'vuex'
+import {timestampOther} from '../../../assets/js/timestamp'
+
 
 export default {
   components: {
@@ -442,8 +444,10 @@ export default {
     },
     getTop () {
       return this.$refs.Top.getBoundingClientRect().top
+    },
+    timestamp (time) {
+      return timestampOther(time)
     }
-
   },
   created () {
     this.getData()
