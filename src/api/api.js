@@ -253,6 +253,25 @@ const musics = {
   }
 }
 
+// 专辑有关
+const albums = {
+  newalbum (offset = 0, limit = 20) {
+    return axios.get(`${base}/top/album?offset=${offset}&limit=${limit}`)
+  },
+  homenewalbum () {
+    return axios.get(`${base}/album/newest`)
+  },
+  album (id) {
+    return axios.get(`${base}/album?id=${id}`)
+  },
+  albumdym (id) {
+    return axios.get(`${base}/album/detail/dynamic?id=${id}`)
+  },
+  subalbum (is, id) {
+    return axios.get(`${base}/album/sub?t=${is}&id=${id}`)
+  }
+}
+
 // 搜索
 const searchs = {
   search (keywords, limit, offset, type) {
@@ -272,5 +291,6 @@ export default {
   commentFeature,
   singers,
   searchs,
-  musics
+  musics,
+  albums
 }

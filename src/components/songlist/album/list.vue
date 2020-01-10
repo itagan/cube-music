@@ -2,23 +2,23 @@
   <ul class="ul-list">
     <li v-for="(item, index) in tracks" :key="item.id" v-if="!checkbox">
       <div class="song-base">
-        <div class="left-img">
-          <img v-lazy="item.album.picUrl" alt="" :key="item.album.picUrl">
+        <div class="num">
+          <span v-show="!playing">{{index + +1}}</span>
+          <i class="iconfont iconlaba" v-show="playing"></i>
         </div>
 
         <div class="song-base-content">
           <div class="title" :class="[playing ? 'activeColor' : '']">
             <span class="title-left">{{item.name}}</span>
-            <span class="title-right" v-if="item.alias && item.alias.length">({{item.alias[0]}})</span>
+            <span class="title-right" v-if="item.alia && item.alia.length">({{item.alia[0]}})</span>
           </div>
           <div class="desc">
-            <!-- <img src="" alt="" class="sq"> -->
-            <span class="nickname">{{Artist(item.artists)}}</span> -
-            <span class="name">{{item.album.name}}</span>
+            <img src="" alt="" class="sq">
+            <span class="nickname">{{item.ar[0].name}}</span>
           </div>
         </div>
 
-        <div class="playing" v-if="item.mvid">
+        <div class="playing">
           <i class="iconfont iconbofang5"></i>
         </div>
         <div class="more" @click="more(index)">
@@ -32,21 +32,18 @@
       <cube-checkbox :option="{value:index+ +1}" class="checkbox-css">
 
       <div class="song-base">
-        <div class="left-img">
-          <img v-lazy="item.album.picUrl" alt="" :key="item.album.picUrl">
-        </div>
-
         <div class="song-base-content">
           <div class="title" :class="[playing ? 'activeColor' : '']">
             <span class="title-left">{{item.name}}</span>
-            <span class="title-right" v-if="item.alias && item.alias.length">({{item.alias[0]}})</span>
+            <span class="title-right" v-if="item.alia && item.alia.length">({{item.alia[0]}})</span>
           </div>
           <div class="desc">
-            <span class="nickname">{{Artist(item.artists)}}</span> -
-            <span class="name">{{item.album.name}}</span>
+            <span class="nickname">{{item.ar[0].name}}</span>
           </div>
         </div>
-       
+        <div  class="drag-drop">
+          <i class="iconfont icontuozhuai"></i>
+        </div>
       </div>
 
       </cube-checkbox>
@@ -116,22 +113,14 @@
         },
         allToCheckNo () {
           this.checkList = []
-        },
-        Artist (items) {
-          let arr = []
-          items.forEach(ele => {
-            arr.push(ele.name)
-          })
-          return arr.join('/')
         }
       }
     }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/variable"
-  @import "../../common/stylus/mixin"
-  
+  @import "../../../common/stylus/variable"
+  @import "../../../common/stylus/mixin"
   .ul-list
     height:auto
     width:375px
@@ -141,22 +130,18 @@
       width:375px
       height:50px
       position:relative
-      .left-img
+      .num
         width: 40px
-        height:40px
+        height:50px
         flex-center()
-        margin:auto 10px
-        img 
-         width:100%
-         height:100%
-         border-radius:5px
+        color:gray
       .song-base-content
         height:50px
         position:absolute
-        left:60px
+        left:40px
         max-width:250px
         .title
-          font-size:$font-size-medium
+          font-size:$font-size-medium-x
           ellipsis()
           max-width:250px
           height:28px
