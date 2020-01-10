@@ -9,7 +9,7 @@
           <span class="dynamic-right-name">{{events[index].user.nickname}}</span>
           <span>{{Test(events[index].type)}}</span>
         </div>
-        <div class="dynamic-right-time">昨天19：20</div>
+        <div class="dynamic-right-time">{{timestamp(events[index].eventTime)}}</div>
       </div>
     </div>
     <div class="dynamic-bottom">
@@ -339,6 +339,7 @@ import shareVideo from '../../base/video/sharevideo'
 import shareComment from '../../base/share/sharecomment'
 import forWard from './forward'
 import {mapActions} from 'vuex'
+import {timestampOther} from '../../assets/js/timestamp'
 
 export default {
   components: {
@@ -476,6 +477,9 @@ export default {
       this.$router.push({
         path: `/dynamiccomment`
       })
+    },
+    timestamp (time) {
+      return timestampOther(time)
     },
     ...mapActions([
       'saveDynamic',

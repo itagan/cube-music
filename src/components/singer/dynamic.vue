@@ -83,6 +83,8 @@ export default {
           return JSON.parse(item.json)
         })
         this.$emit('dynamicNum', this.events.length)
+        
+        console.log(this.events)
       
       })
     },
