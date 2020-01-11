@@ -269,6 +269,9 @@ const albums = {
   },
   subalbum (is, id) {
     return axios.get(`${base}/album/sub?t=${is}&id=${id}`)
+  },
+  albumcomment (id, offset = 0, limit = 20) {
+    return axios.get(`${base}/comment/album?id=${id}&offset=${offset}&limit=${limit}`)
   }
 }
 

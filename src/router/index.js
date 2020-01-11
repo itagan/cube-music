@@ -27,6 +27,8 @@ import Singer from '../components/singer/singer'
 import Songandalbum from '../components/newalbumsong/index'
 import Newsong from '../components/newalbumsong/newsongs'
 import Newalbum from '../components/newalbumsong/newalbums'
+import AlbumList from '../components/songlist/album/albumlist'
+import AlbumComment from '../components/songlist/album/listcomment'
 Vue.use(Router)
 
 const originalPush = Router.prototype.push
@@ -177,17 +179,6 @@ export default new Router({
       meta: {
         keepAlive: false
       }
-      // redirect: "/user/:id",
-      // children: [
-      //   {
-      //     path: '/',
-      //     component: User
-      //   },
-      //   {
-      //     path: 'basemessage',
-      //     component: BaseMessage
-      //   }
-      // ]
     },
     {
       path: '/basemessage',
@@ -254,5 +245,20 @@ export default new Router({
         }
       ]
     },
+    {
+      path: '/albumlist/:id',
+      component: AlbumList,
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/albumcomment',
+      component: AlbumComment,
+      name: 'albumcomment',
+      meta: {
+        keepAlive: false
+      }
+    }
   ]
 })

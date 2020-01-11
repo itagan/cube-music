@@ -1,11 +1,13 @@
 <template>
   <div class="song-list">
 
-    <div class="song-list-background">
-      <img width="100%" height="100%" :src="messages.blurPicUrl" alt="">
+    <my-header class="my-header" ref="header" :title="title"></my-header> 
+
+    <div class="user-background" ref="bgEnlarge">
+      <img width="100%" height="100%" :src="messages.blurPicUrl" alt="" ref="Enlarge">
     </div>
 
-    <div class="song-list-white" :style="{height:whiteHeight + 'px'}"></div>
+    
     <ul class="check-footer" v-show="allShow">
       <li>
         <div class="check-footer-icon"><i class="iconfont iconbofang"></i></div>
@@ -25,16 +27,14 @@
       </li>
     </ul>
 
-    <my-header class="my-header" ref="header" v-show="isShow" :title="title"></my-header>
-
-    <div v-if="!this.songs" class="pull-load-top">
+    <div v-if="!this.tracks" class="pull-load-top">
        <span class="load">
           <i class="iconfont iconyinletiaodongzhuangtai"></i>
           <span> 正在加载...</span>
        </span>
     </div>
 
-    <div class="sticky-view-container">
+      <div class="sticky-view-container">
       <cube-sticky :pos="scrollY">
 
         <cube-scroll
@@ -54,7 +54,7 @@
           ></message>
 
           <cube-sticky-ele>
-            <ul class="sticky-header" ref="messTop" v-show="!allShow">
+             <ul class="sticky-header" ref="messTop" v-show="!allShow">
               <li class="play-icon">
                 <i class="iconfont iconbofang2"></i>
               </li>
@@ -67,16 +67,16 @@
                     (共{{songs.length}}首)
                   </span>
               </li>
-              <!-- <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed">
+              <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
-                (<span class="sub-num" ref="Sub">{{playlist.subscribedCount}}</span>)
+                (<span class="sub-num" ref="Sub">111</span>)
               </li>
 
               <li class="play-sub-ok" v-if="this.isSubscribed" @click="toSubscribed">
                 <i class="iconfont iconshoucangchenggong"></i>
-                <span class="sub-num" ref="Sub">{{playlist.subscribedCount}}</span>
-              </li> -->
+                <span class="sub-num" ref="Sub">22</span>
+              </li>
             </ul>
 
             <ul class="sticky-header" v-show="allShow" @click.self="allCheck">
@@ -87,8 +87,9 @@
               </li>
               <li class="complete" @click.self="toComplete">完成</li>
             </ul>
-
           </cube-sticky-ele>
+
+
           <list
             class="my-list"
             :tracks="songs"
@@ -124,6 +125,7 @@
     import playMore from '../playmore'
     import shareDialog from '../../common/sharedialog'
     import setRing from '../../common/setring'
+
     export default {
       name: 'songList.vue',
       components: {
@@ -136,24 +138,13 @@
       },
       data () {
         return {
-          placeholder: '搜索歌单内歌曲',
-          fake: false,
-          isShow: true,
-          searchLeave: false,
-          searchEnter: false,
           scrollY: 0,
           scrollEvents: ['scroll'],
           pullUpLoad: true,
-          pullUpLoadThreshold: 0,
-          pullUpLoadMoreTxt: '加载中…………',
-          pullUpLoadNoMoreTxt: '没有更多数据了~',
           track: {},
           tracks: [],
-          songs:[],
           messages: {},
           playlist: {},
-          subs: [],
-          whiteHeight: 200,
           isMore: false,
           isBuild: false,
           visible: false,
@@ -163,7 +154,8 @@
           allShow: false,
           complete: false,
           isSubscribed: false,
-          id:''
+          id:'',
+          songs:[]
         }
       },
       computed: {
@@ -171,7 +163,7 @@
           return {
             pullUpLoad: this.pullUpLoadObj,
             scrollbar: true,
-            startY: -50
+            startY: 0
           }
         },
         pullUpLoadObj: function () {
@@ -189,26 +181,34 @@
       },
       methods: {
         getAlbums () {
-          // this.id = this.$route.params.id
+          this.id = this.$route.params.id
           this.$api.albums.album(this.$route.params.id).then(res => {
             console.log(res.data)
             this.songs = res.data.songs
-            // this.isSubscribed = this.playlist.subscribed
-              // this.tracks = res.data.playlist.tracks
-            // this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
-            // this.messages.nickname = res.data.playlist.creator.nickname
             this.messages = res.data.album
           })
         },
+        saveComment () {
+
+        },
         scrollHandler ({ y }) {
-          this.scrollY = -y
-          this.whiteHeight = 610 - this.$refs.subTop.getBoundingClientRect().bottom + 100
+           this.scrollY = -y
           this.messTop = this.$refs.messTop.getBoundingClientRect().top
               // 需要添加防抖节流
           if (this.messTop < 171) {
-            this.title = this.album.name
+            this.title = this.messages.name
           } else {
             this.title = '专辑'
+          }
+
+          if (this.messTop > 280) {
+                  // this.$refs.bgEnlarge.style.height = '100%'
+            let scale = 1 + ((this.messTop - 280) / 320)
+            this.$refs.Enlarge.style['transform'] = `scaleX(${scale})`
+            this.$refs.bgEnlarge.style.height = 320 + this.messTop - 280 + 'px'
+          } else {
+            this.$refs.bgEnlarge.style.height = '320px'
+                  // this.$refs.Enlarge.style['transform'].scale = 1
           }
         },
         onPullingUp () {
@@ -252,11 +252,10 @@
         setRing () {
           this.$refs.setRingShow.show()
         },
-        saveComment () {},
             // 全选功能
         toCheck () {
           this.allShow = true
-          this.stickyTop()
+          // this.stickyTop()
         },
         stickyTop () {
           this.$nextTick(() => {
@@ -289,7 +288,7 @@
           if (this.isSubscribed) {
             this.$createDialog({
               type: 'confirm',
-              title: '确定不再收藏该专辑？',
+              title: '确定不再收藏该歌单？',
               confirmBtn: {
                 text: '确定',
                 active: true,
@@ -309,7 +308,7 @@
                     this.$createToast({
                       type: 'text',
                       time: 1000,
-                      txt: '专辑已取消收藏'
+                      txt: '歌单已取消收藏'
                     }).show()
                     this.$refs.Sub.innerHTML--
                     this.isSubscribed = false
@@ -322,7 +321,7 @@
               console.log(res)
               if (res.status === 200) {
                 const toast = this.$createToast({
-                  txt: '专辑已收藏',
+                  txt: '歌单已收藏',
                   type: 'correct',
                   time: 2000
                 })
@@ -361,7 +360,7 @@
   @import "../../../common/stylus/mixin"
 
   .song-list
-    background-color:rgba(128,128,128,.8) !important
+    background-color:white
     height:667px  //必须设置高度，否则遮罩弹出层异常
     width:100%
     .my-header
@@ -372,27 +371,28 @@
       z-index 1000
       top:0
     .my-message
-      margin-top:50px
+      margin-top:30px
       margin-bottom:15px
       /*position: absolute*/
       /*top:50px*/
-    .song-list-background
+    .user-background
       position: absolute
       width: 100%
-      height: 100%
+      height:320px
       top:0
       left:0
       z-index: 0
-      opacity: 0.7
-      filter: blur(18px)
-    .song-list-white
-      position: absolute
-      width: 100%
-      height:40%
-      left:0
-      bottom:0
-      z-index: 0
-      background-color:white
+      opacity:1
+      filter:brightness(.8) //调整背景暗度
+      -webkit-filter:brightness(.8)//兼容不同浏览器
+      -o-filter:brightness(.8)
+      -moz-filter:brightness(.8)
+      overflow: hidden //避免图片放大影响整体布局
+      opacity: .9
+      filter: blur(15px)
+      img
+        width: 100%
+        height: 100% 
     .check-footer
       position:fixed
       bottom:0

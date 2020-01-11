@@ -14,11 +14,11 @@
           </div>
           <div class="desc">
             <img src="" alt="" class="sq">
-            <span class="nickname">{{item.ar[0].name}}</span>
+            <span class="nickname">{{Artist(item.ar)}}</span>
           </div>
         </div>
 
-        <div class="playing">
+        <div class="playing" v-if="item.mv">
           <i class="iconfont iconbofang5"></i>
         </div>
         <div class="more" @click="more(index)">
@@ -113,6 +113,13 @@
         },
         allToCheckNo () {
           this.checkList = []
+        },
+        Artist (artist) {
+          let arr = []
+          artist.forEach(item => {
+            arr.push(item.name)
+          })
+          return arr.join('/')
         }
       }
     }
@@ -122,7 +129,7 @@
   @import "../../../common/stylus/variable"
   @import "../../../common/stylus/mixin"
   .ul-list
-    height:auto
+    min-height:450px
     width:375px
     background-color:white
     .song-base

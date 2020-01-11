@@ -24,7 +24,7 @@
            <li>更多热销专辑</li>
          </ul>
          <ul class="top-album">
-           <li class="album-base-top" v-for="item in topAlbums" :key="item.id">
+           <li class="album-base-top" v-for="item in topAlbums" :key="item.id" @click="toAlbum(item.id)">
               <div class="left-img">
                 <img v-lazy="item.picUrl" alt="" :key="item.picUrl">
               </div>
@@ -46,7 +46,7 @@
           </cube-sticky-ele>
 
           <ul class="new-album">
-           <li class="album-base-new" v-for="item in albums" :key="item.id">
+           <li class="album-base-new" v-for="item in albums" :key="item.id" @click="toAlbum(item.id)">
               <div class="left-img">
                 <img v-lazy="item.picUrl" alt="" :key="item.picUrl">
               </div>
@@ -156,6 +156,11 @@
             this.$refs.scroll.forceUpdate()
           }
         },
+        toAlbum (id) {
+          this.$router.push({
+            path:`/albumlist/${id}`
+          })
+        }
       },
       watch: {
       },
