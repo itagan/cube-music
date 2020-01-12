@@ -24,6 +24,11 @@ import FollowSinger from '../components/account/follows/followsinger'
 import Followeds from '../components/account/follows/fans'
 import MoreSongList from '../components/others/morelist/moresonglist'
 import Singer from '../components/singer/singer'
+import Songandalbum from '../components/newalbumsong/index'
+import Newsong from '../components/newalbumsong/newsongs'
+import Newalbum from '../components/newalbumsong/newalbums'
+import AlbumList from '../components/songlist/album/albumlist'
+import AlbumComment from '../components/songlist/album/listcomment'
 Vue.use(Router)
 
 const originalPush = Router.prototype.push
@@ -174,17 +179,6 @@ export default new Router({
       meta: {
         keepAlive: false
       }
-      // redirect: "/user/:id",
-      // children: [
-      //   {
-      //     path: '/',
-      //     component: User
-      //   },
-      //   {
-      //     path: 'basemessage',
-      //     component: BaseMessage
-      //   }
-      // ]
     },
     {
       path: '/basemessage',
@@ -228,5 +222,43 @@ export default new Router({
         keepAlive: false
       }
     },
+    {
+      path: '/songandalbum',
+      component: Songandalbum,
+      meta: {
+        keepAlive: false
+      },
+      children: [
+        {
+          path: '/newsong',
+          component: Newsong,
+          meta: {
+            keepAlive: true
+          }
+        },
+        {
+          path: '/newalbum',
+          component: Newalbum,
+          meta: {
+            keepAlive: true
+          }
+        }
+      ]
+    },
+    {
+      path: '/albumlist/:id',
+      component: AlbumList,
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/albumcomment',
+      component: AlbumComment,
+      name: 'albumcomment',
+      meta: {
+        keepAlive: false
+      }
+    }
   ]
 })

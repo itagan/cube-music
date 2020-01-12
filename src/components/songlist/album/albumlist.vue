@@ -1,11 +1,13 @@
 <template>
   <div class="song-list">
 
-    <div class="song-list-background">
-      <img width="100%" height="100%" :src="playlist.coverImgUrl" alt="">
+    <my-header class="my-header" ref="header" :title="title"></my-header> 
+
+    <div class="user-background" ref="bgEnlarge">
+      <img width="100%" height="100%" :src="messages.blurPicUrl" alt="" ref="Enlarge">
     </div>
 
-    <div class="song-list-white" :style="{height:whiteHeight + 'px'}"></div>
+    
     <ul class="check-footer" v-show="allShow">
       <li>
         <div class="check-footer-icon"><i class="iconfont iconbofang"></i></div>
@@ -24,18 +26,15 @@
         <div class="check-footer-text">删除下载</div>
       </li>
     </ul>
-    <transition name="slide-fade">
-      <my-header class="my-header" ref="header" v-show="isShow" :title="title"></my-header>
-    </transition>
 
-    <div v-if="!this.tracks" class="pull-load-top">
+    <div v-if="!this.songs" class="pull-load-top">
        <span class="load">
           <i class="iconfont iconyinletiaodongzhuangtai"></i>
           <span> 正在加载...</span>
        </span>
     </div>
 
-    <div class="sticky-view-container">
+      <div class="sticky-view-container">
       <cube-sticky :pos="scrollY">
 
         <cube-scroll
@@ -46,26 +45,19 @@
           ref="scroll"
           class="scroll-ele"
         >
-          <my-search
-            :placeholder="placeholder"
-            :fake="fake"
-            @query="getQuery"
-            @click.native="goToSearch"
-            :class="{'my-search-leave': this.searchLeave ,'my-search-enter' : this.searchEnter}"
-            class="my-search"
-          >
-          </my-search>
           <message
             class="my-message"
-            :playlist="playlist"
+            :messages="messages"
             @saveComment="saveComment"
             @share="toShare"
             @check="toCheck"
+            @user="toUser"
+            @comment="toComment"
             @cover="toCover"
           ></message>
 
           <cube-sticky-ele>
-            <ul class="sticky-header" ref="messTop" v-show="!allShow">
+             <ul class="sticky-header" ref="messTop" v-show="!allShow">
               <li class="play-icon">
                 <i class="iconfont iconbofang2"></i>
               </li>
@@ -75,18 +67,18 @@
                     播放全部
                   </span>
                   <span class="play-all-num">
-                    (共{{tracks.length}}首)
+                    (共{{songs.length}}首)
                   </span>
               </li>
-              <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed">
+              <li class="play-sub" v-if="!isSub" @click="toSubscribed">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
-                (<span class="sub-num" ref="Sub">{{playlist.subscribedCount}}</span>)
+                (<span class="sub-num" ref="Sub">{{subCount}}</span>)
               </li>
 
-              <li class="play-sub-ok" v-if="this.isSubscribed" @click="toSubscribed">
+              <li class="play-sub-ok" v-if="isSub" @click="toSubscribed">
                 <i class="iconfont iconshoucangchenggong"></i>
-                <span class="sub-num" ref="Sub">{{playlist.subscribedCount}}</span>
+                <span class="sub-num" ref="Sub">{{subCount}}</span>
               </li>
             </ul>
 
@@ -98,26 +90,19 @@
               </li>
               <li class="complete" @click.self="toComplete">完成</li>
             </ul>
-
           </cube-sticky-ele>
+
+
           <list
             class="my-list"
-            :tracks="tracks"
+            :tracks="songs"
             @more="more"
             @toAll="toAllChecked"
             :complete="complete"
             :allShow="allShow"
             ref="ToCheck"
           ></list>
-          <ul class="song-list-collection" ref="subTop">
-            <li class="li-img" v-for="item in subs" :key="item.userId">
-              <img :src="item.avatarUrl" alt="">
-            </li>
-            <li class="collection-num">{{subs.length}}人收藏</li>
-            <li class="collection-icon">
-              <i class="iconfont iconiconfontyoujiantou"></i>
-            </li>
-          </ul>
+
         </cube-scroll>
       </cube-sticky>
     </div>
@@ -125,68 +110,70 @@
     <play-more
       v-if="isMore"
       @cancel="cancelMore"
-      @build="moreBuildList"
       @share="toShare"
       @ring="setRing"
+      @singer="toSinger"
+      @collect="toCollected"
       :track="track"
       ref="playMore"
     ></play-more>
     <share-dialog ref="shareShow"></share-dialog>
     <set-ring ref="setRingShow"></set-ring>
-    <my-cover :playlist="playlist" v-if="coverShow" @coverHide="coverHide"></my-cover>
+    <more-singer ref="moreSingerShow" :singers="singers"></more-singer>
+    <collection-to-list ref="collectedShow" @bulid="bulidlist"> </collection-to-list>
+    <build-list v-if="isBuild" @cancel="cancel"></build-list>
+    <my-cover :messages="messages" v-if="coverShow" @coverHide="coverHide"></my-cover>
   </div>
 </template>
 
 <script>
-    import myHeader from './header'
-    import mySearch from '../../base/search/searchcancel'
+    import myHeader from '../header'
     import Message from './message'
     import List from './list'
-    import playMore from './playmore'
-    import shareDialog from '../common/sharedialog'
-    import setRing from '../common/setring'
-    import myCover from '../common/cover'
+    import playMore from '../playmore'
+    import shareDialog from '../../common/sharedialog'
+    import setRing from '../../common/setring'
+    import moreSinger from '../../common/moresinger'
+    import collectionToList from '../../common/collectiontolist'
+    import buildList from '../../common/buildlist'
+    import myCover from './cover'
     export default {
       name: 'songList.vue',
       components: {
         myHeader,
-        mySearch,
         Message,
         List,
         playMore,
         shareDialog,
         setRing,
+        moreSinger,
+        collectionToList,
+        buildList,
         myCover
       },
       data () {
         return {
-          placeholder: '搜索歌单内歌曲',
-          fake: false,
-          isShow: true,
-          searchLeave: false,
-          searchEnter: false,
           scrollY: 0,
           scrollEvents: ['scroll'],
           pullUpLoad: true,
-          pullUpLoadThreshold: 0,
-          pullUpLoadMoreTxt: '加载中…………',
-          pullUpLoadNoMoreTxt: '没有更多数据了~',
           track: {},
           tracks: [],
           messages: {},
           playlist: {},
-          subs: [],
-          whiteHeight: 200,
           isMore: false,
           isBuild: false,
           visible: false,
           messTop: 0,
-          title: '歌单',
+          title: '专辑',
           checked: false,
           allShow: false,
           complete: false,
           isSubscribed: false,
           id:'',
+          songs:[],
+          subCount:0,
+          isSub:false,
+          singers:[],
           coverShow:false
         }
       },
@@ -195,7 +182,7 @@
           return {
             pullUpLoad: this.pullUpLoadObj,
             scrollbar: true,
-            startY: -50
+            startY: 0
           }
         },
         pullUpLoadObj: function () {
@@ -209,49 +196,45 @@
         }
       },
       created () {
-        this.getList()
+        this.getAlbums()
+        this.getDyms()
       },
       methods: {
-        getList () {
-          // this.id = this.$route.params.id
-          this.$api.songLists.songList(this.$route.params.id).then(res => {
+        getAlbums () {
+          this.id = this.$route.params.id
+          this.$api.albums.album(this.$route.params.id).then(res => {
             console.log(res.data)
-            this.playlist = res.data.playlist
-            this.isSubscribed = this.playlist.subscribed
-              // this.tracks = res.data.playlist.tracks
-            this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0, 10) : res.data.playlist.tracks
-            this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0, 4) : res.data.playlist.subscribers
-            this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
-            this.messages.nickname = res.data.playlist.creator.nickname
+            this.songs = res.data.songs
+            this.messages = res.data.album
           })
         },
-        getQuery (query) {
-          console.log(query)
-        },
-        goToSearch () {
-          this.isShow = !this.isShow
-          if (this.isShow) {
-            this.fake = false
-            this.searchEnter = true
-            this.searchLeave = false
-          } else {
-            this.searchLeave = true
-            this.searchEnter = false
-            this.fake = true
-          }
+        getDyms () {
+          this.$api.albums.albumdym(this.$route.params.id).then(res => {
+            this.isSub = res.data.isSub
+            this.subCount = res.data.subCount
+          })
         },
         saveComment () {
 
         },
         scrollHandler ({ y }) {
-          this.scrollY = -y
-          this.whiteHeight = 610 - this.$refs.subTop.getBoundingClientRect().bottom + 100
+           this.scrollY = -y
           this.messTop = this.$refs.messTop.getBoundingClientRect().top
               // 需要添加防抖节流
           if (this.messTop < 171) {
-            this.title = this.playlist.name
+            this.title = this.messages.name
           } else {
-            this.title = '歌单'
+            this.title = '专辑'
+          }
+
+          if (this.messTop > 280) {
+                  // this.$refs.bgEnlarge.style.height = '100%'
+            let scale = 1 + ((this.messTop - 280) / 320)
+            this.$refs.Enlarge.style['transform'] = `scaleX(${scale})`
+            this.$refs.bgEnlarge.style.height = 320 + this.messTop - 280 + 'px'
+          } else {
+            this.$refs.bgEnlarge.style.height = '320px'
+                  // this.$refs.Enlarge.style['transform'].scale = 1
           }
         },
         onPullingUp () {
@@ -267,7 +250,9 @@
           this.$nextTick(() => {
             this.$refs.playMore.show()
           })
-          this.track = this.tracks[index]
+          this.track = this.songs[index]
+          this.singers = this.songs[index].ar
+          console.log(this.singers)
         },
 
         moreBuildList () {
@@ -290,15 +275,19 @@
           }, 500)
         },
         toShare () {
+          if(this.allShow) return
           this.$refs.shareShow.show()
         },
         setRing () {
           this.$refs.setRingShow.show()
         },
+        moreSinger () {
+          this.$refs.moreSingerShow.show()
+        },
             // 全选功能
         toCheck () {
           this.allShow = true
-          this.stickyTop()
+          // this.stickyTop()
         },
         stickyTop () {
           this.$nextTick(() => {
@@ -326,6 +315,69 @@
             this.checked = false
           }
         },
+        toUser () {
+          if(this.allShow) return
+          this.singers = this.messages.artists
+          if(this.messages.artists.length > 1) {
+            this.moreSinger()
+            this.isMore = false
+            return
+          }
+
+          this.$api.singers.singermusic(this.messages.artist.id).then(res => {
+            if(res.data.artist.accountId) {
+              this.accountId = res.data.artist.accountId
+              let userId = this.accountId
+              this.$router.push({
+                path: `/singer/${userId}/${this.messages.artist.id}`
+                })
+            }else {
+              let userId = 477726475
+              this.$router.push({
+                path: `/singer/${userId}/${this.messages.artist.id}`
+                })
+            }
+          })
+        },
+        toSinger () {
+          if(this.singers.length > 1) {
+            this.moreSinger()
+            this.isMore = false
+            return
+          }
+          this.$api.singers.singermusic(this.track.ar[0].id).then(res => {
+            if(res.data.artist.accountId) {
+              this.accountId = res.data.artist.accountId
+              let userId = this.accountId
+              this.$router.push({
+                path: `/singer/${userId}/${this.track.ar[0].id}`
+                })
+            }else {
+              let userId = 477726475
+              this.$router.push({
+                path: `/singer/${userId}/${this.track.ar[0].id}`
+                })
+            }
+          })
+        },
+        toComment () {
+          if(this.allShow) return
+          this.$router.push({
+            path:`/albumcomment`,
+            query: {
+              album: JSON.stringify(this.messages)
+            }
+          })
+        },
+        toCollected () {
+          this.isMore = false
+          this.$refs.collectedShow.show()
+        },
+        bulidlist () {
+          this.isBuild = true
+          this.isMore = false
+          // this.$refs.collectedShow.hide()
+        },
         toCover () {
           this.coverShow = true
         },
@@ -334,10 +386,11 @@
         },
             // 收藏功能
         toSubscribed () {
-          if (this.isSubscribed) {
+          if (this.isSub) {
             this.$createDialog({
               type: 'confirm',
-              title: '确定不再收藏该歌单？',
+              title: '确定不再收藏该专辑？',
+              zIndex:2001,
               confirmBtn: {
                 text: '确定',
                 active: true,
@@ -351,32 +404,30 @@
                 href: 'javascript:;'
               },
               onConfirm: () => {
-                this.$api.songLists.subscribe(2, this.playlist.id).then(res => {
-                  console.log(res)
+                this.$api.albums.subalbum(2, this.$route.params.id).then(res => {
                   if (res.status === 200) {
                     this.$createToast({
                       type: 'text',
                       time: 1000,
-                      txt: '歌单已取消收藏'
+                      txt: '专辑已取消收藏'
                     }).show()
                     this.$refs.Sub.innerHTML--
-                    this.isSubscribed = false
+                    this.isSub = false
                   }
                 })
               }
             }).show()
           } else {
-            this.$api.songLists.subscribe(1, this.playlist.id).then(res => {
-              console.log(res)
+            this.$api.albums.subalbum(1, this.$route.params.id).then(res => {
               if (res.status === 200) {
                 const toast = this.$createToast({
-                  txt: '歌单已收藏',
+                  txt: '专辑已收藏',
                   type: 'correct',
                   time: 2000
                 })
                 toast.show()
                 this.$refs.Sub.innerHTML++
-                this.isSubscribed = true
+                this.isSub = true
               }
             })
           }
@@ -405,11 +456,11 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/variable"
-  @import "../../common/stylus/mixin"
+  @import "../../../common/stylus/variable"
+  @import "../../../common/stylus/mixin"
 
   .song-list
-    background-color:rgba(128,128,128,.8) !important
+    background-color:white
     height:667px  //必须设置高度，否则遮罩弹出层异常
     width:100%
     .my-header
@@ -420,27 +471,28 @@
       z-index 1000
       top:0
     .my-message
-      margin-top:50px
+      margin-top:30px
       margin-bottom:15px
       /*position: absolute*/
       /*top:50px*/
-    .song-list-background
+    .user-background
       position: absolute
       width: 100%
-      height: 100%
+      height:320px
       top:0
       left:0
       z-index: 0
-      opacity: 0.7
-      filter: blur(18px)
-    .song-list-white
-      position: absolute
-      width: 100%
-      height:40%
-      left:0
-      bottom:0
-      z-index: 0
-      background-color:white
+      opacity:1
+      filter:brightness(.8) //调整背景暗度
+      -webkit-filter:brightness(.8)//兼容不同浏览器
+      -o-filter:brightness(.8)
+      -moz-filter:brightness(.8)
+      overflow: hidden //避免图片放大影响整体布局
+      opacity: .9
+      filter: blur(15px)
+      img
+        width: 100%
+        height: 100% 
     .check-footer
       position:fixed
       bottom:0
@@ -547,6 +599,8 @@
         width:50px
         line-height:50px
         color:red
+
+
 
     /*.cube-sticky*/
       /*padding: 0 10px*/

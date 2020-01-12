@@ -137,7 +137,7 @@ const users = {
   }
 }
 
-// 歌单有关
+// 播放歌单有关
 const playlists = {
   // 新建歌单
   createlist (name, privacy) {
@@ -246,6 +246,35 @@ const singers = {
   }
 }
 
+// 歌曲有关
+const musics = {
+  newmusic (type) {
+    return axios.get(`${base}/top/song?type=${type}`)
+  }
+}
+
+// 专辑有关
+const albums = {
+  newalbum (offset = 0, limit = 20) {
+    return axios.get(`${base}/top/album?offset=${offset}&limit=${limit}`)
+  },
+  homenewalbum () {
+    return axios.get(`${base}/album/newest`)
+  },
+  album (id) {
+    return axios.get(`${base}/album?id=${id}`)
+  },
+  albumdym (id) {
+    return axios.get(`${base}/album/detail/dynamic?id=${id}`)
+  },
+  subalbum (is, id) {
+    return axios.get(`${base}/album/sub?t=${is}&id=${id}`)
+  },
+  albumcomment (id, offset = 0, limit = 20) {
+    return axios.get(`${base}/comment/album?id=${id}&offset=${offset}&limit=${limit}`)
+  }
+}
+
 // 搜索
 const searchs = {
   search (keywords, limit, offset, type) {
@@ -264,5 +293,7 @@ export default {
   songLists,
   commentFeature,
   singers,
-  searchs
+  searchs,
+  musics,
+  albums
 }

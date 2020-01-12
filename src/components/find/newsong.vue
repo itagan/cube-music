@@ -6,8 +6,8 @@
         <span class="new-center"></span>
         <span class="new-right" @click="newRight()">新歌</span>
       </div>
-      <router-link tab="div" class="new-songs-right" to="/my" v-if="isShow">更多新碟</router-link>
-      <router-link tab="div" class="new-songs-right" to="/my" v-if="show">新歌推荐</router-link>
+      <router-link tab="div" class="new-songs-right" to="/newalbum" v-if="isShow">更多新碟</router-link>
+      <router-link tab="div" class="new-songs-right" to="/newsong" v-if="show">新歌推荐</router-link>
     </div>
 
     <div class="nav-flex" v-if="isShow">

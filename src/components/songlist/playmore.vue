@@ -41,7 +41,7 @@
             <span>下一首播放</span>
           </div>
         </li>
-        <li>
+        <li @click="toCollected">
           <div class="build-icon">
             <i class="iconfont iconshoucang"></i>
           </div>
@@ -74,12 +74,14 @@
             <span>分享</span>
           </div>
         </li>
-        <li>
+        <li @click="toSinger">
           <div class="build-icon">
             <i class="iconfont iconwodeshoucang"></i>
           </div>
           <div class="build-text">
-            <span>歌手：伍佰</span>
+            <span>歌手：
+              {{Artist(track.ar)}}
+            </span>
           </div>
         </li>
         <li>
@@ -174,6 +176,20 @@
         ring () {
           this.$emit('ring')
           this.$emit('cancel')
+        },
+        toSinger () {
+          this.$emit('singer')
+        },
+        toCollected () {
+          this.$emit('collect')
+           console.log('1112')
+        },
+        Artist (artist) {
+          let arr = []
+          artist.forEach(item => {
+            arr.push(item.name)
+          })
+          return arr.join('/')
         }
       }
     }

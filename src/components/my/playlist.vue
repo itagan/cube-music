@@ -32,7 +32,7 @@
         </div>
       </li>
 
-      <li class="li" v-for="item in playlist.slice(1)" :key="item.id" data-type="0">
+      <li class="li" v-for="item in playlist.slice(1)" :key="item.id" data-type="0" @click="toList(item.id)">
         <div class="li-item" >
 <!--          <div class="li-item" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">-->
 
@@ -69,7 +69,7 @@
       </div>
 
       <ul v-show="showCollection">
-        <li class="li" v-for="item in collection" :key="item.id">
+        <li class="li" v-for="item in collection" :key="item.id" @click="toList(item.id)">
           <div class="li-item">
             <div class="li-left">
               <img :src="item.coverImgUrl" v-if="item">
@@ -155,6 +155,12 @@
         homing () {
                 // 右边更多等图标显示出来
           this.rightIcon = true
+        },
+
+        toList (id) {
+          this.$router.push({
+            path:`/songlist/${id}`
+          })
         },
 
         // 左滑删除功能 ** 外部网上代码引入，暂时未成功本地实现
