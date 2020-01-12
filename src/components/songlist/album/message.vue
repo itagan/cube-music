@@ -1,7 +1,7 @@
 <template>
   <div class="song-list-message">
     <div class="song-message">
-      <div class="song-message-left">
+      <div class="song-message-left" @click="toCover">
         <img :src="messages.picUrl" alt="">
         <div class="album-cir"></div>
       </div>
@@ -10,13 +10,13 @@
           {{messages.name}}
           <span v-if="messages.alias.length" class="song-title-alia">({{messages.alias[0]}})</span>
         </div>
-        <div class="song-create" @click="toUser(messages.artist.id)">
+        <div class="song-create" @click="toUser">
           <span style="color:#dcdcdc">歌手:</span>
           <span v-if="messages.artists">{{Artist(messages.artists)}}</span>
           <i class="iconfont iconiconfontyoujiantou"></i>
         </div>
-        <div class="song-time">发行时间: {{transTime(messages.publishTime)}}</div>
-        <div class="song-desc">
+        <div class="song-time" @click="toCover">发行时间: {{transTime(messages.publishTime)}}</div>
+        <div class="song-desc" @click="toCover">
           <span>{{messages.description}}</span>
           <i class="iconfont iconiconfontyoujiantou"></i>
         </div>
@@ -51,19 +51,20 @@
         messages: {
           type: Object,
           default: {}
-        },
+        }
       },
       methods: {
         toComment () {
           // this.$emit('saveComment')
-          this.$router.push({
-            // name: 'albumcomment',
-            // params: {album: this.messages}
-            path:`/albumcomment`,
-            query: {
-              album: JSON.stringify(this.messages)
-            }
-          })
+          // this.$router.push({
+          //   // name: 'albumcomment',
+          //   // params: {album: this.messages}
+          //   path:`/albumcomment`,
+          //   query: {
+          //     album: JSON.stringify(this.messages)
+          //   }
+          // })
+          this.$emit('comment')
         },
         toShare () {
           this.$emit('share')
@@ -71,21 +72,11 @@
         chcekMore () {
           this.$emit('check')
         },
-        toUser (id) {
-          this.$api.singers.singermusic(id).then(res => {
-            if(res.data.artist.accountId) {
-              this.accountId = res.data.artist.accountId
-              let userId = this.accountId
-              this.$router.push({
-                path: `/singer/${userId}/${id}`
-                })
-            }else {
-              let userId = 477726475
-              this.$router.push({
-                path: `/singer/${userId}/${id}`
-                })
-            }
-          })
+        toUser () {
+          this.$emit('user')
+        },
+        toCover () {
+          this.$emit('cover')
         },
         transTime (timestamp) {
           let date = new Date(timestamp)

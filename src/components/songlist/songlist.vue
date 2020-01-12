@@ -57,11 +57,11 @@
           </my-search>
           <message
             class="my-message"
-            :messages="messages"
             :playlist="playlist"
             @saveComment="saveComment"
             @share="toShare"
             @check="toCheck"
+            @cover="toCover"
           ></message>
 
           <cube-sticky-ele>
@@ -133,6 +133,7 @@
     ></play-more>
     <share-dialog ref="shareShow"></share-dialog>
     <set-ring ref="setRingShow"></set-ring>
+    <my-cover :playlist="playlist" v-if="coverShow" @coverHide="coverHide"></my-cover>
   </div>
 </template>
 
@@ -144,6 +145,7 @@
     import playMore from './playmore'
     import shareDialog from '../common/sharedialog'
     import setRing from '../common/setring'
+    import myCover from '../common/cover'
     export default {
       name: 'songList.vue',
       components: {
@@ -153,7 +155,8 @@
         List,
         playMore,
         shareDialog,
-        setRing
+        setRing,
+        myCover
       },
       data () {
         return {
@@ -183,7 +186,8 @@
           allShow: false,
           complete: false,
           isSubscribed: false,
-          id:''
+          id:'',
+          coverShow:false
         }
       },
       computed: {
@@ -321,6 +325,12 @@
           } else if (val === 0) {
             this.checked = false
           }
+        },
+        toCover () {
+          this.coverShow = true
+        },
+        coverHide () {
+          this.coverShow = false
         },
             // 收藏功能
         toSubscribed () {

@@ -41,9 +41,6 @@
             <span class="nickname">{{item.ar[0].name}}</span>
           </div>
         </div>
-        <div  class="drag-drop">
-          <i class="iconfont icontuozhuai"></i>
-        </div>
       </div>
 
       </cube-checkbox>

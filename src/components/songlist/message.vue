@@ -1,7 +1,7 @@
 <template>
   <div class="song-list-message">
     <div class="song-message">
-      <div class="song-message-left">
+      <div class="song-message-left" @click="toCover">
         <img :src="playlist.coverImgUrl" alt="">
         <span>
             <i class="iconfont iconCell-PlayVolume"></i>
@@ -12,12 +12,12 @@
         <div class="song-title">
           {{playlist.name}}
         </div>
-        <div class="song-create" @click="toUser">
-          <img :src="messages.avatarUrl" alt="">
-          <span>{{messages.nickname}}</span>
+        <div class="song-create" @click="toUser" v-if="playlist.creator">
+          <img :src="playlist.creator.avatarUrl" alt="">
+          <span>{{playlist.creator.nickname}}</span>
           <i class="iconfont iconiconfontyoujiantou"></i>
         </div>
-        <div class="song-desc">
+        <div class="song-desc" @click="toCover">
           <span>{{playlist.description}}</span>
           <i class="iconfont iconiconfontyoujiantou"></i>
         </div>
@@ -49,10 +49,6 @@
     export default {
       name: 'songMessage.vue',
       props: {
-        messages: {
-          type: Object,
-          default: {}
-        },
         playlist: {
           type: Object,
           default: {}
@@ -76,7 +72,10 @@
           this.$router.push({
             path: `/user/${this.playlist.creator.userId}`
           })
-        }
+        },
+        toCover () {
+          this.$emit('cover')
+        },
       }
     }
 </script>

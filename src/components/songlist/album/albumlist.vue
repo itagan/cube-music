@@ -27,7 +27,7 @@
       </li>
     </ul>
 
-    <div v-if="!this.tracks" class="pull-load-top">
+    <div v-if="!this.songs" class="pull-load-top">
        <span class="load">
           <i class="iconfont iconyinletiaodongzhuangtai"></i>
           <span> 正在加载...</span>
@@ -51,6 +51,9 @@
             @saveComment="saveComment"
             @share="toShare"
             @check="toCheck"
+            @user="toUser"
+            @comment="toComment"
+            @cover="toCover"
           ></message>
 
           <cube-sticky-ele>
@@ -67,15 +70,15 @@
                     (共{{songs.length}}首)
                   </span>
               </li>
-              <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed">
+              <li class="play-sub" v-if="!isSub" @click="toSubscribed">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
-                (<span class="sub-num" ref="Sub">111</span>)
+                (<span class="sub-num" ref="Sub">{{subCount}}</span>)
               </li>
 
-              <li class="play-sub-ok" v-if="this.isSubscribed" @click="toSubscribed">
+              <li class="play-sub-ok" v-if="isSub" @click="toSubscribed">
                 <i class="iconfont iconshoucangchenggong"></i>
-                <span class="sub-num" ref="Sub">22</span>
+                <span class="sub-num" ref="Sub">{{subCount}}</span>
               </li>
             </ul>
 
@@ -107,14 +110,19 @@
     <play-more
       v-if="isMore"
       @cancel="cancelMore"
-      @build="moreBuildList"
       @share="toShare"
       @ring="setRing"
+      @singer="toSinger"
+      @collect="toCollected"
       :track="track"
       ref="playMore"
     ></play-more>
     <share-dialog ref="shareShow"></share-dialog>
     <set-ring ref="setRingShow"></set-ring>
+    <more-singer ref="moreSingerShow" :singers="singers"></more-singer>
+    <collection-to-list ref="collectedShow" @bulid="bulidlist"> </collection-to-list>
+    <build-list v-if="isBuild" @cancel="cancel"></build-list>
+    <my-cover :messages="messages" v-if="coverShow" @coverHide="coverHide"></my-cover>
   </div>
 </template>
 
@@ -125,7 +133,10 @@
     import playMore from '../playmore'
     import shareDialog from '../../common/sharedialog'
     import setRing from '../../common/setring'
-
+    import moreSinger from '../../common/moresinger'
+    import collectionToList from '../../common/collectiontolist'
+    import buildList from '../../common/buildlist'
+    import myCover from './cover'
     export default {
       name: 'songList.vue',
       components: {
@@ -134,7 +145,11 @@
         List,
         playMore,
         shareDialog,
-        setRing
+        setRing,
+        moreSinger,
+        collectionToList,
+        buildList,
+        myCover
       },
       data () {
         return {
@@ -155,7 +170,11 @@
           complete: false,
           isSubscribed: false,
           id:'',
-          songs:[]
+          songs:[],
+          subCount:0,
+          isSub:false,
+          singers:[],
+          coverShow:false
         }
       },
       computed: {
@@ -178,6 +197,7 @@
       },
       created () {
         this.getAlbums()
+        this.getDyms()
       },
       methods: {
         getAlbums () {
@@ -186,6 +206,12 @@
             console.log(res.data)
             this.songs = res.data.songs
             this.messages = res.data.album
+          })
+        },
+        getDyms () {
+          this.$api.albums.albumdym(this.$route.params.id).then(res => {
+            this.isSub = res.data.isSub
+            this.subCount = res.data.subCount
           })
         },
         saveComment () {
@@ -224,7 +250,9 @@
           this.$nextTick(() => {
             this.$refs.playMore.show()
           })
-          this.track = this.tracks[index]
+          this.track = this.songs[index]
+          this.singers = this.songs[index].ar
+          console.log(this.singers)
         },
 
         moreBuildList () {
@@ -247,10 +275,14 @@
           }, 500)
         },
         toShare () {
+          if(this.allShow) return
           this.$refs.shareShow.show()
         },
         setRing () {
           this.$refs.setRingShow.show()
+        },
+        moreSinger () {
+          this.$refs.moreSingerShow.show()
         },
             // 全选功能
         toCheck () {
@@ -283,12 +315,82 @@
             this.checked = false
           }
         },
+        toUser () {
+          if(this.allShow) return
+          this.singers = this.messages.artists
+          if(this.messages.artists.length > 1) {
+            this.moreSinger()
+            this.isMore = false
+            return
+          }
+
+          this.$api.singers.singermusic(this.messages.artist.id).then(res => {
+            if(res.data.artist.accountId) {
+              this.accountId = res.data.artist.accountId
+              let userId = this.accountId
+              this.$router.push({
+                path: `/singer/${userId}/${this.messages.artist.id}`
+                })
+            }else {
+              let userId = 477726475
+              this.$router.push({
+                path: `/singer/${userId}/${this.messages.artist.id}`
+                })
+            }
+          })
+        },
+        toSinger () {
+          if(this.singers.length > 1) {
+            this.moreSinger()
+            this.isMore = false
+            return
+          }
+          this.$api.singers.singermusic(this.track.ar[0].id).then(res => {
+            if(res.data.artist.accountId) {
+              this.accountId = res.data.artist.accountId
+              let userId = this.accountId
+              this.$router.push({
+                path: `/singer/${userId}/${this.track.ar[0].id}`
+                })
+            }else {
+              let userId = 477726475
+              this.$router.push({
+                path: `/singer/${userId}/${this.track.ar[0].id}`
+                })
+            }
+          })
+        },
+        toComment () {
+          if(this.allShow) return
+          this.$router.push({
+            path:`/albumcomment`,
+            query: {
+              album: JSON.stringify(this.messages)
+            }
+          })
+        },
+        toCollected () {
+          this.isMore = false
+          this.$refs.collectedShow.show()
+        },
+        bulidlist () {
+          this.isBuild = true
+          this.isMore = false
+          // this.$refs.collectedShow.hide()
+        },
+        toCover () {
+          this.coverShow = true
+        },
+        coverHide () {
+          this.coverShow = false
+        },
             // 收藏功能
         toSubscribed () {
-          if (this.isSubscribed) {
+          if (this.isSub) {
             this.$createDialog({
               type: 'confirm',
-              title: '确定不再收藏该歌单？',
+              title: '确定不再收藏该专辑？',
+              zIndex:2001,
               confirmBtn: {
                 text: '确定',
                 active: true,
@@ -302,32 +404,30 @@
                 href: 'javascript:;'
               },
               onConfirm: () => {
-                this.$api.songLists.subscribe(2, this.playlist.id).then(res => {
-                  console.log(res)
+                this.$api.albums.subalbum(2, this.$route.params.id).then(res => {
                   if (res.status === 200) {
                     this.$createToast({
                       type: 'text',
                       time: 1000,
-                      txt: '歌单已取消收藏'
+                      txt: '专辑已取消收藏'
                     }).show()
                     this.$refs.Sub.innerHTML--
-                    this.isSubscribed = false
+                    this.isSub = false
                   }
                 })
               }
             }).show()
           } else {
-            this.$api.songLists.subscribe(1, this.playlist.id).then(res => {
-              console.log(res)
+            this.$api.albums.subalbum(1, this.$route.params.id).then(res => {
               if (res.status === 200) {
                 const toast = this.$createToast({
-                  txt: '歌单已收藏',
+                  txt: '专辑已收藏',
                   type: 'correct',
                   time: 2000
                 })
                 toast.show()
                 this.$refs.Sub.innerHTML++
-                this.isSubscribed = true
+                this.isSub = true
               }
             })
           }
@@ -499,6 +599,8 @@
         width:50px
         line-height:50px
         color:red
+
+
 
     /*.cube-sticky*/
       /*padding: 0 10px*/

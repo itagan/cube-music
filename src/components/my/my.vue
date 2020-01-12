@@ -22,7 +22,7 @@
 <!--      </cube-scroll>-->
 <!--    </div>-->
 
-    <build-list class="build-list" v-if="isBuild" @cancel="cancel"></build-list>
+    <build-list v-if="isBuild" @cancel="cancel"></build-list>
 
     <play-more
       v-if="isMore"
@@ -186,12 +186,6 @@
     position:absolute
     top:750px
     margin-top:20px
-  .build-list
-    position:fixed
-    top:0
-    bottom:0
-    left:0
-    right:0
 
   .my-nav
     width:375px
