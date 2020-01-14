@@ -103,9 +103,7 @@ export default {
       border:none
       .cube-input-field 
         border:0;/*去掉未选中状态边框*/
-
         outline:none;/*去掉选中状态边框*/
-
         background-color:rgba(0,0,0,0);/*透明背景*/
 
  /*动画效果*/

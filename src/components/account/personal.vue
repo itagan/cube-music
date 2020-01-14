@@ -1,6 +1,6 @@
 <template>
   <div class="personal">
-    <div class="top">
+    <div class="top" @click="toUser">
       <div class="header-img">
         <span>上传头像</span>
         <img src="" alt="">
@@ -129,6 +129,7 @@
         getPersonal () {
           this.$api.users.userdetail(this.uid).then(res => {
             this.personals = res.data
+            console.log(this.personals)
           })
         },
         toFollows () {
@@ -140,7 +141,12 @@
           this.$router.push({
             path:`followeds`
           })
-        }
+        },
+        toUser () {
+          this.$router.push({
+            path: `/user/${this.personals.profile.userId}`
+          })
+        },
       }
     }
 </script>

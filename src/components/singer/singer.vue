@@ -52,10 +52,12 @@
               <home-page 
               :id="id" 
               :userId="userId"
-              ref="toScroll" 
               :begin="begin" 
               :profile="profile" 
-              :userMessage="userMessage"></home-page>
+              :userMessage="userMessage"
+              ref="toScroll" 
+              @taggleIndex="taggleIndex"
+              ></home-page>
             </cube-slide-item>
 
             <cube-slide-item :index="1">
@@ -184,6 +186,7 @@
             this.userMessage = res.data
             this.profile = res.data.profile
             this.level = res.data.level
+            console.log(this.profile)
           })
         },
         scrollHandler ({ y }) {
@@ -247,6 +250,9 @@
         },
         dynamicNum (num) {
           this.objs[4].num = num
+        },
+        taggleIndex () {
+          this.currentPage = 1
         }
       }
     }

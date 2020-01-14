@@ -39,18 +39,32 @@
                 </li>
               </ul>
             </li>
-            <li class="content-desc">
+            <li class="content-desc" v-if="playlist.description">
               {{playlist.description}} 
+            </li>
+            <li class="content-desc" v-else>
+              暂无描述
             </li>
           </ul>
       </cube-scroll>
     </div>
 
-    <div class="footer">
+     <div class="footer-user" v-if="playlist.creator.userId === 477726475">
+      <div class="footer-text">
+        <span @click.stop="toEdit">编辑</span>
+      </div>
+      
       <div class="footer-text">
         <span @click.stop="saveCover">保存封面</span>
       </div>
     </div>
+
+     <div class="footer" v-else>
+      <div class="footer-text">
+        <span @click.stop="saveCover">保存封面</span>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -94,6 +108,14 @@ export default {
         }
       })
       toast.show()
+    },
+    toEdit () {
+      this.$router.push({
+        path:'/editlist',
+        query: {
+          playlist: JSON.stringify(this.playlist)
+        }
+      })
     }
   },
   created() {},
@@ -142,13 +164,31 @@ export default {
       bottom:0
       .footer-text
         height:20px 
-        width:100px
-        border:1px solid rgba(128,128,128,.8)
+        width:90px
+        border:1px solid rgba(248,248,255,1)
         border-radius:10px
         flex-center()
-        font-size:$font-size-medium
+        font-size:$font-size-small
         color:white
         margin-bottom:10px
+    .footer-user
+      height:50px
+      width:100%
+      background-color:transparent 
+      flex-center()  
+      position:fixed
+      bottom:0
+      .footer-text
+        height:20px 
+        width:90px
+        border:1px solid rgba(248,248,255,1)
+        border-radius:10px
+        flex-center()
+        font-size:$font-size-small
+        color:white
+        margin-bottom:10px  
+      div
+       margin:0 10px    
 
     .scroll-list-wrap
       height:567px  
@@ -211,6 +251,7 @@ export default {
           line-height:1.5 
           margin-top:15px  
           white-space: normal
+          font-size:$font-size-small
          
 
 </style>

@@ -192,7 +192,7 @@
             this.collection = res.data.playlist.filter((item) => {
               return item.creator.userId !== this.userMessage.profile.userId
             })
-            // console.log(res.data.playlist)
+            // console.log(this.collection)
             this.trackCountLike = this.playlist[0].trackCount
             this.playCountLike = this.playlist[0].playCount
             for(let i = 0;i<res.data.playlist.length; i++) {
@@ -218,14 +218,7 @@
         },
         moreList () {
           this.$router.push({
-            path: `/moresonglist`,
-            // params:{
-            //   profile:this.profile
-            // }
-            query: {
-              playlist:JSON.stringify(this.playlist),
-              collection:JSON.stringify(this.collection)
-            }
+            path: `/moresonglist/${this.userMessage.profile.userId}`
           })
         },
         toList (id) {

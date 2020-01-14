@@ -3,7 +3,7 @@
     <div slot="left" @click="toBack" class="user-list-left">
       <i class="iconfont iconfanhui"></i>
     </div>
-    <ul slot="center" class="user-list" v-show="isShow" ref="Header" v-if="!profile.followTime">
+    <ul slot="center" class="user-list" v-show="isShow" ref="Header" v-if="!profile.followTime && profile.userId !== 477726475">
         <li class="user-list-name"> 
           <div class="user-list-name-nick">{{profile.nickname}}</div>
           <div class="user-list-name-fan">
@@ -15,11 +15,18 @@
           + 关注
         </li>
     </ul>
-    <div v-if="profile.followTime" class="user-list-only-name" slot="center" v-show="isShow" ref="Header">
+    <div v-if="profile.followTime && profile.userId !== 477726475" class="user-list-only-name" slot="center" v-show="isShow" ref="Header">
       <span>
          {{profile.nickname}}
       </span>
     </div>
+
+    <div v-if="profile.userId === 477726475" class="user-list-only-name" slot="center" v-show="isShow" ref="Header">
+      <span>
+         {{profile.nickname}}
+      </span>
+    </div>
+    
     <div  slot="right" class="user-img">
       <i class="iconfont icongengduo" @click="more"></i>
       <span @click="music">
@@ -105,6 +112,7 @@
         background-color:red
     .user-list-only-name
       font-size:$font-size-medium-x
+      opacity:0
     
     .user-img
       flex-center()

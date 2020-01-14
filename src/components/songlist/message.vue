@@ -17,8 +17,12 @@
           <span>{{playlist.creator.nickname}}</span>
           <i class="iconfont iconiconfontyoujiantou"></i>
         </div>
-        <div class="song-desc" @click="toCover">
+        <div class="song-desc" @click="toCover" v-if="playlist.description">
           <span>{{playlist.description}}</span>
+          <i class="iconfont iconiconfontyoujiantou"></i>
+        </div>
+        <div class="song-desc" v-else @click="toEdit">
+          <span>编辑简介</span>
           <i class="iconfont iconiconfontyoujiantou"></i>
         </div>
       </div>
@@ -68,7 +72,7 @@
           this.$emit('check')
         },
         toUser () {
-          let userId = 477726475
+          // let userId = 477726475
           this.$router.push({
             path: `/user/${this.playlist.creator.userId}`
           })
@@ -76,6 +80,18 @@
         toCover () {
           this.$emit('cover')
         },
+        toEdit () {
+          if(this.playlist.creator.userId === 477726475) {
+            this.$router.push({
+            path:'/editlist',
+            query: {
+              playlist: JSON.stringify(this.playlist)
+              }
+            })
+          }else {
+            this.toCover()
+          }
+        }
       }
     }
 </script>
@@ -139,7 +155,7 @@
         .song-desc
           height:40px
           font-size:$font-size-small
-          flex-between()
+          display:flex
           margin-top:10px
           color:#dcdcdc
           span

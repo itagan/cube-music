@@ -203,6 +203,15 @@ const songLists = {
   // 歌单收藏
   subscribe (is, id) {
     return axios.get(`${base}/playlist/subscribe?t=${is}&id=${id}`)
+  },
+  updatedesc (id, desc) {
+    return axios.get(`${base}/playlist/desc/update?id=${id}&desc=${desc}`)
+  },
+  updatename (id, name) {
+    return axios.get(`${base}/playlist/name/update?id=${id}&name=${name}`)
+  },
+  updatetags (id, tags) {
+    return axios.get(`${base}/playlist/tags/update?id=${id}&tags=${tags}`)
   }
 }
 // 评论功能

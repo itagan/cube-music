@@ -78,7 +78,7 @@
                     (共{{tracks.length}}首)
                   </span>
               </li>
-              <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed">
+              <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed" v-show="!isCreater">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
                 (<span class="sub-num" ref="Sub">{{playlist.subscribedCount}}</span>)
@@ -187,7 +187,8 @@
           complete: false,
           isSubscribed: false,
           id:'',
-          coverShow:false
+          coverShow:false,
+          isCreater:false
         }
       },
       computed: {
@@ -221,9 +222,11 @@
               // this.tracks = res.data.playlist.tracks
             this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0, 10) : res.data.playlist.tracks
             this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0, 4) : res.data.playlist.subscribers
-            this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
-            this.messages.nickname = res.data.playlist.creator.nickname
+            this.Creater()
           })
+        },
+        Creater () {
+          this.isCreater = this.playlist.userId === 477726475
         },
         getQuery (query) {
           console.log(query)

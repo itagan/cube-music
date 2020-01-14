@@ -54,7 +54,7 @@
             </div>
           </li>
 
-          <li class="ul-list-bottom">
+          <li class="ul-list-bottom" @click="moreHot">
             <span>更多热歌</span>
             <i class="iconfont iconleft-arrow"></i>
           </li>
@@ -103,7 +103,7 @@
             <span slot="bottom" @click="toListLike">{{trackCountLike}}首，播放{{playCountLike}}次</span>
           </song-list-base>
           </li>
-           <li>
+           <li @click="moreList">
             <song-list-base>
             <div slot="left" class="home-page-music-songlist">
               <i class="iconfont iconpaixingbang"></i>
@@ -164,7 +164,10 @@ export default {
       scrollEvents: ['scroll'],
       scrollY: 0,
       trackCountLike:0,
-      playCountLike:0
+      playCountLike:0,
+      playlists:[],
+      playlist:[],
+      collection:[]
     }
   },
   watch: {
@@ -186,28 +189,30 @@ export default {
         // this.userId = res.data.artist.accountId
         this.hotSongs = res.data.hotSongs
         this.artist = res.data.artist
-        // setTimeout(() => {
-        //    this.hotSongs = res.data.hotSongs
-        //   this.artist = res.data.artist
-        // }, 300000);
       })
     },
     getPlaylist () {
-        this.$api.users.playlist(this.userId).then(res => {
-          // this.playlist = res.data.playlist.filter((item) => {
-          //   return item.creator.userId === this.userId
-          // })
-          // this.trackCountLike = this.playlist[0].trackCount
-          // this.playCountLike = this.playlist[0].playCount
+      this.$api.users.playlist(this.userId).then(res => {
+        this.playlists = res.data.playlist
+        this.trackCountLike = this.playlists[0].trackCount
+        this.playCountLike = this.playlists[0].playCount
 
-          this.playlist = res.data.playlist
-          this.trackCountLike = this.playlist[0].trackCount
-          this.playCountLike = this.playlist[0].playCount
-
-          console.log(this.playlist)
-
+        this.playlist = res.data.playlist.filter((item) => {
+            return item.creator.userId === this.userId
+          })
+        this.collection = res.data.playlist.filter((item) => {
+          return item.creator.userId !== this.userId
         })
-      },
+
+        console.log(this.playlists)
+
+      })
+    },
+    getMsg () {
+      this.$api.users.usermsg().then(res => {
+
+      })
+    },
     onPullingUp () {
       // if(!this.hasMore) return
       // setTimeout(() => {
@@ -232,7 +237,21 @@ export default {
       //  console.log('开始滚动')
     },
     toListLike() {
-
+      this.$router.push({
+        path:`/songlist/${this.playlists[0].id}`  //注意前面加个'/' 是根路由
+      })
+    },
+    moreList () {
+      this.$router.push({
+        path: `/moresonglist/${this.userId}`
+        // query: {
+        //   playlist:JSON.stringify(this.playlist),
+        //   collection:JSON.stringify(this.collection)
+        // }
+      })
+    },
+    moreHot () {
+      this.$emit('taggleIndex')
     }
   },
   created() {

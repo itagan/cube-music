@@ -53,6 +53,10 @@
       </cube-checkbox>
     </li>
     </cube-checkbox-group>
+
+    <li class="ul-list-none" v-if="!tracks.length">
+      添加歌曲
+    </li>
   </ul>
 </template>
 
@@ -126,7 +130,7 @@
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
   .ul-list
-    height:auto
+    min-height:400px
     width:375px
     background-color:white
     .song-base
@@ -181,6 +185,21 @@
         i
           font-size:$font-size-large-x
 
+  .ul-list
+    .ul-list-none
+      flex-center()
+      border:1px solid red
+      color:red
+      border-radius:11px
+      width:140px
+      height:22px
+      font-size:$font-size-medium
+      margin:auto
+      margin-top:60px
+ 
+ 
+ 
+ 
   .checkbox-css
     position:relative
     .song-base

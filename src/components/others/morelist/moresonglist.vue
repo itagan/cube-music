@@ -57,25 +57,33 @@
           currentPage: 0,
           objs: [
             {
-              text: '主页'
+              text: '创建的歌单'
             },
             {
-              text: '动态'
+              text: '收藏的歌单'
             }
           ],
           playlist:[],
           collection:[],
-          nums:0
+          nums:0,
+          userId:477726475
         }
       },
       methods: {
-        getList () {
-          this.playlist = JSON.parse(this.$route.query.playlist)
-          this.collection = JSON.parse(this.$route.query.collection)
-          console.log(this.playlist)
-          for(let i = 1; i < this.playlist.length; i++) {
-            this.nums += this.playlist[i].subscribedCount
-          }
+        getPlaylist () {
+          this.$api.users.playlist(this.$route.params.userId).then(res => {  
+            this.playlist = res.data.playlist.filter((item) => {
+                item.creator.userId === this.userId
+              })
+            this.collection = res.data.playlist.filter((item) => {
+              item.creator.userId !== this.userId
+            })
+            this.playlists = res.data.playlist
+            console.log(this.playlist)
+            // console.log(this.collection[10].creator.userId === this.$route.params.userId)
+          })
+          // this.playlists = res.data.playlist
+          // console.log(this.playlists[0])
         },
         toBack () {
           this.$router.go(-1)
@@ -91,7 +99,8 @@
         }
       },
       created () {
-        this.getList()
+        // this.getList()
+        this.getPlaylist() 
       }
     }
 </script>
