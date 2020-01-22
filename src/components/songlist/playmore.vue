@@ -22,8 +22,8 @@
           <img src="../user/img/login1.png" alt="">
         </li>
         <li class="li-content">
-            <div class="li-title">苦笑</div>
-            <div class="li-desc">阿感</div>
+            <div class="li-title">啦啦</div>
+            <div class="li-desc">测试描述</div>
         </li>
       </ul>
 
@@ -84,7 +84,7 @@
             </span>
           </div>
         </li>
-        <li>
+        <li v-if="noAlbum">
           <div class="build-icon">
             <i class="iconfont iconzuijinbofang"></i>
           </div>
@@ -141,7 +141,8 @@
           visible: false,
           options: {
             scrollbar: true
-          }
+          },
+          // noAlbum:true
         }
       },
       props: {
@@ -156,6 +157,10 @@
         track: {
           type: Object,
           default: {}
+        },
+        noAlbum: {
+          type: Boolean,
+          default: true
         }
       },
       methods: {
@@ -182,7 +187,6 @@
         },
         toCollected () {
           this.$emit('collect')
-           console.log('1112')
         },
         Artist (artist) {
           let arr = []

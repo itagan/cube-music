@@ -1,7 +1,8 @@
 <template>
-  <div class="share">
-    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001">
-
+  <!-- <div class="share"> -->
+    <!-- <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001"> -->
+ <div class="mask" @click.self="cancel" v-if="visible">
+    <transition name="fade-more" v-if="visible">
       <div class="share-build">
         <div class="share-top">分享</div>
 
@@ -26,10 +27,12 @@
           </li>
         </ul>
 
-        <div class="scroll-list-wrap">
+        <div class="scroll-list-wrap-share">
           <cube-scroll
             ref="scroll"
             direction="horizontal"
+            :options="options"
+            @scroll="scrollHandler"
             class="horizontal-scroll-list-wrap"
           >
             <ul class="share-bottom">
@@ -117,11 +120,24 @@
           </cube-scroll>
         </div>
 
+         <!-- <cube-scroll
+          ref="scroll"
+          :data="items"
+          direction="horizontal"
+          class="horizontal-scroll-list-wrap">
+          <ul class="list-wrapper">
+            <li v-for="item in items" class="list-item">{{ item }}</li>
+          </ul>
+        </cube-scroll> -->
+
         <cube-button class="button" @click="hide">取消</cube-button>
 
+       </div>
+
+       </transition>
       </div>
-    </cube-popup>
-  </div>
+    <!-- </cube-popup> -->
+  <!-- </div> -->
 </template>
 
 <script>
@@ -129,32 +145,61 @@
       name: 'playMore.vue',
       data () {
         return {
+          visible: false,
           options: {
             scrollbar: true
-          }}
+          },
+          scrollY:0,
+          }
       },
       methods: {
+        // show () {
+        //   this.$refs.popup.show()
+        // },
+        // hide () {
+        //   this.$refs.popup.hide()
+        // },
+        scrollHandler ({ y }) {
+          this.scrollY = -y
+          console.log(this.scrollY)
+        },
+        cancel () {
+          // 触摸到遮罩层就取消本组件
+        this.$emit('cancel')
+        },
         show () {
-          this.$refs.popup.show()
+          this.visible = true
         },
         hide () {
-          this.$refs.popup.hide()
-        }
+          this.visible = false
+        },
       }
     }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" scoped rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-   .share-build
-      position:relative
-      bottom:0
-      height:auto
+
+  .mask
+    width:100%
+    height:100%
+    position:fixed
+    top:0
+    z-index:2001 //遮罩层需要更高
+    left:0
+    background: rgba(0, 0, 0, 0.5)
+    .share-build
       width:100%
+      height:auto
+      background-color:white
+      /*opacity:1*/
       border-top-left-radius:20px
       border-top-right-radius:20px
-      background-color:white
+      font-size:$font-size-medium
+      z-index:2001
+      position:fixed
+      bottom:0
       .share-top
         height:30px
         width:100%
@@ -194,10 +239,10 @@
         font-size:$font-size-medium-x
         color:black
 
-  .scroll-list-wrap
+  .scroll-list-wrap-share >>>  //深度选择器解决样式因scoped隔绝传递问题
     width:375px
-    .horizontal-scroll-list-wrap
-      border-radius: 5px
+    .cube-scroll-wrapper
+      width:375px
       .cube-scroll-content
         display: inline-block
         width:auto
@@ -205,11 +250,36 @@
         padding: 15px 10px
         line-height: 70px
         white-space: nowrap
+      .share-bottom
+        width:auto
       li
         display: inline-block
 
   .cube-scroll-wrapper
     width:375px
 
+
+    // .horizontal-scroll-list-wrap
+    //   border: 1px solid rgba(0, 0, 0, 0.1)
+    //   border-radius: 5px
+    //   .cube-scroll-content
+    //     display: inline-block
+    //   .list-wrapper
+    //     padding: 0 10px
+    //     line-height: 60px
+    //     white-space: nowrap
+    //   .list-item
+    //     display: inline-block
+
+
+     /*动画效果*/
+  .fade-more-enter-active,
+  .fade-more-leave-active
+    transition: all .5s ease-in
+
+  .fade-more-enter,
+  .fade-more-leave-to
+    transform: translateY(700px)
+    opacity: 0
 
 </style>

@@ -1,14 +1,14 @@
 <template>
   <div class="wrapper">
 
-    <div class="pullloadtop" v-if="!hotSongs.length">
+    <!-- <div class="pullloadtop" v-if="!hotSongs.length">
      <div>
         <span class="load">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
      </div>
-    </div>
+    </div> -->
 
      <div class="content-scroll-wrapper">
       <cube-scroll
@@ -54,7 +54,7 @@
             </div>
           </li>
 
-          <li class="ul-list-bottom">
+          <li class="ul-list-bottom" @click="moreHot">
             <span>更多热歌</span>
             <i class="iconfont iconleft-arrow"></i>
           </li>
@@ -103,7 +103,7 @@
             <span slot="bottom" @click="toListLike">{{trackCountLike}}首，播放{{playCountLike}}次</span>
           </song-list-base>
           </li>
-           <li>
+           <li @click="moreList">
             <song-list-base>
             <div slot="left" class="home-page-music-songlist">
               <i class="iconfont iconpaixingbang"></i>
@@ -146,68 +146,99 @@ export default {
       type:String,
       default:''
     },
+    currentPage: {
+      type:Number,
+      default:0
+    }
   },
   data() {
     return {
       hotSongs:[],
       artist:{},
       playing:false,
-      options: {
-        pullUpLoad: false,
-        scrollbar: false,
-        click: false, // 解决点击事件被触发两次的问题
-        stopPropagation:false,
-        scrollX:false,
-        scrollY:true
-      },
-      secondStop: 0,
+      // options: {
+      //   pullUpLoad: false,
+      //   scrollbar: false,
+      //   click: false, // 解决点击事件被触发两次的问题
+      //   stopPropagation:false,
+      //   scrollX:false,
+      //   scrollY:true
+      // },
       scrollEvents: ['scroll'],
       scrollY: 0,
       trackCountLike:0,
-      playCountLike:0
+      playCountLike:0,
+      playlists:[],
+      playlist:[],
+      collection:[],
+      // scrollTrue:false
     }
   },
   watch: {
-    begin(val) {
-      // if(val)
-      // this.options.scrollY = val
-      this.$refs.contentScroll.enable()
-      //  this.$refs.contentScroll.forceUpdate()
-       this.$nextTick(() =>{
-        //  this.$refs.contentScroll.forceUpdate()
-        this.$refs.contentScroll.refresh()
-       })
+    // begin(val) {
+    //   // if(val)
+    //   // this.options.scrollY = val
+    //   this.$refs.contentScroll.enable()
+    //   //  this.$refs.contentScroll.forceUpdate()
+    //    this.$nextTick(() =>{
+    //     //  this.$refs.contentScroll.forceUpdate()
+    //     this.$refs.contentScroll.refresh()
+    //    })
+    // }
+  },
+  computed: {
+    options () {
+      if(this.begin) {
+        return {
+          pullUpLoad: false,
+          scrollbar: true,
+          click: false, // 解决点击事件被触发两次的问题
+          stopPropagation:false,
+          scrollX:false,
+          scrollY:true
+        }
+      }else {
+        return {
+          pullUpLoad: false,
+          scrollbar: true,
+          click: false, // 解决点击事件被触发两次的问题
+          stopPropagation:false,
+          scrollX:false,
+          scrollY:false
+        } 
+      }
     }
   },
-  computed: {},
   methods: {
     getMusic () {
       this.$api.singers.singermusic(this.id).then(res => {
         // this.userId = res.data.artist.accountId
         this.hotSongs = res.data.hotSongs
         this.artist = res.data.artist
-        // setTimeout(() => {
-        //    this.hotSongs = res.data.hotSongs
-        //   this.artist = res.data.artist
-        // }, 300000);
       })
     },
     getPlaylist () {
-        this.$api.users.playlist(this.userId).then(res => {
-          // this.playlist = res.data.playlist.filter((item) => {
-          //   return item.creator.userId === this.userId
-          // })
-          // this.trackCountLike = this.playlist[0].trackCount
-          // this.playCountLike = this.playlist[0].playCount
+      this.$api.users.playlist(this.userId).then(res => {
+        this.playlists = res.data.playlist
+        this.trackCountLike = this.playlists[0].trackCount
+        this.playCountLike = this.playlists[0].playCount
 
-          this.playlist = res.data.playlist
-          this.trackCountLike = this.playlist[0].trackCount
-          this.playCountLike = this.playlist[0].playCount
-
-          console.log(this.playlist)
-
+        this.playlist = res.data.playlist.filter((item) => {
+            return item.creator.userId === this.userId
+          })
+        this.collection = res.data.playlist.filter((item) => {
+          return item.creator.userId !== this.userId
         })
-      },
+
+        console.log(this.playlists)
+
+      })
+    },
+    getMsg () {
+      this.$api.users.usermsg().then(res => {
+
+      })
+    },
     onPullingUp () {
       // if(!this.hasMore) return
       // setTimeout(() => {
@@ -222,17 +253,31 @@ export default {
       //  console.log('子组件左边滚动' + this.scrollY)
     },
     Disable () {
-      // this.$refs.contentScroll.disable()
+      this.$refs.contentScroll && this.$refs.contentScroll.disable()
       // console.log(this.$refs.contentScroll)
     },
     Enable () {
-      // this.$refs.contentScroll.enable()
+      this.$refs.contentScroll && this.$refs.contentScroll.enable()
       // this.options.scrollY = true
        this.$refs.contentScroll.refresh()
       //  console.log('开始滚动')
     },
     toListLike() {
-
+      this.$router.push({
+        path:`/songlist/${this.playlists[0].id}`  //注意前面加个'/' 是根路由
+      })
+    },
+    moreList () {
+      this.$router.push({
+        path: `/moresonglist/${this.userId}`
+        // query: {
+        //   playlist:JSON.stringify(this.playlist),
+        //   collection:JSON.stringify(this.collection)
+        // }
+      })
+    },
+    moreHot () {
+      this.$emit('taggleIndex')
     }
   },
   created() {
@@ -241,9 +286,9 @@ export default {
     
   },
   mounted() {
-    // this.$nextTick(() => {
-    //   this.Disable()
-    // })
+    this.$nextTick(() => {
+      this.Disable()
+    })
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="list-comment">
     <my-header class="header">
       <i class="iconfont iconfanhui" slot="left" @click="toBack"></i>
-      <div slot="center" class="song-list">评论({{total}})</div>
+      <div slot="center" class="song-list">评论 <span v-if="!isLoading">({{total}})</span></div>
       <div  slot="right" class="song-img">
         <i class="iconfont iconfenxiang" @click="share"></i>
         <span @click="music">
@@ -22,27 +22,41 @@
         >
           <ul class="comment-message">
             <li>
-              <song-list-comment></song-list-comment>
+              <song-list-comment :playlist="playlist"></song-list-comment>
             </li>
           </ul>
-          <cube-sticky-ele ele-key="精彩评论">
-            <ul class="sticky-header">
+
+          <div class="pullloadtop" v-if="isLoading">
+            <div>
+              <span class="load">
+                <i class="iconfont iconyinletiaodongzhuangtai"></i>
+                <span> 正在加载...</span>
+              </span>
+            </div>
+          </div>
+
+          <div v-if="isLoadingText" class="pullload-top-text">还没有评论</div>
+
+          <cube-sticky-ele ele-key="精彩评论" v-if="hotComments.length">
+            <ul class="sticky-header" v-if="!isLoading">
               <li class="hot-comment-top">精彩评论</li>
             </ul>
           </cube-sticky-ele>
-          <div ref="stickyHeight" style="height:auto">
-            <ul class="hot-comment">
+          <div ref="stickyHeight" style="height:auto" v-if="hotComments.length">
+            <ul class="hot-comment"  v-if="!isLoading">
               <li v-for="(item,index) in hotComments" :key="item.commentId" ref="_liOffset" @click="_Reply(index)">
                 <base-comment :item="item" class="base-comment" :hasReplyArr="ReplyArr"></base-comment>
               </li>
             </ul>
           </div>
           <cube-sticky-ele ele-key="最新评论">
-            <ul class="sticky-header">
-              <li class="comment-top">最新评论</li>
+            <ul class="sticky-header"  v-if="!isLoading">
+              <li class="comment-top">最新评论
+                <span style="color:gray">{{comments.length}}</span>
+              </li>
             </ul>
           </cube-sticky-ele>
-          <ul class="new-comment">
+          <ul class="new-comment"  v-if="!isLoading">
             <li v-for="(newItem,index) in comments" :key="newItem.commentId" ref="liOffset" @click="Reply(index)">
               <base-comment :item="newItem" class="base-comment" :hasReplyArr="hasReplyArr"></base-comment>
             </li>
@@ -70,7 +84,6 @@
       </cube-sticky>
     </div>
     <div class="comment">
-      <!-- <input type="text" placeholder="这一次也许就是你上热评了"> -->
       <input type="text" :placeholder="placeholder" ref="Input" v-model="value">
       <div class="comment-icon">
         <i class="iconfont iconfanhuidingbu"></i>
@@ -103,13 +116,13 @@
           scrollY: 0,
           scrollEvents: ['scroll'],
           totals: 0,
-          options: {
-            pullUpLoad: true,
-            scrollbar: true,
-            click: false // 解决点击事件被触发两次的问题
-          },
-          secondStop: 0,
-          pullDownY: 0,
+          // options: {
+          //   pullUpLoad: true,
+          //   scrollbar: true,
+          //   click: false // 解决点击事件被触发两次的问题
+          // },
+          // secondStop: 0,
+          // pullDownY: 0,
           offset: 0,
           hasMore: true,
           moreHot: false,
@@ -119,12 +132,33 @@
           value:'',
           user:'',
           commentId:-1,
-          threadId:''
+          threadId:'',
+          playlist:{},
+          isLoading:true,
+          isLoadingText:false
         }
       },
       props: {},
       created () {
-        this.getComment(this.$route.params.id, this.offset)
+        this.getComment(JSON.parse(this.$route.query.playlist).id, this.offset)
+        this.Playlist()
+      },
+      computed: {
+        options () {
+          if(this.comments.length) {
+            return {
+              pullUpLoad: true,
+              scrollbar: true,
+              click: false // 解决触发两次点击事件的bug
+            }
+          }else{
+            return {
+              pullUpLoad: false,
+              scrollbar: true,
+              click: false // 解决触发两次点击事件的bug
+            }
+          }
+        }
       },
       methods: {
         getComment (id, offset) {
@@ -159,7 +193,22 @@
                 }) 
               }
             }
-            console.log(this.hotComments)
+
+
+            if(res.data.comments.length >= 1) {
+              setTimeout(() => {
+                this.isLoading = false
+                this.isLoadingText = false
+              }, 5000)
+            }else{
+              setTimeout(() => {
+                this.isLoading = false
+                this.isLoadingText = true
+                this.Input()
+              }, 5000)
+            }
+
+            // console.log(this.hotComments)
           })
         },
         toBack () {
@@ -176,16 +225,15 @@
         },
         onPullingUp () {
           setTimeout(() => {
-            this.getComment(705123491, this.offset)
+            this.getComment(JSON.parse(this.$route.query.playlist).id, this.offset)
             const contentScroll = this.$refs.contentScroll
             contentScroll.forceUpdate()
           }, 1000)
         },
-        // ReplyNum (item) {
-        //   return [...new Set(this.hasReplyArr.slice())].findIndex(ele => {
-        //     return item.commentId === ele.parentCommentId
-        //   })
-        // }
+        Playlist () {
+          this.playlist = JSON.parse(this.$route.query.playlist)
+          console.log(this.playlist)
+        },
         Reply (index) {
           let proup = document.getElementsByClassName('cube-popup-content')[0],
           liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
@@ -252,7 +300,7 @@
           // this.$refs.stickyHeight.style.height = myColor +'px'
           // this.$refs.scrollCube.refresh()
 
-          this.$refs.stickyHeight.style.height = 300 + 'px'
+          // this.$refs.stickyHeight.style.height = 300 + 'px'
           // console.log(this.totals)
           this.$refs.contentScroll.refresh()
         })
@@ -355,7 +403,7 @@
         bottom:0
         left:50%
         margin-left:-60px
-      flex-center()
+        flex-center()
       .load
         font-size:$font-size-medium
         i
@@ -385,4 +433,14 @@
           .new-comment
             margin:auto 10px
             padding-bottom:10px
+
+    .pullload-top-text
+      width:100%
+      height:50px
+      text-align:center
+      font-size:$font-size-medium
+      color:gray
+      position: absolute
+      top:180px
+      z-index: 10000        
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="base-comment" v-if="!item.beReplied.length">
     <div class="base-comment-top">
-      <img v-lazy="item.user.avatarUrl" @click="toUser">
+      <img v-lazy="item.user.avatarUrl" @click.stop="toUser(item.user.userId, item.user.userType)">
       <div class="base-comment-time">
         <div class="base-comment-name">
           <div class="user-name">{{item.user.nickname}}</div>
@@ -82,8 +82,19 @@ import {timestampOther} from '../../assets/js/timestamp'
     },
     watch:{},
     methods: {
-      toUser () {
-                // 去用户个人中心页面
+      toUser (userId, userType) {
+        if(userType === 2 || userType === 4) {
+          this.$api.users.userdetail(userId).then(res => {
+            let id = res.data.profile.artistId
+            this.$router.push({
+              path: `/singer/${userId}/${id}`
+            })
+          })
+        }else {
+          this.$router.push({
+          path: `/user/${userId}`
+        })
+       }
       },
       toLike () {
         this.$api.likes.commentDynamic(this.item.commentId, this.dynamic[0].info.threadId, 1).then(res => {
@@ -132,7 +143,7 @@ import {timestampOther} from '../../assets/js/timestamp'
       },
       timestamp (time) {
         return timestampOther(time)
-      }
+      },
       // isShow (id) {
       //   return id === this.author[0].userId
       // }

@@ -29,6 +29,8 @@ import Newsong from '../components/newalbumsong/newsongs'
 import Newalbum from '../components/newalbumsong/newalbums'
 import AlbumList from '../components/songlist/album/albumlist'
 import AlbumComment from '../components/songlist/album/listcomment'
+import EditList from '../components/songlist/edit/editlist'
+import EditInformation from '../components/others/edituser/editinfor.vue'
 Vue.use(Router)
 
 const originalPush = Router.prototype.push
@@ -174,6 +176,13 @@ export default new Router({
       }
     },
     {
+      path: '/editlist',
+      component: EditList,
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
       path: '/user/:userId',
       component: User,
       meta: {
@@ -208,7 +217,7 @@ export default new Router({
       }
     },
     {
-      path: '/moresonglist',
+      path: '/moresonglist/:userId',
       component: MoreSongList,
       name: 'MoreSongList',
       meta: {
@@ -256,6 +265,14 @@ export default new Router({
       path: '/albumcomment',
       component: AlbumComment,
       name: 'albumcomment',
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/editinformation',
+      component: EditInformation,
+      name: 'editinformation',
       meta: {
         keepAlive: false
       }

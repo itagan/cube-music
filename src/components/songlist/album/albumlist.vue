@@ -48,7 +48,6 @@
           <message
             class="my-message"
             :messages="messages"
-            @saveComment="saveComment"
             @share="toShare"
             @check="toCheck"
             @user="toUser"
@@ -115,6 +114,7 @@
       @singer="toSinger"
       @collect="toCollected"
       :track="track"
+      :noAlbum="false"
       ref="playMore"
     ></play-more>
     <share-dialog ref="shareShow"></share-dialog>
@@ -174,7 +174,8 @@
           subCount:0,
           isSub:false,
           singers:[],
-          coverShow:false
+          coverShow:false,
+          
         }
       },
       computed: {
@@ -214,9 +215,6 @@
             this.subCount = res.data.subCount
           })
         },
-        saveComment () {
-
-        },
         scrollHandler ({ y }) {
            this.scrollY = -y
           this.messTop = this.$refs.messTop.getBoundingClientRect().top
@@ -252,7 +250,6 @@
           })
           this.track = this.songs[index]
           this.singers = this.songs[index].ar
-          console.log(this.singers)
         },
 
         moreBuildList () {

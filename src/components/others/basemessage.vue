@@ -38,14 +38,14 @@
           <span v-if="profile.gender === 1">男</span>
           <span v-if="profile.gender === 2">女</span>
         </li>
-        <li>
-          年龄：<span>{{profile.birthday}}</span>
+        <li v-if="profile.birthday">
+          年龄：<span>{{getAge(profile.birthday)}}</span>
         </li>
         <li>
-          地区：<span>{{profile.city}}</span>
+          地区：<span>{{area}}</span>
         </li>
         <li>
-          大学：<span>北大</span>
+          大学：<span>您来填</span>
         </li>
       </ul>
       <div class="message-brief">
@@ -64,6 +64,11 @@
 
 <script>
     import MyHeader from '../../base/navbar/navbar'
+    import { provinceList, cityList } from '../../assets/js/area'
+    const addressData = provinceList
+    addressData.forEach(province => {
+      province.children = cityList[province.value]
+    })
     export default {
       name: 'baseMessage.vue',
       components: {
@@ -73,7 +78,8 @@
         return {
           authentication: false,
           level: 0,
-          profile: {}
+          profile: {},
+          area:''
         }
       },
       created () {
@@ -83,13 +89,25 @@
         getUser () {
           this.profile = JSON.parse(this.$route.query.profile)
           this.level = this.$route.query.level
+          this.CitySure(this.profile.province, this.profile.city)
+          // this.getAge(this.profile.birthday)
         },
         toBack () {
           this.$router.go(-1)
         },
         music () {
 
-        }
+        },
+        CitySure (province, city) {
+          let arr = cityList[province].filter(item => {
+            return item.value == city
+          })
+          this.area = arr[0].province + arr[0].text
+        },
+        getAge (timestamp) {
+          let nowTimestamp = new Date().getTime()
+          return Math.ceil((nowTimestamp-timestamp)/31536000000)
+        },
       },
       watch: {
         'router':'getUser'

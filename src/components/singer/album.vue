@@ -30,7 +30,7 @@
             </div>
           </div>
          <ul class="my-album">
-          <li v-for="item in albums" :key="item.id" @click="selectItem(item.id)">
+          <li v-for="item in albums" :key="item.id" @click.stop="toAlbum(item.id)">
               <album-base :item="item"></album-base>
             </li>
          </ul>
@@ -97,8 +97,10 @@ export default {
          this.$emit('albumNum', this.albums.length)
       })
     },
-    selectItem (vid) {
-
+    toAlbum (id) {
+      this.$router.push({
+        path:`/albumlist/${id}`
+      })
     },
     onPullingUp () {
       if(!this.hasMore) return

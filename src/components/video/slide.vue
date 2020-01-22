@@ -112,7 +112,7 @@ export default {
   }
 </script>
 
-<style  lang="stylus" rel="stylesheet/stylus">
+<style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
 
@@ -124,7 +124,7 @@ export default {
 
   .slide
     font-size:$font-size-medium-x
-    .nav-scroll-list-wrap
+    .nav-scroll-list-wrap >>> 
       transform: rotate(0deg) // fix 子元素超出边框圆角部分不隐藏的问题
       position: relative
       background-color: white
@@ -154,7 +154,7 @@ export default {
             &:nth-last-child(2)
               margin-right:25px
 
-      .cube-scroll-wrapper
+      .cube-scroll-wrapper 
         width:375px
 
       .nav-item-active

@@ -26,14 +26,17 @@
             <li class="content-line">
               
             </li>
-            <li class="content-company">
+            <li class="content-company" v-if="messages.company">
               发行公司: {{messages.company}}
             </li>
             <li class="content-type" v-if="messages.subType">
               专辑类别: {{messages.subType}} 
             </li>
-            <li class="content-desc">
+            <li class="content-desc" v-if="messages.description">
               {{messages.description}} 
+            </li>
+            <li class="content-desc" v-if="!messages.description">
+              暂无描述
             </li>
           </ul>
       </cube-scroll>
@@ -135,7 +138,7 @@ export default {
       .footer-text
         height:20px 
         width:100px
-        border:1px solid rgba(128,128,128,.8)
+        border:1px solid rgba(248,248,255,1)
         border-radius:10px
         flex-center()
         font-size:$font-size-medium

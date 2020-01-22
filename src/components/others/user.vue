@@ -16,7 +16,7 @@
           ref="scroll"
           class="scroll-ele"
         >
-          <my-message :profile="profile" :level="level" ref="myMessage"></my-message>
+          <my-message :userMessage="userMessage" ref="myMessage"></my-message>
 
           <cube-sticky-ele>
             <ul class="sticky-header" ref="messTop">
@@ -154,6 +154,8 @@
             this.profile = res.data.profile
             this.level = res.data.level
             // this.hasMore = res.data.more
+            console.log(this.userMessage)
+            this.taggleIndex()
           })
         },
         scrollHandler ({ y }) {
@@ -214,7 +216,7 @@
           // }else {
           //   this.scrollYs.rightY = -y
           // }
-          console.log(this.scrollYs)
+          // console.log(this.scrollYs)
         },
         toggles (index) {
           this.currentPage = index
@@ -239,8 +241,8 @@
         Lasttime (time, more) {
           this.lasttime = time
           this.hasMore = more
-          console.log(this.hasMore)
-          console.log(this.lasttime)
+          // console.log(this.hasMore)
+          // console.log(this.lasttime)
         },
         onPullingUp () {
           if(this.hasMore) {
@@ -251,7 +253,17 @@
           }, 1000)
           }
         },
-      }
+        taggleIndex () {
+          if(this.profile.userId === 477726475) {
+            this.currentPage = 0
+          }
+        }
+      },
+      // mounted() {
+      //   this.$nextTick(() => {
+      //     this.taggleIndex()
+      //   })
+      // }
     }
 </script>
 

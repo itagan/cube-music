@@ -107,6 +107,9 @@ const users = {
     return axios.get(`${base}/user/subcount`)
   },
   // 更新用户信息
+  userUpdate (gender, signature, city, nickname, birthday, province) {
+    return axios.get(`${base}/user/update?gender=${gender}&signature=${signature}&city=${city}&nickname=${nickname}&birthday=${birthday}&province=${province}`)
+  },
   // 获取用户歌单
   playlist (uid) {
     return axios.get(`${base}/user/playlist?uid=${uid}`)
@@ -203,6 +206,15 @@ const songLists = {
   // 歌单收藏
   subscribe (is, id) {
     return axios.get(`${base}/playlist/subscribe?t=${is}&id=${id}`)
+  },
+  updatedesc (id, desc) {
+    return axios.get(`${base}/playlist/desc/update?id=${id}&desc=${desc}`)
+  },
+  updatename (id, name) {
+    return axios.get(`${base}/playlist/name/update?id=${id}&name=${name}`)
+  },
+  updatetags (id, tags) {
+    return axios.get(`${base}/playlist/tags/update?id=${id}&tags=${tags}`)
   }
 }
 // 评论功能

@@ -2,27 +2,26 @@
   <div class="share">
     <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001">
 
-      <div class="build">
-        <ul class="top">
-          <li class="top-left">收藏到歌单</li>
-          <li class="top-center">
-            <div></div>
-          </li>
-          <li class="top-bottom" @click="bulidlist">
-            <i class="iconfont iconjia"></i>
-            <span>新建歌单</span>
-          </li>
-        </ul>
-        
-      <div class="scroll-list-wrap" ref="increaseHeight">
-        <cube-scroll
-          ref="scroll"
-          :options="options"
-          :scroll-events="scrollEvents"
-          @scroll="scrollHandler"
-          >
+     <cube-sticky :pos="scrollY">
+      <cube-scroll
+        :scroll-events="scrollEvents"
+        @scroll="scrollHandler">
 
-          <ul class="build-center">
+        <div style="height:30px">1111</div>
+        <cube-sticky-ele>
+          <ul class="sticky-header">
+          <li class="top-left">收藏到歌单</li>
+            <li class="top-center">
+              <div></div>
+            </li>
+            <li class="top-bottom" @click="bulidlist">
+              <i class="iconfont iconjia"></i>
+              <span>新建歌单</span>
+            </li>
+          </ul>
+        </cube-sticky-ele>
+
+         <ul class="build-center">
             <li class="li" v-for="item in playlist" :key="item.id" @click="toList(item.id)">
               <div class="li-item" >
                 <div class="li-left">
@@ -40,11 +39,9 @@
               </div>
             </li>
           </ul>
-          
-        </cube-scroll>
-      </div>
 
-      </div>
+        </cube-scroll>
+      </cube-sticky>
     </cube-popup>
   </div>
 </template>
@@ -104,15 +101,15 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-   .build
-      position:relative
-      bottom:0
-      height:auto
-      width:100%
-      border-top-left-radius:20px
-      border-top-right-radius:20px
-      background-color:white
-      .top
+  //  .build
+  //     position:relative
+  //     bottom:0
+  //     height:auto
+  //     width:100%
+  //     border-top-left-radius:20px
+  //     border-top-right-radius:20px
+  //     background-color:white
+      .sticky-header
         height:60px
         width:100%
         // padding-left:20px
@@ -120,6 +117,10 @@
         flex-between()
         position:relative 
         margin: auto 10px
+        background-color:white
+        position:relative
+        border-top-left-radius:20px
+        border-top-right-radius:20px       
         li
          height:60px
         .top-left
@@ -145,13 +146,13 @@
           margin-right:20px
           ont-size:$font-size-medium
 
-    .scroll-list-wrap
-      height:360px
+    // .scroll-list-wrap
+    //   height:360px
       .build-center
         background-color:white
         width:100%
         height:auto
-        margin:10px auto
+        // margin:10px auto
         .li
           height:50px
           line-height:50px
@@ -188,4 +189,42 @@
                 height:20px
                 line-height:20px
                 color:gray
+
+        
+    .sticky-view-container
+      position: absolute
+      top: 100px
+      bottom: 0
+      left: 0
+      width: 100%
+      z-index:1
+      font-size:$font-size-medium
+      border-top-left-radius:20px
+      border-top-right-radius:20px
+      .sticky-header
+        flex-between()
+        height:60px
+        background-color:white
+        position:relative
+        border-top-left-radius:20px
+        border-top-right-radius:20px     
+
+
+    // .sticky-view-container
+    //   position: absolute
+    //   top: 300px
+    //   bottom: 0
+    //   left: 0
+    //   width: 100%
+    //   li
+    //     padding: 20px 10px
+    //   .sticky-header
+    //     background-color: #666
+    //   .cube-sticky
+    //     padding: 0 10px
+    //     .cube-scroll-wrapper
+    //       background-color: #fff
+    //   .cube-sticky-fixed
+    //     .sticky-header
+    //       margin: 0 10px  
 </style>

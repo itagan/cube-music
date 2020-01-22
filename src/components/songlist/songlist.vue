@@ -58,7 +58,7 @@
           <message
             class="my-message"
             :playlist="playlist"
-            @saveComment="saveComment"
+            @comment="toComment"
             @share="toShare"
             @check="toCheck"
             @cover="toCover"
@@ -78,7 +78,7 @@
                     (共{{tracks.length}}首)
                   </span>
               </li>
-              <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed">
+              <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed" v-show="!isCreater">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
                 (<span class="sub-num" ref="Sub">{{playlist.subscribedCount}}</span>)
@@ -128,12 +128,14 @@
       @build="moreBuildList"
       @share="toShare"
       @ring="setRing"
+      @collect="toCollected"
       :track="track"
       ref="playMore"
     ></play-more>
-    <share-dialog ref="shareShow"></share-dialog>
+    <share-dialog ref="shareShow" @cancel="cancelShare"></share-dialog>
     <set-ring ref="setRingShow"></set-ring>
     <my-cover :playlist="playlist" v-if="coverShow" @coverHide="coverHide"></my-cover>
+    <collection-to-list ref="collectedShow" @bulid="bulidlist"> </collection-to-list>
   </div>
 </template>
 
@@ -146,6 +148,7 @@
     import shareDialog from '../common/sharedialog'
     import setRing from '../common/setring'
     import myCover from '../common/cover'
+    import collectionToList from '../common/collectiontolist-copy'
     export default {
       name: 'songList.vue',
       components: {
@@ -156,7 +159,8 @@
         playMore,
         shareDialog,
         setRing,
-        myCover
+        myCover,
+        collectionToList
       },
       data () {
         return {
@@ -187,7 +191,8 @@
           complete: false,
           isSubscribed: false,
           id:'',
-          coverShow:false
+          coverShow:false,
+          isCreater:false
         }
       },
       computed: {
@@ -221,9 +226,11 @@
               // this.tracks = res.data.playlist.tracks
             this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0, 10) : res.data.playlist.tracks
             this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0, 4) : res.data.playlist.subscribers
-            this.messages.avatarUrl = res.data.playlist.creator.avatarUrl
-            this.messages.nickname = res.data.playlist.creator.nickname
+            this.Creater()
           })
+        },
+        Creater () {
+          this.isCreater = this.playlist.userId === 477726475
         },
         getQuery (query) {
           console.log(query)
@@ -240,8 +247,14 @@
             this.fake = true
           }
         },
-        saveComment () {
-
+        toComment () {
+          if(this.allShow) return
+          this.$router.push({
+            path: `/songlistcomment/${this.playlist.id}`,
+            query: {
+              playlist: JSON.stringify(this.playlist)
+            }
+          })
         },
         scrollHandler ({ y }) {
           this.scrollY = -y
@@ -289,6 +302,12 @@
             this.isMore = false
           }, 500)
         },
+        cancelShare () {
+          this.$refs.shareShow.hide()
+          setTimeout(() => {
+            this.isMore = false
+          }, 500)
+        },
         toShare () {
           this.$refs.shareShow.show()
         },
@@ -331,6 +350,15 @@
         },
         coverHide () {
           this.coverShow = false
+        },
+        bulidlist () {
+          this.isBuild = true
+          this.isMore = false
+          // this.$refs.collectedShow.hide()
+        },
+        toCollected () {
+          this.isMore = false
+          this.$refs.collectedShow.show()
         },
             // 收藏功能
         toSubscribed () {

@@ -52,14 +52,17 @@
               <home-page 
               :id="id" 
               :userId="userId"
-              ref="toScroll" 
               :begin="begin" 
+              :currentPage="currentPage"
               :profile="profile" 
-              :userMessage="userMessage"></home-page>
+              :userMessage="userMessage"
+              ref="toScroll" 
+              @taggleIndex="taggleIndex"
+              ></home-page>
             </cube-slide-item>
 
             <cube-slide-item :index="1">
-              <play-list :id="id" ref="toScroll"></play-list>
+              <play-list :id="id" ref="toScroll" :begin="beginOne" :currentPage="currentPage"></play-list>
               <!-- <div style="height:600px">测试啦啦啦啦啦</div> -->
             </cube-slide-item>
 
@@ -148,11 +151,13 @@
           },
           Options: {
             listenScroll: true,
-            probeType: 3
+            probeType: 3,
+            // stopPropagation:true
           },
           id:'',
           userId:'',
-          begin:false
+          begin:false,
+          beginOne:false
 
         }
       },
@@ -161,17 +166,23 @@
       },
       computed: {
         options () {
-          if(this.currentPage === 0) {
+          if(this.scrollY < 221) {
             return {
               pullUpLoad: false,
               scrollbar: true,
-              click: false // 解决触发两次点击事件的bug
+              click: false, // 解决点击事件被触发两次的问题
+              stopPropagation:false,
+              scrollX:false,
+              scrollY:true
             }
           }else{
             return {
               pullUpLoad: false,
               scrollbar: true,
-              click: false // 解决触发两次点击事件的bug
+              click: false, // 解决点击事件被触发两次的问题
+              stopPropagation:false,
+              scrollX:false,
+              scrollY:false
             }
           }
         }
@@ -184,17 +195,24 @@
             this.userMessage = res.data
             this.profile = res.data.profile
             this.level = res.data.level
+            console.log(this.profile)
           })
         },
         scrollHandler ({ y }) {
           this.scrollY = -y
+          console.log(this.scrollY)
                 // console.log(this.scrollY)
           // this.$refs.toScroll.Enable()
-          if(this.scrollY === 221) {
+          if(this.scrollY >= 221) {
             // this.$refs.toScroll.Enable()
             // this.$refs.scroll.forceUpdate()
             // console.log('开启子组件滚动')
-            this.begin = true
+            if( this.currentPage === 0) {
+              this.begin = true
+            }else if(this.currentPage === 1) {
+              this.beginOne = true
+            }
+           
           }
           this.messTop = this.$refs.messTop.getBoundingClientRect().top
                 // console.log(this.messTop)
@@ -234,8 +252,8 @@
         Lasttime (time, more) {
           this.lasttime = time
           this.hasMore = more
-          console.log(this.hasMore)
-          console.log(this.lasttime)
+          // console.log(this.hasMore)
+          // console.log(this.lasttime)
         },
         onPullingUp () {
         },
@@ -247,6 +265,9 @@
         },
         dynamicNum (num) {
           this.objs[4].num = num
+        },
+        taggleIndex () {
+          this.currentPage = 1
         }
       }
     }
