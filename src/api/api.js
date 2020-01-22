@@ -107,6 +107,9 @@ const users = {
     return axios.get(`${base}/user/subcount`)
   },
   // 更新用户信息
+  userUpdate (gender, signature, city, nickname, birthday, province) {
+    return axios.get(`${base}/user/update?gender=${gender}&signature=${signature}&city=${city}&nickname=${nickname}&birthday=${birthday}&province=${province}`)
+  },
   // 获取用户歌单
   playlist (uid) {
     return axios.get(`${base}/user/playlist?uid=${uid}`)

@@ -1,7 +1,7 @@
 <template>
-  <div class="user-message" ref="Message">
+  <div class="user-message" ref="Message" @click="toBigimg">
     <div class="user-message-left">
-      <div class="user-message-left-img">
+      <div class="user-message-left-img" @click.stop="changeCover">
         <img :src="userMessage.profile.avatarUrl" alt="" v-if="userMessage.profile">
       </div>
       <div class="user-message-left-more">
@@ -34,11 +34,11 @@
         <span>{{userMessage.profile.followTime}}</span>
       </div>
       <ul v-if="userMessage.profile.userId !== 477726475">
-        <li class="user-message-right-follow" v-if="!userMessage.profile.followed">
+        <li class="user-message-right-follow" v-if="!userMessage.profile.followed" v-show="isFollowed" @click.stop="toFollow">
           <i class="iconfont iconjia"></i>
           关注
         </li>
-        <li class="user-message-right-follow-true" v-if="userMessage.profile.followTime">
+        <li class="user-message-right-follow-true" v-if="userMessage.profile.followed" @click.stop="removeFollow">
           <i class="iconfont iconzhanghao"  v-if="!userMessage.profile.followMe"></i>
           <i class="iconfont iconduoren"  v-if="userMessage.profile.followMe"></i>
         </li>
@@ -49,7 +49,7 @@
       </ul>
       
       <ul v-if="userMessage.profile.userId === 477726475">
-        <li class="user-message-edit" v-if="!userMessage.profile.followed">
+        <li class="user-message-edit" v-if="!userMessage.profile.followed" @click="toEdit">
           编辑
         </li>
         <li class="user-message-edit">
@@ -67,18 +67,14 @@
       data () {
         return {
           man: true,
-          isUser:true
+          isUser:true,
+          isFollowed:true,
+          followed:false,
+          followTime:'',
+          Message:{}
         }
       },
       props: {
-        // profile: {
-        //   type: Object,
-        //   default: {}
-        // },
-        // level: {
-        //   type: Number,
-        //   default: 0
-        // },
         userMessage: {
           type: Object,
           default: {}
@@ -87,7 +83,59 @@
       methods: {
         opacityHeader (opac) {
           this.$refs.Message.style.opacity = opac
+        },
+        getMes () {
+          this.Message = this.userMessage
+          this.followed = this.userMessage.profile && this.userMessage.profile.followed
+          this.followTime = this.userMessage.profile && this.userMessage.profile.followTime
+        },
+        toEdit () {
+         this.$router.push({
+            path: `/editinformation`,
+            query: {
+              userMessage:JSON.stringify(this.userMessage)
+            }
+          })
+        },
+        toBigimg () {
+          this.$createImagePreview({
+            imgs: [this.userMessage.profile.backgroundUrl],
+            zIndex:2002
+          }).show()
+        },
+        changeCover () {
+          //头像放大
+        },
+        toFollow () {
+          this.$api.users.toFollow(this.userMessage.profile.userId, 1).then(res => {
+            console.log(res.data)
+            // this.isFollowed = false
+            // this.userMessage.profile.followed = true
+            if(res.data.code === 200) {
+              const toast = this.$createToast({
+                txt: res.data.followContent,
+                type: 'text',
+                zIndex:2002,
+                time: 2000
+              })
+              toast.show()  
+              this.userMessage.profile.followed = true
+            }
+          })
+        },
+        removeFollow () {
+          this.$api.users.toFollow(this.userMessage.profile.userId, 2).then(res => {
+            console.log(res.data)
+            // this.isFollowed = false
+            this.userMessage.profile.followed = false
+          })
         }
+      },
+      created () {
+        // this.$nextTick(() => {
+        //   this.getMes()
+        // })
+        this.getMes()
       }
     }
 </script>

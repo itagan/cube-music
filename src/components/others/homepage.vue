@@ -17,11 +17,11 @@
         <li>
           村龄：{{createYear(userMessage.createDays)}} （{{registerTime(userMessage.createTime)}}注册）
         </li>
-        <li>
-          年龄：90后 天秤座
+        <li v-if="userMessage.profile">
+          年龄：{{(getAge(userMessage.profile.birthday))}}
         </li>
-        <li>
-          地区：广东 广州
+        <li v-if="userMessage.profile">
+          地区：{{CitySure(userMessage.profile.province, userMessage.profile.city)}}
         </li>
       </ul>
       <div class="home-page-message-more" @click.stop="moreMessage">
@@ -152,6 +152,12 @@
     import songListBase from '../../base/song/songlistbase'
     import userBase from '../../base/basecomment/userbase'
     import { serializeNumber } from '../../assets/js/number'
+    import { provinceList, cityList } from '../../assets/js/area'
+
+    const addressData = provinceList
+    addressData.forEach(province => {
+      province.children = cityList[province.value]
+    })
     export default {
       name: 'homepage.vue',
       data () {
@@ -163,7 +169,7 @@
           playCountLike: 0,
           isLog:false,
           musiccolumn:false,
-          isComment:false
+          isComment:false,
         }
       },
       components: {
@@ -200,6 +206,7 @@
             }
             this.playlists = res.data.playlist
             // console.log(this.playlists)
+            
 
           })
         },
@@ -231,12 +238,22 @@
             path:`/songlist/${this.playlists[0].id}`  //注意前面加个'/' 是根路由
           })
         },
+        CitySure (province, city) {
+          let arr = cityList[province].filter(item => {
+            return item.value == city
+          })
+          return arr[0].province + arr[0].text
+        },
         createYear (day) {
           if(day < 365) {
             return `${day}` + '天'
           }else {
             return `${Math.floor(day / 365)}` + '年'
           }
+        },
+        getAge (timestamp) {
+          let nowTimestamp = new Date().getTime()
+          return Math.ceil((nowTimestamp-timestamp)/31536000000)
         },
         registerTime (timestamp) {
           let date = new Date(timestamp)

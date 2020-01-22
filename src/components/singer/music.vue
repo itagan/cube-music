@@ -86,20 +86,28 @@ export default {
     id:{
       type:String,
       default:''
+    },
+    begin:{
+      type:Boolean,
+      default:false
+    },
+    currentPage: {
+      type:Number,
+      default:0
     }
   },
   data() {
     return {
       hotSongs:[],
       playing:false,
-      options: {
-        pullUpLoad: true,
-        scrollbar: true,
-        click: false, // 解决点击事件被触发两次的问题
-        stopPropagation:false,
-        scrollX:false,
-        scrollY:true
-      },
+      // options: {
+      //   pullUpLoad: true,
+      //   scrollbar: true,
+      //   click: false, // 解决点击事件被触发两次的问题
+      //   stopPropagation:false,
+      //   scrollX:false,
+      //   scrollY:true
+      // },
       secondStop: 0,
       scrollEvents: ['scroll'],
       scrollY: 0,
@@ -110,8 +118,37 @@ export default {
       val: 1
     }
   },
-  watch: {},
-  computed: {},
+  watch: {
+     currentPage () {
+       if(this.currentPage === 1) {
+         this.getMusic()
+       }
+     }
+  },
+  computed: {
+    options () {
+      if(this.begin) {
+        // console.log('让我滚动')
+        return {
+          pullUpLoad: false,
+          scrollbar: false,
+          click: false, // 解决点击事件被触发两次的问题
+          stopPropagation:false,
+          scrollX:false,
+          scrollY:true
+        }
+      }else {
+        return {
+          pullUpLoad: false,
+          scrollbar: false,
+          click: false, // 解决点击事件被触发两次的问题
+          stopPropagation:false,
+          scrollX:false,
+          scrollY:false 
+        } 
+      }
+    }
+  },
   methods: {
     getMusic () {
       this.$api.singers.singermusic(this.id).then(res => {
@@ -144,7 +181,7 @@ export default {
     }
   },
   created() {
-    this.getMusic()
+    // this.getMusic()
    
   },
   mounted() {

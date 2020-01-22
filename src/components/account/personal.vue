@@ -39,7 +39,7 @@
         <span v-if="personals.profile">{{personals.profile.followeds}}</span>
         <span>粉丝</span>
       </li>
-      <li>
+      <li @click="toEdit">
         <i class="iconfont iconbianji"></i>
         <span>编辑资料</span>
       </li>
@@ -145,6 +145,14 @@
         toUser () {
           this.$router.push({
             path: `/user/${this.personals.profile.userId}`
+          })
+        },
+        toEdit () {
+          this.$router.push({
+            path: `/editinformation`,
+            query: {
+              userMessage:JSON.stringify(this.personals)
+            }
           })
         },
       }

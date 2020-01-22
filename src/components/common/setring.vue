@@ -2,6 +2,11 @@
   <div class="share">
     <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001">
 
+      <!-- <div class="scroll-list-wrap">
+        <cube-scroll
+          ref="scroll"
+          :options="options"> -->
+
         <ul class="set-ring">
           <li class="set-ring-top">
             <span>设置选择</span>
@@ -15,6 +20,9 @@
           </li>
         </ul>
 
+        <!-- </cube-scroll>
+      </div> -->
+
     </cube-popup>
   </div>
 </template>
@@ -23,7 +31,11 @@
     export default {
       name: 'setRing.vue',
       data () {
-        return {}
+        return {
+          // options: {
+          //   scrollbar: true
+          // },
+        }
       },
       created () {
             // this.subscribeDialog = this.$createSubscribeDialog()
@@ -31,6 +43,7 @@
       methods: {
         show () {
           this.$refs.popup.show()
+          // this.$refs.scroll.refresh()
         },
         hide () {
           this.$refs.popup.hide()
@@ -43,6 +56,11 @@
           this.$createSubscribeDialog().show()
           this.hide()
         }
+      },
+      mounted() {
+        // this.$nextTick(() =>{ 
+        //   this.$refs.scroll.refresh()
+        // })
       }
     }
 </script>
@@ -55,6 +73,7 @@
     width:100%
     border-top-left-radius:20px
     border-top-right-radius:20px
+    overflow:hidden
     background-color:white
     .set-ring-top
       color:gray

@@ -70,9 +70,9 @@
 </script>
 
 
-<style  lang="stylus" rel="stylesheet/stylus">
+<style scoped lang="stylus" rel="stylesheet/stylus">
 
-  .nav-scroll-list-wrap
+  .nav-scroll-list-wrap >>>
     transform: rotate(0deg) // fix 子元素超出边框圆角部分不隐藏的问题
     position: relative
     background-color: white

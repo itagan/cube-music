@@ -44,8 +44,7 @@
       flex-between()
       .recommend-left
         color:gray
-        font-weight:bold
-        font-size:$font-size-large
+        font-size:$font-size-large - 2
       .recommend-right
         color:gray
         font-size:$font-size-small

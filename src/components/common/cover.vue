@@ -194,6 +194,7 @@ export default {
       height:567px  
       position:relative
       top:50px
+      width:375px
       .content
         height:auto
         font-size:$font-size-medium

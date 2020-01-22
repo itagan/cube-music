@@ -401,7 +401,7 @@
         bottom:0
         left:50%
         margin-left:-60px
-      flex-center()
+        flex-center()
       .load
         font-size:$font-size-medium
         i

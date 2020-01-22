@@ -58,7 +58,7 @@
           <message
             class="my-message"
             :playlist="playlist"
-            @saveComment="saveComment"
+            @comment="toComment"
             @share="toShare"
             @check="toCheck"
             @cover="toCover"
@@ -128,12 +128,14 @@
       @build="moreBuildList"
       @share="toShare"
       @ring="setRing"
+      @collect="toCollected"
       :track="track"
       ref="playMore"
     ></play-more>
-    <share-dialog ref="shareShow"></share-dialog>
+    <share-dialog ref="shareShow" @cancel="cancelShare"></share-dialog>
     <set-ring ref="setRingShow"></set-ring>
     <my-cover :playlist="playlist" v-if="coverShow" @coverHide="coverHide"></my-cover>
+    <collection-to-list ref="collectedShow" @bulid="bulidlist"> </collection-to-list>
   </div>
 </template>
 
@@ -146,6 +148,7 @@
     import shareDialog from '../common/sharedialog'
     import setRing from '../common/setring'
     import myCover from '../common/cover'
+    import collectionToList from '../common/collectiontolist-copy'
     export default {
       name: 'songList.vue',
       components: {
@@ -156,7 +159,8 @@
         playMore,
         shareDialog,
         setRing,
-        myCover
+        myCover,
+        collectionToList
       },
       data () {
         return {
@@ -243,8 +247,14 @@
             this.fake = true
           }
         },
-        saveComment () {
-
+        toComment () {
+          if(this.allShow) return
+          this.$router.push({
+            path: `/songlistcomment/${this.playlist.id}`,
+            query: {
+              playlist: JSON.stringify(this.playlist)
+            }
+          })
         },
         scrollHandler ({ y }) {
           this.scrollY = -y
@@ -292,6 +302,12 @@
             this.isMore = false
           }, 500)
         },
+        cancelShare () {
+          this.$refs.shareShow.hide()
+          setTimeout(() => {
+            this.isMore = false
+          }, 500)
+        },
         toShare () {
           this.$refs.shareShow.show()
         },
@@ -334,6 +350,15 @@
         },
         coverHide () {
           this.coverShow = false
+        },
+        bulidlist () {
+          this.isBuild = true
+          this.isMore = false
+          // this.$refs.collectedShow.hide()
+        },
+        toCollected () {
+          this.isMore = false
+          this.$refs.collectedShow.show()
         },
             // 收藏功能
         toSubscribed () {

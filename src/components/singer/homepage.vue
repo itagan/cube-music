@@ -1,14 +1,14 @@
 <template>
   <div class="wrapper">
 
-    <div class="pullloadtop" v-if="!hotSongs.length">
+    <!-- <div class="pullloadtop" v-if="!hotSongs.length">
      <div>
         <span class="load">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
      </div>
-    </div>
+    </div> -->
 
      <div class="content-scroll-wrapper">
       <cube-scroll
@@ -146,43 +146,69 @@ export default {
       type:String,
       default:''
     },
+    currentPage: {
+      type:Number,
+      default:0
+    }
   },
   data() {
     return {
       hotSongs:[],
       artist:{},
       playing:false,
-      options: {
-        pullUpLoad: false,
-        scrollbar: false,
-        click: false, // 解决点击事件被触发两次的问题
-        stopPropagation:false,
-        scrollX:false,
-        scrollY:true
-      },
-      secondStop: 0,
+      // options: {
+      //   pullUpLoad: false,
+      //   scrollbar: false,
+      //   click: false, // 解决点击事件被触发两次的问题
+      //   stopPropagation:false,
+      //   scrollX:false,
+      //   scrollY:true
+      // },
       scrollEvents: ['scroll'],
       scrollY: 0,
       trackCountLike:0,
       playCountLike:0,
       playlists:[],
       playlist:[],
-      collection:[]
+      collection:[],
+      // scrollTrue:false
     }
   },
   watch: {
-    begin(val) {
-      // if(val)
-      // this.options.scrollY = val
-      this.$refs.contentScroll.enable()
-      //  this.$refs.contentScroll.forceUpdate()
-       this.$nextTick(() =>{
-        //  this.$refs.contentScroll.forceUpdate()
-        this.$refs.contentScroll.refresh()
-       })
+    // begin(val) {
+    //   // if(val)
+    //   // this.options.scrollY = val
+    //   this.$refs.contentScroll.enable()
+    //   //  this.$refs.contentScroll.forceUpdate()
+    //    this.$nextTick(() =>{
+    //     //  this.$refs.contentScroll.forceUpdate()
+    //     this.$refs.contentScroll.refresh()
+    //    })
+    // }
+  },
+  computed: {
+    options () {
+      if(this.begin) {
+        return {
+          pullUpLoad: false,
+          scrollbar: true,
+          click: false, // 解决点击事件被触发两次的问题
+          stopPropagation:false,
+          scrollX:false,
+          scrollY:true
+        }
+      }else {
+        return {
+          pullUpLoad: false,
+          scrollbar: true,
+          click: false, // 解决点击事件被触发两次的问题
+          stopPropagation:false,
+          scrollX:false,
+          scrollY:false
+        } 
+      }
     }
   },
-  computed: {},
   methods: {
     getMusic () {
       this.$api.singers.singermusic(this.id).then(res => {
@@ -227,11 +253,11 @@ export default {
       //  console.log('子组件左边滚动' + this.scrollY)
     },
     Disable () {
-      // this.$refs.contentScroll.disable()
+      this.$refs.contentScroll && this.$refs.contentScroll.disable()
       // console.log(this.$refs.contentScroll)
     },
     Enable () {
-      // this.$refs.contentScroll.enable()
+      this.$refs.contentScroll && this.$refs.contentScroll.enable()
       // this.options.scrollY = true
        this.$refs.contentScroll.refresh()
       //  console.log('开始滚动')
@@ -260,9 +286,9 @@ export default {
     
   },
   mounted() {
-    // this.$nextTick(() => {
-    //   this.Disable()
-    // })
+    this.$nextTick(() => {
+      this.Disable()
+    })
   }
 }
 </script>

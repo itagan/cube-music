@@ -10,17 +10,17 @@
       <router-link tab="div" class="new-songs-right" to="/newsong" v-if="show">新歌推荐</router-link>
     </div>
 
-    <div class="nav-flex" v-if="isShow">
-      <router-link tab="div" class="nav-item" v-for="item in result" :key="item.id" v-if="result.length" to="/my">
+    <div class="nav-flex" v-show="isShow" v-if="albums.length">
+      <div class="nav-item" v-for="item in albums" :key="item.id" @click="toAlbum(item.id)">
         <div class="nav-div">
-          <img :src="item.picUrl" class="nav-img" alt="图像">
+          <img :src="item.picUrl" class="nav-img" alt="">
         </div>
         <div class="nav-title">{{item.name}}</div>
-      </router-link>
+      </div>
     </div>
 
-    <div class="nav-flex" v-if="show">
-      <div class="nav-item" v-for="item in result" :key="item.id" v-if="result.length">
+    <div class="nav-flex" v-show="show" v-if="result.length">
+      <div class="nav-item" v-for="item in result" :key="item.id" @click="toMusic">
         <div class="nav-div">
           <img :src="item.picUrl" class="nav-img">
           <div class="nav-img-div" @click="player()"></div>
@@ -39,16 +39,24 @@
         return {
           isShow: true,
           show: false,
-          result: []
+          result: [],
+          albums:[]
         }
       },
       created () {
         this.getResults()
+        this.getTopAlbums()
       },
       methods: {
         getResults () {
           this.$api.find.recommend().then((res) => {
             this.result = res.data.result.slice(0, 3)
+          })
+        },
+        getTopAlbums () {
+          this.$api.albums.homenewalbum().then(res => {
+            console.log(res.data)
+            this.albums = res.data.albums.slice(0, 3)
           })
         },
         newLeft () {
@@ -64,6 +72,12 @@
                 // e.preventDefault()
                 // event.stopPropagation()
                 // this.$router.push({path:`/my`})
+        },
+        toMusic () {},
+        toAlbum (id) {
+          this.$router.push({
+            path:`/albumlist/${id}`
+          })
         }
       }
     }

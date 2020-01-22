@@ -12,7 +12,7 @@
         <div class="song-title">
           {{playlist.name}}
         </div>
-        <div class="song-create" @click="toUser" v-if="playlist.creator">
+        <div class="song-create" @click.stop="toUser(playlist.userId)" v-if="playlist.creator">
           <img :src="playlist.creator.avatarUrl" alt="">
           <span>{{playlist.creator.nickname}}</span>
           <i class="iconfont iconiconfontyoujiantou"></i>
@@ -60,10 +60,7 @@
       },
       methods: {
         toComment () {
-          this.$emit('saveComment')
-          this.$router.push({
-            path: `/songlistcomment/${this.playlist.id}`
-          })
+          this.$emit('comment')
         },
         toShare () {
           this.$emit('share')
@@ -71,11 +68,19 @@
         chcekMore () {
           this.$emit('check')
         },
-        toUser () {
-          // let userId = 477726475
-          this.$router.push({
-            path: `/user/${this.playlist.creator.userId}`
-          })
+        toUser (userId) {
+          if(this.playlist.creator.userType === 2 || this.playlist.creator.userType === 4) {
+            this.$api.users.userdetail(userId).then(res => {
+              let id = res.data.profile.artistId
+              this.$router.push({
+                path: `/singer/${userId}/${id}`
+              })
+            })
+            }else {
+              this.$router.push({
+              path: `/user/${userId}`
+            })
+          }
         },
         toCover () {
           this.$emit('cover')

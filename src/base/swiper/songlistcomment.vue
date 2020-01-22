@@ -1,15 +1,16 @@
 <template>
-  <ul>
-    <li class="img"><img src="../../components/user/img/login1.png" alt=""></li>
-
+  <ul @click="toSonglist(playlist.id)">
+    <li class="img">
+      <img :src="playlist.coverImgUrl" alt="">
+    </li>
     <li class="content">
       <div class="content-top">
         <span class="list">歌单</span>
-        <span class="title">肖战翻唱歌录f代发理发师理发了sdas</span>
+        <span class="title">{{playlist.name}}</span>
       </div>
-      <div class="content-bottom">
+      <div class="content-bottom" @click.stop="toUser(playlist.userId)">
         <span class="by">by</span>
-        <span class="nickname">肖战</span>
+        <span class="nickname">{{playlist.creator.nickname}}</span>
       </div>
     </li>
 
@@ -21,7 +22,31 @@
     export default {
       name: 'songListComment.vue',
       props: {
-
+        playlist:{
+          type:Object,
+          default:{}
+        }
+      },
+      methods: {
+        toSonglist (id) {
+          this.$router.push({
+            path:`/songlist/${id}`
+          })
+        },
+        toUser (userId) {
+          if(this.playlist.creator.userType === 2 || this.playlist.creator.userType === 4) {
+            this.$api.users.userdetail(userId).then(res => {
+              let id = res.data.profile.artistId
+              this.$router.push({
+                path: `/singer/${userId}/${id}`
+              })
+            })
+          }else {
+            this.$router.push({
+            path: `/user/${userId}`
+          })
+        }
+        }
       }
     }
 </script>
@@ -57,12 +82,12 @@
         width:auto
         align-items: center
         .list
-          color:lightpink
+          color:red
           border:1px solid lightpink
-          border-radius:1px
+          border-radius:2px
           height:14px
           width:28px
-          font-size:$font-size-small
+          font-size:$font-size-small 
           flex-center()
         .title
           font-size:$font-size-medium
@@ -77,8 +102,8 @@
           font-size:$font-size-small
           color:gray
         .nickname
-          font-size:$font-size-medium
-          color:lightskyblue
+          font-size:$font-size-medium - 1
+          color:#4a8fcd
           margin-left:5px
     .go
       color:gray
