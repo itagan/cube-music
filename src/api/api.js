@@ -291,6 +291,18 @@ const albums = {
 const searchs = {
   search (keywords, limit, offset, type) {
     return axios.get(`${base}/search?keywords=${keywords}&limit=${limit}&offset=${offset}&type=${type}`)
+  },
+  searchDefault () {
+    return axios.get(`${base}/search/default`)
+  },
+  searchHotDetail () {
+    return axios.get(`${base}/search/hot/detail`)
+  },
+  searchSuggestion (keywords) {
+    return axios.get(`${base}/search/suggest?keywords=${keywords}&type=mobile`)
+  },
+  searchSuggest (keywords) {
+    return axios.get(`${base}/search/multimatch?keywords=${keywords}`)
   }
 }
 

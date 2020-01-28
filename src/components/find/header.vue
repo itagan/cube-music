@@ -31,7 +31,8 @@
           console.log(query)
         },
         goToSearch () {
-          this.$router.push('/my')
+          // this.$router.push('/hotsearch')
+          this.$emit('Search')
         }
       }
     }

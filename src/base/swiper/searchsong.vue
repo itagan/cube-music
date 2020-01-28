@@ -7,18 +7,18 @@
       <div class="li-center-top" v-if="$slots.top">
         <slot name="top"></slot>
       </div>
+      <div class="li-center-center" v-if="$slots.center">
+        <slot name="center"></slot>
+      </div>
       <div class="li-center-bottom" v-if="$slots.bottom">
         <slot name="bottom"></slot>
       </div>
-      <div class="li-center-only" v-if="$slots.liRight">
-        <slot name="liRight"></slot>
-      </div>
     </div>
-    <div class="li-right-follow" v-if="$slots.rightFollow">
-      <slot name="rightFollow"></slot>
+    <div class="li-right-play" v-if="$slots.rightPlay">
+      <slot name="rightPlay"></slot>
     </div>
-    <div class="li-right-share" v-if="$slots.rightShare">
-      <slot name="rightShare"></slot>
+    <div class="li-right-more" v-if="$slots.rightMore">
+      <slot name="rightMore"></slot>
     </div>
   </div>
 </template>
@@ -44,49 +44,50 @@ export default {
   @import "../../common/stylus/mixin"
   .li-item
     display:flex
-    height:65px
-    line-height:65px
+    align-items: center
+    // flex-direction:column
+    height:auto
     width:100%
-    border-radius:10px
     .li-left
-      width:65px
-      height:65px
+      width:30px
+      height:100%
+      flex-center()
       margin-left:10px
-      border-radius:50%
+      i
+       font-size:$font-size-large
     .li-center
       flex:1
       margin-left:10px
-      height:65px
-      // display:flex
-      // align-items: center
+      min-height:50px
       .li-center-top
         font-size:$font-size-medium
         height:25px
         line-height:25px
         ellipsis()
-        margin-top:7.5px
-      .li-center-bottom
+      .li-center-center
         font-size:$font-size-small
-        height:25px
-        line-height:25px
+        height:20px
+        line-height:20px
         color:gray
         ellipsis()
-      .li-center-only
-        font-size:$font-size-medium
-        height:65px
-        // line-height:65px
+      .li-center-bottom
+        font-size:$font-size-small
+        height:20px
+        line-height:20px
         ellipsis()
         display:flex
-        align-items: center
-    .li-right-share
+        color:gray
+    .li-right-more
        width:30px
-       height:65px
+       height:100%
        margin-right:10px  
        font-size:$font-size-large-x + 6  
        flex-center()
-    .li-right-follow
-       height:65px
+    .li-right-play
+       height:100%
        margin-right:10px  
        font-size:$font-size-medium
-       flex-center()
+
+    i
+     font-size:$font-size-large   
 </style>
