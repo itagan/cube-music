@@ -18,15 +18,17 @@
         <ul class="content">
           <li v-for="(item,index) in playlists" :key="index">
             <list-base>
-              <img :src="item.coverImgUrl" alt="" slot="left" class="img"> 
-              <div slot="top">
-                {{item.name}}
+              <img v-lazy="item.coverImgUrl" alt="" slot="left" class="img"> 
+              <div slot="top" class="limit">
+               <div class="limit-top">{{item.name}}</div>
               </div>
-              <div slot="bottom">
-                {{item.trackCount}}首音乐
+              <div slot="bottom" class="limit">
+                <div class="limit-bottom">
+                 {{item.trackCount}}首音乐
                 by
                 {{item.creator.nickname}},
-                播放{{item.playCount}}次
+                播放{{Num(item.playCount)}}次
+                </div>
               </div>
             </list-base>
           </li>
@@ -51,6 +53,7 @@
 
 <script>
 import listBase from '../../base/swiper/listbasesmall'
+import {serializeNumber} from '../../assets/js/number'
 export default {
   components: {
     listBase
@@ -59,6 +62,10 @@ export default {
     value:{
       type:String,
       default:''
+    },
+    currentPage:{
+      type:Number,
+      default:0
     }
   },
   data() {
@@ -78,7 +85,13 @@ export default {
       playlists:[]
     }
   },
-  watch: {},
+  watch: {
+    currentPage(val) {
+      if(val === 3 && !this.playlists.length) {
+       this.getPlaylist(this.value, 30, 0, 1000)
+      } 
+    }
+  },
   computed: {},
   methods: {
     getPlaylist (keywords, limit, offset, type) {
@@ -102,9 +115,12 @@ export default {
         contentScroll.forceUpdate()
       }, 1000)
     },
+    Num (num) {
+      return serializeNumber(num)
+    }
   },
   created() {
-    this.getPlaylist(this.value, 30, 0, 1000)
+    // this.getPlaylist(this.value, 30, 0, 1000)
   },
   mounted() {}
 }
@@ -124,6 +140,13 @@ export default {
           width:50px
           height:50px 
           border-radius:5px
+        .limit
+          .limit-top
+            max-width:285px
+            ellipsis() 
+          .limit-bottom
+            max-width:285px
+            ellipsis()    
           
       
   .content-scroll-wrapper

@@ -85,7 +85,7 @@
 
 <script>
 import MyHeader from '../../../base/navbar/navbar'
-import followBase from '../../../base/swiper/followbase'
+import followBase from '../../../base/swiper/followbasesmall'
 import MySearch from '../../../base/search/search'
 export default {
   components: {

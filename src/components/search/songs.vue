@@ -1,14 +1,16 @@
 <template>
   <div class="wrapper">
 
-     <div class="pullloadtop" v-if="!songs.length">
+     <div class="pullloadtop" v-if="!songs.length" v-show="result">
       <span class="load">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
-     </div>  
+     </div> 
 
-    <cube-sticky :pos="scrollY" v-else>
+     <div class="no-result" v-if="!songs.length" v-show="!result">无结果</div> 
+
+    <cube-sticky :pos="scrollY" v-if="songs.length">
       <cube-scroll
         :scroll-events="scrollEvents"
         :options="options"
@@ -47,15 +49,18 @@
             <li v-for="(item,index) in songs" :key="index" class="li">
               <song-base class="my-songs-base">
                 <i slot="left" class="iconfont iconlaba" @click.stop="toIt" v-if="isPlay"></i>
-                <div slot="top">
-                  {{item.name}}
+                <div slot="top" class="limit">
+                  <div class="limit-top">{{item.name}}</div>
                 </div>
-                <div slot="center">
-                  {{item.artists[0].name}} - {{item.album.name}}
+                <div slot="center" class="limit">
+                  <div class="limit-bottom">{{item.artists[0].name}} - {{item.album.name}}</div>
                 </div>
-                <div slot="bottom" v-if="item.alias.length">
-                  {{TransAlias(item.alias)}}
+                <div slot="bottom" class="limit" v-if="item.alias.length">
+                  <div class="limit-bottom">
+                   {{TransAlias(item.alias)}}
+                  </div>
                 </div>
+
                 <i slot="rightPlay" class="iconfont iconbofang2" v-if="item.fee"></i>
                 <i slot="rightMore" class="iconfont icon-ellipsis" @click.stop="toIt"></i>
               </song-base> 
@@ -92,6 +97,10 @@ export default {
     value:{
       type:String,
       default:''
+    },
+    currentPage:{
+      type:Number,
+      default:0
     }
   },
   data() {
@@ -105,7 +114,6 @@ export default {
       scrollEvents: ['scroll'],
       multimatch:{},
       isPlay:false,
-      song: {},
       songs:[],
       checked: false,
       allShow: false,
@@ -113,10 +121,17 @@ export default {
       hasMore: true,
       songCount:'',
       offset:0,
-      count:0
+      count:0,
+      result:true
     }
   },
-  watch: {},
+  watch: {
+    currentPage(val) {
+      if(val === 1  && !this.songs.length) {
+        this.getSongs(this.value, 60, 0, 1)
+      } 
+    }
+  },
   computed: {},
   methods: {
     getSongs (keywords, limit, offset, type) {
@@ -128,6 +143,9 @@ export default {
           this.offset+=10
         }
         this.songs =  this.songs.concat(res.data.result.songs)
+        setTimeout(() => {
+          this.result = this.songs.length > 0
+        }, 3000)
       })
     },
     toIt () {
@@ -156,7 +174,7 @@ export default {
     },
   },
   created() {
-    this.getSongs(this.value, 60, 0, 1)
+    // this.getSongs(this.value, 60, 0, 1)
   },
   mounted() {}
 }
@@ -195,7 +213,15 @@ export default {
     .my-content
       .li
         border-bottom:.5px solid rgba(128,128,128,.2)
-        margin-bottom:10px  
+        margin-bottom:10px 
+        .my-songs-base
+          .limit
+            .limit-top
+              max-width:280px
+              ellipsis() 
+            .limit-bottom
+              max-width:280px
+              ellipsis()   
 
 
      //加载中相关样式

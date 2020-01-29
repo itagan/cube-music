@@ -9,38 +9,6 @@
       </div>
     </my-header>
 
-    <!-- <my-header class="my-header" v-if="!hasTips">
-    <div slot="center" class="search-wrap-tips">
-      <div class="my-input">
-        <i class="iconfont iconsearch"></i>
-        <cube-input
-          v-model="value"
-          :placeholder="placeholder"
-          :maxlength="maxlength"
-          :autofocus="autofocus"
-          :clearable="clearable"
-          @input="input"
-          class="my-input-cube"
-        ></cube-input>
-      </div>
-      <div class="cancel" @click="cancel">取消</div>
-    </div>
-    <i class="iconfont iconyinletiaodongzhuangtai" slot="right"></i>
-    </my-header>
-
-    <ul class="search-tips" v-if="!hasTips">
-      <li class="search-tips-li-one" @click="_toSearch">
-        搜索
-        <span>
-          "{{value}}"
-        </span>
-      </li>
-      <li v-for="(item, index) in suggestions" :key="index" @click="toSearch(item.keyword)">
-        <i class="iconfont iconsearch"></i>
-        <span>{{item.keyword}}</span>
-      </li>
-    </ul> -->
-
    <div class="slide">
     <div class="nav-scroll-list-wrap">
       <cube-scroll 
@@ -55,7 +23,8 @@
             v-for="(item, index) in objs"
             :key="index"
             :class="[currentPage === index ? activeClass : '', errorClass]"
-            @click="toggles(item,index)"
+            @click.stop="toggles(item,index)"
+            ref="distance"
             class="nav-item"
           >{{ item.text }}</li>
         </ul>
@@ -69,39 +38,42 @@
         :loop="false"
         :autoPlay="false"
         :threshold="0.1"
-        @change="slideChange">
+        :showDots="false"
+        :options="options"
+        @change="slideChange"
+        @scroll="scroll"
+        ref="slideScroll"
+        >
         <cube-slide-item :key="0">
-          <my-all :value="value"></my-all>
+          <my-all :value="value" @changeIndex="changeIndex"></my-all>
         </cube-slide-item>
-
-         <cube-slide-item :key="1">
-          <my-songs :value="value"></my-songs>
+        <cube-slide-item :key="1">
+          <my-songs :value="value" :currentPage="currentPage"></my-songs>
         </cube-slide-item>
         <cube-slide-item :key="2">
-          <yun-cun :value="value"></yun-cun>
+          <yun-cun :value="value" :currentPage="currentPage"></yun-cun>
         </cube-slide-item>
         <cube-slide-item :key="3">
-          <play-list :value="value"></play-list>
+          <play-list :value="value" :currentPage="currentPage"></play-list>
         </cube-slide-item>
         <cube-slide-item :key="4">
-          <my-singer :value="value"></my-singer>
+          <my-singer :value="value" :currentPage="currentPage"></my-singer>
         </cube-slide-item>
         <cube-slide-item :key="5">
-          <my-album :value="value"></my-album>
+          <my-album :value="value" :currentPage="currentPage"></my-album>
         </cube-slide-item>
         <cube-slide-item :key="6">
-         <my-videos :value="value"></my-videos>
+         <my-videos :value="value" :currentPage="currentPage"></my-videos>
         </cube-slide-item>
         <cube-slide-item :key="7">
           <div class="noapi">暂无API数据支持</div>
         </cube-slide-item>
         <cube-slide-item :key="8">
-          <my-radios :value="value"></my-radios>
+          <my-radios :value="value" :currentPage="currentPage"></my-radios>
         </cube-slide-item>
         <cube-slide-item :key="9">
-          <my-users :value="value"></my-users>
+          <my-users :value="value" :currentPage="currentPage"></my-users>
         </cube-slide-item>
-        <div slot="dots"></div>
       </cube-slide>
     </div>
 
@@ -150,7 +122,13 @@ export default {
       hasTips:true,
       suggestions:[],
       options: {
-        scrollbar: false
+        scrollbar: false,
+        bounce: {
+        top: false,
+        bottom: false,
+        left: false,
+        right: false
+      }
       },
       scrollEvents: ['scroll'],
       activeClass: 'nav-item-active',
@@ -232,16 +210,35 @@ export default {
       }
     },
     toggles (item, index) {
+      // if(this.currentPage < index) {
+      //   this.$refs.navScroll.scroll.scrollBy(-50*(index - this.currentPage),0,200)
+      // }
+      // if(this.currentPage > index) {
+      //   this.$refs.navScroll.scroll.scrollBy(50*(this.currentPage - index),0,200)
+      // }
+      let leftDistance = this.$refs.distance[index].getBoundingClientRect().left
+      console.log(leftDistance)
+      this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
       this.currentPage = index
+      // console.log(index)
       // this.$refs.navScroll.scroll.scrollBy(-10,0,200)
       // this.$refs.navScroll.scrollToElement('my-header',200,true,true)
     },
     slideChange (index) {
+      let leftDistance = this.$refs.distance[index].getBoundingClientRect().left
+      this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
       this.currentPage = index
     },
     scrollHandler (pos) {
-      console.log(pos.x)
+      // console.log(pos.x)
     },
+    changeIndex (i) {
+      this.currentPage = i
+      this.$refs.slideScroll.refresh()  //刷新一下轮播，避免点击回到全部无效
+    },
+    scroll ({x, y}) {
+      console.log(x, y)
+    }
   },
   created() {
     this.Placeholder()
@@ -334,6 +331,7 @@ export default {
        color:red
        background-color: white
        flex-center()
+       margin-top:20px
      
      .cube-input_active::after
       border:none     

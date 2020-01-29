@@ -48,6 +48,10 @@ export default {
     value:{
       type:String,
       default:''
+    },
+    currentPage:{
+      type:Number,
+      default:0
     }
   },
   data() {
@@ -67,7 +71,13 @@ export default {
       videos:[]
     }
   },
-  watch: {},
+  watch: {
+    currentPage(val) {
+      if(val === 6 && !this.videos.length) {
+        this.getVideos(this.value, 30, 0, 1014)
+      } 
+    }
+  },
   computed: {},
   methods: {
     getVideos (keywords, limit, offset, type) {
@@ -100,7 +110,7 @@ export default {
     },
   },
   created() {
-    this.getVideos(this.value, 30, 0, 1014)
+    // this.getVideos(this.value, 30, 0, 1014)
   },
   mounted() {}
 }

@@ -16,17 +16,19 @@
         @pulling-up="onPullingUp"
         >
         <ul class="content">
-          <li v-for="(item,index) in albums" :key="index">
+          <li v-for="(item,index) in albums" :key="index"  @click="toAlbum(item.id)">
              <album-base class="my-album">
               <div class="left-img" slot="left">
                 <img :src="item.picUrl" alt="">
               </div>
-              <div slot="top">
-                {{item.name}}
+              <div slot="top" class="limit">
+               <div class="limit-top">{{item.name}}</div>
               </div>
-              <div slot="bottom">
-                {{item.artist.name}}
-                <!-- {{Timestamp(item.publishTime)}} -->
+              <div slot="bottom" class="limit">
+                <div class="limit-bottom">
+                  {{item.artist.name}}
+                {{Timestamp(item.publishTime)}}
+                </div>
               </div>
             </album-base>
           </li>
@@ -51,6 +53,8 @@
 
 <script>
 import albumBase from '../../base/swiper/albumsmall'
+import {timestamp} from '../../assets/js/timestamp'
+
 export default {
   components: {
     albumBase
@@ -59,6 +63,10 @@ export default {
     value:{
       type:String,
       default:''
+    },
+    currentPage:{
+      type:Number,
+      default:0
     }
   },
   data() {
@@ -78,7 +86,13 @@ export default {
       albums:[]
     }
   },
-  watch: {},
+  watch: {
+    currentPage(val) {
+      if(val === 5 && !this.albums.length) {
+        this.getAlbums(this.value, 30, 0, 10)
+      } 
+    }
+  },
   computed: {},
   methods: {
     getAlbums (keywords, limit, offset, type) {
@@ -109,9 +123,17 @@ export default {
       }
       return arr.join('/')
     },
+    Timestamp (time) {
+      return timestamp(time)
+    },
+    toAlbum (id) {
+      this.$router.push({
+        path:`/albumlist/${id}`
+      })
+    }
   },
   created() {
-    this.getAlbums(this.value, 30, 0, 10)
+    // this.getAlbums(this.value, 30, 0, 10)
   },
   mounted() {}
 }
@@ -138,6 +160,13 @@ export default {
               width:100%
               height:100%
               border-radius:5px
+          .limit
+            .limit-top
+              max-width:285px
+              ellipsis() 
+            .limit-bottom
+              max-width:285px
+              ellipsis()     
       
   .content-scroll-wrapper
     position:absolute

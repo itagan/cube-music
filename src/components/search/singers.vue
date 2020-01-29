@@ -16,10 +16,10 @@
         @pulling-up="onPullingUp"
         >
         <ul class="content">
-          <li v-for="(item,index) in artists" :key="index">
+          <li v-for="(item,index) in artists" :key="index" @click="toUser(item.id)">
             <follow-base class="my-singers-base">
-              <img :src="item.img1v1Url" alt="" slot="left" class="img"> 
-              <div slot="liRight">
+              <img v-lazy="item.img1v1Url" alt="" slot="left" class="img"> 
+              <div slot="liRight" class="limit">
                {{item.name}}
                <span class="li-right" v-if="item.alias.length">({{(item.alias[0])}})</span>
               </div>
@@ -58,6 +58,10 @@ export default {
     value:{
       type:String,
       default:''
+    },
+    currentPage:{
+      type:Number,
+      default:0
     }
   },
   data() {
@@ -77,7 +81,13 @@ export default {
       artists:[]
     }
   },
-  watch: {},
+  watch: {
+    currentPage(val) {
+      if(val === 4 && !this.artists.length) {
+        this.getSingers(this.value, 30, 0, 100)
+      } 
+    }
+  },
   computed: {},
   methods: {
     getSingers (keywords, limit, offset, type) {
@@ -108,9 +118,24 @@ export default {
       }
       return arr.join('/')
     },
+    toUser (id) {
+      this.$api.singers.singermusic(id).then(res => {
+        if(res.data.artist.accountId) {
+          let userId = res.data.artist.accountId
+          this.$router.push({
+            path: `/singer/${userId}/${id}`
+            })
+        }else {
+          let userId = 477726475
+          this.$router.push({
+            path: `/singer/${userId}/${id}`
+            })
+        }
+      })
+    },
   },
   created() {
-    this.getSingers(this.value, 30, 0, 100)
+    // this.getSingers(this.value, 30, 0, 100)
   },
   mounted() {}
 }
@@ -134,7 +159,9 @@ export default {
         .li-right
           font-size:$font-size-small
           color:gray   
-      
+        .limit
+          max-width:225px
+          ellipsis() 
   .content-scroll-wrapper
     position:absolute
     height:567px //需要除去头部高度，避免产生页面原生滚动

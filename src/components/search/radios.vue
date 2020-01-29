@@ -2,10 +2,11 @@
   <div class="wrapper">
 
      <div class="pullloadtop" v-if="!djRadios.length">
-      <span class="load">
+      <span class="load" v-if="result">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
+     <span v-else>无结果</span> 
      </div>  
 
     <cube-sticky :pos="scrollY" v-else>
@@ -25,15 +26,15 @@
               </li>       
             </ul>
         </cube-sticky-ele>
-        <ul class="content">
+        <ul class="content" v-if="djRadios.length">
            <li v-for="(item,index) in djRadios" :key="index">
             <list-base>
-              <img :src="item.picUrl" alt="" slot="left" class="img"> 
+              <img v-lazy="item.picUrl" alt="" slot="left" class="img"> 
               <div slot="top">
-                # {{item.name}}
+               <div class="limit-top"> # {{item.name}}</div>
               </div>
               <div slot="bottom">
-                {{item.dj.nickname}}
+                <div class="limit-bottom">{{item.dj.nickname}}</div>
               </div>
             </list-base>
           </li>
@@ -58,8 +59,6 @@
 
 <script>
 import listBase from '../../base/swiper/listbasesmall'
-
-
 export default {
   components: {
     listBase
@@ -68,6 +67,10 @@ export default {
     value:{
       type:String,
       default:''
+    },
+    currentPage:{
+      type:Number,
+      default:0
     }
   },
   data() {
@@ -84,10 +87,17 @@ export default {
       hasMore: true,
       offset:0,
       count:0,
-      djRadios:[]
+      djRadios:[],
+      result:true
     }
   },
-  watch: {},
+  watch: {
+    currentPage(val) {
+      if(val === 8 && !this.djRadios.length) {
+        this.getRadios(this.value, 60, 0, 1009)
+      } 
+    }
+  },
   computed: {},
   methods: {
     getRadios (keywords, limit, offset, type) {
@@ -98,6 +108,10 @@ export default {
           this.offset+=10
         }
         this.djRadios =  this.djRadios.concat(res.data.result.djRadios)
+        setTimeout(() => {
+          this.result = this.djRadios.length > 1 ? true : false
+          console.log( this.djRadios,this.result)
+        }, 1000)
       })
     },
     toIt () {
@@ -126,7 +140,7 @@ export default {
     },
   },
   created() {
-    this.getRadios(this.value, 60, 0, 1009)
+    // this.getRadios(this.value, 60, 0, 1009)
   },
   mounted() {}
 }
@@ -165,8 +179,12 @@ export default {
           width:50px
           height:50px 
           border-radius:5px
-
-
+        .limit-top
+          max-width:295px
+          ellipsis() 
+        .limit-bottom
+          max-width:295px
+          ellipsis() 
      //加载中相关样式
   .pullload
     width:100%
@@ -177,7 +195,6 @@ export default {
     top:0
     bottom:50px
     flex-center()
-    // margin:10px auto
     .load
       font-size:$font-size-medium
       i
@@ -190,7 +207,6 @@ export default {
   .pullloadtop
     width:100%
     height:30px
-    // margin-top:150px
     position:relative
     top:150px
     z-index:1
@@ -200,5 +216,13 @@ export default {
       i
         color:red
       span
-        color:gray       
+        color:gray 
+
+  .no-result
+    width:100%
+    height:100%
+    position:relative
+    top:150px
+    z-index:1
+    flex-center()          
 </style>

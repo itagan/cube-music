@@ -1,6 +1,13 @@
 <template>
   <div class="wrapper">
-    <cube-sticky :pos="scrollY">
+    <div class="pullloadtop" v-if="!mlog.mlogs">
+      <span class="load">
+        <i class="iconfont iconyinletiaodongzhuangtai"></i>
+        <span> 正在加载...</span>
+      </span>
+    </div>
+
+    <cube-sticky :pos="scrollY" v-else>
       <cube-scroll
         :scroll-events="scrollEvents"
         @scroll="scrollHandler">
@@ -14,12 +21,14 @@
           <li v-for="(item,index) in talk.talks" :key="index" @click="selectItem(item.vid)" class="li">
             <follow-base>
               <img :src="item.showCover.url" alt="" slot="left" class="img"> 
-              <div slot="top">
-                # {{item.talkName}}
+              <div slot="top" class="limit">
+               <div class="limit-top"> # {{item.talkName}}</div>
               </div>
-              <div slot="bottom">
-                {{item.follows}}人关注
+              <div slot="bottom" class="limit">
+                <div class="limit-bottom">
+                  {{item.follows}}人关注
                 {{item.participations}}人参与
+                </div>
               </div>
               <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toIt"></i>
             </follow-base>
@@ -89,6 +98,10 @@ export default {
     value:{
       type:String,
       default:''
+    },
+    currentPage:{
+      type:Number,
+      default:0
     }
   },
   data() {
@@ -97,17 +110,25 @@ export default {
       scrollY: 0,
       mlog:{},
       talk:{},
+      mlogs:[],
+      talks:[]
     }
   },
-  watch: {},
+  watch: {
+    currentPage(val) {
+      if(val === 2 && !this.mlogs.length || !this.talks.length) {
+        this.getAlls(this.value, 60, 0, 1018)
+      } 
+    }
+  },
   computed: {},
   methods: {
     getAlls (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
-        
         this.mlog = res.data.result.mlog
+        this.mlogs = res.data.result.mlog.mlogs
         this.talk = res.data.result.talk
-       
+        this.talks = res.data.result.talk.talks
       })
     },
     scrollHandler({ y }) {
@@ -115,7 +136,7 @@ export default {
     }
   },
   created() {
-    this.getAlls(this.value, 60, 0, 1018)
+    // this.getAlls(this.value, 60, 0, 1018)
   },
   mounted() {}
 }
@@ -156,7 +177,14 @@ export default {
       img 
         width:65px
         height:65px 
-        border-radius:5px   
+        border-radius:5px  
+      .limit
+        .limit-top
+          max-width:250px
+          ellipsis() 
+        .limit-bottom
+          max-width:250px
+          ellipsis()       
 
   .my-top
     height:40px 
@@ -171,5 +199,41 @@ export default {
     color:gray   
     flex-center()
   .li
-    margin-bottom:10px              
+    margin-bottom:10px   
+
+
+    //加载中相关样式
+  .pullload
+    width:100%
+    height:30px
+    margin-top:1px
+    background-color:white
+    position:relative
+    top:0
+    bottom:50px
+    flex-center()
+    .load
+      font-size:$font-size-medium
+      i
+        color:red
+      span
+        color:gray
+        font-size:$font-size-medium   
+
+  //上方加载中相关样式
+  .pullloadtop
+    width:100%
+    height:30px
+    // margin-top:150px
+    position:relative
+    top:150px
+    z-index:1
+    flex-center()
+    .load
+      font-size:$font-size-medium
+      i
+        color:red
+      span
+        color:gray       
+             
 </style>

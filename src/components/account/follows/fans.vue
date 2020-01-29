@@ -77,7 +77,7 @@
 
 <script>
 import MyHeader from '../../../base/navbar/navbar'
-import followBase from '../../../base/swiper/followbase'
+import followBase from '../../../base/swiper/followbasesmall'
 export default {
   components: {
     MyHeader,

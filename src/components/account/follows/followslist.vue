@@ -33,7 +33,7 @@
             </li>
           </ul>
           <ul class="follow-list">
-            <li v-for="item in follow" :key="item.userId" @click="toUser(item.userId, item.nickname, item.userType)">
+            <li v-for="(item,index) in follow" :key="item.userId" @click.stop="toUser(item.userId, item.userType)">
               <follow-base class="my-follow">
                 <img v-lazy="item.avatarUrl" alt="" slot="left" class="img"> 
                 <div slot="top" class="my-follow-center-top" v-if="item.signature">
@@ -57,7 +57,7 @@
                     <i class="iconfont iconhuaban"></i>
                     <span>已关注</span>
                   </div>
-                  <div v-else class="my-follow-false" @click.stop="toFollow">
+                  <div v-else class="my-follow-false" @click.stop="toFollow(item.userId, index)">
                     <i class="iconfont iconjia"></i>
                     <span>关注</span>
                   </div>
@@ -85,7 +85,7 @@
 
 <script>
 import MyHeader from '../../../base/navbar/navbar'
-import followBase from '../../../base/swiper/followbase'
+import followBase from '../../../base/swiper/followbasesmall'
 export default {
   components: {
     MyHeader,
@@ -126,7 +126,6 @@ export default {
          this.follow = this.follow.concat(res.data.follow)  
          const contentScroll = this.$refs.contentScroll
           contentScroll.forceUpdate()
-         console.log(this.follow)
       })
     },
     isUserOr () {
@@ -143,29 +142,28 @@ export default {
     scrollHandler (pos) {
       this.pullDownY = -pos.y
     },
-    toUser (userId, nickname, userType) {
+    toUser (userId, userType) {
       if(userType === 2 || userType === 4) {
-        this.$api.searchs.search(nickname, 30, 0, 100).then(res => {
-          // let artists = res.data.result.artists
-          let id = res.data.result.artists[0].id
+        this.$api.users.userdetail(userId).then(res => {
+          let id = res.data.profile.artistId
           this.$router.push({
             path: `/singer/${userId}/${id}`
           })
-        }) 
+        })
       }else {
         this.$router.push({
         path: `/user/${userId}`
       })
       }
     },
-    searchId () {
-
-    },
     toMore () {
-
     },
-    toFollow () {
-      
+    toFollow (userId, index) {
+      this.$api.users.toFollow(userId, 1).then(res => {
+        if(res.data.code === 200) {
+          this.userprofiles[index].followed = true
+        }
+      })
     },
     toSingerList () {
       this.$router.push({

@@ -16,17 +16,23 @@
         @pulling-up="onPullingUp"
         >
         <ul class="content">
-         <li v-for="(item,index) in userprofiles" :key="index">
+         <li v-for="(item,index) in userprofiles" :key="index" @click.stop="toUser(item.userId, item.userType)">
             <follow-base class="my-users-base">
-              <img :src="item.avatarUrl" alt="" slot="left" class="img"> 
-              <div slot="top">
-               <span>{{item.nickname}}</span>
-              
+              <img v-lazy="item.avatarUrl" alt="" slot="left" class="img"> 
+              <div slot="top" v-if="item.signature" class="limit">
+               <div class="limit-top">{{item.nickname}}</div>
+               <i class="iconfont iconnv" v-if="item.gender === 2"></i>
+               <i class="iconfont iconnan" v-if="item.gender === 1"></i>
               </div>
-              <div slot="bottom">
-               {{item.signature}}
+              <div slot="bottom" v-if="item.signature" class="limit">
+               <div class="limit-bottom"> {{item.signature}}</div>
               </div>
-              <div slot="rightFollow" class="right-follow" v-if="!item.followed">
+              <div slot="liRight" v-if="!item.signature" class="limit">
+                <div class="limit-top">{{item.nickname}}</div>
+                <i class="iconfont iconnv" v-if="item.gender === 2"></i>
+                <i class="iconfont iconnan" v-if="item.gender === 1"></i>
+              </div>
+              <div slot="rightFollow" class="right-follow" v-if="!item.followed" @click.stop="toFollow(item.userId, index)">
                 <i class="iconfont iconjia"></i>
                 <span>关注</span>
               </div>
@@ -65,6 +71,10 @@ export default {
     value:{
       type:String,
       default:''
+    },
+    currentPage:{
+      type:Number,
+      default:0
     }
   },
   data() {
@@ -84,7 +94,13 @@ export default {
       userprofiles:[]
     }
   },
-  watch: {},
+  watch: {
+    currentPage(val) {
+      if(val === 9 && !this.userprofiles.length) {
+        this.getUsers(this.value, 30, 0, 1002)
+      } 
+    }
+  },
   computed: {},
   methods: {
     getUsers (keywords, limit, offset, type) {
@@ -108,9 +124,30 @@ export default {
         contentScroll.forceUpdate()
       }, 1000)
     },
+    toFollow (userId, index) {
+      this.$api.users.toFollow(userId, 1).then(res => {
+        if(res.data.code === 200) {
+          this.userprofiles[index].followed = true
+        }
+      })
+    },
+    toUser (userId, userType) {
+      if(userType === 2 || userType === 4) {
+        this.$api.users.userdetail(userId).then(res => {
+          let id = res.data.profile.artistId
+          this.$router.push({
+            path: `/singer/${userId}/${id}`
+          })
+        })
+      }else {
+        this.$router.push({
+        path: `/user/${userId}`
+      })
+      }
+    },
   },
   created() {
-    this.getUsers(this.value, 30, 0, 1002)
+    // this.getUsers(this.value, 30, 0, 1002)
   },
   mounted() {}
 }
@@ -132,6 +169,21 @@ export default {
             height:50px
             width:50px
             border-radius:50%
+          .limit
+            display:flex
+            .limit-top
+              max-width:158px
+              ellipsis()  
+              margin-right:15px
+            .limit-bottom
+              max-width:220px
+              ellipsis()  
+            i
+              font-size:$font-size-small 
+            .iconnv
+              color:pink
+            .iconnan
+              color:blue
           .right-follow
             height:22px
             width:62px

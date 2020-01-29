@@ -12,9 +12,9 @@
               歌手: {{multimatch.artist[0].name}}
             </div>
             <div slot="bottom">
-              粉丝: {{multimatch.artist[0].fansSize}}
-              歌曲: {{multimatch.artist[0].musicSize}}
-              专辑: {{multimatch.artist[0].albumSize}}
+              粉丝: {{Num(multimatch.artist[0].fansSize)}}
+              歌曲: {{Num(multimatch.artist[0].musicSize)}}
+              专辑: {{Num(multimatch.artist[0].albumSize)}}
             </div>
             <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toIt"></i>
           </follow-base>
@@ -43,14 +43,16 @@
                 {{item.name}}
               </div>
               <div slot="center">
-                {{item.ar[0].name}} - {{item.al.name}}
-              </div>
-              <div slot="bottom">11</div>
+                  {{item.ar[0].name}} - {{item.al.name}}
+                </div>
+                <div slot="bottom" v-if="item.alias && item.alias.length">
+                  {{TransAlias(item.alias)}}
+                </div>
               <i slot="rightPlay" class="iconfont iconbofang2" @click.stop="toIt"></i>
               <i slot="rightMore" class="iconfont icon-ellipsis" @click.stop="toIt"></i>
             </song-base> 
           </li>
-          <li class="my-bottom" v-if="song.more">
+          <li class="my-bottom" v-if="song.more" @click.stop="toUsers(1)">
             <span>{{song.moreText}}</span>
             <i class="iconfont iconleft-arrow"></i>
           </li>
@@ -63,7 +65,7 @@
           <li v-for="(item,index) in video.videos" :key="index" @click="selectItem(item.vid)">
             <sub-video :item="item"></sub-video>
           </li>
-           <li class="my-bottom" v-if="video.more">
+           <li class="my-bottom" v-if="video.more" @click.stop="toUsers(6)">
             <span>{{video.moreText}}</span>
             <i class="iconfont iconleft-arrow"></i>
           </li>
@@ -74,7 +76,7 @@
           </li>
           <li v-for="(item,index) in playList.playLists" :key="index" @click="selectItem(item.vid)">
             <list-base>
-              <img :src="item.coverImgUrl" alt="" slot="left" class="img"> 
+              <img v-lazy="item.coverImgUrl" alt="" slot="left" class="img"> 
               <div slot="top">
                 {{item.name}}
               </div>
@@ -82,11 +84,11 @@
                 {{item.trackCount}}首音乐
                 by
                 {{item.creator.nickname}},
-                播放{{item.playCount}}次
+                播放{{Num(item.playCount)}}次
               </div>
             </list-base>
           </li>
-           <li class="my-bottom" v-if="playList.more">
+           <li class="my-bottom" v-if="playList.more" @click.stop="toUsers(3)">
             <span>{{playList.moreText}}</span>
              <i class="iconfont iconleft-arrow"></i>
           </li>
@@ -108,8 +110,7 @@
          <ul class="my-mlogs">
           <li class="my-top">
            Mlog
-          </li>
-          
+          </li> 
           <li class="my-mlogs-li">
             <ul>
               <li v-for="(item,index) in mlog.mlogs" :key="index">
@@ -117,7 +118,7 @@
               </li>
             </ul>
           </li>
-           <li class="my-bottom" v-if="mlog.more">
+           <li class="my-bottom" v-if="mlog.more" @click.stop="toUsers(2)">
             <span>{{mlog.moreText}}</span>
              <i class="iconfont iconleft-arrow"></i>
           </li>
@@ -129,7 +130,7 @@
           </li>
           <li v-for="(item,index) in talk.talks" :key="index" @click="selectItem(item.vid)" class="li">
             <follow-base>
-              <img :src="item.showCover.url" alt="" slot="left" class="img"> 
+              <img v-lazy="item.showCover.url" alt="" slot="left" class="img"> 
               <div slot="top">
                 # {{item.talkName}}
               </div>
@@ -140,7 +141,7 @@
               <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toIt"></i>
             </follow-base>
           </li>
-           <li class="my-bottom" v-if="talk.more">
+           <li class="my-bottom" v-if="talk.more" @click.stop="toUsers(2)">
             <span>{{talk.moreText}}</span>
              <i class="iconfont iconleft-arrow"></i>
           </li>
@@ -152,7 +153,7 @@
           </li>
           <li v-for="(item,index) in artist.artists" :key="index" @click="selectItem(item.vid)" class="li">
             <follow-base class="my-singers-base">
-              <img :src="item.img1v1Url" alt="" slot="left" class="img"> 
+              <img v-lazy="item.img1v1Url" alt="" slot="left" class="img"> 
               <div slot="liRight">
                {{item.name}}
                <span class="li-right" v-if="item.alias.length">({{TransAlias(item.alias)}})</span>
@@ -163,86 +164,92 @@
               </div>
             </follow-base>
           </li>
-           <li class="my-bottom" v-if="artist.more">
+           <li class="my-bottom" v-if="artist.more" @click.stop="toUsers(4)">
             <span>{{artist.moreText}}</span>
              <i class="iconfont iconleft-arrow"></i>
           </li>
         </ul>
 
          <ul class="my-albums">
-          <li class="my-top">
-           专辑
-          </li>
-          <li v-for="(item,index) in album.albums" :key="index" @click="selectItem(item.vid)" class="li">
-            <album-base class="my-album">
-              <div class="left-img" slot="left">
-                <img :src="item.picUrl" alt="">
-              </div>
-              <div slot="top">
-                {{item.name}}
-              </div>
-              <div slot="bottom">
-                {{item.artist.name}}
-                <!-- {{Timestamp(item.publishTime)}} -->
-              </div>
-            </album-base>
-          </li>
-           <li class="my-bottom" v-if="album.more">
-            <span>{{album.moreText}}</span>
-             <i class="iconfont iconleft-arrow"></i>
-          </li>
-        </ul>
+            <li class="my-top">
+            专辑
+            </li>
+            <li v-for="(item,index) in album.albums" :key="index" @click="selectItem(item.vid)" class="li">
+              <album-base class="my-album">
+                <div class="left-img" slot="left">
+                  <img v-lazy="item.picUrl" alt="">
+                </div>
+                <div slot="top">
+                  {{item.name}}
+                </div>
+                <div slot="bottom">
+                  {{item.artist.name}}
+                  {{Timestamp(item.publishTime)}}
+                </div>
+              </album-base>
+            </li>
+            <li class="my-bottom" v-if="album.more" @click.stop="toUsers(5)">
+              <span>{{album.moreText}}</span>
+              <i class="iconfont iconleft-arrow"></i>
+            </li>
+          </ul>
 
-        <ul class="my-playlist">
-          <li class="my-top">
-           电台
-          </li>
-          <li v-for="(item,index) in djRadio.djRadios" :key="index" @click="selectItem(item.vid)">
-            <list-base>
-              <img :src="item.picUrl" alt="" slot="left" class="img"> 
-              <div slot="top">
-                # {{item.name}}
-              </div>
-              <div slot="bottom">
-                {{item.dj.nickname}}
-              </div>
-            </list-base>
-          </li>
-           <li class="my-bottom" v-if="djRadio.more">
-            <span>{{djRadio.moreText}}</span>
-             <i class="iconfont iconleft-arrow"></i>
-          </li>
-        </ul>
+          <ul class="my-playlist">
+            <li class="my-top">
+            电台
+            </li>
+            <li v-for="(item,index) in djRadio.djRadios" :key="index" @click="selectItem(item.vid)">
+              <list-base>
+                <img v-lazy="item.picUrl" alt="" slot="left" class="img"> 
+                <div slot="top">
+                  # {{item.name}}
+                </div>
+                <div slot="bottom">
+                  {{item.dj.nickname}}
+                </div>
+              </list-base>
+            </li>
+            <li class="my-bottom" v-if="djRadio.more"  @click.stop="toUsers(8)">
+              <span>{{djRadio.moreText}}</span>
+              <i class="iconfont iconleft-arrow"></i>
+            </li>
+          </ul>
 
-        <ul class="my-users">
-          <li class="my-top">
-           用户
-          </li>
-          <li v-for="(item,index) in user.users" :key="index" @click="selectItem(item.vid)" class="li">
-            <follow-base class="my-users-base">
-              <img :src="item.avatarUrl" alt="" slot="left" class="img"> 
-              <div slot="top">
-               <span>{{item.nickname}}</span>
-              
-              </div>
-              <div slot="bottom">
-               {{item.signature}}
-              </div>
-              <div slot="rightFollow" class="right-follow" v-if="!item.followed">
-                <i class="iconfont iconjia"></i>
-                <span>关注</span>
-              </div>
-              <div slot="rightFollow" class="right-followed" v-if="item.followed">
-                <i class="iconfont iconshoucangchenggong"></i>
-                <span>已关注</span>
-              </div>
+          <ul class="my-users">
+            <li class="my-top">
+            用户
+            </li>
+            <li v-for="(item,index) in user.users" :key="index" @click.stop="toUser(item.userId, item.userType)" class="li">
+              <follow-base class="my-users-base">
+                <img v-lazy="item.avatarUrl" alt="" slot="left" class="img"> 
+                <div slot="top" v-if="item.signature" class="limit">
+                <div class="limit-top">{{item.nickname}}</div>
+                <i class="iconfont iconnv" v-if="item.gender === 2"></i>
+                <i class="iconfont iconnan" v-if="item.gender === 1"></i>
+                </div>
+                <div slot="bottom" v-if="item.signature" class="limit">
+                <div class="limit-bottom"> {{item.signature}}</div>
+                </div>
+                <div slot="liRight" v-if="!item.signature" class="limit">
+                  <div class="limit-top">{{item.nickname}}</div>
+                  <i class="iconfont iconnv" v-if="item.gender === 2"></i>
+                  <i class="iconfont iconnan" v-if="item.gender === 1"></i>
+                </div>
+                <div slot="rightFollow" class="right-follow" v-if="!item.followed" @click.stop="toFollow(item.userId, index)">
+                  <i class="iconfont iconjia"></i>
+                  <span>关注</span>
+                </div>
+                <div slot="rightFollow" class="right-followed" v-if="item.followed">
+                  <i class="iconfont iconshoucangchenggong"></i>
+                  <span>已关注</span>
+                </div>
             </follow-base>
-          </li>
-           <li class="my-bottom" v-if="user.more">
-            <span>{{user.moreText}}</span>
-             <i class="iconfont iconleft-arrow"></i>
-          </li>
-        </ul>
+            </li>
+            <li class="my-bottom" v-if="user.more" @click.stop="toUsers(9)">
+              <span>{{user.moreText}}</span>
+              <i class="iconfont iconleft-arrow"></i>
+            </li>
+          </ul>
       </cube-scroll>
     </div>     
   </div>
@@ -256,6 +263,8 @@ import listBase from '../../base/swiper/listbase'
 import logBase from '../../base/swiper/logbase'
 import albumBase from '../../base/swiper/album'
 import {timestamp} from '../../assets/js/timestamp'
+import {serializeNumber} from '../../assets/js/number'
+
 
 export default {
   components: {
@@ -326,15 +335,45 @@ export default {
       }
       return arr.join('/')
     },
-    Timestamp (timestamp) {
-      return timestamp(timestamp)
+    Timestamp (time) {
+      return timestamp(time)
+    },
+    Num (num) {
+      return serializeNumber(num)
+    },
+    toFollow (userId, index) {
+      this.$api.users.toFollow(userId, 1).then(res => {
+        if(res.data.code === 200) {
+          this.user.users[index].followed = true
+        }
+      })
+    },
+    toUser (userId, userType) {
+      if(userType === 2 || userType === 4) {
+        this.$api.users.userdetail(userId).then(res => {
+          let id = res.data.profile.artistId
+          this.$router.push({
+            path: `/singer/${userId}/${id}`
+          })
+        })
+      }else {
+        this.$router.push({
+        path: `/user/${userId}`
+      })
+      }
+    },
+    toUsers (i) {
+      this.$emit('changeIndex',i)
     }
   },
   created() {
+    // this.getMultimatch (this.value)
+    // this.getAlls(this.value, 60, 0, 1018)
+  },
+  mounted() {
     this.getMultimatch (this.value)
     this.getAlls(this.value, 60, 0, 1018)
-  },
-  mounted() {}
+  }
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
@@ -441,12 +480,28 @@ export default {
               height:100%
               border-radius:5px
       .my-users
+        margin-bottom:30px
         .li
           .my-users-base
             img  
               height:100%
               width:100%
               border-radius:50%
+            .limit
+              display:flex
+              .limit-top
+                max-width:158px
+                ellipsis()  
+                margin-right:15px
+              .limit-bottom
+                max-width:220px
+                ellipsis()  
+              i
+                font-size:$font-size-small 
+              .iconnv
+                color:pink
+              .iconnan
+                color:blue  
             .right-follow
               height:22px
               width:62px
