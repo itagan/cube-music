@@ -18,7 +18,7 @@
         </cube-sticky-ele>
          <ul class="my-talks">
 
-          <li v-for="(item,index) in talk.talks" :key="index" @click="selectItem(item.vid)" class="li">
+          <li v-for="(item,index) in talk.talks" :key="index" class="li">
             <follow-base>
               <img :src="item.showCover.url" alt="" slot="left" class="img"> 
               <div slot="top" class="limit">
@@ -151,7 +151,7 @@ export default {
   margin-top:15px
   .sticky-view-scroll
     .sticky-view-container
-      position: relative
+      position: absolute
       top: 50px
       bottom: 0
       left: 0

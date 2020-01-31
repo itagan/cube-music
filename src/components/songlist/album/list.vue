@@ -21,7 +21,7 @@
         <div class="playing" v-if="item.mv">
           <i class="iconfont iconbofang5"></i>
         </div>
-        <div class="more" @click="more(index)">
+        <div class="more" @click.stop="more(item)">
           <i class="iconfont icongengduo"></i>
         </div>
       </div>
@@ -88,8 +88,9 @@
         }
       },
       methods: {
-        more (index) {
-          this.$emit('more', index)
+        more (item) {
+          this.$emit('more', item)
+          console.log(item)
         },
         Input () {
           if (this.checkList.length === this.tracks.length) {

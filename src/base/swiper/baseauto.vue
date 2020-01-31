@@ -1,8 +1,5 @@
 <template>
   <div class="li-item">
-    <div class="li-left-check" v-if="$slots.leftCheck">
-      <slot name="leftCheck"></slot>
-    </div>
     <div class="li-left" v-if="$slots.left">
       <slot name="left"></slot>
     </div>
@@ -10,18 +7,18 @@
       <div class="li-center-top" v-if="$slots.top">
         <slot name="top"></slot>
       </div>
-      <div class="li-center-center" v-if="$slots.center">
-        <slot name="center"></slot>
-      </div>
       <div class="li-center-bottom" v-if="$slots.bottom">
         <slot name="bottom"></slot>
       </div>
+      <div class="li-center-only" v-if="$slots.liRight">
+        <slot name="liRight"></slot>
+      </div>
     </div>
-    <div class="li-right-play" v-if="$slots.rightPlay">
-      <slot name="rightPlay"></slot>
+    <div class="li-right-follow" v-if="$slots.rightFollow">
+      <slot name="rightFollow"></slot>
     </div>
-    <div class="li-right-more" v-if="$slots.rightMore">
-      <slot name="rightMore"></slot>
+    <div class="li-right-share" v-if="$slots.rightShare">
+      <slot name="rightShare"></slot>
     </div>
   </div>
 </template>
@@ -47,57 +44,44 @@ export default {
   @import "../../common/stylus/mixin"
   .li-item
     display:flex
-    align-items: center
-    // flex-direction:column
-    height:auto
+    height:50px
+    line-height:50px
     width:100%
-    .li-left-check
-      width:30px
-      height:100%
-      flex-center()
-      margin-left:10px
-      i
-       font-size:$font-size-large
+    border-radius:10px
     .li-left
-      width:30px
-      height:100%
-      flex-center()
+      width:auto
+      height:50px
       margin-left:10px
-      i
-       font-size:$font-size-large
     .li-center
       flex:1
       margin-left:10px
-      min-height:50px
+      height:50px
       .li-center-top
         font-size:$font-size-medium
         height:25px
         line-height:25px
         ellipsis()
-      .li-center-center
-        font-size:$font-size-small
-        height:20px
-        line-height:20px
-        color:gray
-        ellipsis()
       .li-center-bottom
         font-size:$font-size-small
-        height:20px
-        line-height:20px
+        height:25px
+        line-height:25px
+        color:gray
+        ellipsis()
+      .li-center-only
+        font-size:$font-size-medium
+        height:50px
         ellipsis()
         display:flex
-        color:gray
-    .li-right-more
+        align-items: center
+    .li-right-share
        width:30px
-       height:100%
+       height:50px
        margin-right:10px  
        font-size:$font-size-large-x + 6  
        flex-center()
-    .li-right-play
-       height:100%
+    .li-right-follow
+       height:50px
        margin-right:10px  
        font-size:$font-size-medium
-
-    i
-     font-size:$font-size-large   
+       flex-center()
 </style>

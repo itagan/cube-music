@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import FindIndex from '../components/find/index'
 import Find from '../components/find/find'
 import Video from '../components/video/video'
 import My from '../components/my/my'
@@ -36,10 +35,10 @@ import HotSearch from '../components/search/hotsearch.vue'
 import Search from '../components/search/search.vue'
 Vue.use(Router)
 
-const originalPush = Router.prototype.push
-Router.prototype.push = function push (location) {
-  return originalPush.call(this, location).catch(err => err)
-}
+// const originalPush = Router.prototype.push
+// Router.prototype.push = function push (location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
 
 export default new Router({
   routes: [

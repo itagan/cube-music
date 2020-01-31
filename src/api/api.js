@@ -215,6 +215,14 @@ const songLists = {
   },
   updatetags (id, tags) {
     return axios.get(`${base}/playlist/tags/update?id=${id}&tags=${tags}`)
+  },
+  // 对歌单添加或删除歌曲
+  addDel (op, pid, trackId) {
+    return axios.get(`${base}/playlist/tracks?op=${op}&pid=${pid}&tracks=${trackId}`)
+  },
+  // 新建歌单
+  createlist (name, privacy) {
+    return axios.get(`${base}/playlist/create?name=${name}&privacy=${privacy}`)
   }
 }
 // 评论功能

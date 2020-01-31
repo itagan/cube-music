@@ -18,8 +18,8 @@
         ></cube-input>
       </div>
 
-      <div class="build-bottom" @click="privacy">
-        <i class="iconfont iconzan1"></i>
+      <div class="build-bottom" @click.stop="privacy">
+        <div class="check" :class="this.isPrivacy === 10 ? 'checked' : '' "></div>
         <span>设置为隐私歌单</span>
       </div>
     </div>
@@ -38,7 +38,7 @@
           clearable: {
             visible: true,
             blurHidden: true
-          }
+          },
         }
       },
       methods: {
@@ -146,6 +146,30 @@
         height:45px
         line-height:45px
         width:100%
+        display:flex
+        .check
+          height:18px
+          width:18px
+          border:1px solid rgba(128,128,128,.5) 
+          border-radius:50%
+          position:relative
+        .checked
+          height:10px
+          width:10px
+          border:1px solid red
+          border-radius:50%
+          position:relative
+          background-color:red
+        .checked::after
+          position: absolute
+          top: 1px
+          left: 3px
+          width: 2px
+          height: 5px
+          border: 2px solid white
+          border-width: 0 1px 1px 0
+          content: ''
+          transform: rotate(45deg) 
 
       .cube-popup-content
         display: flex;

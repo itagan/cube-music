@@ -32,7 +32,7 @@
         </div>
       </li>
 
-      <li class="li" v-for="item in playlist.slice(1)" :key="item.id" data-type="0" @click="toList(item.id)">
+      <li class="li" v-for="item in playlist.slice(1)" :key="item.id" data-type="0" @click.stop="toList(item.id)">
         <div class="li-item" >
 <!--          <div class="li-item" @touchstart.capture="touchStart" @touchend.capture="touchEnd" @click="skip">-->
 

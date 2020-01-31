@@ -6,108 +6,140 @@
         :options="options">
         <div class="my-inter" v-if="multimatch.orders"> 
           <div class="my-inter-top">你可能感兴趣</div>
-          <follow-base class="my-inter-bottom" v-if="multimatch.artist">
+          <base-auto class="my-inter-bottom" v-if="multimatch.artist">
             <img :src="multimatch.artist[0].img1v1Url" alt="" slot="left" class="img"> 
-            <div slot="top" class="my-follow-center-top">
+            <div slot="top" class="my-follow-center-top" @click.stop="toSinger(multimatch.artist[0].id)">
               歌手: {{multimatch.artist[0].name}}
             </div>
-            <div slot="bottom">
+            <div slot="bottom" @click.stop="toSinger(multimatch.artist[0].id)">
               粉丝: {{Num(multimatch.artist[0].fansSize)}}
               歌曲: {{Num(multimatch.artist[0].musicSize)}}
               专辑: {{Num(multimatch.artist[0].albumSize)}}
             </div>
-            <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toIt"></i>
-          </follow-base>
+            <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toSinger(multimatch.artist[0].id)"></i>
+          </base-auto>
 
-          <follow-base class="my-inter-bottom" v-if="multimatch.album">
+          <base-auto class="my-inter-bottom" v-if="multimatch.album"  @click.stop="toAlbum(multimatch.album[0].id)">
             <img :src="multimatch.album[0].picUrl" alt="" slot="left" class="img"> 
-            <div slot="top" class="my-follow-center-top">
+            <div slot="top" class="my-follow-center-top"  @click.stop="toAlbum(multimatch.album[0].id)">
               专辑: {{multimatch.album[0].name}}
             </div>
-            <div slot="bottom">
+            <div slot="bottom"  @click.stop="toAlbum(multimatch.album[0].id)">
               {{multimatch.album[0].artist.name}}
             </div>
             <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toIt"></i>
-          </follow-base>
+          </base-auto>
+
+          <base-auto class="my-inter-video" v-if="multimatch.video">
+            <div slot="left" class="my-video-wrap">
+               <img :src="multimatch.video[0].coverUrl" alt="" class="img">
+               <div class="my-video-bg">
+                 <i class="iconfont iconbofang4"></i>
+               </div>
+            </div> 
+            <div slot="top" class="my-follow-center-top">
+              <div class="mv">MV</div> 视频: <div>{{multimatch.video[0].title}}</div>
+            </div>
+            <div slot="bottom">
+              {{multimatch.video[0].creator[0].userName}}
+            </div>
+            <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toIt"></i>
+          </base-auto>
+
+          <base-auto class="my-inter-video" v-if="multimatch.video" v-show="!multimatch.video">
+            <img :src="multimatch.video[0].coverUrl" alt="" slot="left" class="img"> 
+            <div slot="top" class="my-follow-center-top">
+              视频: {{multimatch.video[0].title}}
+            </div>
+            <div slot="bottom">
+              {{multimatch.video[0].creator[0].userName}}
+            </div>
+            <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toIt"></i>
+          </base-auto>
+
+
+
         </div>
 
-        <ul class="my-songs">
+        <ul class="my-songs" v-if="song.songs">
           <li class="my-songs-top">
             <div class="my-songs-top-left">单曲</div>
             <div class="my-songs-top-right">播放全部</div>
           </li>
-          <li v-for="item in songs" :key="item.id">
+          <li v-for="item in song.songs" :key="item.id">
             <song-base class="my-songs-base">
               <i slot="left" class="iconfont iconlaba" @click.stop="toIt" v-if="isPlay"></i>
-              <div slot="top">
-                {{item.name}}
+              <div slot="top" class="limit">
+                <div class="limit-top">{{item.name}}</div>
               </div>
-              <div slot="center">
-                  {{item.ar[0].name}} - {{item.al.name}}
-                </div>
-                <div slot="bottom" v-if="item.alias && item.alias.length">
-                  {{TransAlias(item.alias)}}
-                </div>
-              <i slot="rightPlay" class="iconfont iconbofang2" @click.stop="toIt"></i>
-              <i slot="rightMore" class="iconfont icon-ellipsis" @click.stop="toIt"></i>
+              <div slot="center" class="limit">
+                <div class="limit-bottom">{{item.ar[0].name}} - {{item.al.name}}</div>
+              </div>
+              <div slot="bottom" v-if="item.alias && item.alias.length" class="limit">
+                <div class="limit-bottom">{{TransAlias(item.alias)}}</div>
+              </div>
+              <i slot="rightPlay" class="iconfont iconbofang2" v-show="item.mv !== 0" @click.stop="toIt"></i>
+              <i slot="rightMore" class="iconfont icon-ellipsis" @click.stop="toMoreOpera(item)"></i>
             </song-base> 
           </li>
-          <li class="my-bottom" v-if="song.more" @click.stop="toUsers(1)">
+          <li class="my-bottom" v-if="song.more" @click.stop="toChanges(1)">
             <span>{{song.moreText}}</span>
             <i class="iconfont iconleft-arrow"></i>
           </li>
         </ul>
 
-        <ul class="my-video">
+        <ul class="my-video" v-if="video.videos">
           <li class="my-top">
            视频
           </li>
-          <li v-for="(item,index) in video.videos" :key="index" @click="selectItem(item.vid)">
+          <li v-for="(item,index) in video.videos" :key="index">
             <sub-video :item="item"></sub-video>
           </li>
-           <li class="my-bottom" v-if="video.more" @click.stop="toUsers(6)">
+           <li class="my-bottom" v-if="video.more" @click.stop="toChanges(6)">
             <span>{{video.moreText}}</span>
             <i class="iconfont iconleft-arrow"></i>
           </li>
         </ul>
-        <ul class="my-playlist">
+        <ul class="my-playlist" v-if="playList.playLists">
           <li class="my-top">
            歌单
           </li>
-          <li v-for="(item,index) in playList.playLists" :key="index" @click="selectItem(item.vid)">
+          <li v-for="(item,index) in playList.playLists" :key="index" @click.stop="toList(item.id)">
             <list-base>
               <img v-lazy="item.coverImgUrl" alt="" slot="left" class="img"> 
-              <div slot="top">
-                {{item.name}}
+              <div slot="top" class="limit">
+               <div class="limit-top">{{item.name}}</div>
               </div>
-              <div slot="bottom">
-                {{item.trackCount}}首音乐
+              <div slot="bottom" class="limit">
+                <div class="limit-bottom">
+                 {{item.trackCount}}首音乐
                 by
                 {{item.creator.nickname}},
                 播放{{Num(item.playCount)}}次
+                </div>
               </div>
             </list-base>
           </li>
-           <li class="my-bottom" v-if="playList.more" @click.stop="toUsers(3)">
+           <li class="my-bottom" v-if="playList.more" @click.stop="toChanges(3)">
             <span>{{playList.moreText}}</span>
              <i class="iconfont iconleft-arrow"></i>
           </li>
         </ul>
 
-          <ul class="my-sim_query">
+          <ul class="my-sim_query" v-if="sim_query.sim_querys">
           <li class="my-top">
            相关搜索
           </li>  
           <li class="my-sim_query-ul">
             <ul>
-              <li v-for="(item,index) in sim_query.sim_querys" :key="index" class="my-sim_query-li">
+              <li v-for="(item,index) in sim_query.sim_querys" :key="index" class="my-sim_query-li" @click.stop="toSearch(item.keyword)">
                {{item.keyword}}
               </li>
             </ul>
           </li>
         </ul>
 
-         <ul class="my-mlogs">
+         <ul class="my-mlogs" v-if="mlog.mlogs">
           <li class="my-top">
            Mlog
           </li> 
@@ -118,45 +150,48 @@
               </li>
             </ul>
           </li>
-           <li class="my-bottom" v-if="mlog.more" @click.stop="toUsers(2)">
+           <li class="my-bottom" v-if="mlog.more" @click.stop="toChanges(2)">
             <span>{{mlog.moreText}}</span>
              <i class="iconfont iconleft-arrow"></i>
           </li>
         </ul>
 
-        <ul class="my-playlist">
+        <ul class="my-playlist" v-if="talk.talks">
           <li class="my-top">
            主题
           </li>
-          <li v-for="(item,index) in talk.talks" :key="index" @click="selectItem(item.vid)" class="li">
+          <li v-for="(item,index) in talk.talks" :key="index" class="li">
             <follow-base>
-              <img v-lazy="item.showCover.url" alt="" slot="left" class="img"> 
-              <div slot="top">
-                # {{item.talkName}}
+              <img :src="item.showCover.url" alt="" slot="left" class="img"> 
+              <div slot="top" class="limit">
+               <div class="limit-top-talks"> # {{item.talkName}}</div>
               </div>
-              <div slot="bottom">
-                {{item.follows}}人关注
+              <div slot="bottom" class="limit">
+                <div class="limit-bottom-talks">
+                  {{item.follows}}人关注
                 {{item.participations}}人参与
+                
+                </div>
               </div>
               <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toIt"></i>
             </follow-base>
           </li>
-           <li class="my-bottom" v-if="talk.more" @click.stop="toUsers(2)">
+           <li class="my-bottom" v-if="talk.more" @click.stop="toChanges(2)">
             <span>{{talk.moreText}}</span>
              <i class="iconfont iconleft-arrow"></i>
           </li>
         </ul>
 
-        <ul class="my-singers">
+        <ul class="my-singers" v-if="artist.artists">
           <li class="my-top">
            歌手
           </li>
-          <li v-for="(item,index) in artist.artists" :key="index" @click="selectItem(item.vid)" class="li">
-            <follow-base class="my-singers-base">
+          <li v-for="(item,index) in artist.artists" :key="index" @click.stop="toSinger(item.id)" class="li">
+           <follow-base class="my-singers-base">
               <img v-lazy="item.img1v1Url" alt="" slot="left" class="img"> 
-              <div slot="liRight">
+              <div slot="liRight" class="limit-singer">
                {{item.name}}
-               <span class="li-right" v-if="item.alias.length">({{TransAlias(item.alias)}})</span>
+               <span class="li-right" v-if="item.alias.length">({{(item.alias[0])}})</span>
               </div>
               <div slot="rightFollow" class="right-share">
                 <i class="iconfont iconwodeshoucang"></i>
@@ -164,58 +199,60 @@
               </div>
             </follow-base>
           </li>
-           <li class="my-bottom" v-if="artist.more" @click.stop="toUsers(4)">
+           <li class="my-bottom" v-if="artist.more" @click.stop="toChanges(4)">
             <span>{{artist.moreText}}</span>
              <i class="iconfont iconleft-arrow"></i>
           </li>
         </ul>
 
-         <ul class="my-albums">
+         <ul class="my-albums" v-if="album.albums">
             <li class="my-top">
             专辑
             </li>
-            <li v-for="(item,index) in album.albums" :key="index" @click="selectItem(item.vid)" class="li">
+            <li v-for="(item,index) in album.albums" :key="index" @click="toAlbum(item.id)" class="li">
               <album-base class="my-album">
                 <div class="left-img" slot="left">
-                  <img v-lazy="item.picUrl" alt="">
+                  <img :src="item.picUrl" alt="">
                 </div>
-                <div slot="top">
-                  {{item.name}}
+                <div slot="top" class="limit">
+                <div class="limit-top-talks">{{item.name}}</div>
                 </div>
-                <div slot="bottom">
-                  {{item.artist.name}}
+                <div slot="bottom" class="limit">
+                  <div class="limit-bottom-talks">
+                    {{item.artist.name}}
                   {{Timestamp(item.publishTime)}}
+                  </div>
                 </div>
-              </album-base>
+            </album-base>
             </li>
-            <li class="my-bottom" v-if="album.more" @click.stop="toUsers(5)">
+            <li class="my-bottom" v-if="album.more" @click.stop="toChanges(5)">
               <span>{{album.moreText}}</span>
               <i class="iconfont iconleft-arrow"></i>
             </li>
           </ul>
 
-          <ul class="my-playlist">
+          <ul class="my-playlist" v-if="djRadio.djRadios">
             <li class="my-top">
             电台
             </li>
             <li v-for="(item,index) in djRadio.djRadios" :key="index" @click="selectItem(item.vid)">
               <list-base>
                 <img v-lazy="item.picUrl" alt="" slot="left" class="img"> 
-                <div slot="top">
-                  # {{item.name}}
+                <div slot="top" class="limit">
+                <div class="limit-top-radio"> # {{item.name}}</div>
                 </div>
-                <div slot="bottom">
-                  {{item.dj.nickname}}
+                <div slot="bottom" class="limit">
+                  <div class="limit-bottom-radio">{{item.dj.nickname}}</div>
                 </div>
               </list-base>
             </li>
-            <li class="my-bottom" v-if="djRadio.more"  @click.stop="toUsers(8)">
+            <li class="my-bottom" v-if="djRadio.more"  @click.stop="toChanges(8)">
               <span>{{djRadio.moreText}}</span>
               <i class="iconfont iconleft-arrow"></i>
             </li>
           </ul>
 
-          <ul class="my-users">
+          <ul class="my-users" v-if="user.users">
             <li class="my-top">
             用户
             </li>
@@ -223,15 +260,15 @@
               <follow-base class="my-users-base">
                 <img v-lazy="item.avatarUrl" alt="" slot="left" class="img"> 
                 <div slot="top" v-if="item.signature" class="limit">
-                <div class="limit-top">{{item.nickname}}</div>
+                <div class="limit-top-user">{{item.nickname}}</div>
                 <i class="iconfont iconnv" v-if="item.gender === 2"></i>
                 <i class="iconfont iconnan" v-if="item.gender === 1"></i>
                 </div>
                 <div slot="bottom" v-if="item.signature" class="limit">
-                <div class="limit-bottom"> {{item.signature}}</div>
+                <div class="limit-bottom-user"> {{item.signature}}</div>
                 </div>
                 <div slot="liRight" v-if="!item.signature" class="limit">
-                  <div class="limit-top">{{item.nickname}}</div>
+                  <div class="limit-top-user">{{item.nickname}}</div>
                   <i class="iconfont iconnv" v-if="item.gender === 2"></i>
                   <i class="iconfont iconnan" v-if="item.gender === 1"></i>
                 </div>
@@ -245,7 +282,7 @@
                 </div>
             </follow-base>
             </li>
-            <li class="my-bottom" v-if="user.more" @click.stop="toUsers(9)">
+            <li class="my-bottom" v-if="user.more" @click.stop="toChanges(9)">
               <span>{{user.moreText}}</span>
               <i class="iconfont iconleft-arrow"></i>
             </li>
@@ -257,6 +294,7 @@
 
 <script>
 import followBase from '../../base/swiper/followbase'
+import baseAuto from '../../base/swiper/baseauto'
 import songBase from '../../base/swiper/searchsong'
 import subVideo from '../../base/swiper/subvideo'
 import listBase from '../../base/swiper/listbase'
@@ -264,16 +302,19 @@ import logBase from '../../base/swiper/logbase'
 import albumBase from '../../base/swiper/album'
 import {timestamp} from '../../assets/js/timestamp'
 import {serializeNumber} from '../../assets/js/number'
+import {saveHistory, loadHistory, deleteAllHistory} from '../../common/js/goodstorage'
 
 
 export default {
+  inject: ['reload'],
   components: {
     followBase,
     songBase,
     subVideo,
     listBase,
     logBase,
-    albumBase
+    albumBase,
+    baseAuto
   },
   props: {
     value:{
@@ -298,7 +339,6 @@ export default {
       album:{},
       djRadio:{},
       user:{},
-      songs:[]
     }
   },
   watch: {},
@@ -311,18 +351,18 @@ export default {
     },
     getAlls (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
-        this.songs = res.data.result.song.songs
-        this.song = res.data.result.song
-        this.video = res.data.result.video
-        this.playList = res.data.result.playList
-        this.mlog = res.data.result.mlog
-        this.talk = res.data.result.talk
-        this.artist = res.data.result.artist
-        this.sim_query = res.data.result.sim_query
-        this.album = res.data.result.album
-        this.djRadio = res.data.result.djRadio
-        this.user = res.data.result.user
-        console.log(this.mlog.mlogs)
+
+        this.song = res.data.result.song || []
+        this.video = res.data.result.video || []
+        this.playList = res.data.result.playList || []
+        this.mlog = res.data.result.mlog || []
+        this.talk = res.data.result.talk || []
+        this.artist = res.data.result.artist || []
+        this.sim_query = res.data.result.sim_query || []
+        this.album = res.data.result.album || []
+        this.djRadio = res.data.result.djRadio || []
+        this.user = res.data.result.user || []
+        console.log(res.data)
       })
     },
     toIt () {
@@ -362,8 +402,50 @@ export default {
       })
       }
     },
-    toUsers (i) {
+    toChanges (i) {
       this.$emit('changeIndex',i)
+    },
+    toList (id) {
+      this.$router.push({
+        path:`/songlist/${id}`
+      })
+    },
+    toSinger (id) {
+      this.$api.singers.singermusic(id).then(res => {
+        if(res.data.artist.accountId) {
+          let userId = res.data.artist.accountId
+          this.$router.push({
+            path: `/singer/${userId}/${id}`
+            })
+        }else {
+          let userId = 477726475
+          this.$router.push({
+            path: `/singer/${userId}/${id}`
+          })
+        }
+      })
+    },
+    toAlbum (id) {
+      this.$router.push({
+        path:`/albumlist/${id}`
+      })
+    },
+    toSearch(keyword) {
+      this.reload()
+      this.$router.push({
+        path:`/search/${keyword}`
+      }).catch(err => {
+        console.log('输出报错',err)
+      })
+
+      this.toStore(keyword)
+    },
+    toStore(keyword) {
+      saveHistory(keyword)
+    },
+    toMoreOpera (item) {
+      this.$emit('more', item)
+      console.log(item)
     }
   },
   created() {
@@ -371,8 +453,10 @@ export default {
     // this.getAlls(this.value, 60, 0, 1018)
   },
   mounted() {
-    this.getMultimatch (this.value)
-    this.getAlls(this.value, 60, 0, 1018)
+    this.$nextTick(() => {
+      this.getMultimatch (this.value)
+      this.getAlls(this.value, 60, 0, 1018)
+    })
   }
 }
 </script>
@@ -383,7 +467,7 @@ export default {
     height:auto
     .scroll-list-wrap
       height:567px  
-      position:relative
+      position:absolute
       top:15px
       width:375px 
       font-size:$font-size-medium
@@ -394,10 +478,50 @@ export default {
           padding-left:10px
           margin:10px auto
         .my-inter-bottom
+          margin-bottom:10px
           img 
-            height:45px
-            width:45px
+            height:50px
+            width:50px
             border-radius:50%
+          .my-follow-center-top
+            max-width:235px
+            ellipsis() 
+        .my-inter-video
+          margin-bottom:10px
+          .my-video-wrap
+            position:relative
+            img 
+              height:50px
+              width:100px
+              border-radius:5px
+          .my-video-bg
+             position:absolute   
+             width:20px
+             height:20px
+             border-radius:50%
+             background-color:rgba(255,255,255,.6)
+             left:50%
+             top:50%
+             margin-top:-20px 
+             margin-left:-7.5px
+             flex-center()
+             i  
+               color:red
+               font-size:$font-size-small
+          .my-follow-center-top
+            display:flex
+            max-width:180px
+            ellipsis()  
+            .mv
+              border:1px solid red
+              height:15px
+              width:30px
+              border-radius:2px
+              font-size:$font-size-small
+              color:red
+              flex-center()
+              margin-top:2.5px
+              margin-right:5px
       .my-songs
         height:auto 
         li
@@ -486,16 +610,7 @@ export default {
             img  
               height:100%
               width:100%
-              border-radius:50%
-            .limit
-              display:flex
-              .limit-top
-                max-width:158px
-                ellipsis()  
-                margin-right:15px
-              .limit-bottom
-                max-width:220px
-                ellipsis()  
+              border-radius:50% 
               i
                 font-size:$font-size-small 
               .iconnv
@@ -518,6 +633,11 @@ export default {
               flex-center()
               font-size:$font-size-small
               color:gray 
+            .limit
+              display:flex
+              i
+                margin-left:10px  
+                font-size:$font-size-small
 
       .my-top
         height:40px 
@@ -533,4 +653,34 @@ export default {
         flex-center()
       .li
         margin-bottom:10px  
+
+      .limit-singer
+        max-width:220px
+        ellipsis()  
+      .limit  
+        .limit-top
+          max-width:280px
+          ellipsis()  
+        .limit-bottom
+          max-width:285px
+          ellipsis() 
+        .limit-top-talks
+          max-width:260px
+          ellipsis()  
+        .limit-bottom-talks
+          max-width:265px
+          ellipsis() 
+        .limit-top-radio
+          max-width:270px
+          ellipsis()  
+        .limit-bottom-radio
+          max-width:270px
+          ellipsis() 
+        .limit-top-user
+          max-width:190px
+          ellipsis()  
+        .limit-bottom-user
+          max-width:200px
+          ellipsis() 
+
 </style>

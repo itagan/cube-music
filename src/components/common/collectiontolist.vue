@@ -1,6 +1,6 @@
 <template>
   <div class="share">
-    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001">
+    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2004">
 
       <div class="build">
         <ul class="top">
@@ -23,7 +23,7 @@
           >
 
           <ul class="build-center">
-            <li class="li" v-for="item in playlist" :key="item.id" @click="toList(item.id)">
+            <li class="li" v-for="item in playlist" :key="item.id" @click="allSub(item.id)">
               <div class="li-item" >
                 <div class="li-left">
                   <img v-lazy="item.coverImgUrl" v-if="item" :key="item.coverImgUrl">
@@ -65,6 +65,14 @@
         }
       },
       props: {
+        // track: {
+        //   type: Object,
+        //   default: {}
+        // },
+        checkLists: {
+          type:Array,
+          default:[]
+        }
       },
       created() {
         // this.getPlaylist()
@@ -84,9 +92,48 @@
             })
           })
         },
-        toList (id) {
-          this.$router.push({
-            path:`/songlist/${id}`
+        // toSub (pid) {
+        //   this.$api.songLists.addDel('add', pid, this.track.id).then(res => {
+        //     if(res.data.code === 200) {
+        //       const toast = this.$createToast({
+        //         txt: '已收藏到歌单',
+        //         type: 'correct',
+        //         zIndex:2002
+        //       })
+        //       toast.show()
+        //       this.hide() 
+        //     }else if(res.data.code === 502) {
+        //       const toast = this.$createToast({
+        //         txt: '歌曲已存在',
+        //         type: 'error',
+        //         zIndex:2002
+        //       })
+        //       toast.show()
+        //       this.hide() 
+        //     }
+        //   })
+        // },
+        allSub (pid) {
+          this.checkLists.forEach(item => {
+            this.$api.songLists.addDel('add', pid, item.id).then(res => {
+            if(res.data.code === 200) {
+              const toast = this.$createToast({
+                txt: '已收藏到歌单',
+                type: 'correct',
+                zIndex:2002
+              })
+              toast.show()
+              this.hide() 
+            }else if(res.data.code === 502) {
+              const toast = this.$createToast({
+                txt: '歌曲已存在',
+                type: 'error',
+                zIndex:2002
+              })
+              toast.show()
+              this.hide() 
+            }
+          })
           })
         },
         bulidlist () {
@@ -104,7 +151,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-   .build
+    .build
       position:relative
       bottom:0
       height:auto
@@ -132,8 +179,8 @@
           width:80px
           margin-left:-40px
           div
-           width:80px
-           height:6px
+           width:60px
+           height:4px
            border-radius:3.5px
            background-color:rgba(128,128,128,.4)
         .top-bottom

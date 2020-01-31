@@ -198,20 +198,21 @@
       computed: {
         options () {
           return {
-            pullUpLoad: this.pullUpLoadObj,
+            // pullUpLoad: this.pullUpLoadObj,
+            pullUpLoad: false,
             scrollbar: true,
             startY: -50
           }
         },
-        pullUpLoadObj: function () {
-          return this.pullUpLoad ? {
-            threshold: parseInt(this.pullUpLoadThreshold),
-            txt: {
-              more: this.pullUpLoadMoreTxt,
-              noMore: this.pullUpLoadNoMoreTxt
-            }
-          } : false
-        }
+        // pullUpLoadObj: function () {
+        //   return this.pullUpLoad ? {
+        //     threshold: parseInt(this.pullUpLoadThreshold),
+        //     txt: {
+        //       more: this.pullUpLoadMoreTxt,
+        //       noMore: this.pullUpLoadNoMoreTxt
+        //     }
+        //   } : false
+        // }
       },
       created () {
         this.getList()
@@ -499,6 +500,7 @@
       position:relative
       background-color:white
       padding:10px auto
+      margin-bottom:50px
       li
         height:25px
         line-height:25px

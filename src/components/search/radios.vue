@@ -30,10 +30,10 @@
            <li v-for="(item,index) in djRadios" :key="index">
             <list-base>
               <img v-lazy="item.picUrl" alt="" slot="left" class="img"> 
-              <div slot="top">
+              <div slot="top" class="limit">
                <div class="limit-top"> # {{item.name}}</div>
               </div>
-              <div slot="bottom">
+              <div slot="bottom" class="limit">
                 <div class="limit-bottom">{{item.dj.nickname}}</div>
               </div>
             </list-base>
@@ -164,6 +164,7 @@ export default {
     height:567px
     background-color:white
     margin-top:15px
+    // margin-bottom:50px
     .sticky-view-scroll
       .sticky-view-container
         position: absolute
@@ -179,12 +180,13 @@ export default {
           width:50px
           height:50px 
           border-radius:5px
-        .limit-top
-          max-width:295px
-          ellipsis() 
-        .limit-bottom
-          max-width:295px
-          ellipsis() 
+        .limit  
+          .limit-top
+            max-width:295px
+            ellipsis() 
+          .limit-bottom
+            max-width:295px
+            ellipsis() 
      //加载中相关样式
   .pullload
     width:100%

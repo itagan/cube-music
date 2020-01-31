@@ -1,9 +1,9 @@
 <template>
   <div class="base-comment" v-if="!item.beReplied.length">
     <div class="base-comment-top">
-      <img v-lazy="item.user.avatarUrl" @click.stop="toUser(item.user.userId, item.user.userType)">
+      <img v-lazy="item.user.avatarUrl" @click.stop="toUser(item.user.userId, item.user.userType)" v-if="item.user">
       <div class="base-comment-time">
-        <div class="base-comment-name">
+        <div class="base-comment-name" v-if="item.user">
           <div class="user-name">{{item.user.nickname}}</div>
           <div class="user-author" v-if="this.author[0].userId === item.user.userId"><span class="user-author-name">作者</span></div>
         </div>

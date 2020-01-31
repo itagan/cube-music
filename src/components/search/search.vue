@@ -45,10 +45,16 @@
         ref="slideScroll"
         >
         <cube-slide-item :key="0">
-          <my-all :value="value" @changeIndex="changeIndex"></my-all>
+          <my-all :value="value" @changeIndex="changeIndex" @more="toMoreOpera"></my-all>
         </cube-slide-item>
         <cube-slide-item :key="1">
-          <my-songs :value="value" :currentPage="currentPage"></my-songs>
+          <my-songs :value="value" 
+          :currentPage="currentPage" 
+          @more="toMoreOpera" 
+          @allToShow="allToShow" 
+          @whochecked="whoChecked"
+          @changebg="changeColor"
+          ref="toCheck"></my-songs>
         </cube-slide-item>
         <cube-slide-item :key="2">
           <yun-cun :value="value" :currentPage="currentPage"></yun-cun>
@@ -76,9 +82,26 @@
         </cube-slide-item>
       </cube-slide>
     </div>
-
   </div>
 
+  <play-more
+      v-if="isMore"
+      :key="3"
+      @cancel="cancelMore"
+      @build="moreBuildList"
+      @share="toShare"
+      @ring="setRing"
+      @collect="toCollected"
+      @singer="toSinger"
+      @album="toAlbum"
+      :track="song"
+      ref="playMore"
+    ></play-more>
+    <share-dialog ref="shareShow" @cancel="cancelShare"></share-dialog>
+    <set-ring ref="setRingShow"></set-ring>
+    <collection-to-list ref="collectedShow" @bulid="bulidlist" :checkLists="checkLists"> </collection-to-list>
+    <build-list  @cancel="cancel" :track="song" ref="showBuild"></build-list>
+    <check-footer v-if="allShow" @collect="toCollectedFooter" :addColor="addColor"></check-footer>
   </div>
 </template>
 
@@ -93,6 +116,12 @@ import myAlbum from './albums'
 import myVideos from './videos'
 import myRadios from './radios'
 import myUsers from './users'
+import playMore from '../common/playmore'
+import shareDialog from '../common/sharedialog'
+import setRing from '../common/setring'
+import collectionToList from '../common/collectiontolist'
+import buildList from '../common/buildlist'
+import checkFooter from '../common/checkfooter'
 export default {
   components: {
     MyHeader,
@@ -104,7 +133,13 @@ export default {
     myAlbum,
     myVideos,
     myRadios,
-    myUsers
+    myUsers,
+    playMore,
+    shareDialog,
+    setRing,
+    collectionToList,
+    buildList,
+    checkFooter
   },
   props: {},
   data() {
@@ -131,6 +166,7 @@ export default {
       }
       },
       scrollEvents: ['scroll'],
+      posX:0,
       activeClass: 'nav-item-active',
       errorClass: '',
       currentPage: 0,
@@ -176,19 +212,43 @@ export default {
           text: '用户',
           id: 1000
         }
-      ]
+      ],
+      isMore: false,
+      isBuild: false,
+      visible: false,
+      allShow:false,
+      addColor:false,
+      song:{},
+      checkLists:[]
     }
   },
-  watch: {},
+  watch: {
+    isBuild (val) {
+      if (val) {
+        this._dialog.afterOpen()
+      } else {
+        this._dialog.beforeClose()
+      }
+    },
+    isMore (val) {
+      if (val) {
+        this._dialog.afterOpen()
+      } else {
+        this._dialog.beforeClose()
+      }
+    },
+    currentPage (val) {
+      if(val !== 1) {
+        this.allShow = false
+      }
+    }
+  },
   computed: {},
   methods: {
     toBack () {
       this.$router.go(-1)
     },
     input (val) {
-    },
-    cancel () {
-
     },
     Placeholder () {
       this.value = this.$route.params.content
@@ -210,34 +270,130 @@ export default {
       }
     },
     toggles (item, index) {
-      // if(this.currentPage < index) {
-      //   this.$refs.navScroll.scroll.scrollBy(-50*(index - this.currentPage),0,200)
-      // }
-      // if(this.currentPage > index) {
-      //   this.$refs.navScroll.scroll.scrollBy(50*(this.currentPage - index),0,200)
-      // }
       let leftDistance = this.$refs.distance[index].getBoundingClientRect().left
-      console.log(leftDistance)
+      // console.log(leftDistance)
+      // if(this.posX ===0 || this.posX === -191) {
+      //   this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
+      // }
+      // this.$refs.slideScroll.scroll.getCurrentPage()
       this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
       this.currentPage = index
-      // console.log(index)
-      // this.$refs.navScroll.scroll.scrollBy(-10,0,200)
-      // this.$refs.navScroll.scrollToElement('my-header',200,true,true)
     },
     slideChange (index) {
       let leftDistance = this.$refs.distance[index].getBoundingClientRect().left
-      this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
+      // this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
       this.currentPage = index
     },
     scrollHandler (pos) {
-      // console.log(pos.x)
+      console.log(pos.x)
+      this.posX = pos.x
+
     },
     changeIndex (i) {
       this.currentPage = i
+      // this.$refs.slideScroll.scroll.goToPage(i, 0, 300)
       this.$refs.slideScroll.refresh()  //刷新一下轮播，避免点击回到全部无效
     },
     scroll ({x, y}) {
       console.log(x, y)
+    },
+    allToShow (type) {
+     if(type === true) {
+        this.allShow = true
+     }else {
+        this.allShow = false
+     }
+    },
+    changeColor (type) {
+      if(type) {
+        this.addColor = true
+      }else {
+        this.addColor = false
+      }
+    },
+    toSinger () {
+      this.$api.singers.singermusic((this.song.artists && this.song.artists[0].id) || (this.song.ar && this.song.ar[0].id)).then(res => {
+        if(res.data.artist.accountId) {
+          let userId = res.data.artist.accountId
+          this.$router.push({
+            path: `/singer/${userId}/${(this.song.artists && this.song.artists[0].id) || (this.song.ar && this.song.ar[0].id)}`
+            })
+        }else {
+          let userId = 477726475
+          this.$router.push({
+            path: `/singer/${userId}/${(this.song.artists && this.song.artists[0].id) || (this.song.ar && this.song.ar[0].id)}`
+            })
+        }
+      })
+    },
+    toAlbum () {
+      this.$router.push({
+        path:`/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
+      })
+    },
+    cancel () {
+      this.isBuild = false
+      this.$refs.collectedShow.hide()
+    },
+    toMoreOpera (item) {
+      this.isMore = true
+      this.$nextTick(() => {
+        this.$refs.playMore.show()
+      })
+      this.song = item
+      this.checkLists = []
+      this.checkLists.push(item)
+    },
+    moreBuildList () {
+      this.isMore = false
+      this.isBuild = true
+        // 手动调用，解决打开更多再新建歌单产生滚动现象的bug。
+      this.$nextTick(() => {
+        this._dialog.afterOpen()
+      })
+    },
+    cancelMore () {
+      this.$refs.playMore.hide()
+        // this.isMore = false
+        // this.$nextTick(() => {
+        //     this.$refs.playMore.hide()
+        // })
+      setTimeout(() => {
+        this.isMore = false
+      }, 500)
+    },
+    cancelShare () {
+      this.$refs.shareShow.hide()
+      setTimeout(() => {
+        this.isMore = false
+      }, 500)
+    },
+    toShare () {
+      this.$refs.shareShow.show()
+    },
+    setRing () {
+      this.$refs.setRingShow.show()
+    },
+    bulidlist () {
+      // this.isBuild = true
+      this.isMore = false
+      this.$refs.showBuild.show()
+      
+    },
+    toCollected () {
+      this.isMore = false
+      this.$refs.collectedShow.show()
+    },
+    toCollectedFooter () {
+      this.$refs.toCheck.whoChecked()
+      if(this.checkLists.length) {
+        this.$refs.collectedShow.show()
+      }
+    },
+    whoChecked (checkLists) {
+      this.checkLists = []
+      this.checkLists = checkLists
+      console.log(this.checkLists)
     }
   },
   created() {

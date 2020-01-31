@@ -16,7 +16,7 @@
         @pulling-up="onPullingUp"
         >
         <ul class="content">
-          <li v-for="(item,index) in playlists" :key="index">
+          <li v-for="(item,index) in playlists" :key="index" @click.stop="toList(item.id)">
             <list-base>
               <img v-lazy="item.coverImgUrl" alt="" slot="left" class="img"> 
               <div slot="top" class="limit">
@@ -117,7 +117,12 @@ export default {
     },
     Num (num) {
       return serializeNumber(num)
-    }
+    },
+    toList (id) {
+      this.$router.push({
+        path:`/songlist/${id}`
+      })
+    },
   },
   created() {
     // this.getPlaylist(this.value, 30, 0, 1000)

@@ -108,20 +108,22 @@
 
     <play-more
       v-if="isMore"
+      :noAlbum="false"
       @cancel="cancelMore"
+      @build="moreBuildList"
       @share="toShare"
       @ring="setRing"
-      @singer="toSinger"
       @collect="toCollected"
-      :track="track"
-      :noAlbum="false"
+      @singer="toSinger"
+      @album="toAlbum"
+      :track="song"
       ref="playMore"
     ></play-more>
     <share-dialog ref="shareShow"></share-dialog>
     <set-ring ref="setRingShow"></set-ring>
     <more-singer ref="moreSingerShow" :singers="singers"></more-singer>
-    <collection-to-list ref="collectedShow" @bulid="bulidlist"> </collection-to-list>
-    <build-list v-if="isBuild" @cancel="cancel"></build-list>
+    <collection-to-list ref="collectedShow" @bulid="bulidlist" :track="song"> </collection-to-list>
+    <build-list  @cancel="cancel" :track="song" ref="showBuild"></build-list>
     <my-cover :messages="messages" v-if="coverShow" @coverHide="coverHide"></my-cover>
   </div>
 </template>
@@ -130,7 +132,7 @@
     import myHeader from '../header'
     import Message from './message'
     import List from './list'
-    import playMore from '../playmore'
+    import playMore from '../../common/playmore'
     import shareDialog from '../../common/sharedialog'
     import setRing from '../../common/setring'
     import moreSinger from '../../common/moresinger'
@@ -175,7 +177,7 @@
           isSub:false,
           singers:[],
           coverShow:false,
-          
+          song:{}
         }
       },
       computed: {
@@ -238,18 +240,39 @@
         onPullingUp () {
 
         },
+        // toSinger () {
+        //   this.$api.singers.singermusic((this.song.artists && this.song.artists[0].id) || (this.song.ar && this.song.ar[0].id)).then(res => {
+        //     if(res.data.artist.accountId) {
+        //       let userId = res.data.artist.accountId
+        //       this.$router.push({
+        //         path: `/singer/${userId}/${(this.song.artists && this.song.artists[0].id) || (this.song.ar && this.song.ar[0].id)}`
+        //         })
+        //     }else {
+        //       let userId = 477726475
+        //       this.$router.push({
+        //         path: `/singer/${userId}/${(this.song.artists && this.song.artists[0].id) || (this.song.ar && this.song.ar[0].id)}`
+        //         })
+        //     }
+        //   })
+        // },
+        toAlbum () {
+          this.$router.push({
+            path:`/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
+          })
+        },
         cancel () {
           this.isBuild = false
+          this.$refs.collectedShow.hide()
         },
-        more (index) {
+        more (item) {
             // 子组件提醒打开更多操作页面
           this.isMore = true
             // this.visible = true
           this.$nextTick(() => {
             this.$refs.playMore.show()
           })
-          this.track = this.songs[index]
-          this.singers = this.songs[index].ar
+          this.song = item
+          this.singers = item.ar
         },
 
         moreBuildList () {
@@ -342,17 +365,17 @@
             this.isMore = false
             return
           }
-          this.$api.singers.singermusic(this.track.ar[0].id).then(res => {
+          this.$api.singers.singermusic(this.song.ar[0].id).then(res => {
             if(res.data.artist.accountId) {
               this.accountId = res.data.artist.accountId
               let userId = this.accountId
               this.$router.push({
-                path: `/singer/${userId}/${this.track.ar[0].id}`
+                path: `/singer/${userId}/${this.song.ar[0].id}`
                 })
             }else {
               let userId = 477726475
               this.$router.push({
-                path: `/singer/${userId}/${this.track.ar[0].id}`
+                path: `/singer/${userId}/${this.song.ar[0].id}`
                 })
             }
           })
@@ -373,7 +396,7 @@
         bulidlist () {
           this.isBuild = true
           this.isMore = false
-          // this.$refs.collectedShow.hide()
+          this.$refs.showBuild.show()
         },
         toCover () {
           this.coverShow = true

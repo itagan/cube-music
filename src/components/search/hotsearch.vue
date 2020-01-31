@@ -20,32 +20,27 @@
     <i class="iconfont iconyinletiaodongzhuangtai" slot="right"></i>
     </my-header>
 
-    <div class="scroll-list-wrap">
+    <div class="scroll-list-wrap" >
         <cube-scroll
           ref="scroll"
           :options="options">
-            <div class="history" v-if="hasTips">
+            <div class="history" v-show="hasTips"  v-if="historySearchs.length">
               <div class="history-text">
                 <span>搜索历史</span>
-                <i class="iconfont icon3"></i>
+                <i class="iconfont icon3" @click.stop="clearHistory"></i>
               </div>
 
               <div class="scroll-list-wrap-history">
                 <cube-scroll
-                  ref="scroll"
+                  ref="scrollHorizontal"
                   direction="horizontal"
                   :options="horizontalOptions"
                   class="horizontal-scroll-list-wrap"
                 >
                   <ul class="history-content">
-                    <li>那些年</li>
-                    <li>做过</li>
-                    <li>路过</li>
-                    <li>的你</li>
-                    <li>那些年</li>
-                    <li>做过</li>
-                    <li>路过</li>
-                    <li>的你</li>
+                    <li v-for="(item, index) in historySearchs" :key="index"  @click.stop="toSearch(item)">
+                      {{item}}
+                    </li>
                   </ul>
                 </cube-scroll>
               </div>
@@ -75,13 +70,13 @@
             </div>
 
             <ul class="search-tips" v-else>
-              <li class="search-tips-li-one" @click="_toSearch">
+              <li class="search-tips-li-one" @click.stop="toSearch(value)">
                 搜索
                 <span>
                   "{{value}}"
                 </span>
               </li>
-              <li v-for="(item, index) in suggestions" :key="index" @click="toSearch(item.keyword)">
+              <li v-for="(item, index) in suggestions" :key="index" @click.stop="toSearch(item.keyword)">
                 <i class="iconfont iconsearch"></i>
                 <span>{{item.keyword}}</span>
               </li>
@@ -94,6 +89,7 @@
 <script>
 import MyHeader from '../../base/navbar/navbar'
 import mySearch from '../../base/search/searchcancel'
+import {saveHistory, loadHistory, deleteAllHistory} from '../../common/js/goodstorage'
 export default {
   components: {
      MyHeader,
@@ -106,11 +102,12 @@ export default {
         scrollbar: true
       },
       horizontalOptions: {
-        scrollbar: false
+        scrollbar: true
       },
       hotsearchs:[],
       hasTips:true,
       suggestions:[],
+      historySearchs:[],
       value: '',
       placeholder: '请输入内容',
       type: 'password',
@@ -158,9 +155,6 @@ export default {
       })
     },
     input (val) {
-      // 输入中
-      // this.hasTips = false
-      // this.getSuggestion (val)
       if (val.length > 0) {
         this.hasTips = false
         this.getSuggestion (val)
@@ -172,9 +166,7 @@ export default {
       this.$router.push({
         path:`/search/${keyword}`
       })
-    },
-    _toSearch () {
-
+      this.toStore(keyword)
     },
     Placeholder () {
       this.value = this.$route.params.content
@@ -184,8 +176,38 @@ export default {
         this.getSuggestion (this.value)
       }
     },
+    toStore(keyword) {
+      saveHistory(keyword)
+      this.getHistorys()
+    },
+    getHistorys () {
+      this.historySearchs = loadHistory()
+    },
+    clearHistory () {
+      this.$createDialog({
+        type: 'confirm',
+        title: '确认清空全部历史记录？',
+        confirmBtn: {
+          text: '确认',
+          active: true,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        cancelBtn: {
+          text: '取消',
+          active: false,
+          disabled: false,
+          href: 'javascript:;'
+        },
+        onConfirm: () => {
+          this.historySearchs = []
+          deleteAllHistory()
+        }
+      }).show()
+    }
   },
   created() {
+    this.getHistorys()
     this.getHotSearch()
     this.getSearchDefault()
     this.Placeholder()
@@ -250,6 +272,7 @@ export default {
            margin-right:10px  
         .history-content
           display:flex 
+          // min-width:500px
           li
             height:30px  
             width:auto
