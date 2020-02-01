@@ -98,6 +98,11 @@
           } else {
             this.$emit('toAll', 0)
           }
+          if(this.checkList.length) {
+            this.$emit('changebg',true)
+          }else {
+            this.$emit('changebg',false)
+          }
         },
         allToCheck () {
           let arr = []
@@ -108,9 +113,21 @@
         },
         allToChecked () {
           this.checkList = [...this.allToCheck()]
+          this.$emit('changebg',true)
         },
         allToCheckNo () {
           this.checkList = []
+          this.$emit('changebg',false)
+        },
+            // 选中的有哪些
+        whoChecked () {
+          this.checkLists = []
+          for(let i = 0; i < this.checkList.length; i++) {
+            this.checkLists.push(this.tracks[this.checkList[i] - 1])
+          }
+          console.log(this.checkList)
+          console.log(this.checkLists)
+          this.$emit('whochecked', this.checkLists)
         },
         Artist (artist) {
           let arr = []

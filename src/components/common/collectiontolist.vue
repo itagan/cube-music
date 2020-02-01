@@ -24,7 +24,7 @@
 
           <ul class="build-center">
             <li class="li" v-for="item in playlist" :key="item.id" @click="allSub(item.id)">
-              <div class="li-item" >
+              <div class="li-item">
                 <div class="li-left">
                   <img v-lazy="item.coverImgUrl" v-if="item" :key="item.coverImgUrl">
                 </div>
@@ -61,26 +61,23 @@
           scrollEvents: ['scroll'],
           playing:false,
           id:'477726475',
-          playlist:[]
+          playlist:[],
+          codes:[]
         }
       },
       props: {
-        // track: {
-        //   type: Object,
-        //   default: {}
-        // },
         checkLists: {
           type:Array,
           default:[]
         }
       },
-      created() {
-        // this.getPlaylist()
-      },
+      created() {},
       methods: {
         show () {
           this.$refs.popup.show()
-          this.getPlaylist()
+          this.$nextTick(() => {
+            this.getPlaylist()
+          })
         },
         hide () {
           this.$refs.popup.hide()
@@ -92,49 +89,34 @@
             })
           })
         },
-        // toSub (pid) {
-        //   this.$api.songLists.addDel('add', pid, this.track.id).then(res => {
-        //     if(res.data.code === 200) {
-        //       const toast = this.$createToast({
-        //         txt: '已收藏到歌单',
-        //         type: 'correct',
-        //         zIndex:2002
-        //       })
-        //       toast.show()
-        //       this.hide() 
-        //     }else if(res.data.code === 502) {
-        //       const toast = this.$createToast({
-        //         txt: '歌曲已存在',
-        //         type: 'error',
-        //         zIndex:2002
-        //       })
-        //       toast.show()
-        //       this.hide() 
-        //     }
-        //   })
-        // },
         allSub (pid) {
+          this.codes = []
           this.checkLists.forEach(item => {
             this.$api.songLists.addDel('add', pid, item.id).then(res => {
-            if(res.data.code === 200) {
-              const toast = this.$createToast({
-                txt: '已收藏到歌单',
-                type: 'correct',
-                zIndex:2002
-              })
-              toast.show()
-              this.hide() 
-            }else if(res.data.code === 502) {
-              const toast = this.$createToast({
-                txt: '歌曲已存在',
-                type: 'error',
-                zIndex:2002
-              })
-              toast.show()
-              this.hide() 
-            }
+            this.codes.push(res.data.code)
           })
           })
+          let arr = []
+          arr = this.codes.filter(item => {
+            return item === 502
+          })
+          if(arr.length === this.checkLists.length) {
+          const toast = this.$createToast({
+            txt: '歌曲已存在',
+            type: 'error',
+            zIndex:2002
+          })
+          toast.show()
+          this.hide() 
+          }else {
+          const toast = this.$createToast({
+            txt: '已收藏到歌单',
+            type: 'correct',
+            zIndex:2002
+          })
+          toast.show()
+          this.hide() 
+          }
         },
         bulidlist () {
           this.hide() 
@@ -144,6 +126,11 @@
           this.scrollY = -y
           // this.$refs.increaseHeight.style.height = `${this.scrollY}`
         },
+      },
+      mounted () {
+        // this.$nextTick(() => {
+        //   this.getPlaylist()
+        // })
       }
     }
 </script>

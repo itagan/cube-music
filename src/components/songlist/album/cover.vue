@@ -58,9 +58,9 @@ export default {
   },
   props: {
     messages: {
-        type: Object,
-        default: {}
-      }
+      type: Object,
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -108,7 +108,7 @@ export default {
     bottom:0
     left:0
     right:0
-    z-index:2001
+    z-index:2004
     background-color:black
     .header
       background-color:transparent
