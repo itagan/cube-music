@@ -1,16 +1,16 @@
 <template>
   <div class="wrapper">
 
-     <div class="pullloadtop" v-if="!songs.length" v-show="result">
-      <span class="load">
+     <div class="pullloadtop" v-if="songCount === 0"> 
+      <span class="load"  v-if="result">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
+      <span  v-if="!result" class="no-result">无结果</span>
      </div> 
 
-     <div class="no-result" v-if="!songs.length" v-show="!result">无结果</div> 
 
-    <cube-sticky :pos="scrollY" v-if="songs.length">
+    <cube-sticky :pos="scrollY" v-if="songCount > 0">
       <cube-scroll
         :scroll-events="scrollEvents"
         :options="options"
@@ -44,7 +44,7 @@
             </ul>
 
         </cube-sticky-ele>
-        <ul class="my-content">
+        <ul class="my-content" v-if="songCount > 0">
           <li v-for="(item,index) in songs" :key="index" class="li" @click.stop="toCheckMusic(item, index)">
             <song-base class="my-songs-base">
               <!-- 添加一个key属性，来唯一标识该控件，被key标识后会重新渲染，避免不渲染样式bug问题 -->
@@ -123,7 +123,7 @@ export default {
       allShow: false,
       complete: false,
       hasMore: true,
-      songCount:'',
+      songCount:0,
       offset:0,
       count:0,
       result:true,
@@ -158,8 +158,9 @@ export default {
           this.offset+=10
         }
         this.songs =  this.songs.concat(res.data.result.songs)
+
         setTimeout(() => {
-          this.result = this.songs.length > 0
+          this.result = this.songCount > 0 ? true : false
         }, 3000)
       })
     },
@@ -411,5 +412,8 @@ export default {
       i
         color:red
       span
-        color:gray       
+        color:gray  
+    .no-result
+     color:gray  
+     font-size:$font-size-medium   
 </style>

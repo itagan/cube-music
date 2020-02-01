@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="showSearch">
     <my-header class="my-header">
     <div slot="center" class="search-wrap">
       <div class="my-input">
@@ -116,7 +116,8 @@ export default {
       clearable: {
         visible: true,
         blurHidden: true
-      }
+      },
+      showSearch:true
     }
   },
   watch: {
@@ -136,6 +137,7 @@ export default {
     cancel () {
       //  this.$refs.search.hide()
       this.$emit('cancal')
+      this.showSearch = false
     },
     getHotSearch () {
       this.$api.searchs.searchHotDetail().then(res => {

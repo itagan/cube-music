@@ -1,22 +1,23 @@
 <template>
   <div class="wrapper">
-    <div class="pullloadtop" v-if="!mlog.mlogs">
-      <span class="load">
+    <div class="pullloadtop" v-if="!talks.length || !mlogs.length"> 
+      <span class="load"  v-if="result">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
-    </div>
+      <span  v-if="!result" class="no-result">无结果</span>
+     </div> 
 
     <cube-sticky :pos="scrollY" v-else>
       <cube-scroll
         :scroll-events="scrollEvents"
         @scroll="scrollHandler">
-        <cube-sticky-ele ele-key="主题">
+        <cube-sticky-ele ele-key="主题"  v-if="talk.talks">
           <ul class="sticky-header">
             <li>主题</li>
           </ul>
         </cube-sticky-ele>
-         <ul class="my-talks">
+         <ul class="my-talks" v-if="talk.talks">
 
           <li v-for="(item,index) in talk.talks" :key="index" class="li">
             <follow-base>
@@ -38,12 +39,12 @@
              <i class="iconfont iconleft-arrow"></i>
           </li>
         </ul>
-        <cube-sticky-ele ele-key="Mlog">
+        <cube-sticky-ele ele-key="Mlog" v-if="mlog.mlogs">
           <ul class="sticky-header">
             <li>Mlog</li>
           </ul>
         </cube-sticky-ele>
-        <ul class="my-mlogs">
+        <ul class="my-mlogs" v-if="mlog.mlogs">
           
           <li class="my-mlogs-li">
             <ul>
@@ -111,13 +112,16 @@ export default {
       mlog:{},
       talk:{},
       mlogs:[],
-      talks:[]
+      talks:[],
+      loadData:true,
+      result:true
     }
   },
   watch: {
     currentPage(val) {
-      if(val === 2 && !this.mlogs.length || !this.talks.length) {
+      if(val === 2 && this.loadData) {
         this.getAlls(this.value, 60, 0, 1018)
+        this.loadData = false
       } 
     }
   },
@@ -125,10 +129,17 @@ export default {
   methods: {
     getAlls (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
-        this.mlog = res.data.result.mlog
-        this.mlogs = res.data.result.mlog.mlogs
-        this.talk = res.data.result.talk
-        this.talks = res.data.result.talk.talks
+        this.mlog = res.data.result.mlog || {}
+        this.mlogs = (res.data.result.mlog && res.data.result.mlog.mlogs) || []
+        this.talk = res.data.result.talk || {}
+        this.talks = (res.data.result.talk && res.data.result.talk.talks) || []
+
+        setTimeout(() => {
+          // this.result = this.userprofileCount > 0 ? true : false
+          if(!res.data.result.mlog || !res.data.result.talk) {
+            this.result = false
+          }
+        }, 3000)
       })
     },
     scrollHandler({ y }) {
@@ -234,6 +245,9 @@ export default {
       i
         color:red
       span
-        color:gray       
+        color:gray  
+    .no-result
+     color:gray  
+     font-size:$font-size-medium         
              
 </style>

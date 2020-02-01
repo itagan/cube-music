@@ -1,13 +1,14 @@
 <template>
   <div class="wrapper">
-    <div class="pullloadtop" v-if="!artists.length">
-      <span class="load">
+    <div class="pullloadtop" v-if="artistCount === 0"> 
+      <span class="load"  v-if="result">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
-    </div>
+      <span  v-if="!result" class="no-result">无结果</span>
+     </div> 
 
-    <div class="content-scroll-wrapper" v-else>
+    <div class="content-scroll-wrapper" v-if="artistCount > 0">
       <cube-scroll
         ref="contentScroll"
         :scroll-events="scrollEvents"
@@ -15,15 +16,15 @@
         @scroll="scrollHandler"
         @pulling-up="onPullingUp"
         >
-        <ul class="content">
+        <ul class="content" v-if="artists.length">
           <li v-for="(item,index) in artists" :key="index" @click="toUser(item.id)">
             <follow-base class="my-singers-base">
-              <img v-lazy="item.img1v1Url" alt="" slot="left" class="img"> 
-              <div slot="liRight" class="limit">
+              <img v-lazy="item.img1v1Url" alt="" slot="left" class="img" v-if="item && item.img1v1Url"> 
+              <div slot="liRight" class="limit" v-if="item && item.name">
                {{item.name}}
-               <span class="li-right" v-if="item.alias.length">({{(item.alias[0])}})</span>
+               <span class="li-right" v-if="item && item.alias.length">({{(item.alias[0])}})</span>
               </div>
-              <div slot="rightFollow" class="right-share">
+              <div slot="rightFollow" class="right-share" v-if="item">
                 <i class="iconfont iconwodeshoucang"></i>
                 <span>已入驻</span>
               </div>
@@ -78,7 +79,9 @@ export default {
       songCount:'',
       offset:0,
       count:0,
-      artists:[]
+      artists:[],
+      result:true,
+      artistCount:0
     }
   },
   watch: {
@@ -92,12 +95,16 @@ export default {
   methods: {
     getSingers (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
+        this.artistCount = res.data.result.artistCount
         this.hasMore = this.count < res.data.result.artistCount
         if(this.hasMore) {
           this.count+=30
           this.offset+=10
         }
         this.artists =  this.artists.concat(res.data.result.artists)
+        setTimeout(() => {
+          this.result = this.artistCount > 0 ? true : false
+        }, 3000)
       })
     },
     scrollHandler ({ y }) {
@@ -206,6 +213,8 @@ export default {
       i
         color:red
       span
-        color:gray       
-
+        color:gray  
+    .no-result
+     color:gray  
+     font-size:$font-size-medium   
 </style>
