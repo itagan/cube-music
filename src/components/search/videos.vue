@@ -1,13 +1,14 @@
 <template>
   <div class="wrapper">
-    <div class="pullloadtop" v-if="!videos.length">
-      <span class="load">
+    <div class="pullloadtop" v-if="videoCount === 0"> 
+      <span class="load"  v-if="result">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
-    </div>
+      <span  v-if="!result" class="no-result">无结果</span>
+     </div> 
 
-    <div class="content-scroll-wrapper" v-else>
+    <div class="content-scroll-wrapper" v-if="videoCount > 0">
       <cube-scroll
         ref="contentScroll"
         :scroll-events="scrollEvents"
@@ -68,7 +69,9 @@ export default {
       songCount:'',
       offset:0,
       count:0,
-      videos:[]
+      videos:[],
+      result:true,
+      videoCount:0
     }
   },
   watch: {
@@ -82,12 +85,21 @@ export default {
   methods: {
     getVideos (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
+        //手动api补全解决不全的bug
+        if(res.data.result.videoCount) {
+          this.videoCount = res.data.result.videoCount
+        }else {
+          this.videoCount = 0
+        }
         this.hasMore = this.count < res.data.result.videoCount
         if(this.hasMore) {
           this.count+=30
           this.offset+=10
         }
         this.videos =  this.videos.concat(res.data.result.videos)
+        setTimeout(() => {
+          this.result = this.videoCount > 0 ? true : false
+        }, 3000)
       })
     },
     scrollHandler ({ y }) {
@@ -182,6 +194,9 @@ export default {
       i
         color:red
       span
-        color:gray       
+        color:gray  
+    .no-result
+     color:gray  
+     font-size:$font-size-medium     
 
 </style>

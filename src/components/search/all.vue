@@ -1,10 +1,18 @@
 <template>
   <div class="wrapper">
-    <div class="scroll-list-wrap">
+    <div class="pullloadtop" v-if="!order.length"> 
+      <span class="load"  v-if="result">
+        <i class="iconfont iconyinletiaodongzhuangtai"></i>
+        <span> 正在加载...</span>
+      </span>
+      <span  v-if="!result" class="no-result">没有找到结果哈，请重新搜索其它试试</span>
+     </div> 
+
+    <div class="scroll-list-wrap" v-else>
       <cube-scroll
         ref="scroll"
         :options="options">
-        <div class="my-inter" v-if="multimatch.orders"> 
+        <div class="my-inter" v-if="multimatch.orders && multimatch.orders.length"> 
           <div class="my-inter-top">你可能感兴趣</div>
           <base-auto class="my-inter-bottom" v-if="multimatch.artist">
             <img :src="multimatch.artist[0].img1v1Url" alt="" slot="left" class="img"> 
@@ -15,6 +23,16 @@
               粉丝: {{Num(multimatch.artist[0].fansSize)}}
               歌曲: {{Num(multimatch.artist[0].musicSize)}}
               专辑: {{Num(multimatch.artist[0].albumSize)}}
+            </div>
+            <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toSinger(multimatch.artist[0].id)"></i>
+          </base-auto>
+          <base-auto class="my-inter-bottom" v-if="multimatch.user">
+            <img :src="multimatch.user[0].avatarUrl" alt="" slot="left" class="img"> 
+            <div slot="top" class="my-follow-center-top" @click.stop="toUser(multimatch.user[0].userId, multimatch.user[0].userType)">
+               用户: {{multimatch.user[0].name}}
+            </div>
+            <div slot="bottom" @click.stop="toUser(multimatch.user[0].userId, multimatch.user[0].userType)">
+              粉丝: {{Num(multimatch.user[0].fansSize)}}
             </div>
             <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toSinger(multimatch.artist[0].id)"></i>
           </base-auto>
@@ -339,6 +357,8 @@ export default {
       album:{},
       djRadio:{},
       user:{},
+      result:true,
+      order:[]
     }
   },
   watch: {},
@@ -351,18 +371,24 @@ export default {
     },
     getAlls (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
-
-        this.song = res.data.result.song || []
-        this.video = res.data.result.video || []
-        this.playList = res.data.result.playList || []
-        this.mlog = res.data.result.mlog || []
-        this.talk = res.data.result.talk || []
-        this.artist = res.data.result.artist || []
-        this.sim_query = res.data.result.sim_query || []
-        this.album = res.data.result.album || []
-        this.djRadio = res.data.result.djRadio || []
-        this.user = res.data.result.user || []
-        console.log(res.data)
+        if(res.data.result.order) {
+          this.song = res.data.result.song || {}
+          this.video = res.data.result.video || {}
+          this.playList = res.data.result.playList || {}
+          this.mlog = res.data.result.mlog || {}
+          this.talk = res.data.result.talk || {}
+          this.artist = res.data.result.artist || {}
+          this.sim_query = res.data.result.sim_query || {}
+          this.album = res.data.result.album || {}
+          this.djRadio = res.data.result.djRadio || {}
+          this.user = res.data.result.user || {}
+          console.log(res.data)
+        }else {
+          setTimeout(() => {
+            this.result =  false
+          }, 3000)
+        }
+        this.order = res.data.result.order || []
       })
     },
     toIt () {
@@ -464,7 +490,10 @@ export default {
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
   .wrapper
-    height:auto
+    height:100%
+    width:100%
+    background-color:white
+    margin-top:22px
     .scroll-list-wrap
       height:567px  
       position:absolute
@@ -683,4 +712,22 @@ export default {
           max-width:200px
           ellipsis() 
 
+        //上方加载中相关样式
+  .pullloadtop
+    width:100%
+    height:30px
+    // margin-top:150px
+    position:relative
+    top:150px
+    z-index:1
+    flex-center()
+    .load
+      font-size:$font-size-medium
+      i
+        color:red
+      span
+        color:gray  
+    .no-result
+     color:gray  
+     font-size:$font-size-medium 
 </style>

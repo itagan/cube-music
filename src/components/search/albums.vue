@@ -1,13 +1,14 @@
 <template>
   <div class="wrapper">
-    <div class="pullloadtop" v-if="!albums.length">
-      <span class="load">
+    <div class="pullloadtop" v-if="albumCount === 0"> 
+      <span class="load"  v-if="result">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
-    </div>
+      <span  v-if="!result" class="no-result">无结果</span>
+     </div> 
 
-    <div class="content-scroll-wrapper" v-else>
+    <div class="content-scroll-wrapper" v-if="albumCount > 0">
       <cube-scroll
         ref="contentScroll"
         :scroll-events="scrollEvents"
@@ -83,7 +84,9 @@ export default {
       songCount:'',
       offset:0,
       count:0,
-      albums:[]
+      albums:[],
+      result:true,
+      albumCount:0
     }
   },
   watch: {
@@ -97,12 +100,16 @@ export default {
   methods: {
     getAlbums (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
+        this.albumCount = res.data.result.albumCount
         this.hasMore = this.count < res.data.result.albumCount
         if(this.hasMore) {
           this.count+=30
           this.offset+=10
         }
         this.albums =  this.albums.concat(res.data.result.albums)
+        setTimeout(() => {
+          this.result = this.albumCount > 0 ? true : false
+        }, 3000)
       })
     },
     scrollHandler ({ y }) {
@@ -212,6 +219,9 @@ export default {
       i
         color:red
       span
-        color:gray       
+        color:gray  
+    .no-result
+     color:gray  
+     font-size:$font-size-medium   
 
 </style>

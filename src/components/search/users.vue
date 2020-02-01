@@ -1,13 +1,14 @@
 <template>
   <div class="wrapper">
-    <div class="pullloadtop" v-if="!userprofiles.length">
-      <span class="load">
+    <div class="pullloadtop" v-if="userprofileCount === 0"> 
+      <span class="load"  v-if="result">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
-    </div>
+      <span  v-if="!result" class="no-result">无结果</span>
+     </div> 
 
-    <div class="content-scroll-wrapper" v-else>
+    <div class="content-scroll-wrapper" v-if="userprofileCount > 0">
       <cube-scroll
         ref="contentScroll"
         :scroll-events="scrollEvents"
@@ -91,7 +92,9 @@ export default {
       songCount:'',
       offset:0,
       count:0,
-      userprofiles:[]
+      userprofiles:[],
+      result:true,
+      userprofileCount:0
     }
   },
   watch: {
@@ -105,12 +108,16 @@ export default {
   methods: {
     getUsers (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
+        this.userprofileCount = res.data.result.userprofileCount
         this.hasMore = this.count < res.data.result.userprofileCount
         if(this.hasMore) {
           this.count+=30
           this.offset+=10
         }
         this.userprofiles =  this.userprofiles.concat(res.data.result.userprofiles)
+        setTimeout(() => {
+          this.result = this.userprofileCount > 0 ? true : false
+        }, 3000)
       })
     },
     scrollHandler ({ y }) {
@@ -245,6 +252,9 @@ export default {
       i
         color:red
       span
-        color:gray       
+        color:gray  
+    .no-result
+     color:gray  
+     font-size:$font-size-medium       
 
 </style>

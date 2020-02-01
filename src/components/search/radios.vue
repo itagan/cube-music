@@ -1,15 +1,15 @@
 <template>
   <div class="wrapper">
 
-     <div class="pullloadtop" v-if="!djRadios.length">
-      <span class="load" v-if="result">
+    <div class="pullloadtop" v-if="djRadiosCount === 0"> 
+      <span class="load"  v-if="result">
         <i class="iconfont iconyinletiaodongzhuangtai"></i>
         <span> 正在加载...</span>
       </span>
-     <span v-else>无结果</span> 
-     </div>  
+      <span  v-if="!result" class="no-result">无结果</span>
+     </div> 
 
-    <cube-sticky :pos="scrollY" v-else>
+    <cube-sticky :pos="scrollY" v-if="djRadiosCount > 0">
       <cube-scroll
         :scroll-events="scrollEvents"
         :options="options"
@@ -88,7 +88,8 @@ export default {
       offset:0,
       count:0,
       djRadios:[],
-      result:true
+      result:true,
+      djRadiosCount:0
     }
   },
   watch: {
@@ -102,6 +103,12 @@ export default {
   methods: {
     getRadios (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
+        //手动api补全解决不全的bug
+        if(res.data.result.djRadiosCount) {
+          this.djRadiosCount = res.data.result.djRadiosCount
+        }else {
+          this.djRadiosCount = 0
+        }
         this.hasMore = this.count < res.data.result.djRadiosCount
         if(this.hasMore) {
           this.count+=30
@@ -109,9 +116,8 @@ export default {
         }
         this.djRadios =  this.djRadios.concat(res.data.result.djRadios)
         setTimeout(() => {
-          this.result = this.djRadios.length > 1 ? true : false
-          console.log( this.djRadios,this.result)
-        }, 1000)
+          this.result = this.djRadiosCount > 0 ? true : false
+        }, 3000)
       })
     },
     toIt () {
@@ -205,10 +211,11 @@ export default {
         color:gray
         font-size:$font-size-medium   
 
-  //上方加载中相关样式
+ //上方加载中相关样式
   .pullloadtop
     width:100%
     height:30px
+    // margin-top:150px
     position:relative
     top:150px
     z-index:1
@@ -218,13 +225,8 @@ export default {
       i
         color:red
       span
-        color:gray 
-
-  .no-result
-    width:100%
-    height:100%
-    position:relative
-    top:150px
-    z-index:1
-    flex-center()          
+        color:gray  
+    .no-result
+     color:gray  
+     font-size:$font-size-medium         
 </style>
