@@ -50,8 +50,12 @@
           this.focus()
         },
         cancel () {
-          this.fake = false
+          // this.fake = false
           this.clear()
+          this.$emit('cancel')
+        },
+        hide () {
+          this.fake = false
         }
       },
       watch: {

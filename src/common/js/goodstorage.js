@@ -16,6 +16,8 @@ const CURRENT_DYNAMIC_KEY = '__dynamic__'
 const CURRENT_DYNAMIC_LEN = 1
 const CURRENT_AUTHOR_KEY = '__author__'
 const CURRENT_AUTHOR_LEN = 1
+const HISTORY_KEY = '__history__'
+const HISTORY_LEN = 30
 
 // 公共方法设置
 function insertArray (arr, val, compare, maxLen) {
@@ -37,6 +39,7 @@ function deleteFromArray (arr, compare) {
     arr.splice(index, 1)
   }
 }
+// function deleteAll ()
 
 // 当前视频
 export function saveCurrentVideo (video) {
@@ -138,4 +141,28 @@ export function deleteCurrentAuthor (author) {
 }
 export function loadCurrentAuthor () {
   return storage.get(CURRENT_AUTHOR_KEY, [])
+}
+
+// 历史搜索记录
+export function saveHistory (keyword) {
+  let _History = storage.get(HISTORY_KEY, [])
+  insertArray(_History, keyword, (item) => {
+    return item === keyword
+  }, HISTORY_LEN)
+  storage.set(HISTORY_KEY, _History)
+  return _History
+}
+export function deleteHistory (keyword) {
+  let _History = storage.get(HISTORY_KEY, [])
+  deleteFromArray(_History, (item) => {
+    return item === keyword
+  })
+  storage.set(HISTORY_KEY, _History)
+  return _History
+}
+export function loadHistory () {
+  return storage.get(HISTORY_KEY, [])
+}
+export function deleteAllHistory () {
+  return storage.set(HISTORY_KEY, [])
 }

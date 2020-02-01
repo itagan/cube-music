@@ -59,6 +59,7 @@
         img
           height:100%
           width:100%
+          border-radius:5px
         .playtime
           position:absolute
           top:5px

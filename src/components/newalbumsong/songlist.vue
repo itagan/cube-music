@@ -13,10 +13,6 @@
        </span>
     </div> 
 
-      <!-- <div class="song-list-background">
-        <img width="375px" height="200px" src="./img/news.jpeg">
-      </div>  -->
-
     <div class="sticky-view-container">
       <cube-sticky :pos="scrollY">
 

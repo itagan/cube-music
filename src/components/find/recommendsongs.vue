@@ -2,7 +2,7 @@
   <div class="recommend">
     <div class="recommend-top">
       <span class="recommend-left">推荐歌单</span>
-      <router-link tab="div" class="recommend-right" to="/my">歌单广场</router-link>
+      <router-link tab="div" class="recommend-right" to="/hotsearch">歌单广场</router-link>
     </div>
     <base-nav v-bind:result="result"></base-nav>
   </div>

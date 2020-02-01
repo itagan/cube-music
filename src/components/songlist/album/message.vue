@@ -51,31 +51,31 @@
         messages: {
           type: Object,
           default: {}
+        },
+        allShow: {
+          type:Boolean,
+          default:false
         }
       },
       methods: {
         toComment () {
-          // this.$emit('saveComment')
-          // this.$router.push({
-          //   // name: 'albumcomment',
-          //   // params: {album: this.messages}
-          //   path:`/albumcomment`,
-          //   query: {
-          //     album: JSON.stringify(this.messages)
-          //   }
-          // })
+          if(this.allShow) return
           this.$emit('comment')
         },
         toShare () {
+          if(this.allShow) return
           this.$emit('share')
         },
         chcekMore () {
+          if(this.allShow) return
           this.$emit('check')
         },
         toUser () {
+          if(this.allShow) return
           this.$emit('user')
         },
         toCover () {
+          if(this.allShow) return
           this.$emit('cover')
         },
         transTime (timestamp) {

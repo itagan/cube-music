@@ -1,5 +1,6 @@
 <template>
-  <div class="mask" @click.self="cancel">
+  <div class="mask" @click.self="cancel" v-show="visible">
+    <transition name="fade-more" v-if="visible">
     <div class="build">
       <div class="build-top">
         <span @click="cancel">取消</span>
@@ -18,11 +19,12 @@
         ></cube-input>
       </div>
 
-      <div class="build-bottom" @click="privacy">
-        <i class="iconfont iconzan1"></i>
+      <div class="build-bottom" @click.stop="privacy">
+        <div class="check" :class="this.isPrivacy === 10 ? 'checked' : '' "></div>
         <span>设置为隐私歌单</span>
       </div>
     </div>
+     </transition>
   </div>
 </template>
 
@@ -33,6 +35,7 @@
         return {
           value: '',
           isPrivacy: '', // 是否隐私歌单
+          visible: false,
           placeholder: '歌单标题',
           autofocus: true,
           clearable: {
@@ -41,10 +44,16 @@
           }
         }
       },
+      props: {
+        track: {
+          type: Object,
+          default: {}
+        }
+      },
       methods: {
             // 提交创建的歌单
-        createList () {
-          this.$api.playlists.createlist(this.value, this.isprivacy).then(res => {
+        createList (value, privacy) {
+          this.$api.songLists.createlist(value, privacy).then(res => {
             console.log(res)
           })
         },
@@ -70,15 +79,23 @@
             })
           }
         },
+        show () {
+          this.visible = true
+        },
+        hide () {
+          this.visible = false
+        },
         cancel (e) {
                 // 触摸到遮罩层就取消本组件
           this.$emit('cancel')
-          this.value = '' // 清空内容
+          this.value = '' // 清空内容'
+          this.hide()
         },
         complete () {
                 // 完成创建
           if (this.value) {
-            this.createList()
+            this.isPrivacy === 10 ? this.createList(this.value, 10) : this.createList(this.value, 0)
+            this.hide()
           }
         },
         privacy () {
@@ -89,6 +106,11 @@
             this.isPrivacy = 10
           }
         }
+      },
+      mounted() {
+        this.$nextTick(() => {
+          this.value = this.track.name
+        })
       }
     }
 </script>
@@ -148,9 +170,35 @@
         font-size:$font-size-small
         text-align:left
         margin:auto 10px
-        height:45px
-        line-height:45px
+        height:30px
+        // line-height:45px
         width:100%
+        display:flex
+        align-items: center
+        .check
+          height:10px
+          width:10px
+          border:1px solid rgba(128,128,128,.5) 
+          border-radius:50%
+          position:relative
+          margin-right:5px
+        .checked
+          height:10px
+          width:10px
+          border:1px solid red
+          border-radius:50%
+          position:relative
+          background-color:red
+        .checked::after
+          position: absolute
+          top: 1px
+          left: 3px
+          width: 2px
+          height: 5px
+          border: 2px solid white
+          border-width: 0 1px 1px 0
+          content: ''
+          transform: rotate(45deg) 
 
       .cube-popup-content
         display: flex;
@@ -159,4 +207,14 @@
         .cube-toast-icon
           display:inline-block
 
+
+        /*动画效果*/
+  .fade-more-enter-active,
+  .fade-more-leave-active
+    transition: all .5s ease-in
+
+  .fade-more-enter,
+  .fade-more-leave-to
+    transform: translateY(700px)
+    opacity: 0
 </style>

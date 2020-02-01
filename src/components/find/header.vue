@@ -30,9 +30,20 @@
         getQuery (query) {
           console.log(query)
         },
+        getSearchDefault () {
+          this.$api.searchs.searchDefault().then(res => {
+            this.placeholder = res.data.data.showKeyword
+          })
+        },
         goToSearch () {
-          this.$router.push('/my')
+          // this.$router.push('/hotsearch')
+          this.$emit('Search')
         }
+      },
+      mounted () {
+        this.$nextTick(() => {
+          this.getSearchDefault()
+        })
       }
     }
 </script>

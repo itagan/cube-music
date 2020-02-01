@@ -6,29 +6,12 @@
     </div>
 
     <div class="song-list-white" :style="{height:whiteHeight + 'px'}"></div>
-    <ul class="check-footer" v-show="allShow">
-      <li>
-        <div class="check-footer-icon"><i class="iconfont iconbofang"></i></div>
-        <div class="check-footer-text">下一首播放</div>
-      </li>
-      <li>
-        <div class="check-footer-icon"><i class="iconfont iconwodeshoucang"></i></div>
-        <div class="check-footer-text">收藏到歌单</div>
-      </li>
-      <li>
-        <div class="check-footer-icon"><i class="iconfont iconxiazaigequ"></i></div>
-        <div class="check-footer-text">下载</div>
-      </li>
-      <li>
-        <div class="check-footer-icon"><i class="iconfont iconquxiao"></i></div>
-        <div class="check-footer-text">删除下载</div>
-      </li>
-    </ul>
+
     <transition name="slide-fade">
       <my-header class="my-header" ref="header" v-show="isShow" :title="title"></my-header>
     </transition>
 
-    <div v-if="!this.tracks" class="pull-load-top">
+    <div v-if="!this.songs" class="pull-load-top">
        <span class="load">
           <i class="iconfont iconyinletiaodongzhuangtai"></i>
           <span> 正在加载...</span>
@@ -58,6 +41,7 @@
           <message
             class="my-message"
             :playlist="playlist"
+            :allShow="allShow"
             @comment="toComment"
             @share="toShare"
             @check="toCheck"
@@ -75,7 +59,7 @@
                     播放全部
                   </span>
                   <span class="play-all-num">
-                    (共{{tracks.length}}首)
+                    (共{{songs.length}}首)
                   </span>
               </li>
               <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed" v-show="!isCreater">
@@ -102,19 +86,22 @@
           </cube-sticky-ele>
           <list
             class="my-list"
-            :tracks="tracks"
-            @more="more"
-            @toAll="toAllChecked"
+            :tracks="songs"
             :complete="complete"
             :allShow="allShow"
+            :isself="playlist && playlist.creator && playlist.creator.userId === 477726475"
+            @more="more"
+            @toAll="toAllChecked"
+            @whochecked="whoChecked"
+            @changebg="changeColor"
             ref="ToCheck"
           ></list>
           <ul class="song-list-collection" ref="subTop">
             <li class="li-img" v-for="item in subs" :key="item.userId">
               <img :src="item.avatarUrl" alt="">
             </li>
-            <li class="collection-num">{{subs.length}}人收藏</li>
-            <li class="collection-icon">
+            <li class="collection-num" v-if="subs.length">{{subs.length}}人收藏</li>
+            <li class="collection-icon" v-if="subs.length">
               <i class="iconfont iconiconfontyoujiantou"></i>
             </li>
           </ul>
@@ -122,20 +109,26 @@
       </cube-sticky>
     </div>
 
-    <play-more
+     <play-more
       v-if="isMore"
+      :key="3"
       @cancel="cancelMore"
       @build="moreBuildList"
       @share="toShare"
       @ring="setRing"
       @collect="toCollected"
-      :track="track"
+      @singer="toSinger"
+      @album="toAlbum"
+      :track="song"
+      :noAlbum="true"
       ref="playMore"
     ></play-more>
     <share-dialog ref="shareShow" @cancel="cancelShare"></share-dialog>
     <set-ring ref="setRingShow"></set-ring>
+    <collection-to-list ref="collectedShow" @bulid="bulidlist" :checkLists="checkLists"> </collection-to-list>
+    <build-list  @cancel="cancel" :track="song" ref="showBuild"></build-list>
+    <check-footer v-if="allShow" @collect="toCollectedFooter" :addColor="addColor"></check-footer>
     <my-cover :playlist="playlist" v-if="coverShow" @coverHide="coverHide"></my-cover>
-    <collection-to-list ref="collectedShow" @bulid="bulidlist"> </collection-to-list>
   </div>
 </template>
 
@@ -144,11 +137,14 @@
     import mySearch from '../../base/search/searchcancel'
     import Message from './message'
     import List from './list'
-    import playMore from './playmore'
+    import playMore from '../common/playmore'
     import shareDialog from '../common/sharedialog'
     import setRing from '../common/setring'
     import myCover from '../common/cover'
-    import collectionToList from '../common/collectiontolist-copy'
+    import buildList from '../common/buildlist'
+    import collectionToList from '../common/collectiontolist'
+    import checkFooter from '../common/checkfooter'
+
     export default {
       name: 'songList.vue',
       components: {
@@ -160,7 +156,9 @@
         shareDialog,
         setRing,
         myCover,
-        collectionToList
+        collectionToList,
+        checkFooter,
+        buildList
       },
       data () {
         return {
@@ -175,8 +173,6 @@
           pullUpLoadThreshold: 0,
           pullUpLoadMoreTxt: '加载中…………',
           pullUpLoadNoMoreTxt: '没有更多数据了~',
-          track: {},
-          tracks: [],
           messages: {},
           playlist: {},
           subs: [],
@@ -192,26 +188,32 @@
           isSubscribed: false,
           id:'',
           coverShow:false,
-          isCreater:false
+          isCreater:false,
+          song:{},
+          songs:[],
+          singers:[],
+          checkLists:[],
+          addColor:false,
         }
       },
       computed: {
         options () {
           return {
-            pullUpLoad: this.pullUpLoadObj,
+            // pullUpLoad: this.pullUpLoadObj,
+            pullUpLoad: false,
             scrollbar: true,
             startY: -50
           }
         },
-        pullUpLoadObj: function () {
-          return this.pullUpLoad ? {
-            threshold: parseInt(this.pullUpLoadThreshold),
-            txt: {
-              more: this.pullUpLoadMoreTxt,
-              noMore: this.pullUpLoadNoMoreTxt
-            }
-          } : false
-        }
+        // pullUpLoadObj: function () {
+        //   return this.pullUpLoad ? {
+        //     threshold: parseInt(this.pullUpLoadThreshold),
+        //     txt: {
+        //       more: this.pullUpLoadMoreTxt,
+        //       noMore: this.pullUpLoadNoMoreTxt
+        //     }
+        //   } : false
+        // }
       },
       created () {
         this.getList()
@@ -222,9 +224,11 @@
           this.$api.songLists.songList(this.$route.params.id).then(res => {
             console.log(res.data)
             this.playlist = res.data.playlist
+
+             console.log(this.playlist)
             this.isSubscribed = this.playlist.subscribed
               // this.tracks = res.data.playlist.tracks
-            this.tracks = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0, 10) : res.data.playlist.tracks
+            this.songs = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0, 100) : res.data.playlist.tracks
             this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0, 4) : res.data.playlist.subscribers
             this.Creater()
           })
@@ -273,16 +277,23 @@
         cancel () {
           this.isBuild = false
         },
-        more (index) {
-            // 子组件提醒打开更多操作页面
+        more (item) {
+          // 子组件提醒打开更多操作页面
           this.isMore = true
             // this.visible = true
           this.$nextTick(() => {
             this.$refs.playMore.show()
           })
-          this.track = this.tracks[index]
+          this.song = item
+          console.log(item)
+          this.singers = item.ar
         },
-
+        bulidlist () {
+          // this.isBuild = true
+          this.isMore = false
+          this.$refs.showBuild.show()
+          
+        },
         moreBuildList () {
           this.isMore = false
           this.isBuild = true
@@ -317,12 +328,14 @@
             // 全选功能
         toCheck () {
           this.allShow = true
-          this.stickyTop()
+          if(this.songs.length > 5) {
+            this.stickyTop()  
+          }
         },
         stickyTop () {
           this.$nextTick(() => {
             // this.$refs.scroll.scrollToElement('.toTop', 250, 0, -50)
-            this.$refs.scroll.scrollTo(0, -280, 250)
+            this.$refs.scroll.scrollTo(0, -270, 250)
           })
         },
         toComplete () {
@@ -351,14 +364,81 @@
         coverHide () {
           this.coverShow = false
         },
-        bulidlist () {
-          this.isBuild = true
-          this.isMore = false
-          // this.$refs.collectedShow.hide()
-        },
+        // bulidlist () {
+        //   this.isBuild = true
+        //   this.isMore = false
+        //   // this.$refs.collectedShow.hide()
+        // },
         toCollected () {
           this.isMore = false
           this.$refs.collectedShow.show()
+        },
+        toCollectedFooter () {
+          this.$refs.ToCheck.whoChecked()
+          if(this.checkLists.length) {
+            this.$refs.collectedShow.show()
+          }
+        },
+        whoChecked (checkLists) {
+          this.checkLists = []
+          this.checkLists = checkLists
+        },
+        changeColor (type) {
+        if(type) {
+          this.addColor = true
+        }else {
+          this.addColor = false
+        }
+        },
+        toAlbum () {
+        this.$router.push({
+          path:`/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
+         })
+        },
+        toUser () {
+          if(this.allShow) return
+          this.singers = this.messages.artists
+          if(this.messages.artists.length > 1) {
+            this.moreSinger()
+            this.isMore = false
+            return
+          }
+
+          this.$api.singers.singermusic(this.messages.artist.id).then(res => {
+            if(res.data.artist.accountId) {
+              this.accountId = res.data.artist.accountId
+              let userId = this.accountId
+              this.$router.push({
+                path: `/singer/${userId}/${this.messages.artist.id}`
+                })
+            }else {
+              let userId = 477726475
+              this.$router.push({
+                path: `/singer/${userId}/${this.messages.artist.id}`
+                })
+            }
+          })
+        },
+        toSinger () {
+          if(this.singers.length > 1) {
+            this.moreSinger()
+            this.isMore = false
+            return
+          }
+          this.$api.singers.singermusic(this.song.ar[0].id).then(res => {
+            if(res.data.artist.accountId) {
+              this.accountId = res.data.artist.accountId
+              let userId = this.accountId
+              this.$router.push({
+                path: `/singer/${userId}/${this.song.ar[0].id}`
+                })
+            }else {
+              let userId = 477726475
+              this.$router.push({
+                path: `/singer/${userId}/${this.song.ar[0].id}`
+                })
+            }
+          })
         },
             // 收藏功能
         toSubscribed () {
@@ -499,6 +579,7 @@
       position:relative
       background-color:white
       padding:10px auto
+      margin-bottom:50px
       li
         height:25px
         line-height:25px

@@ -20,10 +20,10 @@
           </div>
         </div>
 
-        <div class="playing">
+        <div class="playing" v-if="item.mv">
           <i class="iconfont iconbofang5"></i>
         </div>
-        <div class="more" @click="more(index)">
+        <div class="more" @click.stop="more(item)">
           <i class="iconfont icongengduo"></i>
         </div>
       </div>
@@ -45,7 +45,7 @@
             <span class="name">{{item.al.name}}</span>
           </div>
         </div>
-        <div  class="drag-drop">
+        <div  class="drag-drop" v-if="isself">
           <i class="iconfont icontuozhuai"></i>
         </div>
       </div>
@@ -88,6 +88,10 @@
         allCheckbox: {
           type: Boolean,
           default: false
+        },
+        isself:{
+          ype: Boolean,
+          default: false
         }
       },
       watch: {
@@ -99,14 +103,20 @@
         }
       },
       methods: {
-        more (index) {
-          this.$emit('more', index)
+        more (item) {
+          this.$emit('more', item)
+          console.log(item)
         },
         Input () {
           if (this.checkList.length === this.tracks.length) {
             this.$emit('toAll', 1)
           } else {
             this.$emit('toAll', 0)
+          }
+          if(this.checkList.length) {
+            this.$emit('changebg',true)
+          }else {
+            this.$emit('changebg',false)
           }
         },
         allToCheck () {
@@ -118,10 +128,22 @@
         },
         allToChecked () {
           this.checkList = [...this.allToCheck()]
+          this.$emit('changebg',true)
         },
         allToCheckNo () {
           this.checkList = []
-        }
+          this.$emit('changebg',false)
+        },
+            // 选中的有哪些
+        whoChecked () {
+          this.checkLists = []
+          for(let i = 0; i < this.checkList.length; i++) {
+            this.checkLists.push(this.tracks[this.checkList[i] - 1])
+          }
+          console.log(this.checkList)
+          console.log(this.checkLists)
+          this.$emit('whochecked', this.checkLists)
+        },
       }
     }
 </script>

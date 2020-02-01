@@ -44,27 +44,23 @@ export default {
   @import "../../common/stylus/mixin"
   .li-item
     display:flex
-    height:65px
-    line-height:65px
+    height:50px
+    line-height:50px
     width:100%
     border-radius:10px
     .li-left
-      width:65px
-      height:65px
+      width:auto
+      height:50px
       margin-left:10px
-      border-radius:50%
     .li-center
       flex:1
       margin-left:10px
-      height:65px
-      // display:flex
-      // align-items: center
+      height:50px
       .li-center-top
         font-size:$font-size-medium
         height:25px
         line-height:25px
         ellipsis()
-        margin-top:7.5px
       .li-center-bottom
         font-size:$font-size-small
         height:25px
@@ -73,19 +69,18 @@ export default {
         ellipsis()
       .li-center-only
         font-size:$font-size-medium
-        height:65px
-        // line-height:65px
+        height:50px
         ellipsis()
         display:flex
         align-items: center
     .li-right-share
        width:30px
-       height:65px
+       height:50px
        margin-right:10px  
        font-size:$font-size-large-x + 6  
        flex-center()
     .li-right-follow
-       height:65px
+       height:50px
        margin-right:10px  
        font-size:$font-size-medium
        flex-center()

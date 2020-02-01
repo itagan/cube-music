@@ -6,7 +6,7 @@
       </div>
     </my-header>
     <div class="background">
-      <img width="100%" height="100%" :src="playlist.coverImgUrl" alt="">
+      <img width="100%" height="100%" :src="playlist.coverImgUrl" alt="" v-if="playlist && playlist.coverImgUrl">
     </div>
     
     <div class="scroll-list-wrap">
@@ -16,16 +16,16 @@
           <ul class="content">
             <li class="content-img">
               <div class="content-img-wrap">
-                <img :src="playlist.coverImgUrl" alt="">
+                <img :src="playlist.coverImgUrl" alt=""  v-if="playlist && playlist.coverImgUrl">
               </div>
             </li>
-            <li class="content-title">
+            <li class="content-title" v-if="playlist && playlist.name">
               {{playlist.name}}
             </li>
             <li class="content-line">
             </li>
             <li class="content-label">
-              <ul v-if="playlist.tags.length">
+              <ul v-if="playlist && playlist.tags && playlist.tags.length">
                 <li class="content-label-one">
                   标签:
                 </li>
@@ -39,7 +39,7 @@
                 </li>
               </ul>
             </li>
-            <li class="content-desc" v-if="playlist.description">
+            <li class="content-desc" v-if="playlist && playlist.description">
               {{playlist.description}} 
             </li>
             <li class="content-desc" v-else>
@@ -49,7 +49,7 @@
       </cube-scroll>
     </div>
 
-     <div class="footer-user" v-if="playlist.creator.userId === 477726475">
+     <div class="footer-user" v-if=" playlist && playlist.creator.userId === 477726475">
       <div class="footer-text">
         <span @click.stop="toEdit">编辑</span>
       </div>
@@ -76,9 +76,9 @@ export default {
   },
   props: {
     playlist: {
-        type: Object,
-        default: {}
-      }
+      type: Object,
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -138,7 +138,7 @@ export default {
     background-color:black
     .header
       background-color:transparent
-      z-index:2001
+      z-index:2005
       .cancel-top
         i 
          font-size:$font-size-large-x + 20

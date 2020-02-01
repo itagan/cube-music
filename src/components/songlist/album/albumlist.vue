@@ -8,7 +8,7 @@
     </div>
 
     
-    <ul class="check-footer" v-show="allShow">
+    <!-- <ul class="check-footer" v-show="allShow">
       <li>
         <div class="check-footer-icon"><i class="iconfont iconbofang"></i></div>
         <div class="check-footer-text">下一首播放</div>
@@ -25,7 +25,7 @@
         <div class="check-footer-icon"><i class="iconfont iconquxiao"></i></div>
         <div class="check-footer-text">删除下载</div>
       </li>
-    </ul>
+    </ul> -->
 
     <div v-if="!this.songs" class="pull-load-top">
        <span class="load">
@@ -48,6 +48,7 @@
           <message
             class="my-message"
             :messages="messages"
+            :allShow="allShow"
             @share="toShare"
             @check="toCheck"
             @user="toUser"
@@ -99,6 +100,8 @@
             @toAll="toAllChecked"
             :complete="complete"
             :allShow="allShow"
+            @whochecked="whoChecked"
+            @changebg="changeColor"
             ref="ToCheck"
           ></list>
 
@@ -106,23 +109,27 @@
       </cube-sticky>
     </div>
 
-    <play-more
+     <play-more
       v-if="isMore"
+      :key="3"
       @cancel="cancelMore"
+      @build="moreBuildList"
       @share="toShare"
       @ring="setRing"
-      @singer="toSinger"
       @collect="toCollected"
-      :track="track"
+      @singer="toSinger"
+      @album="toAlbum"
+      :track="song"
       :noAlbum="false"
       ref="playMore"
     ></play-more>
-    <share-dialog ref="shareShow"></share-dialog>
+    <share-dialog ref="shareShow" @cancel="cancelShare"></share-dialog>
     <set-ring ref="setRingShow"></set-ring>
-    <more-singer ref="moreSingerShow" :singers="singers"></more-singer>
-    <collection-to-list ref="collectedShow" @bulid="bulidlist"> </collection-to-list>
-    <build-list v-if="isBuild" @cancel="cancel"></build-list>
+    <collection-to-list ref="collectedShow" @bulid="bulidlist" :checkLists="checkLists"> </collection-to-list>
+    <build-list  @cancel="cancel" :track="song" ref="showBuild"></build-list>
+    <check-footer v-if="allShow" @collect="toCollectedFooter" :addColor="addColor"></check-footer>
     <my-cover :messages="messages" v-if="coverShow" @coverHide="coverHide"></my-cover>
+
   </div>
 </template>
 
@@ -130,13 +137,14 @@
     import myHeader from '../header'
     import Message from './message'
     import List from './list'
-    import playMore from '../playmore'
+    import playMore from '../../common/playmore'
     import shareDialog from '../../common/sharedialog'
     import setRing from '../../common/setring'
     import moreSinger from '../../common/moresinger'
     import collectionToList from '../../common/collectiontolist'
     import buildList from '../../common/buildlist'
     import myCover from './cover'
+    import checkFooter from '../../common/checkfooter'
     export default {
       name: 'songList.vue',
       components: {
@@ -149,15 +157,14 @@
         moreSinger,
         collectionToList,
         buildList,
-        myCover
+        myCover,
+        checkFooter
       },
       data () {
         return {
           scrollY: 0,
           scrollEvents: ['scroll'],
           pullUpLoad: true,
-          track: {},
-          tracks: [],
           messages: {},
           playlist: {},
           isMore: false,
@@ -170,12 +177,14 @@
           complete: false,
           isSubscribed: false,
           id:'',
-          songs:[],
           subCount:0,
           isSub:false,
           singers:[],
           coverShow:false,
-          
+          addColor:false,
+          song:{},
+          songs:[],
+          checkLists:[]
         }
       },
       computed: {
@@ -238,18 +247,24 @@
         onPullingUp () {
 
         },
+        toAlbum () {
+          this.$router.push({
+            path:`/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
+          })
+        },
         cancel () {
           this.isBuild = false
+          this.$refs.collectedShow.hide()
         },
-        more (index) {
+        more (item) {
             // 子组件提醒打开更多操作页面
           this.isMore = true
             // this.visible = true
           this.$nextTick(() => {
             this.$refs.playMore.show()
           })
-          this.track = this.songs[index]
-          this.singers = this.songs[index].ar
+          this.song = item
+          this.singers = item.ar
         },
 
         moreBuildList () {
@@ -284,12 +299,15 @@
             // 全选功能
         toCheck () {
           this.allShow = true
+          if(this.songs.length > 5) {
+            this.stickyTop()  
+          }
           // this.stickyTop()
         },
         stickyTop () {
           this.$nextTick(() => {
             // this.$refs.scroll.scrollToElement('.toTop', 250, 0, -50)
-            this.$refs.scroll.scrollTo(0, -280, 250)
+            this.$refs.scroll.scroll.scrollBy(0, -250, 250)
           })
         },
         toComplete () {
@@ -311,6 +329,12 @@
           } else if (val === 0) {
             this.checked = false
           }
+        },
+        cancelShare () {
+          this.$refs.shareShow.hide()
+          setTimeout(() => {
+            this.isMore = false
+          }, 500)
         },
         toUser () {
           if(this.allShow) return
@@ -342,17 +366,17 @@
             this.isMore = false
             return
           }
-          this.$api.singers.singermusic(this.track.ar[0].id).then(res => {
+          this.$api.singers.singermusic(this.song.ar[0].id).then(res => {
             if(res.data.artist.accountId) {
               this.accountId = res.data.artist.accountId
               let userId = this.accountId
               this.$router.push({
-                path: `/singer/${userId}/${this.track.ar[0].id}`
+                path: `/singer/${userId}/${this.song.ar[0].id}`
                 })
             }else {
               let userId = 477726475
               this.$router.push({
-                path: `/singer/${userId}/${this.track.ar[0].id}`
+                path: `/singer/${userId}/${this.song.ar[0].id}`
                 })
             }
           })
@@ -373,13 +397,30 @@
         bulidlist () {
           this.isBuild = true
           this.isMore = false
-          // this.$refs.collectedShow.hide()
+          this.$refs.showBuild.show()
         },
         toCover () {
           this.coverShow = true
         },
         coverHide () {
           this.coverShow = false
+        },
+        toCollectedFooter () {
+          this.$refs.ToCheck.whoChecked()
+          if(this.checkLists.length) {
+            this.$refs.collectedShow.show()
+          }
+        },
+        whoChecked (checkLists) {
+          this.checkLists = []
+          this.checkLists = checkLists
+        },
+        changeColor (type) {
+        if(type) {
+          this.addColor = true
+        }else {
+          this.addColor = false
+          }
         },
             // 收藏功能
         toSubscribed () {

@@ -1,7 +1,7 @@
 <template>
   <div class="find">
-    <find-header></find-header>
-    <div class="content-scroll-wrapper">
+    <find-header v-if="!showSearch" @Search="Search"></find-header>
+    <div class="content-scroll-wrapper" v-if="!showSearch">
       <cube-scroll
         ref="contentScroll"
         :scroll-events="scrollEvents"
@@ -35,7 +35,6 @@
               <span :class="{rotate: props.bubbleY > 0}" v-show="!props.isPullingDown">↓</span>
 
               <transition name="bounce" v-if="!props.isPullingDown">
-<!--              <transition name="bounce" v-if="trans">-->
               <div class="text-wrapper">
                   <span class="refresh-text">
                     已为你推荐新的个性化内容
@@ -45,8 +44,6 @@
             </div>
           </div>
         </template>
-
-
         <template slot="pullup" slot-scope="props">
           <div v-if="props.pullUpLoad" class="pullload">
             <template>
@@ -59,6 +56,8 @@
         </template>
       </cube-scroll>
     </div>
+
+    <hot-search v-if="showSearch" @cancal="cancal"></hot-search>
   </div>
 </template>
 
@@ -69,6 +68,7 @@
     import FindRecommend from './recommendsongs'
     import FindNew from './newsong'
     import FindVideos from './videos'
+    import HotSearch from '../search/hotsearch'
     export default {
       name: 'find.vue',
       components: {
@@ -77,7 +77,8 @@
         FindNav,
         FindRecommend,
         FindNew,
-        FindVideos
+        FindVideos,
+        HotSearch
       },
       data () {
         return {
@@ -93,7 +94,8 @@
           scrollEvents: ['scroll'],
           pullDownY: 0,
           isRefresh: false,
-          trans: false
+          trans: false,
+          showSearch:false
         }
       },
       methods: {
@@ -117,6 +119,13 @@
         },
         scrollHandler (pos) {
           this.pullDownY = -pos.y
+        },
+        Search () {
+          console.log('11s')
+          this.showSearch = true
+        },
+        cancal () {
+          this.showSearch = false
         }
       }
     }

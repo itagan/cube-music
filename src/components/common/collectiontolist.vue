@@ -1,6 +1,6 @@
 <template>
   <div class="share">
-    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001">
+    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2004">
 
       <div class="build">
         <ul class="top">
@@ -23,8 +23,8 @@
           >
 
           <ul class="build-center">
-            <li class="li" v-for="item in playlist" :key="item.id" @click="toList(item.id)">
-              <div class="li-item" >
+            <li class="li" v-for="item in playlist" :key="item.id" @click="allSub(item.id)">
+              <div class="li-item">
                 <div class="li-left">
                   <img v-lazy="item.coverImgUrl" v-if="item" :key="item.coverImgUrl">
                 </div>
@@ -61,18 +61,23 @@
           scrollEvents: ['scroll'],
           playing:false,
           id:'477726475',
-          playlist:[]
+          playlist:[],
+          codes:[]
         }
       },
       props: {
+        checkLists: {
+          type:Array,
+          default:[]
+        }
       },
-      created() {
-        // this.getPlaylist()
-      },
+      created() {},
       methods: {
         show () {
           this.$refs.popup.show()
-          this.getPlaylist()
+          this.$nextTick(() => {
+            this.getPlaylist()
+          })
         },
         hide () {
           this.$refs.popup.hide()
@@ -84,10 +89,34 @@
             })
           })
         },
-        toList (id) {
-          this.$router.push({
-            path:`/songlist/${id}`
+        allSub (pid) {
+          this.codes = []
+          this.checkLists.forEach(item => {
+            this.$api.songLists.addDel('add', pid, item.id).then(res => {
+            this.codes.push(res.data.code)
           })
+          })
+          let arr = []
+          arr = this.codes.filter(item => {
+            return item === 502
+          })
+          if(arr.length === this.checkLists.length) {
+          const toast = this.$createToast({
+            txt: '歌曲已存在',
+            type: 'error',
+            zIndex:2002
+          })
+          toast.show()
+          this.hide() 
+          }else {
+          const toast = this.$createToast({
+            txt: '已收藏到歌单',
+            type: 'correct',
+            zIndex:2002
+          })
+          toast.show()
+          this.hide() 
+          }
         },
         bulidlist () {
           this.hide() 
@@ -97,6 +126,11 @@
           this.scrollY = -y
           // this.$refs.increaseHeight.style.height = `${this.scrollY}`
         },
+      },
+      mounted () {
+        // this.$nextTick(() => {
+        //   this.getPlaylist()
+        // })
       }
     }
 </script>
@@ -104,7 +138,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-   .build
+    .build
       position:relative
       bottom:0
       height:auto
@@ -132,8 +166,8 @@
           width:80px
           margin-left:-40px
           div
-           width:80px
-           height:6px
+           width:60px
+           height:4px
            border-radius:3.5px
            background-color:rgba(128,128,128,.4)
         .top-bottom

@@ -31,22 +31,28 @@ import AlbumList from '../components/songlist/album/albumlist'
 import AlbumComment from '../components/songlist/album/listcomment'
 import EditList from '../components/songlist/edit/editlist'
 import EditInformation from '../components/others/edituser/editinfor.vue'
+import HotSearch from '../components/search/hotsearch.vue'
+import Search from '../components/search/search.vue'
 Vue.use(Router)
 
-const originalPush = Router.prototype.push
-Router.prototype.push = function push (location) {
-  return originalPush.call(this, location).catch(err => err)
-}
+// const originalPush = Router.prototype.push
+// Router.prototype.push = function push (location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
 
 export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/Find',
+      redirect: '/find',
       meta: {
         keepAlive: true // 需要被缓存
       }
     },
+    // {
+    //   path: '*',
+    //   redirect: '/findindex'
+    // },
     {
       path: '/login',
       component: Login,
@@ -88,8 +94,38 @@ export default new Router({
       component: Find,
       meta: {
         keepAlive: true // 需要被缓存
-      }
+      },
+    //   children: [
+    //     {
+    //       path: '*',
+    //       redirect: '/Find'
+    //     },
+    //     {
+    //       path: '/hotsearch',
+    //       component: HotSearch,
+    //       name: 'hotSearch'
+    //     }
+    //   ]
     },
+
+    // {
+    //   path: '/index',
+    //   component: FindIndex,
+    //   meta: {
+    //     keepAlive: true // 需要被缓存
+    //   },
+    //   children: [
+    //     {
+    //       path: '/find',
+    //       component: Find
+    //     },
+    //     {
+    //       path: '/hotsearch',
+    //       component: HotSearch,
+    //       name: 'hotSearch'
+    //     }
+    //   ]
+    // },
     {
       path: '/video',
       component: Video,
@@ -273,6 +309,22 @@ export default new Router({
       path: '/editinformation',
       component: EditInformation,
       name: 'editinformation',
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/search/:content',
+      component: Search,
+      name: 'search',
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/hotsearch/:content',
+      component: HotSearch,
+      name: 'hotSearch',
       meta: {
         keepAlive: false
       }
