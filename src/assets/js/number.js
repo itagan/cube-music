@@ -5,8 +5,14 @@ export const serializeNumber = (Num) => {
    * @param {需要保留的小数位数} point
    * 1万以内直接返回 大于8位数是亿 大于5位数是1万 (以1W分割 1W以下全部显示)
    */
-
-  let numStr = Num.toString()
+  // let numStr
+  // if (typeof (Num) !== 'string') {
+  //   console.log(typeof (Num))
+  //   // numStr = Num.toString()
+  //   // numStr = (Num).toString()
+  //   numStr = String(Num) // 强制转换解决上边转换方法报错渲染错误问题
+  // }
+  let numStr = String(Num)
   if (numStr.length < 5) {
     return numStr
   } else if (numStr.length > 8) {

@@ -17,7 +17,7 @@
         @pulling-up="onPullingUp"
         >
         <ul class="content">
-          <li v-for="(item,index) in albums" :key="index"  @click="toAlbum(item.id)">
+          <li v-for="(item,index) in albums" :key="index"  @click.stop="toAlbum(item.id)">
              <album-base class="my-album">
               <div class="left-img" slot="left">
                 <img :src="item.picUrl" alt="">

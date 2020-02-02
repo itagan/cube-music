@@ -33,6 +33,8 @@ import EditList from '../components/songlist/edit/editlist'
 import EditInformation from '../components/others/edituser/editinfor.vue'
 import HotSearch from '../components/search/hotsearch.vue'
 import Search from '../components/search/search.vue'
+import RadioList from '../components/songlist/radio/radiolist'
+import DjComment from '../components/songlist/radio/djcomment'
 Vue.use(Router)
 
 // const originalPush = Router.prototype.push
@@ -325,6 +327,21 @@ export default new Router({
       path: '/hotsearch/:content',
       component: HotSearch,
       name: 'hotSearch',
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/radiolist/:id',
+      component: RadioList,
+      meta: {
+        keepAlive: false
+      }
+    },
+    {
+      path: '/djcomment',
+      component: DjComment,
+      name: 'djcomment',
       meta: {
         keepAlive: false
       }

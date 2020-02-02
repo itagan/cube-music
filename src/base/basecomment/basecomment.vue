@@ -59,6 +59,10 @@ import {timestampOther} from '../../assets/js/timestamp'
       //   type:Number,
       //   default:0
       // }
+      isdynamic: {
+        type:Boolean,
+        default:false
+      }
     },
     data () {
       return {
@@ -97,27 +101,35 @@ import {timestampOther} from '../../assets/js/timestamp'
        }
       },
       toLike () {
-        this.$api.likes.commentDynamic(this.item.commentId, this.dynamic[0].info.threadId, 1).then(res => {
-          console.log(res)
-          if(res.status === 200) {
-            this.$refs.likeCount.innerHTML++
-          }
-        })
+        // this.$api.likes.commentDynamic(this.item.commentId, this.dynamic[0].info.threadId, 1).then(res => {
+        //   console.log(res)
+        //   if(res.status === 200) {
+        //     this.$refs.likeCount.innerHTML++
+        //   }
+        // })
       },
       reply () {
-        this.$router.push({
-          // path:`/commentreply:${this.item}`
-          path: 'commentreply', 
-          name:'commentreply',
-          // params: { 
-          //    item:this.item
-          // }
-          query: { 
-             item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
-             _item:JSON.stringify(this.item),
-             threadId:this.dynamic[0].info.threadId
-          }
-        })    
+        if(this.isdynamic) {
+           this.$router.push({
+            path: 'commentreply', 
+            name:'commentreply',
+            query: { 
+              item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
+              _item:JSON.stringify(this.item),
+              threadId:this.dynamic[0].info.threadId
+            }
+          })   
+        }else {
+          this.$router.push({
+            path: 'commentreply', 
+            name:'commentreply',
+            query: { 
+              item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
+              _item:JSON.stringify(this.item),
+            }
+          })   
+        }
+        
 
         console.log(this.item)
       },

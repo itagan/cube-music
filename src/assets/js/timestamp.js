@@ -12,6 +12,19 @@ export const timestamp = (timestamp) => {
 
   return Y + M + D
 }
+// 时间戳转月-日
+export const timeMd = (timestamp) => {
+  let date
+  if (timestamp.toString().length === 10) {
+    date = new Date(timestamp * 1000)// 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  } else {
+    date = new Date(timestamp)// 时间戳为10位需*1000，时间戳为13位的话不需乘1000
+  }
+  let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+  let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' '
+
+  return M + D
+}
 // 时间戳转年月日等。
 // 今年以前的都是xx年xx月xx日
 // 昨天之前：xx月xx日
