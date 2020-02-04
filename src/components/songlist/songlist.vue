@@ -65,7 +65,7 @@
               <li class="play-sub" v-if="!this.isSubscribed" @click="toSubscribed" v-show="!isCreater">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
-                (<span class="sub-num" ref="Sub">{{playlist.subscribedCount}}</span>)
+                (<span class="sub-num" ref="Sub">{{Num(playlist.subscribedCount)}}</span>)
               </li>
 
               <li class="play-sub-ok" v-if="this.isSubscribed" @click="toSubscribed">
@@ -144,6 +144,7 @@
     import buildList from '../common/buildlist'
     import collectionToList from '../common/collectiontolist'
     import checkFooter from '../common/checkfooter'
+    import {serializeNumber} from '../../assets/js/number'
 
     export default {
       name: 'songList.vue',
@@ -488,7 +489,10 @@
               }
             })
           }
-        }
+        },
+        Num (num) {
+          return serializeNumber(num)
+        },
       },
       watch: {
         isBuild (val) {

@@ -1,14 +1,15 @@
 <template>
-  <ul class="ul-list">
-    <li v-for="(item, index) in tracks" :key="item.id" v-if="!checkbox">
+  <div>
+    <ul class="ul-list" v-if="!checkbox">
+    <li v-for="(item, index) in tracks" :key="item.id" @click.stop="toCheckMusic(item, index)">
       <div class="song-base">
-        <div class="num">
-          <span v-show="!playing">{{index + +1}}</span>
-          <i class="iconfont iconlaba" v-show="playing"></i>
+       <div class="num">
+          <span v-show="index !== currentIndex">{{index + +1}}</span>
+          <i class="iconfont iconlaba" v-show="index === currentIndex"></i>
         </div>
 
         <div class="song-base-content">
-          <div class="title" :class="[playing ? 'activeColor' : '']">
+          <div class="title" :style="[index === currentIndex ? {color:'red'} : '']">
             <span class="title-left">{{item.name}}</span>
             <span class="title-right" v-if="item.alia && item.alia.length">({{item.alia[0]}})</span>
           </div>
@@ -26,14 +27,14 @@
         </div>
       </div>
     </li>
-
+  </ul>
+  <ul class="ul-list" v-if="checkbox">
     <cube-checkbox-group v-model="checkList" @input="Input">
-    <li v-for="(item, index) in tracks" :key="item.id" v-if="checkbox">
+    <li v-for="(item, index) in tracks" :key="item.id" @click.stop="toCheckMusic(item, index)">
       <cube-checkbox :option="{value:index+ +1}" class="checkbox-css">
-
       <div class="song-base">
         <div class="song-base-content">
-          <div class="title" :class="[playing ? 'activeColor' : '']">
+          <div class="title" :style="[index === currentIndex ? {color:'red'} : '']">
             <span class="title-left">{{item.name}}</span>
             <span class="title-right" v-if="item.alia && item.alia.length">({{item.alia[0]}})</span>
           </div>
@@ -42,11 +43,11 @@
           </div>
         </div>
       </div>
-
       </cube-checkbox>
     </li>
     </cube-checkbox-group>
   </ul>
+  </div>
 </template>
 
 <script>
@@ -58,7 +59,8 @@
           checkbox: false,
           activeColor: 'activeColor',
           checkList: [],
-          val: 1
+          val: 1,
+          currentIndex:-1
         }
       },
       props: {
@@ -102,6 +104,14 @@
             this.$emit('changebg',true)
           }else {
             this.$emit('changebg',false)
+          }
+        },
+        toCheckMusic(item,index) {
+          if(this.checkbox) {
+          }else {
+            //播放电台歌曲
+            // this.isPlay = true
+            this.currentIndex = index
           }
         },
         allToCheck () {
@@ -157,6 +167,8 @@
         height:50px
         flex-center()
         color:gray
+        .iconlaba
+          color:red
       .song-base-content
         height:50px
         position:absolute
