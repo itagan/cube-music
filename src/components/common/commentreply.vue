@@ -112,7 +112,8 @@ export default {
       // this.item = this.$route.params.item  //刷新后不能获取参数。该方法需要改造或者采用查询参数形式
       this.items = JSON.parse(this.$route.query.item).reverse() //传参获取参数都使用json方法转换，避免刷新时候报错
       this._item = JSON.parse(this.$route.query._item)
-      this.threadId = this.$route.query.threadId
+      this.threadId = this.$route.query.threadId || '0'
+      console.log(this.threadId)
     },
     showDialog (liTop,user,commentId,threadId) {
       this.$refs.showDia.show()

@@ -5,11 +5,11 @@
         <div class="triangle-top" v-if="diaTop"></div>
         <div class="triangle-bottom" v-if="!diaTop"></div>
         <ul class="ring-dialog-container">
-          <li @click="Reply">
+          <li @click.stop="Reply">
             <i class="iconfont iconhuifu"></i>
             <span>回复</span>
           </li>
-          <li>
+          <li @click.stop="toShare">
             <i class="iconfont iconfenxiang"></i>
             <span>分享</span>
           </li>
@@ -54,6 +54,11 @@ export default {
     Reply () {
       //回复
       this.$emit('reply')
+      this.hide()
+    },
+    toShare () {
+      //回复
+      this.$emit('share')
       this.hide()
     }
   },

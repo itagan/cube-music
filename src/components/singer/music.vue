@@ -144,7 +144,7 @@ export default {
           click: false, // 解决点击事件被触发两次的问题
           stopPropagation:false,
           scrollX:false,
-          scrollY:false 
+          scrollY:true 
         } 
       }
     }

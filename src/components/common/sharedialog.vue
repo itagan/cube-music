@@ -165,7 +165,8 @@
         },
         cancel () {
           // 触摸到遮罩层就取消本组件
-        this.$emit('cancel')
+        // this.$emit('cancel')
+        this.visible = false
         },
         show () {
           this.visible = true
@@ -186,7 +187,7 @@
     height:100%
     position:fixed
     top:0
-    z-index:2001 //遮罩层需要更高
+    z-index:2002 //遮罩层需要更高
     left:0
     background: rgba(0, 0, 0, 0.5)
     .share-build

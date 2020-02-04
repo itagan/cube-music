@@ -27,11 +27,11 @@
             </ul>
         </cube-sticky-ele>
         <ul class="content" v-if="djRadios.length">
-           <li v-for="(item,index) in djRadios" :key="index">
+           <li v-for="(item,index) in djRadios" :key="index" @click.stop="toRadio(item.id)">
             <list-base>
               <img v-lazy="item.picUrl" alt="" slot="left" class="img"> 
               <div slot="top" class="limit">
-               <div class="limit-top"> # {{item.name}}</div>
+               <div class="limit-top">{{item.name}}</div>
               </div>
               <div slot="bottom" class="limit">
                 <div class="limit-bottom">{{item.dj.nickname}}</div>
@@ -85,6 +85,7 @@ export default {
       multimatch:{},
       isPlay:false,
       hasMore: true,
+      hasresult:true,
       offset:0,
       count:0,
       djRadios:[],
@@ -103,21 +104,25 @@ export default {
   methods: {
     getRadios (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
-        //手动api补全解决不全的bug
+        if(this.hasresult) {
+          //手动api补全解决不全的bug
         if(res.data.result.djRadiosCount) {
           this.djRadiosCount = res.data.result.djRadiosCount
         }else {
           this.djRadiosCount = 0
         }
-        this.hasMore = this.count < res.data.result.djRadiosCount
+        setTimeout(() => {
+          this.result = this.djRadiosCount > 0 ? true : false
+          }, 3000)
+          this.hasresult = false  //加上标识符判断 避免上拉加载时变成无结果逻辑bug
+        }
+        this.hasMore = this.count < this.djRadiosCount
         if(this.hasMore) {
           this.count+=30
           this.offset+=10
         }
         this.djRadios =  this.djRadios.concat(res.data.result.djRadios)
-        setTimeout(() => {
-          this.result = this.djRadiosCount > 0 ? true : false
-        }, 3000)
+
       })
     },
     toIt () {
@@ -137,6 +142,19 @@ export default {
     allCheck () {
     },
     toComplete () {},
+    toRadio (id) {
+    //   this.$router.beforeRouteLeave((to, from, next) => {
+    //     if(to.name == 'radio'){
+    //         to.meta.keepAlive = true
+    //     }else{
+    //         to.meta.keepAlive = true
+    //       }
+    //     next()
+    //   })
+      this.$router.push({
+        path:`/radiolist/${id}`
+      })
+    },
     TransAlias (alias) {
       let arr = []
       for(let i = 0; i < alias.length; i++) {
@@ -145,6 +163,24 @@ export default {
       return arr.join('/')
     },
   },
+  // beforeRouteLeave (to, from, next) {
+  //   if (to.name == 'radiolist') {
+  //       to.meta.keepAlive = true
+  //       from.meta.keepAlive = true
+  //       console.log('是我吧')
+  //   }
+  //   else {
+      
+  //   }
+  // },
+  // beforeRouteLeave(to,from,next){
+  //   if(from.name == 'radiolist'){
+  //       to.meta.keepAlive = false
+  //   }else{
+  //       to.meta.keepAlive = true
+  //   }
+  //   next()
+  // },
   created() {
     // this.getRadios(this.value, 60, 0, 1009)
   },

@@ -314,6 +314,22 @@ const searchs = {
   }
 }
 
+// 电台有关
+const radios = {
+  detail (rid) {
+    return axios.get(`${base}/dj/detail?rid=${rid}`)
+  },
+  program (rid, limit, offset, asc) {
+    return axios.get(`${base}/dj/program?rid=${rid}&limit=${limit}&offset=${offset}&asc=${asc}`)
+  },
+  subs (rid, t) {
+    return axios.get(`${base}/dj/sub?rid=${rid}&t=${t}`)
+  },
+  comments (id, offset = 0, limit = 20) {
+    return axios.get(`${base}/comment/dj?id=${id}&offset=${offset}&limit=${limit}`)
+  }
+}
+
 export default {
   login,
   find,
@@ -327,5 +343,6 @@ export default {
   singers,
   searchs,
   musics,
-  albums
+  albums,
+  radios
 }

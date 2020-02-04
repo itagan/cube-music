@@ -5,7 +5,7 @@
       <div class="base-comment-time">
         <div class="base-comment-name" v-if="item.user">
           <div class="user-name">{{item.user.nickname}}</div>
-          <div class="user-author" v-if="this.author[0].userId === item.user.userId"><span class="user-author-name">作者</span></div>
+          <div class="user-author" v-if="this.author[0].userId === item.user.userId"><div class="user-author-name">作者</div></div>
         </div>
         <span class="user-time">{{timestamp(item.time)}}</span>
       </div>
@@ -59,6 +59,10 @@ import {timestampOther} from '../../assets/js/timestamp'
       //   type:Number,
       //   default:0
       // }
+      isdynamic: {
+        type:Boolean,
+        default:false
+      }
     },
     data () {
       return {
@@ -97,27 +101,35 @@ import {timestampOther} from '../../assets/js/timestamp'
        }
       },
       toLike () {
-        this.$api.likes.commentDynamic(this.item.commentId, this.dynamic[0].info.threadId, 1).then(res => {
-          console.log(res)
-          if(res.status === 200) {
-            this.$refs.likeCount.innerHTML++
-          }
-        })
+        // this.$api.likes.commentDynamic(this.item.commentId, this.dynamic[0].info.threadId, 1).then(res => {
+        //   console.log(res)
+        //   if(res.status === 200) {
+        //     this.$refs.likeCount.innerHTML++
+        //   }
+        // })
       },
       reply () {
-        this.$router.push({
-          // path:`/commentreply:${this.item}`
-          path: 'commentreply', 
-          name:'commentreply',
-          // params: { 
-          //    item:this.item
-          // }
-          query: { 
-             item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
-             _item:JSON.stringify(this.item),
-             threadId:this.dynamic[0].info.threadId
-          }
-        })    
+        if(this.isdynamic) {
+           this.$router.push({
+            path: 'commentreply', 
+            name:'commentreply',
+            query: { 
+              item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
+              _item:JSON.stringify(this.item),
+              threadId:this.dynamic[0].info.threadId
+            }
+          })   
+        }else {
+          this.$router.push({
+            path: 'commentreply', 
+            name:'commentreply',
+            query: { 
+              item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
+              _item:JSON.stringify(this.item),
+            }
+          })   
+        }
+        
 
         console.log(this.item)
       },
@@ -191,11 +203,12 @@ import {timestampOther} from '../../assets/js/timestamp'
             margin-bottom:3px
             margin-right:5px
           .user-author
-            width:25px
+            width:auto
             background-color:#ff6eb4
             color:#ffc1c1
             border-radius:3px
-            height:10px
+            height:auto
+            padding:2px 3px
             flex-center()
             .user-author-name  
               flex-center()

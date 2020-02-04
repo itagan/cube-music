@@ -44,7 +44,7 @@
             </ul>
 
         </cube-sticky-ele>
-        <ul class="my-content" v-if="songCount > 0">
+        <ul class="my-content">
           <li v-for="(item,index) in songs" :key="index" class="li" @click.stop="toCheckMusic(item, index)">
             <song-base class="my-songs-base">
               <!-- 添加一个key属性，来唯一标识该控件，被key标识后会重新渲染，避免不渲染样式bug问题 -->
@@ -52,7 +52,7 @@
               </div>
               <i slot="left" class="iconfont iconlaba" @click.stop="toIt" v-if="isPlay"></i>
               <div slot="top" class="limit">
-                <div class="limit-top">{{item.name}}</div>
+                <div class="limit-top" v-if="item.name">{{item.name}}</div>
               </div>
               <div slot="center" class="limit">
                 <div class="limit-bottom">{{item.artists[0].name}} - {{item.album.name}}</div>

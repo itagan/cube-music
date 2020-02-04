@@ -74,9 +74,6 @@
             </div>
             <i slot="rightShare" class="iconfont iconleft-arrow" @click.stop="toIt"></i>
           </base-auto>
-
-
-
         </div>
 
         <ul class="my-songs" v-if="song.songs">
