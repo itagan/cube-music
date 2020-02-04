@@ -73,7 +73,7 @@
               <li class="play-sub" v-if="!isSub" @click="toSubscribed">
                 <i class="iconfont iconjia"></i>
                 <span>收藏</span>
-                (<span class="sub-num" ref="Sub">{{subCount}}</span>)
+                (<span class="sub-num" ref="Sub">{{Num(subCount)}}</span>)
               </li>
 
               <li class="play-sub-ok" v-if="isSub" @click="toSubscribed">
@@ -145,6 +145,8 @@
     import buildList from '../../common/buildlist'
     import myCover from './cover'
     import checkFooter from '../../common/checkfooter'
+    import {serializeNumber} from '../../../assets/js/number'
+
     export default {
       name: 'songList.vue',
       components: {
@@ -469,7 +471,10 @@
               }
             })
           }
-        }
+        },
+         Num (num) {
+          return serializeNumber(num)
+        },
       },
       watch: {
         isBuild (val) {

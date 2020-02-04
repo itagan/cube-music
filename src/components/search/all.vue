@@ -81,10 +81,10 @@
             <div class="my-songs-top-left">单曲</div>
             <div class="my-songs-top-right">播放全部</div>
           </li>
-          <li v-for="item in song.songs" :key="item.id">
+          <li v-for="(item, index) in song.songs" :key="item.id"  @click.stop="toCheckMusic(item, index)">
             <song-base class="my-songs-base">
-              <i slot="left" class="iconfont iconlaba" @click.stop="toIt" v-if="isPlay"></i>
-              <div slot="top" class="limit">
+              <i slot="left" class="iconfont iconlaba" @click.stop="toIt" v-if="index === currentIndex"></i>
+              <div slot="top" class="limit" :style="[index === currentIndex ? {color:'red'} : '']">
                 <div class="limit-top">{{item.name}}</div>
               </div>
               <div slot="center" class="limit">
@@ -355,7 +355,9 @@ export default {
       djRadio:{},
       user:{},
       result:true,
-      order:[]
+      order:[],
+      currentIndex:-1,
+      allShow:false,
     }
   },
   watch: {},
@@ -403,6 +405,9 @@ export default {
     },
     Num (num) {
       return serializeNumber(num)
+    },
+    toCheckMusic(item,index) {
+      this.currentIndex = index
     },
     toFollow (userId, index) {
       this.$api.users.toFollow(userId, 1).then(res => {
@@ -570,6 +575,8 @@ export default {
         .my-songs-base
           height:100%    
           width:100% 
+          .iconlaba
+            color:red
       .my-video
         width:100%
         background-color:white

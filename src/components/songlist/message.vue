@@ -3,10 +3,10 @@
     <div class="song-message">
       <div class="song-message-left" @click="toCover">
         <img :src="playlist.coverImgUrl" alt="">
-        <span>
-            <i class="iconfont iconCell-PlayVolume"></i>
-            {{playlist.playCount}}
-          </span>
+        <div class="bg">
+          <i class="iconfont iconCell-PlayVolume"></i>
+          <span>{{Num(playlist.playCount)}}</span>
+        </div>
       </div>
       <div class="song-message-right">
         <div class="song-title">
@@ -50,6 +50,8 @@
 </template>
 
 <script>
+    import {serializeNumber} from '../../assets/js/number'
+
     export default {
       name: 'songMessage.vue',
       props: {
@@ -106,7 +108,10 @@
           }else {
             this.toCover()
           }
-        }
+        },
+        Num (num) {
+          return serializeNumber(num)
+        },
       }
     }
 </script>
@@ -125,16 +130,22 @@
         height:140px
         position:relative
         margin-left:10px
+        display:flex
         img
           width:140px
           height:140px
           border-radius:5px
-        span
+        .bg
           position:absolute
           top:5px
           right:10px
           font-size:$font-size-small
           color:white
+          flex-vertical()
+          i  
+            font-size:$font-size-medium
+            margin-right:2px
+
       .song-message-right
         height:140px
         flex:1

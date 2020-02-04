@@ -1,63 +1,64 @@
 <template>
-  <ul class="ul-list">
-    <li v-for="(item, index) in tracks" :key="item.id" v-if="!checkbox">
-      <div class="song-base">
-        <div class="num">
-          <span v-show="!playing">{{index + +1}}</span>
-          <i class="iconfont iconlaba" v-show="playing"></i>
-        </div>
-
-        <div class="song-base-content">
-          <div class="title" :class="[playing ? 'activeColor' : '']">
-            <span class="title-left">{{item.name}}</span>
-            <span class="title-right" v-if="item.tns && item.tns.length">({{item.tns[0]}})</span>
+  <div>
+    <ul class="ul-list" v-if="!checkbox">
+      <li v-for="(item, index) in tracks" :key="item.id"  @click.stop="toCheckMusic(item, index)">
+        <div class="song-base">
+          <div class="num">
+            <span v-show="index !== currentIndex">{{index + +1}}</span>
+            <i class="iconfont iconlaba" v-show="index === currentIndex"></i>
           </div>
-          <div class="desc">
-            <img src="" alt="" class="sq">
-            <span class="nickname">{{item.ar[0].name}}</span>
+          <div class="song-base-content">
+            <div class="title" :style="[index === currentIndex ? {color:'red'} : '']">
+              <span class="title-left">{{item.name}}</span>
+              <span class="title-right" v-if="item.tns && item.tns.length">({{item.tns[0]}})</span>
+            </div>
+            <div class="desc">
+              <img src="" alt="" class="sq">
+              <span class="nickname">{{item.ar[0].name}}</span>
 
-            <span class="name">{{item.al.name}}</span>
+              <span class="name">{{item.al.name}}</span>
+            </div>
           </div>
-        </div>
-
-        <div class="playing" v-if="item.mv">
-          <i class="iconfont iconbofang5"></i>
-        </div>
-        <div class="more" @click.stop="more(item)">
-          <i class="iconfont icongengduo"></i>
-        </div>
-      </div>
-    </li>
-
-    <cube-checkbox-group v-model="checkList" @input="Input">
-    <li v-for="(item, index) in tracks" :key="item.id" v-if="checkbox">
-      <cube-checkbox :option="{value:index+ +1}" class="checkbox-css">
-
-      <div class="song-base">
-        <div class="song-base-content">
-          <div class="title" :class="[playing ? 'activeColor' : '']">
-            <span class="title-left">{{item.name}}</span>
-            <span class="title-right" v-if="item.tns && item.tns.length">({{item.tns[0]}})</span>
+          <div class="playing" v-if="item.mv">
+            <i class="iconfont iconbofang5"></i>
           </div>
-          <div class="desc">
-            <img src="" alt="" class="sq">
-            <span class="nickname">{{item.ar[0].name}}</span>
-            <span class="name">{{item.al.name}}</span>
+          <div class="more" @click.stop="more(item)">
+            <i class="iconfont icongengduo"></i>
           </div>
         </div>
-        <div  class="drag-drop" v-if="isself">
-          <i class="iconfont icontuozhuai"></i>
-        </div>
-      </div>
-
-      </cube-checkbox>
-    </li>
-    </cube-checkbox-group>
-
-    <li class="ul-list-none" v-if="!tracks.length">
-      添加歌曲
-    </li>
+      </li>
+      <li class="ul-list-none" v-if="!tracks.length">
+        添加歌曲
+      </li>
   </ul>
+  <ul v-if="checkbox">
+    <cube-checkbox-group v-model="checkList" @input="Input">
+      <li v-for="(item, index) in tracks" :key="item.id" @click.stop="toCheckMusic(item, index)">
+        <cube-checkbox :option="{value:index+ +1}" class="checkbox-css">
+        <div class="song-base">
+          <div class="song-base-content">
+            <div class="title" :style="[index === currentIndex ? {color:'red'} : '']">
+              <span class="title-left">{{item.name}}</span>
+              <span class="title-right" v-if="item.tns && item.tns.length">({{item.tns[0]}})</span>
+            </div>
+            <div class="desc">
+              <img src="" alt="" class="sq">
+              <span class="nickname">{{item.ar[0].name}}</span>
+              <span class="name">{{item.al.name}}</span>
+            </div>
+          </div>
+          <div  class="drag-drop" v-if="isself">
+            <i class="iconfont icontuozhuai"></i>
+          </div>
+        </div>
+        </cube-checkbox>
+      </li>
+      </cube-checkbox-group>
+      <li class="ul-list-none" v-if="!tracks.length">
+        添加歌曲
+      </li>
+  </ul>
+  </div>
 </template>
 
 <script>
@@ -69,7 +70,8 @@
           checkbox: false,
           activeColor: 'activeColor',
           checkList: [],
-          val: 1
+          val: 1,
+          currentIndex:-1
         }
       },
       props: {
@@ -119,6 +121,15 @@
             this.$emit('changebg',false)
           }
         },
+        toCheckMusic(item,index) {
+          if(this.checkbox) {
+           
+          }else {
+            //播放电台歌曲
+            // this.isPlay = true
+            this.currentIndex = index
+          }
+        },
         allToCheck () {
           let arr = []
           for (let i = 1; i <= this.tracks.length; i++) {
@@ -165,6 +176,8 @@
         height:50px
         flex-center()
         color:gray
+        .iconlaba
+          color:red
       .song-base-content
         height:50px
         position:absolute

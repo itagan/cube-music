@@ -50,8 +50,8 @@
               <!-- 添加一个key属性，来唯一标识该控件，被key标识后会重新渲染，避免不渲染样式bug问题 -->
               <div slot="leftCheck" class="check" ref="liSong" v-if="allShow" :key="1">
               </div>
-              <i slot="left" class="iconfont iconlaba" @click.stop="toIt" v-if="isPlay"></i>
-              <div slot="top" class="limit">
+              <i slot="left" class="iconfont iconlaba" @click.stop="toIt" v-if="index === currentIndex"></i>
+              <div slot="top" class="limit" :style="[index === currentIndex ? {color:'red'} : '']">
                 <div class="limit-top" v-if="item.name">{{item.name}}</div>
               </div>
               <div slot="center" class="limit">
@@ -132,6 +132,7 @@ export default {
       checkList: [],
       checkLists:[],
       val: 1,
+      currentIndex:-1,
     }
   },
   watch: {
@@ -221,6 +222,8 @@ export default {
         }else {
           this.$emit('changebg',false)
         }
+      }else {
+        this.currentIndex = index
       }
     },
     toCheckMore () {
@@ -345,7 +348,9 @@ export default {
             border: 2px solid white
             border-width: 0 1px 1px 0
             content: ''
-            transform: rotate(45deg)       
+            transform: rotate(45deg)   
+          .iconlaba
+            color:red      
 
 
   .check
