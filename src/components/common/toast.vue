@@ -17,7 +17,7 @@
           > -->
 
           <ul class="build-center">
-            <li class="li">
+            <!-- <li class="li">
               <div class="build-icon">
                 <i class="iconfont iconxiazaigequ"></i>
               </div>
@@ -49,6 +49,14 @@
               <div class="build-text">
                 <span>举报</span>
               </div>
+            </li> -->
+            <li class="li" @click.stop="toShare" v-if="toasttype === 'dj'"> 
+              <div class="build-icon">
+                <i class="iconfont iconbofang2"></i>
+              </div>
+              <div class="build-text">
+                <span>播放节目</span>
+              </div>
             </li>
           </ul>
           
@@ -75,13 +83,17 @@ import {mapActions} from 'vuex'
           playing:false,
           id:'477726475',
           playlist:[],
-          codes:[]
+          codes:[],
         }
       },
       props: {
         item: {
           type:Object,
-          default:{}
+          default:() => {}
+        },
+        toasttype:{
+          type:String,
+          default:''
         }
       },
       created() {},
@@ -106,7 +118,6 @@ import {mapActions} from 'vuex'
           let obj = {userId:''}
           obj.userId = item.dj.userId
           this.saveAuthor(obj)
-          this.hide()
         },
         scrollHandler ({ y }) {
           this.scrollY = -y

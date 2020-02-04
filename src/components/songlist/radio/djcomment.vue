@@ -22,7 +22,7 @@
           ref="contentScroll"
         >
 
-          <div class="comment-message">
+          <div class="comment-message" @click.stop="toPlayDj">
             <follow-base>
               <div slot="left" class="comment-message-left">
                 <img :src="information.radio.picUrl" alt="">
@@ -31,7 +31,7 @@
               <div slot="top" class="comment-message-top">{{information.name}}</div>
               <div slot="bottom" class="comment-message-bottom">
                 <div class="tag">{{information.radio.category}}</div>
-                <div class="author">{{information.radio.name}}</div>
+                <div class="author" @click.stop="toDj(information.radio.id)">{{information.radio.name}}</div>
               </div>
               <i slot="rightShare" class="iconfont iconleft-arrow"></i>
             </follow-base>
@@ -104,7 +104,10 @@
       </div>
     </div>
 
-    <reply-dialog ref="showDia" @reply="replyComment"></reply-dialog>
+    <reply-dialog ref="showDia" @reply="replyComment" @share="toShare"></reply-dialog>
+    <radio-toast :item="information" :toasttype="mytype" ref="showToast"></radio-toast>
+    <share-dialog ref="shareShow"></share-dialog>
+
   </div>
 </template>
 
@@ -113,13 +116,19 @@
     import followBase from '../../../base/swiper/followbase'
     import baseComment from '../../../base/basecomment/basecomment'
     import replyDialog from '../../common/replydialog'
+    import radioToast from '../../common/toast'
+    import shareDialog from '../../common/sharedialog'
+
+
     export default {
-      name: 'djComment.vue',
+      name: 'djcomment.vue',
       components: {
         MyHeader,
         baseComment,
         replyDialog,
-        followBase
+        followBase,
+        radioToast,
+        shareDialog
       },
       data () {
         return {
@@ -141,7 +150,8 @@
           threadId:'',
           information: {},
           isLoading:true,
-          isLoadingText:false
+          isLoadingText:false,
+          mytype:'dj'
         }
       },
       props: {},
@@ -204,18 +214,22 @@
               setTimeout(() => {
                 this.isLoading = false
                 this.isLoadingText = false
-              }, 2000)
+              }, 1000)
             }else{
               setTimeout(() => {
                 this.isLoading = false
                 this.isLoadingText = true
                 this.Input()
-              }, 2000)
+              }, 1000)
             }
 
           })
         },
         toBack () {
+        //   this.$router.beforeEach((to, from, next) => {
+        //     from.meta.keepAlive = true
+        //     next()
+        //  })
           this.$router.go(-1)
         },
         share () {
@@ -235,8 +249,17 @@
             contentScroll.forceUpdate()
           }, 1000)
         },
+        toPlayDj () {
+          this.$refs.showToast.show()
+        },
+        toDj (id) {
+          this.$router.push({
+            path:`/radiolist/${id}`
+          })
+        },
         Album () {
           this.information = JSON.parse(this.$route.query.dj)
+          console.log(this.information)
         },
         Reply (index) {
           let proup = document.getElementsByClassName('cube-popup-content')[0],
@@ -295,7 +318,10 @@
         },
         input () {
           console.log(this.value.length)
-        }
+        },
+        toShare () {
+          this.$refs.shareShow.show()
+        },
       },
       beforeMount () {
         this.$nextTick(() => {
@@ -313,7 +339,16 @@
           // this.$nextTick(() => {
         //     this.getHeight ()
           // })
-      }
+      },
+      // beforeRouteLeave(to,from,next){
+      //   if(to.name == 'radiolist'){
+      //       to.meta.keepAlive = true
+      //       console.log('缓存本组件')
+      //   }else{
+      //       to.meta.keepAlive = false
+      //   }
+      //   next()
+      // }
     }
 </script>
 
@@ -348,7 +383,7 @@
   .comment
     position:fixed
     bottom:0
-    height:40px
+    height:42px
     width:100%
     background-color:white
     z-index:2002
@@ -480,7 +515,8 @@
               margin-right:5px
             .author
               max-width:180px
-              ellipsis()  
+              ellipsis() 
+              color:rgb(31,113,192) 
 
 
           .hot-comment

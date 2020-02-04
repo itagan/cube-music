@@ -143,6 +143,14 @@ export default {
     },
     toComplete () {},
     toRadio (id) {
+    //   this.$router.beforeRouteLeave((to, from, next) => {
+    //     if(to.name == 'radio'){
+    //         to.meta.keepAlive = true
+    //     }else{
+    //         to.meta.keepAlive = true
+    //       }
+    //     next()
+    //   })
       this.$router.push({
         path:`/radiolist/${id}`
       })
@@ -155,6 +163,24 @@ export default {
       return arr.join('/')
     },
   },
+  // beforeRouteLeave (to, from, next) {
+  //   if (to.name == 'radiolist') {
+  //       to.meta.keepAlive = true
+  //       from.meta.keepAlive = true
+  //       console.log('是我吧')
+  //   }
+  //   else {
+      
+  //   }
+  // },
+  // beforeRouteLeave(to,from,next){
+  //   if(from.name == 'radiolist'){
+  //       to.meta.keepAlive = false
+  //   }else{
+  //       to.meta.keepAlive = true
+  //   }
+  //   next()
+  // },
   created() {
     // this.getRadios(this.value, 60, 0, 1009)
   },

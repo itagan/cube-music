@@ -23,7 +23,7 @@
           @scroll-end="scrollEndHandler"
           @pulling-up="onPullingUp"
           :options="options"
-          ref="scroll"
+          ref="Scroll"
           class="scroll-ele"
         >
           <my-message :djRadio="djRadio" ref="myMessage" @issub="issub"></my-message>
@@ -70,8 +70,10 @@
 
             <cube-slide-item :index="1">
               <program-list 
-              :id="id" ref="toScroll"  
+              ref="toScroll" 
+              :id="id" 
               :currentPage="currentPage" 
+              :loading="loading"
               @more="moreOpera"
               @getcount="getcount"
               ></program-list>
@@ -84,7 +86,7 @@
       </cube-sticky>
     </div>
 
-    <share-dialog ref="shareShow" @cancel="cancelShare"></share-dialog>
+    <share-dialog ref="shareShow"></share-dialog>
     <radio-tips :item="iTem" ref="showMore" @share="toShare"></radio-tips>
   </div>
 </template>
@@ -143,12 +145,14 @@
           },
           id:'',
           iTem:{},
-          count:0
-
+          count:0,
+          loading:false,
+          isFirstEnter:false
         }
       },
       created () {
-        this.getRadio()
+        // this.getRadio()
+        this.isFirstEnter = true
       },
       computed: {
         options () {
@@ -241,7 +245,72 @@
           this.count = count
           this.objs[1].num = count
         }
-      }
+      },
+      beforeRouteEnter(to,from,next){
+        if(from.name == 'djcomment'){
+            // to.meta.keepAlive = true
+            // console.log('缓存本组件')
+            to.meta.isBack = true
+        }else{
+            // to.meta.keepAlive = false
+            to.meta.isBack = false
+            // this.loading = true
+        }
+        next()
+      },
+      //  beforeRouteLeave(to,from,next){
+      //   if(to.name == 'djcomment'){
+      //       from.meta.keepAlive = true
+      //       // console.log('缓存本组件')
+      //       to.meta.isBack = true
+      //   }else{
+      //       to.meta.keepAlive = false
+      //       to.meta.isBack = false
+      //       // this.loading = true
+      //   }
+      //   next()
+      // },
+      // beforeRouteUpdate (to, from, next) {
+      //    if(from.name == 'djcomment'){
+      //      to.meta.keepAlive = true
+      //   }else{
+      //       // to.meta.keepAlive = false
+      //       to.meta.keepAlive = false
+      //       // this.loading = true
+      //   }
+      //   next()
+      // },
+      activated(){
+        if(!this.$route.meta.isBack || this.isFirstEnter){
+            this.djRadio = {}
+            this.getRadio()
+            if(this.currentPage === 1) {
+              this.$refs.toScroll.parget()
+              // this.$refs.toScroll.scrollTo(0,0,300)
+              // this.loadData = false
+            } 
+            // this.$refs.toScroll.parget()
+            console.log('更新数据')
+            //滚动位置重置
+            this.$nextTick(() =>{
+              // this.$refs.Scroll.scrollTo(0,0,300)
+            })
+            // this.$refs.toScroll.scrollTo(0,0,300)
+        }else{
+            // this.$route.meta.isBack = false
+        }
+         this.$route.meta.isBack = false
+         this.isFirstEnter=false
+      },
+      // beforeRouteLeave(to,from,next){
+      //   if(from.name == 'djcomment'){
+      //       to.meta.keepAlive = true
+      //       console.log('缓存本组件')
+      //   }else{
+      //       to.meta.keepAlive = false
+      //   }
+      //   next()
+      // }
     }
 </script>
 

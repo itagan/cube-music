@@ -108,6 +108,10 @@ export default {
     id:{
       type:String,
       default:''
+    },
+    loading: {
+      type:Boolean,
+      default:false
     }
   },
   data() {
@@ -139,10 +143,20 @@ export default {
         this.getAlls(this.id, 30, 0,false)
         this.loadData = false
       } 
+    },
+    loading (val) {
+      if(val) {
+        console.log('重新加载子组件')
+        this.getAlls(this.id, 30, 0,false)
+      }
     }
   },
   computed: {},
   methods: {
+    parget () {
+      this.getAlls(this.id, 30, 0,false)
+      this.$refs.toScroll.scrollTo(0,0,300)
+    },
     getAlls (rid, limit, offset, asc) {
       this.$api.radios.program(rid, limit, offset, asc).then(res => {
         this.programs = res.data.programs
@@ -257,6 +271,24 @@ export default {
       return serializeNumber(num)
     },
   },
+  // beforeRouteEnter(to,from,next){
+  //   if(from.name == 'djcomment'){
+  //       // to.meta.keepAlive = true
+  //       // console.log('缓存本组件')
+  //       to.meta.isBack = true
+  //   }else{
+  //       // to.meta.keepAlive = false
+  //       to.meta.isBack = false
+  //   }
+  //   next()
+  //   },
+  // activated(){
+  //   if(!this.$route.meta.isBack){
+  //       this.getAlls(this.value, 60, 0, 1018)
+  //   }else{
+  //       //详情页返回操作，比如页面位置
+  //   }
+  //   },
   created() {
     // this.getAlls(this.value, 60, 0, 1018)
   },

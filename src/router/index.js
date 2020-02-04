@@ -43,6 +43,17 @@ Vue.use(Router)
 // }
 
 export default new Router({
+  // mode: 'history',
+  // scrollBehavior (to, from, savedPosition) {
+  //     if (savedPosition) {
+  //         return savedPosition
+  //     } else {
+  //         return {
+  //             x: 0,
+  //             y: 0
+  //         }
+  //       }
+  // },
   routes: [
     {
       path: '/',
@@ -334,9 +345,21 @@ export default new Router({
     {
       path: '/radiolist/:id',
       component: RadioList,
+      name: 'radiolist',
       meta: {
-        keepAlive: false
+        keepAlive: true,
+        isBack: false
       }
+      // beforeEnter: (to, from, next) => { 
+      //   if (from.name === 'djcomment') {
+      //     to.meta.keepAlive = true
+      //   } else {
+      //     // to.meta.keepAlive = false
+      //     to.meta.keepAlive = false
+      //     // this.loading = true
+      //   }
+      //   next()
+      // }  
     },
     {
       path: '/djcomment',

@@ -285,7 +285,7 @@ export default {
       this.currentPage = index
     },
     scrollHandler (pos) {
-      console.log(pos.x)
+      // console.log(pos.x)
       this.posX = pos.x
 
     },
