@@ -62,6 +62,8 @@
 </template>
 
 <script>
+    import {mapGetters, mapMutations, mapActions} from 'vuex'
+
     export default {
       name: 'list.vue',
       data () {
@@ -123,11 +125,18 @@
         },
         toCheckMusic(item,index) {
           if(this.checkbox) {
-           
           }else {
-            //播放电台歌曲
-            // this.isPlay = true
             this.currentIndex = index
+            // this.$router.push({
+            //   path: `/musicplayer`,
+            //   // query: {
+            //   //   item:JSON.stringify(item)
+            //   // }
+            // })
+            this.selectPlay({
+              list: this.tracks,
+              index:index
+            })
           }
         },
         allToCheck () {
@@ -155,6 +164,9 @@
           console.log(this.checkLists)
           this.$emit('whochecked', this.checkLists)
         },
+        ...mapActions([
+          'selectPlay'
+        ])
       }
     }
 </script>

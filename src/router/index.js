@@ -35,6 +35,7 @@ import HotSearch from '../components/search/hotsearch.vue'
 import Search from '../components/search/search.vue'
 import RadioList from '../components/songlist/radio/radiolist'
 import DjComment from '../components/songlist/radio/djcomment'
+import Musicplayer from '../components/musicplayer/index'
 Vue.use(Router)
 
 // const originalPush = Router.prototype.push
@@ -368,6 +369,13 @@ export default new Router({
       meta: {
         keepAlive: false
       }
-    }
+    },
+    // {
+    //   path: '/musicplayer',
+    //   component: Musicplayer,
+    //   meta: {
+    //     keepAlive: false // 不被缓存
+    //   }
+    // }
   ]
 })

@@ -6,11 +6,14 @@
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
     <tab></tab>
+    <music-player></music-player>
   </div>
 </template>
 
 <script>
     import Tab from './components/tabbar/tabbar'
+    import MusicPlayer from './components/musicplayer/index'
+
     export default {
       name: 'app',
       provide () {
@@ -32,7 +35,8 @@
         }
       },
       components: {
-        Tab
+        Tab,
+        MusicPlayer
       }
     }
 </script>

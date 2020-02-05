@@ -408,6 +408,12 @@ export default {
     },
     toCheckMusic(item,index) {
       this.currentIndex = index
+      this.$router.push({
+        path: `/musicplayer`,
+        query: {
+          item:JSON.stringify(item)
+        }
+      })
     },
     toFollow (userId, index) {
       this.$api.users.toFollow(userId, 1).then(res => {
