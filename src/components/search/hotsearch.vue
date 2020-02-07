@@ -35,6 +35,7 @@
                   ref="scrollHorizontal"
                   direction="horizontal"
                   :options="horizontalOptions"
+                  :data="historySearchs"
                   class="horizontal-scroll-list-wrap"
                 >
                   <ul class="history-content">

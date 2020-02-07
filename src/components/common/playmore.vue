@@ -33,7 +33,7 @@
           :options="options">
 
       <ul class="build-center">
-        <li>
+        <li v-if="!single">
           <div class="build-icon">
             <i class="iconfont iconbofang5"></i>
           </div>
@@ -49,7 +49,7 @@
             <span>收藏到歌单</span>
           </div>
         </li>
-        <li>
+        <li v-if="!single">
           <div class="build-icon">
             <i class="iconfont iconxiazaigequ"></i>
           </div>
@@ -58,7 +58,7 @@
             <span class="vip-css">vip</span>
           </div>
         </li>
-        <li>
+        <li v-if="!single">
           <div class="build-icon">
             <i class="iconfont iconpinglun"></i>
           </div>
@@ -66,7 +66,7 @@
             <span>评论</span>
           </div>
         </li>
-        <li @click="toShare">
+        <li @click="toShare" v-if="!single">
           <div class="build-icon">
             <i class="iconfont iconfenxiang"></i>
           </div>
@@ -82,6 +82,19 @@
             <span>歌手：
               {{track.ar && Artist(track.ar) || Artist(track.artists)}}
             </span>
+          </div>
+        </li>
+        <li v-if="single">
+          <div class="build-icon">
+            <i class="iconfont iconzuijinbofang"></i>
+          </div>
+          <div class="build-text">
+            <span>来源:
+               歌单:'明年今日'
+            </span>
+            <!-- <span>
+              暂无来源
+            </span> -->
           </div>
         </li>
         <li v-if="noAlbum" @click.stop="toAlbum">
@@ -102,6 +115,14 @@
             <span>单曲购买</span>
           </div>
         </li>
+        <li v-if="single">
+          <div class="build-icon">
+            <i class="iconfont iconzuijinbofang"></i>
+          </div>
+          <div class="build-text">
+            <span>音质:自动选择</span>
+          </div>
+        </li>
         <li @click="ring">
           <div class="build-icon">
             <i class="iconfont iconcailingdingzhi"></i>
@@ -117,6 +138,14 @@
           </div>
           <div class="build-text">
             <span>查看视频</span>
+          </div>
+        </li>
+        <li v-if="single">
+          <div class="build-icon">
+            <i class="iconfont iconzuijinbofang"></i>
+          </div>
+          <div class="build-text">
+            <span>相似推荐</span>
           </div>
         </li>
         <li>
@@ -163,6 +192,10 @@
         noAlbum: {
           type: Boolean,
           default: true
+        },
+        single: {
+          type: Boolean,
+          default: false
         }
       },
       methods: {

@@ -67,7 +67,7 @@ export const timestampOther = (timestamp) => {
   }
 }
 
-// 播放时长转换
+// 播放时长转换毫秒转
 export const durationsTransformation = (durations) => {
   // 对时间戳进行转化为分秒
   durations = durations / 1000// 转换为多少秒
@@ -77,5 +77,21 @@ export const durationsTransformation = (durations) => {
   // let second = _pad(durations) % 60;
   let second = durations % 60
   second = second < 10 ? '0' + second : second// 秒数前面补零操作
+  return `${minute}:${second}`
+}
+
+// 播放时长转换
+export const dtTrans = (interval) => {
+  interval = interval | 0 // 互零操作符，一个正数向下取整 相当于Math.floor方法
+  const minute = interval / 60 | 0
+  function _pad (num, n = 2) {
+    let len = num.toString().length
+    while (len < n) {
+      num = '0' + num
+      len++
+    }
+    return num
+  }
+  const second = _pad(interval % 60) // 秒数前面补零操作
   return `${minute}:${second}`
 }

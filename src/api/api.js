@@ -335,11 +335,11 @@ const playmusic = {
   lyric (id) {
     return axios.get(`${base}/lyric?id=${id}`)
   },
-  program (rid, limit, offset, asc) {
-    return axios.get(`${base}/dj/program?rid=${rid}&limit=${limit}&offset=${offset}&asc=${asc}`)
+  url (id) {
+    return axios.get(`${base}/song/url?id=${id}`)
   },
-  subs (rid, t) {
-    return axios.get(`${base}/dj/sub?rid=${rid}&t=${t}`)
+  check (id) {
+    return axios.get(`${base}/check/music?id=${id}`)
   },
   comments (id, offset = 0, limit = 20) {
     return axios.get(`${base}/comment/dj?id=${id}&offset=${offset}&limit=${limit}`)
