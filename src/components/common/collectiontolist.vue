@@ -2,6 +2,9 @@
   <div class="share">
     <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2004">
 
+      
+    <transition name="cube-action-sheet-move">
+
       <div class="build">
         <ul class="top">
           <li class="top-left">收藏到歌单</li>
@@ -45,6 +48,9 @@
       </div>
 
       </div>
+
+            </transition>
+
     </cube-popup>
   </div>
 </template>
@@ -222,4 +228,12 @@
                 height:20px
                 line-height:20px
                 color:gray
+
+
+    .cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
+      opacity: 0
+    .cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+      transition: all .3s ease-in-out
+
 </style>
+

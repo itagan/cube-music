@@ -6,7 +6,7 @@
         <div class="user-background" ref="bgEnlarge">
           <img width="100%" height="100%" v-lazy="currentSong.al.picUrl" alt="" ref="Enlarge" v-if="currentSong.al">
         </div>
-        <div class="middle-container" v-show="ismusic" @click="toLyric">
+        <div class="middle-container"  @click="toLyric" ref="MusicChange">
            <!-- 中间部分：唱片 -->
           <div class="middle">
             <div class="middle-l">
@@ -58,7 +58,7 @@
           </ul>
         </div>
         
-        <div class="middle-container-lyric" v-show="!ismusic" @click="toMusic">
+        <div class="middle-container-lyric visibility"  @click="toMusic" ref="LyricChange">
           <ul class="middle-container-lyric-volume">
             <li>
               <i class="iconfont iconlaba"></i>
@@ -190,6 +190,7 @@ export default {
       checkLists:[],
       isMore: false,
       firstLyric:true,
+      isPureMusic: false,
       options: {
         scrollbar: true
       },
@@ -227,9 +228,9 @@ export default {
       this.$nextTick(() => {
         newPlaying ? audio.play() : audio.pause()
       })
-      this.$nextTick(() => {
-        newPlaying ? this.currentLyric.play() : this.currentLyric.stop()
-      })
+      // this.$nextTick(() => {
+      //   newPlaying ? this.currentLyric.play() : this.currentLyric.stop()
+      // })
       // if (!newPlaying) {
       //   if (this.fullScreen) {
       //     this.syncWrapperTransform('imageWrapper', 'image')
@@ -295,6 +296,8 @@ export default {
       this.$api.playmusic.lyric(this.currentSong.id).then(res =>{
         if(res.data.code === 200) {
           this.currentLyric = new Lyric(res.data.lrc.lyric, this.handleLyric)
+          this.isPureMusic = !this.currentLyric.lines.length
+          
           if (this.playing) {
           this.currentLyric.play()
           // // 歌词重载以后 高亮行设置为 0
@@ -322,7 +325,9 @@ export default {
       })
     },
     toLyric () {
-      this.ismusic = false
+      // this.ismusic = false
+      this.$refs.MusicChange.classList.add('visibility')
+      this.$refs.LyricChange.classList.remove('visibility')
       //解决一开始不能滚动问题
       this.$nextTick(() => {
         if(this.currentLyric && this.firstLyric) {
@@ -332,7 +337,9 @@ export default {
       })
     },
     toMusic () {
-      this.ismusic = true
+      // this.ismusic = true
+      this.$refs.LyricChange.classList.add('visibility')
+      this.$refs.MusicChange.classList.remove('visibility')
     },
     controlPlay () {
       this.setPlayingState(!this.playing)
@@ -345,9 +352,9 @@ export default {
       this.canLyricPlay = true
       // this.savePlayHistory(this.currentSong)
       // 如果歌曲的播放晚于歌词的出现，播放的时候需要同步歌词
-      // if (this.currentLyric && !this.isPureMusic) {
-      //   this.currentLyric.seek(this.currentTime * 1000)
-      // }
+      if (this.currentLyric && !this.isPureMusic) {
+        this.currentLyric.seek(this.currentTime * 1000)
+      }
     },
     paused () {
       this.setPlayingState(false)
@@ -390,7 +397,7 @@ export default {
       this.scrollY = -y
     },
     handleLyric ({ lineNum, txt }) {
-      console.log({ lineNum, txt })
+      // console.log({ lineNum, txt })
       if (!this.$refs.lyricLine) {
         return
       }
@@ -398,10 +405,13 @@ export default {
       if (lineNum > 5) {
         let lineEl = this.$refs.lyricLine[lineNum - 5]
         this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
+        console.log(lineEl)
+        console.log(this.currentLineNum)
       } else {
         this.$nextTick(() => {
           this.$refs.Scroll.scrollTo(0, 0, 1000)
         })
+        // console.log(this.currentLineNum)
       }
       // this.playingLyric = txt
     },
@@ -528,7 +538,8 @@ export default {
         width:100%
         height:507px
         margin-top:50px  
-        position:relative 
+        position:absolute
+
         .middle
           position: fixed
           width: 100%
@@ -615,6 +626,7 @@ export default {
         height:507px
         margin-top:50px  
         position:relative 
+        // visibility:hidden
         .middle-container-lyric-volume
           flex-between()
           margin:auto 10px
@@ -658,6 +670,9 @@ export default {
             font-size:$font-size-large-x
             color:white  
 
+
+    .visibility
+      visibility:hidden
 
     @keyframes rotate
       0%

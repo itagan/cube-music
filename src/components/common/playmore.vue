@@ -1,7 +1,7 @@
 <template>
   <div class="mask" @click.self="cancel">
-    <transition name="fade-more" v-if="visible">
-    <div class="build">
+    <transition name="fade-more"  v-if="visible">
+    <div class="build"  v-if="visible">
       <ul class="build-top" v-show="isVip">
         <li class="li-img">
           <img :src="track.al && track.al.picUrl || track.album.artist.img1v1Url" alt="">
