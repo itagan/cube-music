@@ -5,23 +5,27 @@
         :loop="false"
         :autoPlay="false"
         :threshold="0.1"
-        :showDots = 'false'
+        :showDots = 'true'
         @change="slideChange">
         
+        <template slot="dots" slot-scope="props">
+          <span class="my-dot" :class="{active: props.current === index}" v-for="(item, index) in props.dots" :key="index">{{index + 1}}</span>
+        </template>
+
         <cube-slide-item :index="0" >
           <div class="list">
             <div class="list-top">
-              上次播放
+              历史播放
             </div>
             <ul class="list-top-mode">
               <li>
                 歌单:
-                <span>一周上新</span>
+                <span>富士山下</span>
               </li>
             </ul>
             <div class="scroll-list-wrap" ref="increaseHeight">
               <cube-scroll
-                ref="scroll"
+                ref="Scroll"
                 :options="options"
                 :scroll-events="scrollEvents"
                 >
@@ -47,16 +51,65 @@
           </div>
         </cube-slide-item>
 
-        <cube-slide-item :index="1">
+        <cube-slide-item :index="1" >
+          <div class="list">
+            <div class="list-top">
+              上次播放
+            </div>
+            <ul class="list-top-mode">
+              <li>
+                歌单:
+                <span>一周上新</span>
+              </li>
+            </ul>
+            <div class="scroll-list-wrap" ref="increaseHeight">
+              <cube-scroll
+                ref="Scroll"
+                :options="options"
+                :scroll-events="scrollEvents"
+                >
+              <ul class="list-center">
+                  <li v-for="(item,index) in sequenceList" :key="index" class="li" @click.stop="toCheckMusic(item, index)"> 
+                    <base-auto class="my-songs-base">
+                      <i slot="left" class="iconfont iconlaba"  v-if="index === currentIndex"></i>
+                      <div class="list-center-li-left" slot="liRight">
+                        <span>红玫瑰</span>
+                        -
+                        <span>陈奕迅</span>
+                      </div>
+                      <div slot="rightFollow">
+                        播放来源
+                      </div>
+                      <i slot="rightShare" class="iconfont icon-ellipsis"></i>
+                    </base-auto>
+                  </li>
+                </ul>
+              </cube-scroll>
+            </div>
+            <div class="list-bottom-close" @click="close">关闭</div>
+          </div>
+        </cube-slide-item>
+
+        <cube-slide-item :index="2">
           <div class="list">
             <div class="list-top">
               当前播放
               <span>(4)</span>
             </div>
             <ul class="list-top-mode">
-              <li class="list-top-mode-left">
-                <i class="iconfont icongengxin"></i>
-                <span>列表循环</span>
+              <li class="list-top-mode-left" @click.stop="changeMode">
+                <div v-show="this.mode === playMode.sequence">
+                  <i class="iconfont icongengxin"></i>
+                  <span>列表循环</span>
+                </div>
+                <div v-show="this.mode === 1">
+                  <i class="iconfont iconwodediantai"></i>
+                  <span>单曲循环</span>
+                </div>
+                <div v-show="this.mode === 2">
+                  <i class="iconfont iconpaobu"></i>
+                  <span>随机播放</span>
+                </div>
               </li>
                <li class="list-top-mode-right"> 
                 <div class="list-top-mode-right-all">
@@ -69,18 +122,18 @@
             </ul>
             <div class="scroll-list-wrap" ref="increaseHeight">
               <cube-scroll
-                ref="scroll"
+                ref="Scroll"
                 :options="options"
                 :scroll-events="scrollEvents"
                 >
               <ul class="list-center-ul">
-                  <li v-for="(item,index) in playlist" :key="index" class="list-center-li" @click.stop="toCheckMusic(item, index)"> 
+                  <li v-for="(item,index) in sequenceList" :key="index" class="list-center-li" @click.stop="toCheckMusic(item, index)" ref="lyricLine"> 
                     <base-auto class="my-songs-base">
                       <i slot="left" class="iconfont iconlaba" style="color:red" v-if="index === currentIndex"></i>
                       <div class="list-center-li-left" slot="liRight">
                         <div class="list-center-li-left-name" :class="index === currentIndex ? activeClass : ''">
                           {{item.name}}-
-                          <span class="list-center-li-left-ar">{{Trans(item.artists || item.ar)}}</span>
+                          <span class="list-center-li-left-ar" :class="index === currentIndex ? activeClass : ''">{{Trans(item.artists || item.ar)}}</span>
                         </div>
                       </div>
                       <div slot="rightFollow" class="list-center-li-right" v-if="index === currentIndex">
@@ -101,6 +154,8 @@
 
 <script>
 import baseAuto from '../../base/swiper/baseauto'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+import {playMode} from '../../common/js/config'
 
 export default {
   components: {
@@ -110,11 +165,15 @@ export default {
     playlist:{
       type:Array,
       default:[]
-    }
+    },
+    // currentIndex: {
+    //   type:Number,
+    //   default:-1
+    // }
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 2,
       showList:false,
       options: {
         scrollbar: true
@@ -122,11 +181,25 @@ export default {
       scrollY: 0,
       scrollEvents: ['scroll'],
       currentIndex:-1,
-      activeClass:'active-class'
+      activeClass:'active-class',
+      playMode:playMode
     }
   },
-  watch: {},
-  computed: {},
+  watch: {
+    currentSong (newSong, oldSong) {
+      if (!newSong.id  || newSong.id === oldSong.id) {
+        return
+      }
+      this.getInd (newSong.id)
+    },
+  },
+  computed: {
+    ...mapGetters([
+    'mode',
+    'sequenceList',
+    'currentSong',
+    ])
+  },
   methods: {
     toggles (index) {
       this.currentPage = index
@@ -136,6 +209,14 @@ export default {
     },
     show () {
       this.showList = true
+      if(this.currentIndex !== -1 && this.currentIndex >= 6) {
+        this.$nextTick(() => {
+          let lineEl = this.$refs.lyricLine[6]
+          // this.$refs.Scroll.scrollTo(0,300, 200)
+          this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
+        })
+         console.log('打开')
+      }
     },
     hide () {
       this.showList = false
@@ -146,8 +227,27 @@ export default {
     close () {
       this.hide ()
     },
+    changeMode () {
+      const mode = (this.mode + 1) % 3
+      this.setPlayMode(mode)
+      let list = null
+      if(mode === playMode.random) {
+        list = shuffle(this.playlist)
+      }
+    },
+    getInd (id) {
+      let ind = this.sequenceList.findIndex(item => {
+        return item.id === id
+      })
+      if(ind >= 0) {
+        this.currentIndex = ind
+        // this.$emit('changeInd',ind)
+      }
+    },
     toCheckMusic(item,index) {
-      this.currentIndex = index
+      // this.currentIndex = index
+      this.$emit('changeInd',item.id)
+      this.hide ()
     },
     Trans (alias) {
       let arr = []
@@ -156,6 +256,10 @@ export default {
       }
       return arr.join('/')
     },
+    ...mapMutations({
+      setPlayMode: 'SET_PLAY_MODE',
+      // setCurrentIndex: 'SET_CURRENT_INDEX',
+    }),
   },
   created() {},
   mounted() {}
@@ -178,16 +282,13 @@ export default {
     right:0
     .cube-slide
       width:100%
-      height:500px
+      height:530px
       background-color:none
       font-size:$font-size-medium
       position:absolute
       bottom:10px
-      // border-top-left-radius:15px
-      // border-top-right-radius:15px
       .cube-slide-item
-        // border-radius:15px
-        // width:90%
+        margin-top:10px
         .list
           border-radius:15px
           background-color:white
@@ -227,7 +328,7 @@ export default {
                 margin-top:5px
 
           .scroll-list-wrap
-            height:360px
+            height:380px
             .list-center-ul
               height:auto
               .list-center-li
@@ -247,7 +348,7 @@ export default {
                     max-width:200px  
                     color:red
                     .list-center-li-left-ar
-                      color:gray
+                      color:red
                       font-size:$font-size-small
                 .list-center-li-right
                   .list-center-li-right-play
@@ -266,4 +367,17 @@ export default {
             height:50px
             border-top: 1px solid rgba(128,128,128,.2)
             flex-center()
+
+    .cube-slide >>>
+      .cube-slide-dots
+        top: 0px 
+        height: 5px
+        z-index:2002
+        .my-dot
+          width: 6px
+          height: 6px
+          border-radius:50% 
+          background-color:rgba(128,128,128,.3)
+        .active  
+          background-color:white 
 </style>

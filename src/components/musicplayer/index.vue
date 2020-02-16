@@ -81,15 +81,7 @@
               >
               <ul class="lyric-content">
                 <li class="li" v-for="(line,index) in currentLyric.lines" :key="index" :class="{'current': currentLineNum === index}">
-                  <!-- <div class="lyric-wrapper">
-                    <div v-if="currentLyric"> -->
-                      <p ref="lyricLine"
-                      >{{line.txt}}</p>
-                    <!-- </div>
-                    <div class="pure-music" v-show="isPureMusic">
-                      <p>{{pureMusicLyric}}</p>
-                    </div>
-                  </div> -->
+                  <p ref="lyricLine">{{line.txt}}</p>
                 </li>
               </ul>
             </cube-scroll>
@@ -109,8 +101,8 @@
           </div>
 
           <ul class="player-bottom-icon">
-            <li @click.stop="taggleMode"> 
-              <i class="iconfont icongengxin"></i>
+            <li @click.stop="changeMode"> 
+              <i class="iconfont" :class="iconMode"></i>
             </li>
             <li @click.stop="prev">
               <i class="iconfont iconkuaitui2"></i>
@@ -130,7 +122,7 @@
     </transition>
     <audio ref="audio"  @playing="ready" @error="error" @timeupdate="updateTime"
            @ended="end" @pause="paused"></audio>
-    <play-list ref="showPlayList" :playlist="playlist"></play-list>
+    <play-list ref="showPlayList" :playlist="playlist"  @changeInd="changeInd"></play-list>
     <play-more
       v-if="isMore"
       @ring="setRing"
@@ -161,6 +153,8 @@ import collectionToList from '../common/collectiontolist'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import Lyric from 'lyric-parser'
 import {durationsTransformation, dtTrans} from '../../assets/js/timestamp'
+import {playMode} from '../../common/js/config'
+import {shuffle} from '../../common/js/util'
 
 export default {
   components: {
@@ -191,6 +185,7 @@ export default {
       isMore: false,
       firstLyric:true,
       isPureMusic: false,
+      nextprev:false,
       options: {
         scrollbar: true
       },
@@ -228,16 +223,6 @@ export default {
       this.$nextTick(() => {
         newPlaying ? audio.play() : audio.pause()
       })
-      // this.$nextTick(() => {
-      //   newPlaying ? this.currentLyric.play() : this.currentLyric.stop()
-      // })
-      // if (!newPlaying) {
-      //   if (this.fullScreen) {
-      //     this.syncWrapperTransform('imageWrapper', 'image')
-      //   } else {
-      //     this.syncWrapperTransform('miniWrapper', 'miniImage')
-      //   }
-      // }
     },
   },
   computed: {
@@ -246,13 +231,17 @@ export default {
     'fullScreen',
     'playing',
     'playlist',
-    'currentSong'
+    'currentSong',
+    'mode'
     ]),
     // RotateClass () {
     //   return this.playing ? 'play' : 'pause'
     // },
     playIcon () {
       return this.playing ? 'iconzanting2' : 'iconbofang'
+    },
+    iconMode () {
+      return this.mode === playMode.sequence ? 'icongengxin' : this.mode === playMode.loop ? 'iconwodediantai' : 'iconpaobu'
     },
     percent () {
       return this.currentTime / (this.currentSong.dt / 1000)
@@ -272,20 +261,11 @@ export default {
       this.currentPage = index
     },
     slideChange (index) {
-      // this.currentPage = index
-      if (this.currentLyric) {
-        this.currentLyric.stop()
-        // 重置为null
-        this.currentLyric = null
-        this.currentTime = 0
-        // this.playingLyric = ''
-        this.currentLineNum = 0
+      if(!this.nextprev) {
+          this.setCurrentIndex(index)
+          // console.log('滑动播放触发')
       }
-      this.setCurrentIndex(index)
-      this.setPlayingState(true)
-      // this.$nextTick(() => {
-      //   this.currentLyric.play()
-      // })
+      this.nextprev = false
     },
     getLyric () {
       if (this.currentLyric) {
@@ -297,7 +277,7 @@ export default {
         if(res.data.code === 200) {
           this.currentLyric = new Lyric(res.data.lrc.lyric, this.handleLyric)
           this.isPureMusic = !this.currentLyric.lines.length
-          
+          // console.log(this.currentLyric)
           if (this.playing) {
           this.currentLyric.play()
           // // 歌词重载以后 高亮行设置为 0
@@ -313,8 +293,21 @@ export default {
       this.$api.playmusic.url(id).then(res =>{
         if(res.data.code === 200) {
           this.url = res.data.data[0].url
+          if(!this.url) {
+             const toast = this.$createToast({
+              txt: '富则悦耳，否则下一首',
+              type:'error',
+              time: 1500,
+              zIndex:2005,
+              mask:true,
+              onTimeout: () => {
+                this.next()
+              }
+            })
+            toast.show()
+          }
         }
-        console.log(this.url)
+        // console.log(this.url)
       })
     },
     getCheck () {
@@ -344,6 +337,68 @@ export default {
     controlPlay () {
       this.setPlayingState(!this.playing)
 
+    },
+    prev () {
+      this.nextprev = true
+      let index =  this.currentIndex - 1
+      if (this.currentLyric) {
+        this.currentLyric.stop()
+        // 重置为null
+        this.currentLyric = null
+        this.currentTime = 0
+        // this.playingLyric = ''
+        this.currentLineNum = 0
+      }
+      this.setCurrentIndex(index)
+      this.setPlayingState(true)
+      // this.nextprev = true
+    },
+    next () {
+      this.nextprev = true
+      let index =  this.currentIndex + 1
+      if (this.currentLyric) {
+        this.currentLyric.stop()
+        // 重置为null
+        this.currentLyric = null
+        this.currentTime = 0
+        // this.playingLyric = ''
+        this.currentLineNum = 0
+      }
+      this.setCurrentIndex(index)
+      this.setPlayingState(true)
+      // this.nextprev = true
+    },
+    changeMode () {
+      const mode = (this.mode + 1) % 3
+      this.setPlayMode(mode)
+      let list = null
+      if(mode === playMode.random) {
+        list = shuffle(this.playlist)
+        console.log(list)
+      }
+      // this.selectPlay({
+      //   list: list,
+      //   index:index
+      // })
+      switch(mode)
+        {
+          case 0:
+              this.textShow('列表循环')
+              break
+          case 1:
+              this.textShow('单曲循环')
+              break
+          default:
+              this.textShow('随机播放')
+        }
+    },
+    textShow(text) {
+      this.toast = this.$createToast({
+        txt: text,
+        type: 'txt',
+        zIndex:2005
+      })
+      this.toast.show()
     },
     ready () {
       clearTimeout(this.timer)
@@ -405,8 +460,8 @@ export default {
       if (lineNum > 5) {
         let lineEl = this.$refs.lyricLine[lineNum - 5]
         this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
-        console.log(lineEl)
-        console.log(this.currentLineNum)
+        // console.log(lineEl)
+        // console.log(this.currentLineNum)
       } else {
         this.$nextTick(() => {
           this.$refs.Scroll.scrollTo(0, 0, 1000)
@@ -414,6 +469,24 @@ export default {
         // console.log(this.currentLineNum)
       }
       // this.playingLyric = txt
+    },
+    changeInd (id) {      
+      // this.currentIndex = index
+      if (this.currentLyric) {
+        this.currentLyric.stop()
+        // 重置为null
+        this.currentLyric = null
+        this.currentTime = 0
+        // this.playingLyric = ''
+        this.currentLineNum = 0
+      }
+      let ind = this.playlist.findIndex(item => {
+        return item.id === id
+      })
+      if(ind >= 0) {
+        this.setCurrentIndex(ind)
+        this.setPlayingState(true)
+      }
     },
     format (urations) {
       return durationsTransformation(urations)
@@ -501,8 +574,11 @@ export default {
       setFullScreen: 'SET_FULL_SCREEN',
       setCurrentIndex:'SET_CURRENT_INDEX',
       setPlayingState: 'SET_PLAYING_STATE',
-
+      setPlayMode: 'SET_PLAY_MODE'
     }),
+     ...mapActions([
+          'selectPlay'
+        ])
   },
   created() {},
   mounted() {

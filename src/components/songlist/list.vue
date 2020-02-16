@@ -4,11 +4,11 @@
       <li v-for="(item, index) in tracks" :key="item.id"  @click.stop="toCheckMusic(item, index)">
         <div class="song-base">
           <div class="num">
-            <span v-show="index !== currentIndex">{{index + +1}}</span>
-            <i class="iconfont iconlaba" v-show="index === currentIndex"></i>
+            <span v-show="index !== currentInd">{{index + +1}}</span>
+            <i class="iconfont iconlaba" v-show="index === currentInd"></i>
           </div>
           <div class="song-base-content">
-            <div class="title" :style="[index === currentIndex ? {color:'red'} : '']">
+            <div class="title" :style="[index === currentInd ? {color:'red'} : '']">
               <span class="title-left">{{item.name}}</span>
               <span class="title-right" v-if="item.tns && item.tns.length">({{item.tns[0]}})</span>
             </div>
@@ -37,7 +37,7 @@
         <cube-checkbox :option="{value:index+ +1}" class="checkbox-css">
         <div class="song-base">
           <div class="song-base-content">
-            <div class="title" :style="[index === currentIndex ? {color:'red'} : '']">
+            <div class="title" :style="[index === currentInd ? {color:'red'} : '']">
               <span class="title-left">{{item.name}}</span>
               <span class="title-right" v-if="item.tns && item.tns.length">({{item.tns[0]}})</span>
             </div>
@@ -73,7 +73,7 @@
           activeColor: 'activeColor',
           checkList: [],
           val: 1,
-          currentIndex:-1
+          // currentInd:-1
         }
       },
       props: {
@@ -94,8 +94,12 @@
           default: false
         },
         isself:{
-          ype: Boolean,
+          type: Boolean,
           default: false
+        },
+        currentInd: {
+          type:Number,
+          default:-1
         }
       },
       watch: {
@@ -104,7 +108,18 @@
         },
         allShow (val) {
           this.checkbox = val
-        }
+        },
+        currentSong (newSong, oldSong) {
+          if (!newSong.id  || newSong.id === oldSong.id) {
+            return
+          }
+          this.getInd (newSong.id)
+        },
+      },
+      computed: {
+        ...mapGetters([
+          'currentSong',
+        ]),
       },
       methods: {
         more (item) {
@@ -126,7 +141,8 @@
         toCheckMusic(item,index) {
           if(this.checkbox) {
           }else {
-            this.currentIndex = index
+             this.$emit('changeInd',index)
+            // this.currentInd = index
             // this.$router.push({
             //   path: `/musicplayer`,
             //   // query: {
@@ -134,7 +150,7 @@
             //   // }
             // })
             this.selectPlay({
-              list: this.tracks,
+              list: this.tracks.slice(),
               index:index
             })
           }
@@ -154,7 +170,16 @@
           this.checkList = []
           this.$emit('changebg',false)
         },
-            // 选中的有哪些
+        getInd (id) {
+          let ind = this.tracks.findIndex(item => {
+            return item.id === id
+          })
+          if(ind >= 0) {
+            // this.currentInd = ind
+            this.$emit('changeInd',ind)
+          }
+        },
+          // 选中的有哪些
         whoChecked () {
           this.checkLists = []
           for(let i = 0; i < this.checkList.length; i++) {
@@ -167,6 +192,20 @@
         ...mapActions([
           'selectPlay'
         ])
+      },
+      mounted () {
+        this.$nextTick(() => {
+          //  console.log(this.tracks)
+          //  console.log(this.currentSong.id)
+          // this.getInd (this.currentSong.id)
+          // this.$emit('changeCor',this.currentSong.id)
+        })
+      },
+      created () {
+        // this.$nextTick(() => {
+        //    console.log(this.currentSong.id)
+        //   this.getInd (this.currentSong.id)
+        // })
       }
     }
 </script>

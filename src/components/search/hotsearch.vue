@@ -82,7 +82,7 @@
                 <span>{{item.keyword}}</span>
               </li>
             </ul>
-      </cube-scroll>
+        </cube-scroll>
       </div>
   </div>
 </template>
