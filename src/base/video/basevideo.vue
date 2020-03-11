@@ -40,12 +40,13 @@
         <div class="control" v-show="this.speedWidth && speedShow" ref="progressBar">
           <div class="bar-inner">
             <div class="speed" ref="speed"></div>
+            
             <div
               ref="controlBtn"
               v-show="controlBtn"
-              @touchstart.prevent="btnTouchStart"
-              @touchmove.prevent="btnTouchMove"
-              @touchend="btnTouchEnd"
+              @touchstart.stop.prevent="btnTouchStart"
+              @touchmove.stop.prevent="btnTouchMove"
+              @touchend.stop.prevent="btnTouchEnd"
             >
             <div class="control-btn" ref="btn"></div>
           </div>

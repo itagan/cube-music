@@ -19,7 +19,7 @@
       class="my-input"
     ></cube-input>
 
-    <cube-button class="login" :light="true" @click="login">立即登录</cube-button>
+    <cube-button class="login" :light="true" @click.stop="login">立即登录</cube-button>
 
     <div class="reset">
       <span>重设密码</span>
@@ -85,21 +85,26 @@
           })
         },
         login () {
-          this.getRes()
+          // this.getRes()
+          
             // 提示方法
           const toast = msg => {
             this.$createToast({
               time: 1000,
               txt: msg,
               type: 'error'
-
             })
           }
 
-          if (this.code === 400) {
+          this.$api.users.cellphone(this.phone, this.value).then(res => {
+            this.code = res.data.code
+            // this.uid = res.data.account.id
+            console.log(res)
+            if (this.code === 502) {
             toast.show('密码错误！')
           } else if (this.code === 200) {
                     // 把用户id信息提交到vuex
+            this.uid = res.data.account.id
             this.setUid(this.uid)
 
                 // 登录成功，刷新登录状态
@@ -118,6 +123,31 @@
               }
             })
           }
+            
+          })
+
+          // if (this.code === 400) {
+          //   toast.show('密码错误！')
+          // } else if (this.code === 200) {
+          //           // 把用户id信息提交到vuex
+          //   this.setUid(this.uid)
+
+          //       // 登录成功，刷新登录状态
+          //   this.$api.users.refresh().then(res => {
+          //     console.log(res)
+          //     if (res.status === 200) {
+          //       console.log('刷新状态成功')
+          //           // 刷新成功，可以登录并跳转到首页
+          //       this.$router.push(
+          //         {
+          //           path: '/find'
+          //         }
+          //               )
+          //     } else {
+          //       console.log('刷新状态失败')
+          //     }
+          //   })
+          // }
         },
         ...mapMutations({
           setUid: 'SET_UID'
