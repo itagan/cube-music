@@ -1,18 +1,23 @@
 <template>
-  <div class="mask" v-if="showList" @click.self="cancel">
+<transition name="cube-action-sheet-fade">
+  <div class="mask"  @click.self="cancel" v-show="showList">
+    <transition name="cube-action-sheet-move">
      <cube-slide
         :initialIndex="currentPage"
         :loop="false"
         :autoPlay="false"
         :threshold="0.1"
         :showDots = 'true'
-        @change="slideChange">
+        :options="SlideOptions"
+        @change="slideChange"
+        v-if="showList"
+        >
         
         <template slot="dots" slot-scope="props">
           <span class="my-dot" :class="{active: props.current === index}" v-for="(item, index) in props.dots" :key="index">{{index + 1}}</span>
         </template>
 
-        <cube-slide-item :index="0" >
+        <cube-slide-item :index="0" class="slide-item-left">
           <div class="list">
             <div class="list-top">
               历史播放
@@ -25,7 +30,6 @@
             </ul>
             <div class="scroll-list-wrap" ref="increaseHeight">
               <cube-scroll
-                ref="Scroll"
                 :options="options"
                 :scroll-events="scrollEvents"
                 >
@@ -51,7 +55,7 @@
           </div>
         </cube-slide-item>
 
-        <cube-slide-item :index="1" >
+        <cube-slide-item :index="1" class="slide-item-center">
           <div class="list">
             <div class="list-top">
               上次播放
@@ -64,7 +68,6 @@
             </ul>
             <div class="scroll-list-wrap" ref="increaseHeight">
               <cube-scroll
-                ref="Scroll"
                 :options="options"
                 :scroll-events="scrollEvents"
                 >
@@ -90,11 +93,11 @@
           </div>
         </cube-slide-item>
 
-        <cube-slide-item :index="2">
+        <cube-slide-item :index="2" class="slide-item-right"> 
           <div class="list">
             <div class="list-top">
               当前播放
-              <span>(4)</span>
+              <span>({{sequenceList.length}})</span>
             </div>
             <ul class="list-top-mode">
               <li class="list-top-mode-left" @click.stop="changeMode">
@@ -149,7 +152,10 @@
           </div>
         </cube-slide-item>
       </cube-slide>
+    </transition>
+
   </div>
+  </transition>
 </template>
 
 <script>
@@ -178,6 +184,9 @@ export default {
       options: {
         scrollbar: true
       },
+      SlideOptions: {
+        // scrollX: 50
+      },
       scrollY: 0,
       scrollEvents: ['scroll'],
       currentIndex:-1,
@@ -192,6 +201,24 @@ export default {
       }
       this.getInd (newSong.id)
     },
+    showList (val) {
+      if(val) {
+        if(this.currentIndex !== -1 && this.currentIndex >= 6) {
+        this.$nextTick(() => {
+          // let lineEl = this.$refs.lyricLine[6]
+          // this.$refs.Scroll.scrollBy(0,300, 200)
+          // this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
+          // console.log(this.$refs.Scroll)
+          setTimeout(() => {
+            let lineEl = this.$refs.lyricLine[2]
+            // this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
+             this.$refs.Scroll.scrollTo(0,-50*(this.currentIndex - 5), 200)
+          }, 300)
+          // this.$refs.Scroll.scrollTo(0,300, 200)
+        })
+      }
+      }
+    }
   },
   computed: {
     ...mapGetters([
@@ -209,14 +236,6 @@ export default {
     },
     show () {
       this.showList = true
-      if(this.currentIndex !== -1 && this.currentIndex >= 6) {
-        this.$nextTick(() => {
-          let lineEl = this.$refs.lyricLine[6]
-          // this.$refs.Scroll.scrollTo(0,300, 200)
-          this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
-        })
-         console.log('打开')
-      }
     },
     hide () {
       this.showList = false
@@ -247,7 +266,7 @@ export default {
     toCheckMusic(item,index) {
       // this.currentIndex = index
       this.$emit('changeInd',item.id)
-      this.hide ()
+      // this.hide ()
     },
     Trans (alias) {
       let arr = []
@@ -289,6 +308,7 @@ export default {
       bottom:10px
       .cube-slide-item
         margin-top:10px
+        // margin-left:10px
         .list
           border-radius:15px
           background-color:white
@@ -380,4 +400,15 @@ export default {
           background-color:rgba(128,128,128,.3)
         .active  
           background-color:white 
+
+  .cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
+    opacity: 0
+  .cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+    transition: all .3s ease-in-out
+
+  .cube-action-sheet-move-enter, .cube-action-sheet-move-leave-active
+    transform: translate3d(0, 100%, 0)
+  .cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+    transition: all .3s ease-in-out
+
 </style>

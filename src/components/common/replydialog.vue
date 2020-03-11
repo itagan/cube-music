@@ -1,7 +1,10 @@
 <template>
-  <div class="ring-dialog-view">
-    <cube-popup ref="popup" @mask-click.stop="hide" :z-index="2001">
-      <div class="ring-dialog-wrapper">
+<!-- <transition name="cube-action-sheet-fade"> -->
+  <!-- <div class="ring-dialog-view"> -->
+    <cube-popup ref="popup" @mask-click.stop="hide" :z-index="2001" v-show="isVisible">
+      <transition name="cube-action-sheet-fade">
+
+      <div class="ring-dialog-wrapper" v-show="isVisible">
         <div class="triangle-top" v-if="diaTop"></div>
         <div class="triangle-bottom" v-if="!diaTop"></div>
         <ul class="ring-dialog-container">
@@ -23,8 +26,10 @@
           </li>
         </ul>
       </div>
+      </transition>
     </cube-popup>
-  </div>
+  <!-- </div> -->
+   <!-- </transition> -->
 </template>
 
 <script>
@@ -33,17 +38,20 @@ export default {
   props: {},
   data() {
     return {
-      diaTop:false
+      diaTop:false,
+      isVisible: false
     }
   },
   watch: {},
   computed: {},
   methods: {
     show () {
-      this.$refs.popup.show()
+      // this.$refs.popup.show()
+      this.isVisible = true
     },
     hide () {
-      this.$refs.popup.hide()
+      // this.$refs.popup.hide()
+      this.isVisible = false
     },
     diaTopChange () {
       this.diaTop = true
@@ -69,9 +77,9 @@ export default {
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/variable"
   @import "../../common/stylus/mixin"
-.ring-dialog-view
-  height 100%
-  width:100%
+// .ring-dialog-view
+//   height 100%
+//   width:100%
   .ring-dialog-wrapper
     position: relative
     min-width: 50px
@@ -128,10 +136,14 @@ export default {
       left:50%
       margin-left:-5px  
 
-.ring-dialog-view >>>
-  .cube-popup-mask
-   background-color:transparent
+// .ring-dialog-view >>>
+.cube-popup >>>
+  .cube-popup-mask 
+    background-color:transparent
 
-
+.cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
+  opacity: 0
+.cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+  transition: all .2s ease-in-out
 
 </style>

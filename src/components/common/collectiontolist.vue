@@ -1,11 +1,10 @@
 <template>
-  <div class="share">
-    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2004">
-
-      
+  <transition name="cube-action-sheet-fade">
+    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2004" v-show="isVisible">
     <transition name="cube-action-sheet-move">
+      
 
-      <div class="build">
+      <div class="build" v-show="isVisible">
         <ul class="top">
           <li class="top-left">收藏到歌单</li>
           <li class="top-center">
@@ -49,10 +48,9 @@
 
       </div>
 
-            </transition>
-
+      </transition>
     </cube-popup>
-  </div>
+    </transition>
 </template>
 
 <script>
@@ -68,7 +66,8 @@
           playing:false,
           id:'477726475',
           playlist:[],
-          codes:[]
+          codes:[],
+          isVisible: false
         }
       },
       props: {
@@ -80,13 +79,13 @@
       created() {},
       methods: {
         show () {
-          this.$refs.popup.show()
+          this.isVisible = true
           this.$nextTick(() => {
             this.getPlaylist()
           })
         },
         hide () {
-          this.$refs.popup.hide()
+          this.isVisible = false
         },
         getPlaylist () {
           this.$api.users.playlist(477726475).then(res => {
@@ -230,10 +229,15 @@
                 color:gray
 
 
-    .cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
-      opacity: 0
-    .cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
-      transition: all .3s ease-in-out
+.cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
+  opacity: 0
+.cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+  transition: all .3s ease-in-out
+
+.cube-action-sheet-move-enter, .cube-action-sheet-move-leave-active
+  transform: translate3d(0, 100%, 0)
+.cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+  transition: all .3s ease-in-out
 
 </style>
 

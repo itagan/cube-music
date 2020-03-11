@@ -1,13 +1,13 @@
 <template>
-  <div class="share">
-    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001">
-
+ <transition name="cube-action-sheet-fade">
+    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001" v-show="isVisible">
+    <transition name="cube-action-sheet-move">
       <!-- <div class="scroll-list-wrap">
         <cube-scroll
           ref="scroll"
           :options="options"> -->
 
-        <ul class="set-ring">
+        <ul class="set-ring" v-show="isVisible">
           <li class="set-ring-top">
             <span>设置选择</span>
           </li>
@@ -23,8 +23,10 @@
         <!-- </cube-scroll>
       </div> -->
 
+     </transition>
     </cube-popup>
-  </div>
+    </transition>
+ 
 </template>
 
 <script>
@@ -32,9 +34,7 @@
       name: 'setRing.vue',
       data () {
         return {
-          // options: {
-          //   scrollbar: true
-          // },
+          isVisible: false
         }
       },
       created () {
@@ -42,11 +42,10 @@
       },
       methods: {
         show () {
-          this.$refs.popup.show()
-          // this.$refs.scroll.refresh()
+          this.isVisible = true
         },
         hide () {
-          this.$refs.popup.hide()
+          this.isVisible = false
         },
         ring () {
           this.$createSubscribeDialog().show()
@@ -98,6 +97,15 @@
         text-align:center
         border-radius:2px
 
+.cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
+  opacity: 0
+.cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+  transition: all .3s ease-in-out
+
+.cube-action-sheet-move-enter, .cube-action-sheet-move-leave-active
+  transform: translate3d(0, 100%, 0)
+.cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+  transition: all .3s ease-in-out
 
 
 </style>

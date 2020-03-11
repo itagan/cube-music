@@ -1,8 +1,10 @@
 <template>
-  <div class="share">
-    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2004">
+  <transition name="cube-action-sheet-fade">
 
-      <div class="build">
+  <!-- <div class="share"> -->
+    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2004" v-show="isVisible">
+    <transition name="cube-action-sheet-move">
+      <div class="build" v-show="isVisible">
         <div class="build-top">
           <span>电台节目:</span>
           <span v-if="item && item.mainSong">{{item.mainSong.name}}</span>
@@ -17,7 +19,7 @@
           > -->
 
           <ul class="build-center">
-            <li class="li">
+            <li class="li" @click.stop="toLoad">
               <div class="build-icon">
                 <i class="iconfont iconxiazaigequ"></i>
               </div>
@@ -56,8 +58,12 @@
       </div> -->
 
       </div>
+        </transition>
+
     </cube-popup>
-  </div>
+  <!-- </div> -->
+    </transition>
+
 </template>
 
 <script>
@@ -75,7 +81,8 @@ import {mapActions} from 'vuex'
           playing:false,
           id:'477726475',
           playlist:[],
-          codes:[]
+          codes:[],
+          isVisible: false
         }
       },
       props: {
@@ -87,10 +94,12 @@ import {mapActions} from 'vuex'
       created() {},
       methods: {
         show () {
-          this.$refs.popup.show()
+          // this.$refs.popup.show() //引进动画不需要这个
+          this.isVisible = true
         },
         hide () {
-          this.$refs.popup.hide()
+          // this.$refs.popup.hide()
+          this.isVisible = false
         },
         toShare () {
           this.$emit('share')
@@ -106,6 +115,9 @@ import {mapActions} from 'vuex'
           let obj = {userId:''}
           obj.userId = item.dj.userId
           this.saveAuthor(obj)
+          this.hide()
+        },
+        toLoad () {
           this.hide()
         },
         scrollHandler ({ y }) {
@@ -179,4 +191,15 @@ import {mapActions} from 'vuex'
     //         margin-right:10px
     //       .build-text
     //         font-size:$font-size-medium
+
+
+    .cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
+      opacity: 0
+    .cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+      transition: all .3s ease-in-out
+
+    .cube-action-sheet-move-enter, .cube-action-sheet-move-leave-active
+      transform: translate3d(0, 100%, 0)
+    .cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+      transition: all .3s ease-in-out
 </style>

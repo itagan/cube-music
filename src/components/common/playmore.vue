@@ -1,6 +1,7 @@
 <template>
-  <div class="mask" @click.self="cancel">
-    <transition name="fade-more"  v-if="visible">
+  <transition name="cube-action-sheet-fade">
+    <div class="mask" @click.self="cancel" v-show="visible">
+      <transition name="cube-action-sheet-move">
     <div class="build"  v-if="visible">
       <ul class="build-top" v-show="isVip">
         <li class="li-img">
@@ -160,8 +161,9 @@
         </cube-scroll>
       </div>
     </div>
-    </transition>
-  </div>
+   </transition>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -202,6 +204,7 @@
         cancel () {
             // 触摸到遮罩层就取消本组件
           this.$emit('cancel')
+          this.hide () 
         },
         show () {
           this.visible = true
@@ -211,20 +214,25 @@
         },
         toShare () {
           this.$emit('share')
-          this.$emit('cancel')
+          // this.$emit('cancel')
+          this.hide () 
         },
         ring () {
           this.$emit('ring')
-          this.$emit('cancel')
+          // this.$emit('cancel')
+           this.hide () 
         },
         toSinger () {
           this.$emit('singer')
+           this.hide () 
         },
         toCollected () {
           this.$emit('collect')
+           this.hide () 
         },
         toAlbum () {
           this.$emit('album')
+           this.hide () 
         },
         Artist (artist) {
           let arr = []
@@ -350,13 +358,13 @@
 
 
 
-  /*动画效果*/
-  .fade-more-enter-active,
-  .fade-more-leave-active
-    transition: all .5s ease-in
-
-  .fade-more-enter,
-  .fade-more-leave-to
-    transform: translateY(700px)
+  .cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
     opacity: 0
+  .cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+    transition: all .3s ease-in-out
+
+  .cube-action-sheet-move-enter, .cube-action-sheet-move-leave-active
+    transform: translate3d(0, 100%, 0)
+  .cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+    transition: all .3s ease-in-out
 </style>

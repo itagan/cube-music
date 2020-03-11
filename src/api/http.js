@@ -78,6 +78,9 @@ const errorHandle = (status, other) => {
       toast('需要登录！')
       toLogin()
       break
+    case 502:
+      toast('没网络！')
+      break
     default:
       // console.log(other)
       toast(other)
