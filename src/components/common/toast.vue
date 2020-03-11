@@ -1,8 +1,9 @@
 <template>
-  <div class="share">
-    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2004">
+    <transition name="cube-action-sheet-fade">
+    <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001" v-show="isVisible">
+    <transition name="cube-action-sheet-move">
 
-      <div class="build">
+      <div class="build" v-show="isVisible">
         <div class="build-top">
           <span>电台节目:</span>
           <span v-if="item && item.mainSong">{{item.mainSong.name}}</span>
@@ -17,39 +18,6 @@
           > -->
 
           <ul class="build-center">
-            <!-- <li class="li">
-              <div class="build-icon">
-                <i class="iconfont iconxiazaigequ"></i>
-              </div>
-              <div class="build-text">
-                <span>下载</span>
-              </div>
-            </li>
-            <li class="li" @click.stop="toComment(item)">
-              <div class="build-icon">
-                <i class="iconfont iconpinglun"></i>
-              </div>
-              <div class="build-text">
-                <span>评论</span>
-                <span v-if="item.commentCount">({{item.commentCount}})</span>
-              </div>
-            </li>
-            <li class="li" @click.stop="toShare">
-              <div class="build-icon">
-                <i class="iconfont iconfenxiang"></i>
-              </div>
-              <div class="build-text">
-                <span>分享</span>
-              </div>
-            </li>
-            <li class="li">
-              <div class="build-icon">
-                <i class="iconfont iconjubao"></i>
-              </div>
-              <div class="build-text">
-                <span>举报</span>
-              </div>
-            </li> -->
             <li class="li" @click.stop="toShare" v-if="toasttype === 'dj'"> 
               <div class="build-icon">
                 <i class="iconfont iconbofang2"></i>
@@ -64,8 +32,9 @@
       </div> -->
 
       </div>
+    </transition>
     </cube-popup>
-  </div>
+    </transition>
 </template>
 
 <script>
@@ -84,6 +53,7 @@ import {mapActions} from 'vuex'
           id:'477726475',
           playlist:[],
           codes:[],
+          isVisible: false
         }
       },
       props: {
@@ -99,10 +69,10 @@ import {mapActions} from 'vuex'
       created() {},
       methods: {
         show () {
-          this.$refs.popup.show()
+          this.isVisible = true
         },
         hide () {
-          this.$refs.popup.hide()
+          this.isVisible = false
         },
         toShare () {
           this.$emit('share')

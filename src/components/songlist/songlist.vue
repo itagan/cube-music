@@ -87,6 +87,7 @@
           <list
             class="my-list"
             :tracks="songs"
+            :currentInd="currentInd"
             :complete="complete"
             :allShow="allShow"
             :isself="playlist && playlist.creator && playlist.creator.userId === 477726475"
@@ -94,6 +95,7 @@
             @toAll="toAllChecked"
             @whochecked="whoChecked"
             @changebg="changeColor"
+            @changeInd="changeInd"
             ref="ToCheck"
           ></list>
           <ul class="song-list-collection" ref="subTop">
@@ -145,6 +147,8 @@
     import collectionToList from '../common/collectiontolist'
     import checkFooter from '../common/checkfooter'
     import {serializeNumber} from '../../assets/js/number'
+    import {mapGetters} from 'vuex'
+
 
     export default {
       name: 'songList.vue',
@@ -195,6 +199,7 @@
           singers:[],
           checkLists:[],
           addColor:false,
+          currentInd:-1
         }
       },
       computed: {
@@ -206,6 +211,9 @@
             startY: -50
           }
         },
+        ...mapGetters([
+          'currentSong',
+        ]),
         // pullUpLoadObj: function () {
         //   return this.pullUpLoad ? {
         //     threshold: parseInt(this.pullUpLoadThreshold),
@@ -232,6 +240,7 @@
             this.songs = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0, 100) : res.data.playlist.tracks
             this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0, 4) : res.data.playlist.subscribers
             this.Creater()
+            this.getInd (this.currentSong.id) 
           })
         },
         Creater () {
@@ -440,6 +449,19 @@
                 })
             }
           })
+        },
+        getInd (id) {
+          let ind = this.songs.findIndex(item => {
+            return item.id === id
+          })
+          // ind >= 0 ? this.currentInd = ind : ''
+          if(ind >= 0) {
+            this.currentInd = ind
+            console.log(ind)
+          }
+        },
+        changeInd (ind) {
+          this.currentInd = ind
         },
             // 收藏功能
         toSubscribed () {

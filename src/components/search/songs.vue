@@ -224,6 +224,16 @@ export default {
         }
       }else {
         this.currentIndex = index
+        // this.$router.push({
+        //   path:`/musicplayer/${item.id}`
+        // })
+        this.$router.push({
+          path: `/musicplayer`,
+          query: {
+            item:JSON.stringify(item)
+          }
+        })
+        // console.log(item)
       }
     },
     toCheckMore () {

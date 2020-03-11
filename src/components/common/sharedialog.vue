@@ -1,11 +1,9 @@
 <template>
-  <!-- <div class="share"> -->
-    <!-- <cube-popup ref="popup" @mask-click="hide" :position="'bottom'" :zIndex="2001"> -->
- <div class="mask" @click.self="cancel" v-if="visible">
+
+ <!-- <div class="mask" @click.self="cancel" v-if="visible">
     <transition name="fade-more" v-if="visible">
       <div class="share-build">
         <div class="share-top">分享</div>
-
         <ul class="share-center">
           <li>
             <div class="share-icon">
@@ -119,25 +117,136 @@
             </ul>
           </cube-scroll>
         </div>
-
-         <!-- <cube-scroll
-          ref="scroll"
-          :data="items"
-          direction="horizontal"
-          class="horizontal-scroll-list-wrap">
-          <ul class="list-wrapper">
-            <li v-for="item in items" class="list-item">{{ item }}</li>
-          </ul>
-        </cube-scroll> -->
-
         <cube-button class="button" @click="hide">取消</cube-button>
-
        </div>
-
        </transition>
-      </div>
-    <!-- </cube-popup> -->
-  <!-- </div> -->
+      </div> -->
+
+  <transition name="cube-action-sheet-fade">
+    <div class="mask" @click.self="cancel" v-show="visible">
+      <transition name="cube-action-sheet-move">
+        <!-- 这里用v-if，否则不能产生滚动 -->
+        <div class="share-build" v-if="visible">
+          <div class="share-top">分享</div>
+          <ul class="share-center">
+            <li>
+              <div class="share-icon">
+                <i class="iconfont iconnetease"></i>
+              </div>
+              <div class="share-text">云音乐动态</div>
+            </li>
+            <li>
+              <div class="share-icon">
+                <i class="iconfont iconxinxiduanxinxiaoxitixingyoujiansixinyouxiang"></i>
+              </div>
+              <div class="share-text">私信</div>
+            </li>
+            <li>
+              <div class="share-icon">
+                <i class="iconfont iconfuzhilianjie"></i>
+              </div>
+              <div class="share-text">复制链接</div>
+            </li>
+          </ul>
+
+          <div class="scroll-list-wrap-share">
+            <cube-scroll
+              ref="Scroll"
+              direction="horizontal"
+              :options="options"
+              @scroll="scrollHandler"
+              class="horizontal-scroll-list-wrap"
+            >
+              <ul class="share-bottom">
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconweixinpengyouquan"></i>
+                  </div>
+                  <div class="share-text">
+                    微信朋友圈
+                  </div>
+                </li>
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconweixinhaoyou"></i>
+                  </div>
+                  <div class="share-text">
+                    微信好友
+                  </div>
+                </li>
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconQQkongjian"></i>
+                  </div>
+                  <div class="share-text">
+                    QQ空间
+                  </div>
+                </li>
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconqqhaoyou"></i>
+                  </div>
+                  <div class="share-text">
+                    QQ好友
+                  </div>
+                </li>
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconweibodenglu"></i>
+                  </div>
+                  <div class="share-text">
+                    微博
+                  </div>
+                </li>
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconweixinpengyouquan"></i>
+                  </div>
+                  <div class="share-text">
+                    微信朋友圈
+                  </div>
+                </li>
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconweixinhaoyou"></i>
+                  </div>
+                  <div class="share-text">
+                    微信好友
+                  </div>
+                </li>
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconQQkongjian"></i>
+                  </div>
+                  <div class="share-text">
+                    QQ空间
+                  </div>
+                </li>
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconqqhaoyou"></i>
+                  </div>
+                  <div class="share-text">
+                    QQ好友
+                  </div>
+                </li>
+                <li>
+                  <div class="share-icon">
+                    <i class="iconfont iconweibodenglu"></i>
+                  </div>
+                  <div class="share-text">
+                    微博
+                  </div>
+                </li>
+              </ul>
+            </cube-scroll>
+          </div>
+          <cube-button class="button" @click.stop="hide">取消</cube-button>
+        </div>
+      </transition>
+    </div>
+  </transition>
+
 </template>
 
 <script>
@@ -161,12 +270,12 @@
         // },
         scrollHandler ({ y }) {
           this.scrollY = -y
-          console.log(this.scrollY)
+          // console.log(this.scrollY)
         },
         cancel () {
           // 触摸到遮罩层就取消本组件
         // this.$emit('cancel')
-        this.visible = false
+        this.hide ()
         },
         show () {
           this.visible = true
@@ -260,27 +369,17 @@
     width:375px
 
 
-    // .horizontal-scroll-list-wrap
-    //   border: 1px solid rgba(0, 0, 0, 0.1)
-    //   border-radius: 5px
-    //   .cube-scroll-content
-    //     display: inline-block
-    //   .list-wrapper
-    //     padding: 0 10px
-    //     line-height: 60px
-    //     white-space: nowrap
-    //   .list-item
-    //     display: inline-block
 
 
-     /*动画效果*/
-  .fade-more-enter-active,
-  .fade-more-leave-active
-    transition: all .5s ease-in
 
-  .fade-more-enter,
-  .fade-more-leave-to
-    transform: translateY(700px)
+  .cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
     opacity: 0
+  .cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+    transition: all .3s ease-in-out
+
+  .cube-action-sheet-move-enter, .cube-action-sheet-move-leave-active
+    transform: translate3d(0, 100%, 0)
+  .cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+    transition: all .3s ease-in-out
 
 </style>

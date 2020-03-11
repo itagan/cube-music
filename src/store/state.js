@@ -1,4 +1,6 @@
-import { loadCurrentVideo } from '../common/js/goodstorage'
+// import { loadCurrentVideo } from '../common/js/goodstorage'
+import { playMode } from '../common/js/config'
+
 const state = {
   token: '', // 网站token
   loginState: false,
@@ -17,6 +19,11 @@ const state = {
   currentVideo: [],
   operation: [],
   dynamic: [],
-  author: []
+  author: [],
+  playing: false,
+  fullScreen: false,
+  playlist: [],
+  sequenceList: [],
+  mode: playMode.sequence
 }
 export default state

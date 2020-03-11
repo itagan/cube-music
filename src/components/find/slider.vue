@@ -7,7 +7,7 @@
         </a>
       </cube-slide-item>
       <template slot="dots" slot-scope="props">
-        <span class="my-dot" :class="{active: props.current === index}" v-for="(item, index) in props.dots">{{index + 1}}</span>
+        <span class="my-dot" :class="{active: props.current === index}" v-for="(item, index) in props.dots" :key="index">{{index + 1}}</span>
       </template>
     </cube-slide>
 </template>

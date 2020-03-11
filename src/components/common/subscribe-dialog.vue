@@ -1,8 +1,8 @@
 <template>
-  <div class="ring-dialog-view">
-
-    <cube-popup ref="popup" @mask-click="hide" :z-index="2001">
-      <div class="ring-dialog-wrapper">
+<transition name="cube-action-sheet-fade">
+    <cube-popup ref="popup" :zIndex="2001" v-show="isVisible">
+    <transition name="cube-action-sheet-move">
+      <div class="ring-dialog-wrapper" v-show="isVisible">
         <div class="ring-dialog-container">
           <div class="title">
             <ul>
@@ -24,22 +24,27 @@
             <cube-button class="button" @click="hide">前往App Store 下载</cube-button>
           </div>
         </div>
-
         <div class="close" @click="hide"><i class="cubeic-close"></i></div>
-      </div>
+        </div>
+       </transition>
     </cube-popup>
-  </div>
+    </transition>
 </template>
 
 <script>
     export default {
       name: 'subscribe-dialog',
+      data () {
+        return {
+          isVisible: false
+        }
+      },
       methods: {
         show () {
-          this.$refs.popup.show()
+          this.isVisible = true
         },
         hide () {
-          this.$refs.popup.hide()
+          this.isVisible = false
         }
       }
     }
@@ -133,4 +138,17 @@
       font-size:$font-size-large
       color:white
       flex-center()
+
+
+.cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
+  opacity: 0
+.cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+  transition: all .3s ease-in-out
+
+.cube-action-sheet-move-enter, .cube-action-sheet-move-leave-to
+  transform: scale3d(0, 0, 0)
+.cube-action-sheet-move-leave, .cube-action-sheet-move-enter-to 
+    transform: scale3d(1, 1, 1)
+.cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+  transition: all .3s ease-in-out  
 </style>

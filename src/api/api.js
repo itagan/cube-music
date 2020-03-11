@@ -330,6 +330,22 @@ const radios = {
   }
 }
 
+// 歌曲播放有关
+const playmusic = {
+  lyric (id) {
+    return axios.get(`${base}/lyric?id=${id}`)
+  },
+  url (id) {
+    return axios.get(`${base}/song/url?id=${id}`)
+  },
+  check (id) {
+    return axios.get(`${base}/check/music?id=${id}`)
+  },
+  comments (id, offset = 0, limit = 20) {
+    return axios.get(`${base}/comment/dj?id=${id}&offset=${offset}&limit=${limit}`)
+  }
+}
+
 export default {
   login,
   find,
@@ -344,5 +360,6 @@ export default {
   searchs,
   musics,
   albums,
-  radios
+  radios,
+  playmusic
 }

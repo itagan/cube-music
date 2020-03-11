@@ -1,7 +1,8 @@
 <template>
-  <div class="mask" @click.self="cancel">
-    <transition name="fade-more" v-if="visible">
-    <div class="build">
+  <transition name="cube-action-sheet-fade">
+    <div class="mask" @click.self="cancel" v-show="visible">
+      <transition name="cube-action-sheet-move">
+    <div class="build"  v-if="visible">
       <ul class="build-top" v-show="isVip">
         <li class="li-img">
           <img :src="track.al && track.al.picUrl || track.album.artist.img1v1Url" alt="">
@@ -33,7 +34,7 @@
           :options="options">
 
       <ul class="build-center">
-        <li>
+        <li v-if="!single">
           <div class="build-icon">
             <i class="iconfont iconbofang5"></i>
           </div>
@@ -49,7 +50,7 @@
             <span>收藏到歌单</span>
           </div>
         </li>
-        <li>
+        <li v-if="!single">
           <div class="build-icon">
             <i class="iconfont iconxiazaigequ"></i>
           </div>
@@ -58,7 +59,7 @@
             <span class="vip-css">vip</span>
           </div>
         </li>
-        <li>
+        <li v-if="!single">
           <div class="build-icon">
             <i class="iconfont iconpinglun"></i>
           </div>
@@ -66,7 +67,7 @@
             <span>评论</span>
           </div>
         </li>
-        <li @click="toShare">
+        <li @click="toShare" v-if="!single">
           <div class="build-icon">
             <i class="iconfont iconfenxiang"></i>
           </div>
@@ -82,6 +83,19 @@
             <span>歌手：
               {{track.ar && Artist(track.ar) || Artist(track.artists)}}
             </span>
+          </div>
+        </li>
+        <li v-if="single">
+          <div class="build-icon">
+            <i class="iconfont iconzuijinbofang"></i>
+          </div>
+          <div class="build-text">
+            <span>来源:
+               歌单:'明年今日'
+            </span>
+            <!-- <span>
+              暂无来源
+            </span> -->
           </div>
         </li>
         <li v-if="noAlbum" @click.stop="toAlbum">
@@ -102,6 +116,14 @@
             <span>单曲购买</span>
           </div>
         </li>
+        <li v-if="single">
+          <div class="build-icon">
+            <i class="iconfont iconzuijinbofang"></i>
+          </div>
+          <div class="build-text">
+            <span>音质:自动选择</span>
+          </div>
+        </li>
         <li @click="ring">
           <div class="build-icon">
             <i class="iconfont iconcailingdingzhi"></i>
@@ -119,6 +141,14 @@
             <span>查看视频</span>
           </div>
         </li>
+        <li v-if="single">
+          <div class="build-icon">
+            <i class="iconfont iconzuijinbofang"></i>
+          </div>
+          <div class="build-text">
+            <span>相似推荐</span>
+          </div>
+        </li>
         <li>
           <div class="build-icon">
             <i class="iconfont iconquxiao"></i>
@@ -131,8 +161,9 @@
         </cube-scroll>
       </div>
     </div>
-    </transition>
-  </div>
+   </transition>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -163,12 +194,17 @@
         noAlbum: {
           type: Boolean,
           default: true
+        },
+        single: {
+          type: Boolean,
+          default: false
         }
       },
       methods: {
         cancel () {
             // 触摸到遮罩层就取消本组件
           this.$emit('cancel')
+          this.hide () 
         },
         show () {
           this.visible = true
@@ -178,20 +214,25 @@
         },
         toShare () {
           this.$emit('share')
-          this.$emit('cancel')
+          // this.$emit('cancel')
+          this.hide () 
         },
         ring () {
           this.$emit('ring')
-          this.$emit('cancel')
+          // this.$emit('cancel')
+           this.hide () 
         },
         toSinger () {
           this.$emit('singer')
+           this.hide () 
         },
         toCollected () {
           this.$emit('collect')
+           this.hide () 
         },
         toAlbum () {
           this.$emit('album')
+           this.hide () 
         },
         Artist (artist) {
           let arr = []
@@ -317,13 +358,13 @@
 
 
 
-  /*动画效果*/
-  .fade-more-enter-active,
-  .fade-more-leave-active
-    transition: all .5s ease-in
-
-  .fade-more-enter,
-  .fade-more-leave-to
-    transform: translateY(700px)
+  .cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
     opacity: 0
+  .cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+    transition: all .3s ease-in-out
+
+  .cube-action-sheet-move-enter, .cube-action-sheet-move-leave-active
+    transform: translate3d(0, 100%, 0)
+  .cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+    transition: all .3s ease-in-out
 </style>

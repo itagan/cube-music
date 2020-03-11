@@ -35,6 +35,7 @@
                   ref="scrollHorizontal"
                   direction="horizontal"
                   :options="horizontalOptions"
+                  :data="historySearchs"
                   class="horizontal-scroll-list-wrap"
                 >
                   <ul class="history-content">
@@ -81,7 +82,7 @@
                 <span>{{item.keyword}}</span>
               </li>
             </ul>
-      </cube-scroll>
+        </cube-scroll>
       </div>
   </div>
 </template>

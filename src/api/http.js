@@ -74,6 +74,13 @@ const errorHandle = (status, other) => {
     case 404:
       toast('请求的资源不存在')
       break
+    case 301:
+      toast('需要登录！')
+      toLogin()
+      break
+    case 502:
+      toast('没网络！')
+      break
     default:
       // console.log(other)
       toast(other)
