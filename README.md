@@ -13,7 +13,7 @@
 感觉依旧缺乏原创性比较强的项目，故借学习vue后，目标相对独立开发一个完整项目，以此掌握vue相关知识，项目通过 Vue 编写实现，全面借用**网易云音乐IOS移动端**的 UI 设计、功能实现。项目开始于2019年11月初。当初IOS网易云移动端应该属于7.0版本之前，故跟现在的UI页面有一定的差异性。目前实现了大部分核心功能，音乐和视频展示和播放功能，歌单展示和部分交互功能，登录用户和其它用户及歌手详情页，搜索功能。但依然有较多细节功能还没有完善或者连通，依旧存在一些Vue bug（如评论大量数据加载的触发无限循环等等）。
 （1）未来将继续解决cube-ui带来的一些交互体验问题，如多级吸附效果失败，用户详情页等内部多栏目里滚动不佳（跟实际网易云效果有些差异）
 （2）优化细节功能开发和连通操作
-（3）代码优化
+（3）代码优化,解决bug
 （4）尝试写UI组件库替换。目前如提醒组件既有采用cube-ui的，也有原生封装
 （5）更深入学习vue和原生js，提升代码质量。封装如内部搜索功能，轮播效果，拖拽功能，滑动删除等功能，Vue和convas动画，从而尽量接近真实网易云效果
 （6）真机环境测试和改进
@@ -39,20 +39,29 @@ https://binaryify.github.io/NeteaseCloudMusicApi/#/
 
 ## 🚀 如何运行
 
-> node 版本 `[10.15.3]`
+> node 版本 `如下`
+>因未部署上线，所以首先你需要拥有NeteaseCloudMusicApi，从github里克隆即可
+参考如下：
+https://github.com/Binaryify/NeteaseCloudMusicApi
 
-### ✨ 开发过程
+环境要求
+需要 NodeJS 8.12+ 环境
 
+安装
+$ git clone git@github.com:Binaryify/NeteaseCloudMusicApi.git
+$ npm install
+运行
+$ node app.js
+
+> 接着才能运行本项目
 ```
 # 克隆
-git clone https://github.com/powerdong/Music-player.git
+git clone https://github.com/itagan/cube-music.git
 ```
 
 ```
 # 打开项目目录
-cd Music-player
-
-cd musicPlayer
+cd cube-music
 ```
 
 ```
@@ -139,15 +148,15 @@ vue全家桶+vuex+vue-router+goodstorage
 
 ## :computer: 部分功能展示截图
 
-![8V8xk4.gif](https://s1.ax1x.com/2020/03/12/8V8xk4.gif)
-![8V8X0U.gif](https://s1.ax1x.com/2020/03/12/8V8X0U.gif)
-![8V8b60.gif](https://s1.ax1x.com/2020/03/12/8V8b60.gif)
-![8V87pn.gif](https://s1.ax1x.com/2020/03/12/8V87pn.gif)
-![8V3wPs.gif](https://s1.ax1x.com/2020/03/12/8V3wPs.gif)
-![8V3YqS.gif](https://s1.ax1x.com/2020/03/12/8V3YqS.gif)
-![8V3GKf.png](https://s1.ax1x.com/2020/03/12/8V3GKf.png)
-![8Vlof1.gif](https://s1.ax1x.com/2020/03/12/8Vlof1.gif)
-![8VQUa9.gif](https://s1.ax1x.com/2020/03/12/8VQUa9.gif)
+![](https://pic.downk.cc/item/5e6a07a0e83c3a1e3a08cd6b.gif)
+![](https://pic.downk.cc/item/5e6a07a0e83c3a1e3a08cd6d.gif)
+![](https://pic.downk.cc/item/5e6a07a0e83c3a1e3a08cd6f.gif)
+![](https://pic.downk.cc/item/5e6a038be83c3a1e3a06ba01.gif)
+![](https://pic.downk.cc/item/5e6a0371e83c3a1e3a06ae44.gif)
+![](https://pic.downk.cc/item/5e6a00bae83c3a1e3a05a808.gif)
+![](https://pic.downk.cc/item/5e6a00bae83c3a1e3a05a80a.gif)
+![](https://pic.downk.cc/item/5e6a00bae83c3a1e3a05a80c.gif)
+![](https://pic.downk.cc/item/5e6a00bae83c3a1e3a05a810.gif)
 
 ## :page_with_curl: 项目布局
 
