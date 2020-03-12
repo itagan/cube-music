@@ -4,7 +4,7 @@
     <div slot="main1" class="main" @click="manage">
       <i class="iconfont iconzan1"></i>
       <span>管理歌单</span>
-    </div>
+    </div>   
   </more-songs>
 </template>
 

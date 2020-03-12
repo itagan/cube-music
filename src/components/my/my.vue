@@ -22,10 +22,10 @@
 <!--      </cube-scroll>-->
 <!--    </div>-->
 
-    <build-list v-if="isBuild" @cancel="cancel"></build-list>
+    <build-list ref="build"></build-list>
 
     <play-more
-      v-if="isMore"
+     
       @cancel="cancelMore"
       @build="moreBuildList"
       @manage="manage"
@@ -48,7 +48,7 @@
     import myNav from './mynav'
     import myMusic from './mymusic'
     import playList from './playlist'
-    import buildList from './buildlist'
+    import buildList from '../common/buildlist'
     import playMore from './playmore'
     import collectionMore from './collectionmore'
 
@@ -105,7 +105,8 @@
       },
       methods: {
         buildList () {
-          this.isBuild = true
+          // this.isBuild = true
+          this.$refs.build.show()
         },
         moreBuildList () {
           this.isMore = false
@@ -115,12 +116,9 @@
             this._dialog.afterOpen()
           })
         },
-        cancel () {
-          this.isBuild = false
-        },
         more (num) {
                 // 子组件提醒打开更多操作页面
-          this.isMore = true
+          // this.isMore = true
           this.createNum = num
         },
         cancelMore () {

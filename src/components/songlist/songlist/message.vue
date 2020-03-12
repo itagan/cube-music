@@ -50,7 +50,7 @@
 </template>
 
 <script>
-    import {serializeNumber} from '../../assets/js/number'
+    import {serializeNumber} from '../../../assets/js/number'
 
     export default {
       name: 'songMessage.vue',
@@ -117,8 +117,8 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/variable"
-  @import "../../common/stylus/mixin"
+  @import "../../../common/stylus/variable"
+  @import "../../../common/stylus/mixin"
 
   .song-list-message
     background-color:none

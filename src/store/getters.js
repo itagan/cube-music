@@ -1,4 +1,3 @@
-import Video from '../common/js/video'
 import { loadCurrentVideo, loadOperation, loadCurrentDynamic, loadCurrentAuthor } from '../common/js/goodstorage'
 
 export const token = state => state.token
