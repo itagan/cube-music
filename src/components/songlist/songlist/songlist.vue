@@ -135,18 +135,18 @@
 </template>
 
 <script>
-    import myHeader from './header'
-    import mySearch from '../../base/search/searchcancel'
+    import myHeader from '../header'
+    import mySearch from '../../../base/search/searchcancel'
     import Message from './message'
     import List from './list'
-    import playMore from '../common/playmore'
-    import shareDialog from '../common/sharedialog'
-    import setRing from '../common/setring'
-    import myCover from '../common/cover'
-    import buildList from '../common/buildlist'
-    import collectionToList from '../common/collectiontolist'
-    import checkFooter from '../common/checkfooter'
-    import {serializeNumber} from '../../assets/js/number'
+    import playMore from '../../common/playmore'
+    import shareDialog from '../../common/sharedialog'
+    import setRing from '../../common/setring'
+    import myCover from '../../common/cover'
+    import buildList from '../../common/buildlist'
+    import collectionToList from '../../common/collectiontolist'
+    import checkFooter from '../../common/checkfooter'
+    import {serializeNumber} from '../../../assets/js/number'
     import {mapGetters} from 'vuex'
 
 
@@ -539,8 +539,8 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/variable"
-  @import "../../common/stylus/mixin"
+  @import "../../../common/stylus/variable"
+  @import "../../../common/stylus/mixin"
 
   .song-list
     background-color:rgba(128,128,128,.8) !important

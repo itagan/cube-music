@@ -12,8 +12,8 @@ import Code from '../components/user/code'
 import PassWord from '../components/user/loginpassword'
 import videoSlide from '../components/common/videoslide'
 import MyCollectionList from '../components/mycollection/collectionlist'
-import SongList from '../components/songlist/songlist'
-import SongListComment from '../components/songlist/listcomment'
+import SongList from '../components/songlist/songlist/songlist'
+import SongListComment from '../components/songlist/songlist/listcomment'
 import User from '../components/others/user'
 import BaseMessage from '../components/others/basemessage'
 import ForWard from '../components/dynamic/forward'
@@ -35,7 +35,6 @@ import HotSearch from '../components/search/hotsearch.vue'
 import Search from '../components/search/search.vue'
 import RadioList from '../components/songlist/radio/radiolist'
 import DjComment from '../components/songlist/radio/djcomment'
-import Musicplayer from '../components/musicplayer/index'
 Vue.use(Router)
 
 // const originalPush = Router.prototype.push

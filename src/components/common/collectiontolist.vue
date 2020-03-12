@@ -10,7 +10,7 @@
           <li class="top-center">
             <div></div>
           </li>
-          <li class="top-bottom" @click="bulidlist">
+          <li class="top-bottom" @click.stop="bulidlist">
             <i class="iconfont iconjia"></i>
             <span>新建歌单</span>
           </li>

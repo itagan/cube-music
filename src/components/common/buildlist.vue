@@ -1,7 +1,8 @@
 <template>
+ <transition name="cube-action-sheet-fade">
   <div class="mask" @click.self="cancel" v-show="visible">
-    <transition name="fade-more" v-if="visible">
-    <div class="build">
+    <transition name="cube-action-sheet-move">
+    <div class="build" v-if="visible">
       <div class="build-top">
         <span @click="cancel">取消</span>
         <span class="title">新建歌单</span>
@@ -25,7 +26,8 @@
       </div>
     </div>
      </transition>
-  </div>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -47,7 +49,7 @@
       props: {
         track: {
           type: Object,
-          default: {}
+          default: () => {}
         }
       },
       methods: {
@@ -66,6 +68,7 @@
             // 输入中
           if (val.length > 0) {
             document.getElementsByClassName('complete')[0].style.color = 'black'
+            console.log('黑色')
           } else {
             document.getElementsByClassName('complete')[0].style.color = 'rgba(128,128,128,.5)'
           }
@@ -109,7 +112,8 @@
       },
       mounted() {
         this.$nextTick(() => {
-          this.value = this.track.name
+          this.value = this.track && this.track.name
+          console.log(this.value)
         })
       }
     }
@@ -208,13 +212,13 @@
           display:inline-block
 
 
-        /*动画效果*/
-  .fade-more-enter-active,
-  .fade-more-leave-active
-    transition: all .5s ease-in
+.cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
+  opacity: 0
+.cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+  transition: all .3s ease-in-out
 
-  .fade-more-enter,
-  .fade-more-leave-to
-    transform: translateY(700px)
-    opacity: 0
+.cube-action-sheet-move-enter, .cube-action-sheet-move-leave-active
+  transform: translate3d(0, 100%, 0)
+.cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+  transition: all .3s ease-in-out 
 </style>

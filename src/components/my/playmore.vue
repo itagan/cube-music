@@ -1,11 +1,11 @@
 <template>
   <more-songs @cancel="cancel" class="mask">
     <span slot="top">我创建的歌单{{num}}</span>
-    <div slot="main1" class="main" @click="build">
+    <div slot="main1" class="main" @click.stop="build">
       <i class="iconfont iconxinjian"></i>
       <span>新建歌单</span>
     </div>
-    <div slot="main2" class="main" @click="manage">
+    <div slot="main2" class="main" @click.stop="manage">
       <i class="iconfont iconguanli"></i>
       <span>管理歌单</span>
     </div>
@@ -37,6 +37,12 @@ export default {
         cancel () {
                 // 触摸到遮罩层就取消本组件
           this.$emit('cancel')
+        },
+        show () {
+          this.visible = true
+        },
+        hide () {
+          this.visible = false
         },
         build () {
                 // 告诉父组件创建新歌单

@@ -1,7 +1,10 @@
 <template>
-  <div class="mask" @click.self="cancel">
+<transition name="cube-action-sheet-fade">
+  <div class="mask" @click.self="cancel" v-show="visible">
+    <transition name="cube-action-sheet-move">
+  <!-- <div class="mask" @click.self="cancel"> -->
     <!--    .self 只有点击当前元素的时候，才会触发处理事件-->
-    <div class="build">
+    <div class="build" v-if="visible">
       <div class="build-top" v-if="$slots.top">
         <slot name="top"></slot>
       </div>
@@ -24,7 +27,9 @@
         </li>
       </ul>
     </div>
-  </div>
+  </transition>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -32,6 +37,7 @@
       name: 'moreSongs.vue',
       data () {
         return {
+          visible: false,
         }
       },
       props: {
@@ -46,7 +52,14 @@
         cancel () {
                 // 触摸到遮罩层就取消本组件
           this.$emit('cancel')
-        }
+          this.hide () 
+        },
+        show () {
+          this.visible = true
+        },
+        hide () {
+          this.visible = false
+        },
       }
     }
 </script>
@@ -72,7 +85,7 @@
       font-size:$font-size-medium
       z-index:1001
       position:fixed
-      bottom:0
+      bottom:50px
       .build-top
         height:45px
         line-height:45px
@@ -84,4 +97,15 @@
       .build-center
         width:100%
         margin:auto 10px
+
+
+  .cube-action-sheet-fade-enter, .cube-action-sheet-fade-leave-active
+    opacity: 0
+  .cube-action-sheet-fade-enter-active, .cube-action-sheet-fade-leave-active
+    transition: all .3s ease-in-out
+
+  .cube-action-sheet-move-enter, .cube-action-sheet-move-leave-active
+    transform: translate3d(0, 100%, 0)
+  .cube-action-sheet-move-enter-active, .cube-action-sheet-move-leave-active
+    transition: all .3s ease-in-out       
 </style>

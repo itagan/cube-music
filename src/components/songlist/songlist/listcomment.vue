@@ -6,7 +6,7 @@
       <div  slot="right" class="song-img">
         <i class="iconfont iconfenxiang" @click="share"></i>
         <span @click="music">
-        <img src="../user/img/login1.png" alt="" class="img">
+        <img src="../../user/img/login1.png" alt="" class="img">
       </span>
       </div>
     </my-header>
@@ -96,10 +96,10 @@
 </template>
 
 <script>
-    import MyHeader from '../../base/navbar/navbar'
-    import songListComment from '../../base/swiper/songlistcomment'
-    import baseComment from '../../base/basecomment/basecomment'
-    import replyDialog from '../common/replydialog'
+    import MyHeader from '../../../base/navbar/navbar'
+    import songListComment from '../../../base/swiper/songlistcomment'
+    import baseComment from '../../../base/basecomment/basecomment'
+    import replyDialog from '../../common/replydialog'
     export default {
       name: 'listComment.vue',
       components: {
@@ -314,8 +314,8 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/variable"
-  @import "../../common/stylus/mixin"
+  @import "../../../common/stylus/variable"
+  @import "../../../common/stylus/mixin"
 .list-comment
   height:667px
   width:375px
