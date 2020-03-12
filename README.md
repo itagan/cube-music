@@ -47,11 +47,16 @@ https://github.com/Binaryify/NeteaseCloudMusicApi
 环境要求
 需要 NodeJS 8.12+ 环境
 
+```
 安装
 $ git clone git@github.com:Binaryify/NeteaseCloudMusicApi.git
 $ npm install
+```
+
+```
 运行
 $ node app.js
+```
 
 > 接着才能运行本项目
 ```
@@ -73,6 +78,18 @@ npm install
 # 开启本地服务运行项目
 npm run dev
 ```
+
+```
+# 提供登录测试账号：
+手机13048268890 
+密码123456
+
+登录入口如：
+http://0.0.0.0:8080/#/login
+
+后面将开发更完善符合实际的登录模式以及不登录体验模式
+```
+
 
 **欢迎 star，欢迎 issue**
 
