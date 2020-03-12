@@ -97,74 +97,74 @@ export default {
     songBase
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     },
-    id:{
-      type:String,
-      default:''
+    id: {
+      type: String,
+      default: ''
     },
     loading: {
-      type:Boolean,
-      default:false
+      type: Boolean,
+      default: false
     }
   },
-  data() {
+  data () {
     return {
       scrollEvents: ['scroll'],
       scrollY: 0,
-      loadData:true,
-      result:true,
-      allShow:false,
-      isPlay:false,
-      programs:[],
+      loadData: true,
+      result: true,
+      allShow: false,
+      isPlay: false,
+      programs: [],
       checkbox: false,
-      checked:false,
+      checked: false,
       checkList: [],
-      checkLists:[],
+      checkLists: [],
       options: {
-      pullUpLoad: false,
-      scrollbar: false,
-      click: false
+        pullUpLoad: false,
+        scrollbar: false,
+        click: false
       },
-      issort:false,
-      count:0,
-      currentIndex:-1
+      issort: false,
+      count: 0,
+      currentIndex: -1
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 1 && this.loadData) {
-        this.getAlls(this.id, 30, 0,false)
+    currentPage (val) {
+      if (val === 1 && this.loadData) {
+        this.getAlls(this.id, 30, 0, false)
         this.loadData = false
-      } 
+      }
     },
     loading (val) {
-      if(val) {
+      if (val) {
         console.log('重新加载子组件')
-        this.getAlls(this.id, 30, 0,false)
+        this.getAlls(this.id, 30, 0, false)
       }
     }
   },
   computed: {},
   methods: {
     parget () {
-      this.getAlls(this.id, 30, 0,false)
-      this.$refs.toScroll.scrollTo(0,0,300)
+      this.getAlls(this.id, 30, 0, false)
+      this.$refs.toScroll.scrollTo(0, 0, 300)
     },
     getAlls (rid, limit, offset, asc) {
       this.$api.radios.program(rid, limit, offset, asc).then(res => {
         this.programs = res.data.programs
         this.count = res.data.count
-        this.$emit('getcount',this.count)
+        this.$emit('getcount', this.count)
       })
     },
-    scrollHandler({ y }) {
+    scrollHandler ({ y }) {
       this.scrollY = -y
     },
     allCheck () {
@@ -182,28 +182,28 @@ export default {
       this.allToCheckNo()
       this.checkList = []
       this.$emit('allToShow', false)
-      this.$emit('changebg',false)
+      this.$emit('changebg', false)
     },
     TransAlias (alias) {
       let arr = []
-      for(let i = 0; i < alias.length; i++) {
+      for (let i = 0; i < alias.length; i++) {
         arr.push(alias[i])
       }
       return arr.join('/')
     },
-    toCheckMusic(item,index) {
-      if(this.allShow) {
-        if(this.$refs.liSong[index].classList.contains('checked')) {
+    toCheckMusic (item, index) {
+      if (this.allShow) {
+        if (this.$refs.liSong[index].classList.contains('checked')) {
           this.$refs.liSong[index].classList.remove('checked')
           console.log('去除')
-        }else {
+        } else {
           this.$refs.liSong[index].classList.add('checked')
           console.log('添加')
         }
         this.checkList = []
-        this.$refs.liSong.filter((item,index) => {
-        if(item.classList.contains('checked') === true) {
-          this.checkList.push(index)
+        this.$refs.liSong.filter((item, index) => {
+          if (item.classList.contains('checked') === true) {
+            this.checkList.push(index)
           }
         })
         this.checkList.length === this.programs.length ? this.checked = true : this.checked = false
@@ -212,8 +212,8 @@ export default {
         // }else {
         //   this.$emit('changebg',false)
         // }
-      }else {
-        //播放电台歌曲
+      } else {
+        // 播放电台歌曲
         // this.isPlay = true
         this.currentIndex = index
       }
@@ -232,17 +232,17 @@ export default {
     },
     allToChecked () {
       this.checkList = [...this.allToCheck()]
-      for(let i = 0; i < this.programs.length; i++) {
+      for (let i = 0; i < this.programs.length; i++) {
         this.$refs.liSong[i].classList.add('checked')
       }
-      this.$emit('changebg',true)
+      this.$emit('changebg', true)
     },
     allToCheckNo () {
       this.checkList = []
-      for(let i = 0; i < this.programs.length; i++) {
+      for (let i = 0; i < this.programs.length; i++) {
         this.$refs.liSong[i].classList.remove('checked')
       }
-      this.$emit('changebg',false)
+      this.$emit('changebg', false)
     },
     toMoreOpera (item) {
       this.$emit('more', item)
@@ -255,21 +255,21 @@ export default {
     // 选中的有哪些
     whoChecked () {
       this.checkLists = []
-      for(let i = 0; i < this.checkList.length; i++) {
+      for (let i = 0; i < this.checkList.length; i++) {
         this.checkLists.push(this.programs[this.checkList[i]])
       }
       // console.log(this.checkLists)
       this.$emit('whochecked', this.checkLists)
     },
     TimeMd (timestamp) {
-      return timeMd (timestamp)
+      return timeMd(timestamp)
     },
     durationsTrans (timestamp) {
       return durationsTransformation(timestamp)
     },
     Num (num) {
       return serializeNumber(num)
-    },
+    }
   },
   // beforeRouteEnter(to,from,next){
   //   if(from.name == 'djcomment'){
@@ -289,10 +289,10 @@ export default {
   //       //详情页返回操作，比如页面位置
   //   }
   //   },
-  created() {
+  created () {
     // this.getAlls(this.value, 60, 0, 1018)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

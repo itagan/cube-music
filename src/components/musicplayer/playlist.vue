@@ -165,22 +165,22 @@ import {playMode} from '../../common/js/config'
 
 export default {
   components: {
-    baseAuto,
+    baseAuto
   },
   props: {
-    playlist:{
-      type:Array,
-      default:[]
-    },
+    playlist: {
+      type: Array,
+      default: []
+    }
     // currentIndex: {
     //   type:Number,
     //   default:-1
     // }
   },
-  data() {
+  data () {
     return {
       currentPage: 2,
-      showList:false,
+      showList: false,
       options: {
         scrollbar: true
       },
@@ -189,42 +189,42 @@ export default {
       },
       scrollY: 0,
       scrollEvents: ['scroll'],
-      currentIndex:-1,
-      activeClass:'active-class',
-      playMode:playMode
+      currentIndex: -1,
+      activeClass: 'active-class',
+      playMode: playMode
     }
   },
   watch: {
     currentSong (newSong, oldSong) {
-      if (!newSong.id  || newSong.id === oldSong.id) {
+      if (!newSong.id || newSong.id === oldSong.id) {
         return
       }
-      this.getInd (newSong.id)
+      this.getInd(newSong.id)
     },
     showList (val) {
-      if(val) {
-        if(this.currentIndex !== -1 && this.currentIndex >= 6) {
-        this.$nextTick(() => {
+      if (val) {
+        if (this.currentIndex !== -1 && this.currentIndex >= 6) {
+          this.$nextTick(() => {
           // let lineEl = this.$refs.lyricLine[6]
           // this.$refs.Scroll.scrollBy(0,300, 200)
           // this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
           // console.log(this.$refs.Scroll)
-          setTimeout(() => {
-            let lineEl = this.$refs.lyricLine[2]
+            setTimeout(() => {
+              let lineEl = this.$refs.lyricLine[2]
             // this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
-             this.$refs.Scroll.scrollTo(0,-50*(this.currentIndex - 5), 200)
-          }, 300)
+              this.$refs.Scroll.scrollTo(0, -50 * (this.currentIndex - 5), 200)
+            }, 300)
           // this.$refs.Scroll.scrollTo(0,300, 200)
-        })
-      }
+          })
+        }
       }
     }
   },
   computed: {
     ...mapGetters([
-    'mode',
-    'sequenceList',
-    'currentSong',
+      'mode',
+      'sequenceList',
+      'currentSong'
     ])
   },
   methods: {
@@ -244,13 +244,13 @@ export default {
       this.hide()
     },
     close () {
-      this.hide ()
+      this.hide()
     },
     changeMode () {
       const mode = (this.mode + 1) % 3
       this.setPlayMode(mode)
       let list = null
-      if(mode === playMode.random) {
+      if (mode === playMode.random) {
         list = shuffle(this.playlist)
       }
     },
@@ -258,30 +258,30 @@ export default {
       let ind = this.sequenceList.findIndex(item => {
         return item.id === id
       })
-      if(ind >= 0) {
+      if (ind >= 0) {
         this.currentIndex = ind
         // this.$emit('changeInd',ind)
       }
     },
-    toCheckMusic(item,index) {
+    toCheckMusic (item, index) {
       // this.currentIndex = index
-      this.$emit('changeInd',item.id)
+      this.$emit('changeInd', item.id)
       // this.hide ()
     },
     Trans (alias) {
       let arr = []
-      for(let i = 0; i < alias.length; i++) {
+      for (let i = 0; i < alias.length; i++) {
         arr.push(alias[i].name)
       }
       return arr.join('/')
     },
     ...mapMutations({
-      setPlayMode: 'SET_PLAY_MODE',
+      setPlayMode: 'SET_PLAY_MODE'
       // setCurrentIndex: 'SET_CURRENT_INDEX',
-    }),
+    })
   },
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

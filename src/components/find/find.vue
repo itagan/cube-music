@@ -95,7 +95,7 @@
           pullDownY: 0,
           isRefresh: false,
           trans: false,
-          showSearch:false
+          showSearch: false
         }
       },
       methods: {

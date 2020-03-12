@@ -258,8 +258,8 @@
           options: {
             scrollbar: true
           },
-          scrollY:0,
-          }
+          scrollY: 0
+        }
       },
       methods: {
         // show () {
@@ -275,14 +275,14 @@
         cancel () {
           // 触摸到遮罩层就取消本组件
         // this.$emit('cancel')
-        this.hide ()
+          this.hide()
         },
         show () {
           this.visible = true
         },
         hide () {
           this.visible = false
-        },
+        }
       }
     }
 </script>

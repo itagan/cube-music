@@ -36,9 +36,9 @@
 export default {
   components: {},
   props: {},
-  data() {
+  data () {
     return {
-      diaTop:false,
+      diaTop: false,
       isVisible: false
     }
   },
@@ -60,18 +60,18 @@ export default {
       this.diaTop = false
     },
     Reply () {
-      //回复
+      // 回复
       this.$emit('reply')
       this.hide()
     },
     toShare () {
-      //回复
+      // 回复
       this.$emit('share')
       this.hide()
     }
   },
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

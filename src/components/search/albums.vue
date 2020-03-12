@@ -61,16 +61,16 @@ export default {
     albumBase
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: true,
@@ -81,19 +81,19 @@ export default {
       scrollEvents: ['scroll'],
       pullDownY: 0,
       hasMore: true,
-      songCount:'',
-      offset:0,
-      count:0,
-      albums:[],
-      result:true,
-      albumCount:0
+      songCount: '',
+      offset: 0,
+      count: 0,
+      albums: [],
+      result: true,
+      albumCount: 0
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 5 && !this.albums.length) {
+    currentPage (val) {
+      if (val === 5 && !this.albums.length) {
         this.getAlbums(this.value, 30, 0, 10)
-      } 
+      }
     }
   },
   computed: {},
@@ -102,13 +102,13 @@ export default {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
         this.albumCount = res.data.result.albumCount
         this.hasMore = this.count < res.data.result.albumCount
-        if(this.hasMore) {
-          this.count+=30
-          this.offset+=10
+        if (this.hasMore) {
+          this.count += 30
+          this.offset += 10
         }
-        this.albums =  this.albums.concat(res.data.result.albums)
+        this.albums = this.albums.concat(res.data.result.albums)
         setTimeout(() => {
-          this.result = this.albumCount > 0 ? true : false
+          this.result = this.albumCount > 0
         }, 3000)
       })
     },
@@ -116,7 +116,7 @@ export default {
       this.scrollY = -y
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       setTimeout(() => {
         this.getAlbums(this.value, 30, this.offset, 10)
         const contentScroll = this.$refs.contentScroll
@@ -125,7 +125,7 @@ export default {
     },
     TransAlias (alias) {
       let arr = []
-      for(let i = 0; i < alias.length; i++) {
+      for (let i = 0; i < alias.length; i++) {
         arr.push(alias[i])
       }
       return arr.join('/')
@@ -135,14 +135,14 @@ export default {
     },
     toAlbum (id) {
       this.$router.push({
-        path:`/albumlist/${id}`
+        path: `/albumlist/${id}`
       })
     }
   },
-  created() {
+  created () {
     // this.getAlbums(this.value, 30, 0, 10)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

@@ -113,51 +113,51 @@
         return {
           title: '',
           isShow: true,
-          scrollEvents: ['scroll','scroll-end'],
+          scrollEvents: ['scroll', 'scroll-end'],
           scrollY: 0,
           activeClass: 'nav-item-active',
           currentPage: 0,
           objs: [
             {
               text: '主页',
-              num:''
+              num: ''
             },
             {
               text: '歌曲',
-              num:''
+              num: ''
             },
             {
               text: '专辑',
-              num:'22'
+              num: '22'
             },
             {
               text: '视频',
-              num:'33'
+              num: '33'
             },
             {
               text: '动态',
-              num:'2'
+              num: '2'
             }
           ],
-          userMessage:{},
+          userMessage: {},
           profile: {},
           level: 0,
           messTop: 0,
-          hasMore:true,
-          lasttime:-1,
-          scrollYs:{
-            leftY:0,
-            rightY:0
+          hasMore: true,
+          lasttime: -1,
+          scrollYs: {
+            leftY: 0,
+            rightY: 0
           },
           Options: {
             listenScroll: true,
-            probeType: 3,
+            probeType: 3
             // stopPropagation:true
           },
-          id:'',
-          userId:'',
-          begin:false,
-          beginOne:false
+          id: '',
+          userId: '',
+          begin: false,
+          beginOne: false
 
         }
       },
@@ -166,30 +166,30 @@
       },
       computed: {
         options () {
-          if(this.scrollY < 221) {
+          if (this.scrollY < 221) {
             return {
               pullUpLoad: false,
               scrollbar: true,
               click: false, // 解决点击事件被触发两次的问题
-              stopPropagation:false,
-              scrollX:false,
-              scrollY:true
+              stopPropagation: false,
+              scrollX: false,
+              scrollY: true
             }
-          }else{
+          } else {
             return {
               pullUpLoad: false,
               scrollbar: true,
               click: false, // 解决点击事件被触发两次的问题
-              stopPropagation:false,
-              scrollX:false,
-              scrollY:false
+              stopPropagation: false,
+              scrollX: false,
+              scrollY: false
             }
           }
         }
       },
       methods: {
         getUser () {
-          this.id = this.$route.params.id     
+          this.id = this.$route.params.id
           this.userId = this.$route.params.userId
           this.$api.users.userdetail(this.$route.params.userId).then(res => {
             this.userMessage = res.data
@@ -203,16 +203,15 @@
           console.log(this.scrollY)
                 // console.log(this.scrollY)
           // this.$refs.toScroll.Enable()
-          if(this.scrollY >= 221) {
+          if (this.scrollY >= 221) {
             // this.$refs.toScroll.Enable()
             // this.$refs.scroll.forceUpdate()
             // console.log('开启子组件滚动')
-            if( this.currentPage === 0) {
+            if (this.currentPage === 0) {
               this.begin = true
-            }else if(this.currentPage === 1) {
+            } else if (this.currentPage === 1) {
               this.beginOne = true
             }
-           
           }
           this.messTop = this.$refs.messTop.getBoundingClientRect().top
                 // console.log(this.messTop)
@@ -239,7 +238,7 @@
           }
         },
         scrollEndHandler ({ y }) {
-          
+    
         },
         toggles (index) {
           this.currentPage = index

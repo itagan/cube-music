@@ -41,13 +41,13 @@
         const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - progressBtnWidth, Math.max(0, this.touch.left + deltaX))
         this._offset(offsetWidth)
         this.$emit('percentChanging', this._getPercent())
-        this.$refs.enLarge.style.height='3px'
+        this.$refs.enLarge.style.height = '3px'
         this.$refs.btnEnlarge.classList.add('progress-btn-active')
       },
       progressTouchEnd () {
         this.touch.initiated = false
         this._triggerPercent()
-        this.$refs.enLarge.style.height='2px'
+        this.$refs.enLarge.style.height = '2px'
         this.$refs.btnEnlarge.classList.remove('progress-btn-active')
       },
       progressClick (e) {

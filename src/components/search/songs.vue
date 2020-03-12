@@ -97,51 +97,51 @@ export default {
     checkFooter
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: true,
         scrollbar: true,
-        click: false 
+        click: false
       },
       scrollY: 0,
       scrollEvents: ['scroll'],
-      multimatch:{},
-      isPlay:false,
-      songs:[],
-      song:{},
+      multimatch: {},
+      isPlay: false,
+      songs: [],
+      song: {},
       checked: false,
       allShow: false,
       complete: false,
       hasMore: true,
-      songCount:0,
-      offset:0,
-      count:0,
-      result:true,
+      songCount: 0,
+      offset: 0,
+      count: 0,
+      result: true,
       checkbox: false,
       activeColor: 'activeColor',
       checkList: [],
-      checkLists:[],
+      checkLists: [],
       val: 1,
-      currentIndex:-1,
+      currentIndex: -1
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 1  && !this.songs.length) {
+    currentPage (val) {
+      if (val === 1 && !this.songs.length) {
         this.getSongs(this.value, 60, 0, 1)
       }
-      
-      if(val !== 1) {
+
+      if (val !== 1) {
         this.allShow = false
         this.checked = false
         this.checkbox = false
@@ -154,14 +154,14 @@ export default {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
         this.songCount = res.data.result.songCount
         this.hasMore = this.count < this.songCount
-        if(this.hasMore) {
-          this.count+=30
-          this.offset+=10
+        if (this.hasMore) {
+          this.count += 30
+          this.offset += 10
         }
-        this.songs =  this.songs.concat(res.data.result.songs)
+        this.songs = this.songs.concat(res.data.result.songs)
 
         setTimeout(() => {
-          this.result = this.songCount > 0 ? true : false
+          this.result = this.songCount > 0
         }, 3000)
       })
     },
@@ -172,7 +172,7 @@ export default {
       this.scrollY = -y
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       setTimeout(() => {
         this.getSongs(this.value, 30, this.offset, 1)
         const contentScroll = this.$refs.contentScroll
@@ -194,35 +194,35 @@ export default {
       this.allToCheckNo()
       this.checkList = []
       this.$emit('allToShow', false)
-      this.$emit('changebg',false)
+      this.$emit('changebg', false)
     },
     TransAlias (alias) {
       let arr = []
-      for(let i = 0; i < alias.length; i++) {
+      for (let i = 0; i < alias.length; i++) {
         arr.push(alias[i])
       }
       return arr.join('/')
     },
-    toCheckMusic(item,index) {
-      if(this.allShow) {
-        if(this.$refs.liSong[index].classList.contains('checked')) {
+    toCheckMusic (item, index) {
+      if (this.allShow) {
+        if (this.$refs.liSong[index].classList.contains('checked')) {
           this.$refs.liSong[index].classList.remove('checked')
-        }else {
+        } else {
           this.$refs.liSong[index].classList.add('checked')
         }
         this.checkList = []
-        this.$refs.liSong.filter((item,index) => {
-        if(item.classList.contains('checked') === true) {
-          this.checkList.push(index)
+        this.$refs.liSong.filter((item, index) => {
+          if (item.classList.contains('checked') === true) {
+            this.checkList.push(index)
           }
         })
         this.checkList.length === this.songs.length ? this.checked = true : this.checked = false
-        if(this.checkList.length) {
-          this.$emit('changebg',true)
-        }else {
-          this.$emit('changebg',false)
+        if (this.checkList.length) {
+          this.$emit('changebg', true)
+        } else {
+          this.$emit('changebg', false)
         }
-      }else {
+      } else {
         this.currentIndex = index
         // this.$router.push({
         //   path:`/musicplayer/${item.id}`
@@ -230,7 +230,7 @@ export default {
         this.$router.push({
           path: `/musicplayer`,
           query: {
-            item:JSON.stringify(item)
+            item: JSON.stringify(item)
           }
         })
         // console.log(item)
@@ -250,17 +250,17 @@ export default {
     },
     allToChecked () {
       this.checkList = [...this.allToCheck()]
-      for(let i = 0; i < this.songs.length; i++) {
+      for (let i = 0; i < this.songs.length; i++) {
         this.$refs.liSong[i].classList.add('checked')
       }
-      this.$emit('changebg',true)
+      this.$emit('changebg', true)
     },
     allToCheckNo () {
       this.checkList = []
-      for(let i = 0; i < this.songs.length; i++) {
+      for (let i = 0; i < this.songs.length; i++) {
         this.$refs.liSong[i].classList.remove('checked')
       }
-      this.$emit('changebg',false)
+      this.$emit('changebg', false)
     },
     toMoreOpera (item) {
       this.$emit('more', item)
@@ -269,17 +269,17 @@ export default {
     // 选中的有哪些
     whoChecked () {
       this.checkLists = []
-      for(let i = 0; i < this.checkList.length; i++) {
+      for (let i = 0; i < this.checkList.length; i++) {
         this.checkLists.push(this.songs[this.checkList[i]])
       }
       // console.log(this.checkLists)
       this.$emit('whochecked', this.checkLists)
     }
   },
-  created() {
+  created () {
     // this.getSongs(this.value, 60, 0, 1)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

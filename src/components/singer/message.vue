@@ -57,7 +57,7 @@
       name: 'userMessage.vue',
       data () {
         return {
-          man: true,
+          man: true
         }
       },
       props: {

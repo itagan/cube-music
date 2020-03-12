@@ -92,7 +92,7 @@
             pullUpLoad: this.pullUpLoadObj,
             scrollbar: true,
             probeType: 1,
-            click:false
+            click: false
           }
         },
         pullUpLoadObj: function () {
@@ -119,7 +119,7 @@
             this.comments = res.data.hotComments
             this.hasReplyArr = this.comments.filter(item => {
               return item.parentCommentId !== 0
-            }) 
+            })
           })
         },
         scrollHandler (pos) {
@@ -176,18 +176,18 @@
         },
         Reply (index) {
           let proup = document.getElementsByClassName('cube-popup-content')[0],
-          liTop = this.$refs.liOffset_[index].getBoundingClientRect().top,
-          Hei = this.$refs.liOffset_[index].offsetHeight
-          if(liTop < 350){
+            liTop = this.$refs.liOffset_[index].getBoundingClientRect().top,
+            Hei = this.$refs.liOffset_[index].offsetHeight
+          if (liTop < 350) {
             let _liTop = liTop + Hei
             proup.style.top = -(667 - _liTop - 30) + 'px'
-          }else {
-            proup.style.top = -(667 - liTop+30) + 'px'
+          } else {
+            proup.style.top = -(667 - liTop + 30) + 'px'
           }
           let user = this.comments[index].user.nickname,
-              commentId = this.comments[index].commentId,
-              threadId = this.threadId
-          this.$emit('showDialog',liTop,user,commentId,threadId)
+            commentId = this.comments[index].commentId,
+            threadId = this.threadId
+          this.$emit('showDialog', liTop, user, commentId, threadId)
         },
         ...mapMutations({
           setHotLimit: 'SET_HOT_LIMIT'

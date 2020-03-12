@@ -86,7 +86,7 @@
         },
         login () {
           // this.getRes()
-          
+    
             // 提示方法
           const toast = msg => {
             this.$createToast({
@@ -101,29 +101,28 @@
             // this.uid = res.data.account.id
             console.log(res)
             if (this.code === 502) {
-            toast.show('密码错误！')
-          } else if (this.code === 200) {
+              toast.show('密码错误！')
+            } else if (this.code === 200) {
                     // 把用户id信息提交到vuex
-            this.uid = res.data.account.id
-            this.setUid(this.uid)
+              this.uid = res.data.account.id
+              this.setUid(this.uid)
 
                 // 登录成功，刷新登录状态
-            this.$api.users.refresh().then(res => {
-              console.log(res)
-              if (res.status === 200) {
-                console.log('刷新状态成功')
+              this.$api.users.refresh().then(res => {
+                console.log(res)
+                if (res.status === 200) {
+                  console.log('刷新状态成功')
                     // 刷新成功，可以登录并跳转到首页
-                this.$router.push(
-                  {
-                    path: '/find'
-                  }
+                  this.$router.push(
+                    {
+                      path: '/find'
+                    }
                         )
-              } else {
-                console.log('刷新状态失败')
-              }
-            })
-          }
-            
+                } else {
+                  console.log('刷新状态失败')
+                }
+              })
+            }
           })
 
           // if (this.code === 400) {

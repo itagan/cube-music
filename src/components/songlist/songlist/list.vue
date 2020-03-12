@@ -72,7 +72,7 @@
           checkbox: false,
           activeColor: 'activeColor',
           checkList: [],
-          val: 1,
+          val: 1
           // currentInd:-1
         }
       },
@@ -93,13 +93,13 @@
           type: Boolean,
           default: false
         },
-        isself:{
+        isself: {
           type: Boolean,
           default: false
         },
         currentInd: {
-          type:Number,
-          default:-1
+          type: Number,
+          default: -1
         }
       },
       watch: {
@@ -110,16 +110,16 @@
           this.checkbox = val
         },
         currentSong (newSong, oldSong) {
-          if (!newSong.id  || newSong.id === oldSong.id) {
+          if (!newSong.id || newSong.id === oldSong.id) {
             return
           }
-          this.getInd (newSong.id)
-        },
+          this.getInd(newSong.id)
+        }
       },
       computed: {
         ...mapGetters([
-          'currentSong',
-        ]),
+          'currentSong'
+        ])
       },
       methods: {
         more (item) {
@@ -132,16 +132,16 @@
           } else {
             this.$emit('toAll', 0)
           }
-          if(this.checkList.length) {
-            this.$emit('changebg',true)
-          }else {
-            this.$emit('changebg',false)
+          if (this.checkList.length) {
+            this.$emit('changebg', true)
+          } else {
+            this.$emit('changebg', false)
           }
         },
-        toCheckMusic(item,index) {
-          if(this.checkbox) {
-          }else {
-             this.$emit('changeInd',index)
+        toCheckMusic (item, index) {
+          if (this.checkbox) {
+          } else {
+            this.$emit('changeInd', index)
             // this.currentInd = index
             // this.$router.push({
             //   path: `/musicplayer`,
@@ -151,7 +151,7 @@
             // })
             this.selectPlay({
               list: this.tracks.slice(),
-              index:index
+              index: index
             })
           }
         },
@@ -164,25 +164,25 @@
         },
         allToChecked () {
           this.checkList = [...this.allToCheck()]
-          this.$emit('changebg',true)
+          this.$emit('changebg', true)
         },
         allToCheckNo () {
           this.checkList = []
-          this.$emit('changebg',false)
+          this.$emit('changebg', false)
         },
         getInd (id) {
           let ind = this.tracks.findIndex(item => {
             return item.id === id
           })
-          if(ind >= 0) {
+          if (ind >= 0) {
             // this.currentInd = ind
-            this.$emit('changeInd',ind)
+            this.$emit('changeInd', ind)
           }
         },
           // 选中的有哪些
         whoChecked () {
           this.checkLists = []
-          for(let i = 0; i < this.checkList.length; i++) {
+          for (let i = 0; i < this.checkList.length; i++) {
             this.checkLists.push(this.tracks[this.checkList[i] - 1])
           }
           console.log(this.checkList)

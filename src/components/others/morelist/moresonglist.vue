@@ -63,18 +63,18 @@
               text: '收藏的歌单'
             }
           ],
-          playlist:[],
-          collection:[],
-          nums:0,
-          userId:477726475
+          playlist: [],
+          collection: [],
+          nums: 0,
+          userId: 477726475
         }
       },
       methods: {
         getPlaylist () {
-          this.$api.users.playlist(this.$route.params.userId).then(res => {  
+          this.$api.users.playlist(this.$route.params.userId).then(res => {
             this.playlist = res.data.playlist.filter((item) => {
-                item.creator.userId === this.userId
-              })
+              item.creator.userId === this.userId
+            })
             this.collection = res.data.playlist.filter((item) => {
               item.creator.userId !== this.userId
             })
@@ -100,7 +100,7 @@
       },
       created () {
         // this.getList()
-        this.getPlaylist() 
+        this.getPlaylist()
       }
     }
 </script>

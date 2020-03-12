@@ -178,15 +178,15 @@
           allShow: false,
           complete: false,
           isSubscribed: false,
-          id:'',
-          subCount:0,
-          isSub:false,
-          singers:[],
-          coverShow:false,
-          addColor:false,
-          song:{},
-          songs:[],
-          checkLists:[]
+          id: '',
+          subCount: 0,
+          isSub: false,
+          singers: [],
+          coverShow: false,
+          addColor: false,
+          song: {},
+          songs: [],
+          checkLists: []
         }
       },
       computed: {
@@ -227,7 +227,7 @@
           })
         },
         scrollHandler ({ y }) {
-           this.scrollY = -y
+          this.scrollY = -y
           this.messTop = this.$refs.messTop.getBoundingClientRect().top
               // 需要添加防抖节流
           if (this.messTop < 171) {
@@ -251,7 +251,7 @@
         },
         toAlbum () {
           this.$router.push({
-            path:`/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
+            path: `/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
           })
         },
         cancel () {
@@ -289,7 +289,7 @@
           }, 500)
         },
         toShare () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$refs.shareShow.show()
         },
         setRing () {
@@ -301,8 +301,8 @@
             // 全选功能
         toCheck () {
           this.allShow = true
-          if(this.songs.length > 5) {
-            this.stickyTop()  
+          if (this.songs.length > 5) {
+            this.stickyTop()
           }
           // this.stickyTop()
         },
@@ -339,54 +339,54 @@
           }, 500)
         },
         toUser () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.singers = this.messages.artists
-          if(this.messages.artists.length > 1) {
+          if (this.messages.artists.length > 1) {
             this.moreSinger()
             this.isMore = false
             return
           }
 
           this.$api.singers.singermusic(this.messages.artist.id).then(res => {
-            if(res.data.artist.accountId) {
+            if (res.data.artist.accountId) {
               this.accountId = res.data.artist.accountId
               let userId = this.accountId
               this.$router.push({
                 path: `/singer/${userId}/${this.messages.artist.id}`
-                })
-            }else {
+              })
+            } else {
               let userId = 477726475
               this.$router.push({
                 path: `/singer/${userId}/${this.messages.artist.id}`
-                })
+              })
             }
           })
         },
         toSinger () {
-          if(this.singers.length > 1) {
+          if (this.singers.length > 1) {
             this.moreSinger()
             this.isMore = false
             return
           }
           this.$api.singers.singermusic(this.song.ar[0].id).then(res => {
-            if(res.data.artist.accountId) {
+            if (res.data.artist.accountId) {
               this.accountId = res.data.artist.accountId
               let userId = this.accountId
               this.$router.push({
                 path: `/singer/${userId}/${this.song.ar[0].id}`
-                })
-            }else {
+              })
+            } else {
               let userId = 477726475
               this.$router.push({
                 path: `/singer/${userId}/${this.song.ar[0].id}`
-                })
+              })
             }
           })
         },
         toComment () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$router.push({
-            path:`/albumcomment`,
+            path: `/albumcomment`,
             query: {
               album: JSON.stringify(this.messages)
             }
@@ -409,7 +409,7 @@
         },
         toCollectedFooter () {
           this.$refs.ToCheck.whoChecked()
-          if(this.checkLists.length) {
+          if (this.checkLists.length) {
             this.$refs.collectedShow.show()
           }
         },
@@ -418,10 +418,10 @@
           this.checkLists = checkLists
         },
         changeColor (type) {
-        if(type) {
-          this.addColor = true
-        }else {
-          this.addColor = false
+          if (type) {
+            this.addColor = true
+          } else {
+            this.addColor = false
           }
         },
             // 收藏功能
@@ -430,7 +430,7 @@
             this.$createDialog({
               type: 'confirm',
               title: '确定不再收藏该专辑？',
-              zIndex:2001,
+              zIndex: 2001,
               confirmBtn: {
                 text: '确定',
                 active: true,
@@ -472,9 +472,9 @@
             })
           }
         },
-         Num (num) {
+        Num (num) {
           return serializeNumber(num)
-        },
+        }
       },
       watch: {
         isBuild (val) {

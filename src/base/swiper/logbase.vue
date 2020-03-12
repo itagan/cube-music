@@ -27,10 +27,10 @@
 <script>
     export default {
       name: 'logBase.vue',
-      props:{
-        item:{
-          type:Object,
-          default:{}
+      props: {
+        item: {
+          type: Object,
+          default: {}
         }
       }
     }

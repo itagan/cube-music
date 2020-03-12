@@ -28,7 +28,7 @@
           comments: [],
           item: {},
           showAllHot: false,
-          hasReplyArr:[]
+          hasReplyArr: []
         }
       },
       props: {
@@ -69,18 +69,18 @@
         },
         Reply (index) {
           let proup = document.getElementsByClassName('cube-popup-content')[0],
-          liTop = this.$refs._liOffset[index].getBoundingClientRect().top,
-          Hei = this.$refs._liOffset[index].offsetHeight
-          if(liTop < 350){
+            liTop = this.$refs._liOffset[index].getBoundingClientRect().top,
+            Hei = this.$refs._liOffset[index].offsetHeight
+          if (liTop < 350) {
             let _liTop = liTop + Hei
             proup.style.top = -(667 - _liTop - 30) + 'px'
-          }else {
-            proup.style.top = -(667 - liTop+30) + 'px'
+          } else {
+            proup.style.top = -(667 - liTop + 30) + 'px'
           }
           let user = this.comments[index].user.nickname,
-              commentId = this.comments[index].commentId,
-              threadId = this.threadId
-          this.$emit('showDialog',liTop,user,commentId,threadId)
+            commentId = this.comments[index].commentId,
+            threadId = this.threadId
+          this.$emit('showDialog', liTop, user, commentId, threadId)
         },
         ...mapMutations({
           setHotLimit: 'SET_HOT_LIMIT'

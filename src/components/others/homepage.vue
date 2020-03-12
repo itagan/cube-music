@@ -162,14 +162,14 @@
       name: 'homepage.vue',
       data () {
         return {
-          playlists:[],
+          playlists: [],
           playlist: [],
           collection: [],
           trackCountLike: 0,
           playCountLike: 0,
-          isLog:false,
-          musiccolumn:false,
-          isComment:false,
+          isLog: false,
+          musiccolumn: false,
+          isComment: false
         }
       },
       components: {
@@ -183,9 +183,9 @@
         }
       },
       created () {},
-      watch:{
+      watch: {
         userMessage (val) {
-          //不采用created钩子，解决props传值未到达加载错误问题
+          // 不采用created钩子，解决props传值未到达加载错误问题
           this.getPlaylist(val.profile.userId)
         }
       },
@@ -201,13 +201,11 @@
             // console.log(this.collection)
             this.trackCountLike = this.playlist[0].trackCount
             this.playCountLike = this.playlist[0].playCount
-            for(let i = 0;i<res.data.playlist.length; i++) {
+            for (let i = 0; i < res.data.playlist.length; i++) {
               res.data.playlist[i].playCount = serializeNumber(res.data.playlist[i].playCount)
             }
             this.playlists = res.data.playlist
             // console.log(this.playlists)
-            
-
           })
         },
         moreMessage () {
@@ -218,8 +216,8 @@
             //   profile:this.profile
             // }
             query: {
-              profile:JSON.stringify(this.userMessage.profile),
-              level:this.userMessage.level
+              profile: JSON.stringify(this.userMessage.profile),
+              level: this.userMessage.level
             }
           })
         },
@@ -230,12 +228,12 @@
         },
         toList (id) {
           this.$router.push({
-            path:`/songlist/${id}`  //注意前面加个'/' 是根路由
+            path: `/songlist/${id}`  // 注意前面加个'/' 是根路由
           })
         },
         toListLike () {
           this.$router.push({
-            path:`/songlist/${this.playlists[0].id}`  //注意前面加个'/' 是根路由
+            path: `/songlist/${this.playlists[0].id}`  // 注意前面加个'/' 是根路由
           })
         },
         CitySure (province, city) {
@@ -245,22 +243,22 @@
           return arr[0].province + arr[0].text
         },
         createYear (day) {
-          if(day < 365) {
+          if (day < 365) {
             return `${day}` + '天'
-          }else {
+          } else {
             return `${Math.floor(day / 365)}` + '年'
           }
         },
         getAge (timestamp) {
           let nowTimestamp = new Date().getTime()
-          return Math.ceil((nowTimestamp-timestamp)/31536000000)
+          return Math.ceil((nowTimestamp - timestamp) / 31536000000)
         },
         registerTime (timestamp) {
           let date = new Date(timestamp)
           let Y = date.getFullYear() + '年'
           let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '月'
-          return Y + M 
-        },
+          return Y + M
+        }
 
       }
 

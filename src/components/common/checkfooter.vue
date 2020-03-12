@@ -26,11 +26,11 @@ export default {
   components: {},
   props: {
     addColor: {
-      type:Boolean,
-      default:false
-    } 
+      type: Boolean,
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
     }
   },
@@ -44,8 +44,8 @@ export default {
     toLoad () {},
     noLoad () {}
   },
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

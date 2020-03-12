@@ -107,7 +107,7 @@ export default new Router({
       component: Find,
       meta: {
         keepAlive: true // 需要被缓存
-      },
+      }
     //   children: [
     //     {
     //       path: '*',
@@ -350,7 +350,7 @@ export default new Router({
         keepAlive: true,
         isBack: false
       }
-      // beforeEnter: (to, from, next) => { 
+      // beforeEnter: (to, from, next) => {
       //   if (from.name === 'djcomment') {
       //     to.meta.keepAlive = true
       //   } else {
@@ -359,7 +359,7 @@ export default new Router({
       //     // this.loading = true
       //   }
       //   next()
-      // }  
+      // }
     },
     {
       path: '/djcomment',
@@ -368,7 +368,7 @@ export default new Router({
       meta: {
         keepAlive: false
       }
-    },
+    }
     // {
     //   path: '/musicplayer',
     //   component: Musicplayer,

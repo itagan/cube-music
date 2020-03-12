@@ -75,8 +75,6 @@
     import homePage from './detail'
     import programList from './program'
 
-   
-
     export default {
       name: 'radio.vue',
       components: {
@@ -89,40 +87,40 @@
         return {
           title: '电台',
           isShow: true,
-          scrollEvents: ['scroll','scroll-end'],
+          scrollEvents: ['scroll', 'scroll-end'],
           scrollY: 0,
           activeClass: 'nav-item-active',
           currentPage: 0,
           objs: [
             {
               text: '详情',
-              num:''
+              num: ''
             },
             {
               text: '节目',
-              num:''
+              num: ''
             }
           ],
-          djRadio:{},
-          userMessage:{},
+          djRadio: {},
+          userMessage: {},
           profile: {},
           level: 0,
           messTop: 0,
-          hasMore:true,
-          lasttime:-1,
-          scrollYs:{
-            leftY:0,
-            rightY:0
+          hasMore: true,
+          lasttime: -1,
+          scrollYs: {
+            leftY: 0,
+            rightY: 0
           },
           Options: {
             listenScroll: true,
-            probeType: 3,
+            probeType: 3
             // stopPropagation:true
           },
-          id:'',
-          userId:'',
-          begin:false,
-          beginOne:false
+          id: '',
+          userId: '',
+          begin: false,
+          beginOne: false
 
         }
       },
@@ -131,30 +129,30 @@
       },
       computed: {
         options () {
-          if(this.scrollY < 221) {
+          if (this.scrollY < 221) {
             return {
               pullUpLoad: false,
               scrollbar: true,
               click: false, // 解决点击事件被触发两次的问题
-              stopPropagation:false,
-              scrollX:false,
-              scrollY:true
+              stopPropagation: false,
+              scrollX: false,
+              scrollY: true
             }
-          }else{
+          } else {
             return {
               pullUpLoad: false,
               scrollbar: true,
               click: false, // 解决点击事件被触发两次的问题
-              stopPropagation:false,
-              scrollX:false,
-              scrollY:true
+              stopPropagation: false,
+              scrollX: false,
+              scrollY: true
             }
           }
         }
       },
       methods: {
         getRadio () {
-          this.id = this.$route.params.id     
+          this.id = this.$route.params.id
           // this.userId = this.$route.params.userId
           this.$api.radios.detail(this.id).then(res => {
             this.djRadio = res.data.djRadio
@@ -182,7 +180,7 @@
           }
         },
         scrollEndHandler ({ y }) {
-          
+    
         },
         toggles (index) {
           this.currentPage = index
@@ -201,10 +199,10 @@
           this.currentPage = 1
         },
         issub (type) {
-          if(type) {
+          if (type) {
             this.djRadio.subed = true
             this.djRadio.subCount++
-          }else {
+          } else {
             this.djRadio.subed = false
             this.djRadio.subCount--
           }

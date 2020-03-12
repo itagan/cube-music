@@ -113,41 +113,41 @@
         return {
           title: '电台',
           isShow: true,
-          scrollEvents: ['scroll','scroll-end'],
+          scrollEvents: ['scroll', 'scroll-end'],
           scrollY: 0,
           activeClass: 'nav-item-active',
           currentPage: 0,
           objs: [
             {
               text: '详情',
-              num:''
+              num: ''
             },
             {
               text: '节目',
-              num:''
+              num: ''
             }
           ],
-          djRadio:{},
-          userMessage:{},
+          djRadio: {},
+          userMessage: {},
           profile: {},
           level: 0,
           messTop: 0,
-          hasMore:true,
-          lasttime:-1,
-          scrollYs:{
-            leftY:0,
-            rightY:0
+          hasMore: true,
+          lasttime: -1,
+          scrollYs: {
+            leftY: 0,
+            rightY: 0
           },
           Options: {
             listenScroll: true,
-            probeType: 3,
+            probeType: 3
             // stopPropagation:true
           },
-          id:'',
-          iTem:{},
-          count:0,
-          loading:false,
-          isFirstEnter:false
+          id: '',
+          iTem: {},
+          count: 0,
+          loading: false,
+          isFirstEnter: false
         }
       },
       created () {
@@ -156,30 +156,30 @@
       },
       computed: {
         options () {
-          if(this.scrollY < 221) {
+          if (this.scrollY < 221) {
             return {
               pullUpLoad: false,
               scrollbar: true,
               click: false, // 解决点击事件被触发两次的问题
-              stopPropagation:false,
-              scrollX:false,
-              scrollY:true
+              stopPropagation: false,
+              scrollX: false,
+              scrollY: true
             }
-          }else{
+          } else {
             return {
               pullUpLoad: false,
               scrollbar: true,
               click: false, // 解决点击事件被触发两次的问题
-              stopPropagation:false,
-              scrollX:false,
-              scrollY:true
+              stopPropagation: false,
+              scrollX: false,
+              scrollY: true
             }
           }
         }
       },
       methods: {
         getRadio () {
-          this.id = this.$route.params.id     
+          this.id = this.$route.params.id
           // this.userId = this.$route.params.userId
           this.$api.radios.detail(this.id).then(res => {
             this.djRadio = res.data.djRadio
@@ -207,7 +207,7 @@
           }
         },
         scrollEndHandler ({ y }) {
-          
+    
         },
         toggles (index) {
           this.currentPage = index
@@ -223,10 +223,10 @@
           this.currentPage = 1
         },
         issub (type) {
-          if(type) {
+          if (type) {
             this.djRadio.subed = true
             this.djRadio.subCount++
-          }else {
+          } else {
             this.djRadio.subed = false
             this.djRadio.subCount--
           }
@@ -246,14 +246,14 @@
           this.objs[1].num = count
         }
       },
-      beforeRouteEnter(to,from,next){
-        if(from.name == 'djcomment'){
+      beforeRouteEnter (to, from, next) {
+        if (from.name == 'djcomment') {
             // to.meta.keepAlive = true
             // console.log('缓存本组件')
-            to.meta.isBack = true
-        }else{
+          to.meta.isBack = true
+        } else {
             // to.meta.keepAlive = false
-            to.meta.isBack = false
+          to.meta.isBack = false
             // this.loading = true
         }
         next()
@@ -280,28 +280,28 @@
       //   }
       //   next()
       // },
-      activated(){
-        if(!this.$route.meta.isBack || this.isFirstEnter){
-            this.djRadio = {}
-            this.getRadio()
-            if(this.currentPage === 1) {
-              this.$refs.toScroll.parget()
+      activated () {
+        if (!this.$route.meta.isBack || this.isFirstEnter) {
+          this.djRadio = {}
+          this.getRadio()
+          if (this.currentPage === 1) {
+            this.$refs.toScroll.parget()
               // this.$refs.toScroll.scrollTo(0,0,300)
               // this.loadData = false
-            } 
+          }
             // this.$refs.toScroll.parget()
-            console.log('更新数据')
-            //滚动位置重置
-            this.$nextTick(() =>{
+          console.log('更新数据')
+            // 滚动位置重置
+          this.$nextTick(() => {
               // this.$refs.Scroll.scrollTo(0,0,300)
-            })
+          })
             // this.$refs.toScroll.scrollTo(0,0,300)
-        }else{
+        } else {
             // this.$route.meta.isBack = false
         }
-         this.$route.meta.isBack = false
-         this.isFirstEnter=false
-      },
+        this.$route.meta.isBack = false
+        this.isFirstEnter = false
+      }
       // beforeRouteLeave(to,from,next){
       //   if(from.name == 'djcomment'){
       //       to.meta.keepAlive = true

@@ -95,7 +95,7 @@
         return {
           title: '',
           isShow: true,
-          scrollEvents: ['scroll','scroll-end'],
+          scrollEvents: ['scroll', 'scroll-end'],
           scrollY: 0,
           activeClass: 'nav-item-active',
           errorClass: '',
@@ -109,15 +109,15 @@
               text: '动态'
             }
           ],
-          userMessage:{},
+          userMessage: {},
           profile: {},
           level: 0,
           messTop: 0,
-          hasMore:true,
-          lasttime:-1,
-          scrollYs:{
-            leftY:0,
-            rightY:0
+          hasMore: true,
+          lasttime: -1,
+          scrollYs: {
+            leftY: 0,
+            rightY: 0
           },
           Options: {
             listenScroll: true,
@@ -131,13 +131,13 @@
       },
       computed: {
         options () {
-          if(this.currentPage === 0) {
+          if (this.currentPage === 0) {
             return {
               pullUpLoad: false,
               scrollbar: true,
               click: false // 解决触发两次点击事件的bug
             }
-          }else{
+          } else {
             return {
               pullUpLoad: true,
               scrollbar: true,
@@ -148,7 +148,7 @@
       },
       methods: {
         getUser () {
-          // this.$route.params.userId          
+          // this.$route.params.userId
           this.$api.users.userdetail(this.$route.params.userId).then(res => {
             this.userMessage = res.data
             this.profile = res.data.profile
@@ -185,7 +185,7 @@
                   // this.$refs.Enlarge.style['transform'].scale = 1
           }
 
-          if(this.scrollY < 230) {
+          if (this.scrollY < 230) {
             // if(this.scrollYs.leftY > 230 && this.scrollYs.rightY < 230) {
             //   this.scrollYs.rightY = 230
             // }
@@ -198,12 +198,12 @@
             //   this.scrollYs.leftY = this.scrollY
             //   this.scrollYs.rightY = this.scrollY
             // }
+            this.scrollYs.leftY = this.scrollY
+            this.scrollYs.rightY = this.scrollY
+          } else {
+            if (this.currentPage === 0) {
               this.scrollYs.leftY = this.scrollY
-              this.scrollYs.rightY = this.scrollY
-          }else {
-            if(this.currentPage === 0) {
-              this.scrollYs.leftY = this.scrollY
-            }else {
+            } else {
               this.scrollYs.rightY = this.scrollY
             }
           }
@@ -223,10 +223,10 @@
         },
         slideChange (index) {
           this.currentPage = index
-          if(this.currentPage === 0) {
-            this.$refs.scroll.scrollTo(0,-this.scrollYs.leftY,150)
-          }else {
-            this.$refs.scroll.scrollTo(0,-this.scrollYs.rightY,150)
+          if (this.currentPage === 0) {
+            this.$refs.scroll.scrollTo(0, -this.scrollYs.leftY, 150)
+          } else {
+            this.$refs.scroll.scrollTo(0, -this.scrollYs.rightY, 150)
           }
           // this.$refs.scroll.scrollTo(0,0,100)
         },
@@ -245,20 +245,20 @@
           // console.log(this.lasttime)
         },
         onPullingUp () {
-          if(this.hasMore) {
+          if (this.hasMore) {
             this.$refs.scroll.forceUpdate()
-          setTimeout(() => {
-            this.$refs.userDynamic.getDynamic(this.profile.userId, 10, this.lasttime)
-            this.$refs.scroll.forceUpdate()
-          }, 1000)
+            setTimeout(() => {
+              this.$refs.userDynamic.getDynamic(this.profile.userId, 10, this.lasttime)
+              this.$refs.scroll.forceUpdate()
+            }, 1000)
           }
         },
         taggleIndex () {
-          if(this.profile.userId === 477726475) {
+          if (this.profile.userId === 477726475) {
             this.currentPage = 0
           }
         }
-      },
+      }
       // mounted() {
       //   this.$nextTick(() => {
       //     this.taggleIndex()

@@ -131,26 +131,26 @@ export default {
     MyHeader,
     UpdateName
   },
-  props: {  },
-  data() {
+  props: { },
+  data () {
     return {
       options: {
         scrollbar: true
       },
       value: '',
       placeholder: '请输入个人介绍...',
-      surplus:300,
-      maxlength:300,
-      userMessage:{},
-      gender:'',
-      birDay:'',
-      area:''
+      surplus: 300,
+      maxlength: 300,
+      userMessage: {},
+      gender: '',
+      birDay: '',
+      area: ''
     }
   },
   watch: {
     value (val) {
-      if(val.length >= 1000) {
-        this.value = val.substring(0,1000)
+      if (val.length >= 1000) {
+        this.value = val.substring(0, 1000)
         this.surplus = 0
       }
     }
@@ -164,20 +164,20 @@ export default {
     getDesc () {
       this.userMessage = JSON.parse(this.$route.query.userMessage)
       console.log(this.userMessage)
-      switch(this.userMessage.profile.gender) {
+      switch (this.userMessage.profile.gender) {
         case 1:
-            this.gender = '男'
-            break
+          this.gender = '男'
+          break
         case 2:
-            this.gender = '女'
-            break
+          this.gender = '女'
+          break
         default:
-            this.gender = '保密'
-       } 
-       this.birDay = this.Timestamp(this.userMessage.profile.birthday)
-       this.CitySure(this.userMessage.profile.province, this.userMessage.profile.city)
+          this.gender = '保密'
+      }
+      this.birDay = this.Timestamp(this.userMessage.profile.birthday)
+      this.CitySure(this.userMessage.profile.province, this.userMessage.profile.city)
     },
-    toBack () {  
+    toBack () {
       // this.$api.songLists.updatedesc(this.userMessage.id, this.value).then(res => {
       //   console.log(res.data)
       // })
@@ -190,7 +190,7 @@ export default {
       })
     },
     music () {},
-    descInput() {
+    descInput () {
       let val = this.value.length
       this.surplus = 300 - val
     },
@@ -198,7 +198,7 @@ export default {
       let date = new Date(timestamp)
       let Y = date.getFullYear() + '-'
       let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
-      let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) 
+      let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate())
       return Y + M + D
     },
     CitySure (province, city) {
@@ -208,22 +208,22 @@ export default {
       this.area = arr[0].province + arr[0].text
     },
     toUpdateCover () {
-    }, 
+    },
     toUpdateName () {
       this.$refs.Name.show()
     },
     toUpdateGener () {
       if (!this.aliasPicker) {
         this.aliasPicker = this.$createPicker({
-          zIndex:2002,
+          zIndex: 2002,
           title: '',
           data: [[{ id: 1, name: '男' }, { id: 2, name: '女' }]],
           alias: {
             value: 'id',
             text: 'name'
           },
-          confirmTxt:'完成',
-          onSelect:  this.GenerSelectHandle,
+          confirmTxt: '完成',
+          onSelect: this.GenerSelectHandle,
           onCancel: this.GenerCancelHandle
         })
       }
@@ -244,9 +244,9 @@ export default {
     toUpdateBir () {
       if (!this.datePicker) {
         this.datePicker = this.$createDatePicker({
-          zIndex:2002,
+          zIndex: 2002,
           title: '',
-          confirmTxt:'完成',
+          confirmTxt: '完成',
           min: new Date(1900, 1, 1),
           max: new Date(2100, 1, 1),
           value: new Date(),
@@ -261,22 +261,22 @@ export default {
       this.addressPicker.show()
     },
     toUpdateUn () {},
-    selectHandle(selectedVal, selectedIndex, selectedText) {
-     this.area = `${selectedText.join(' ')}`
+    selectHandle (selectedVal, selectedIndex, selectedText) {
+      this.area = `${selectedText.join(' ')}`
     },
-    cancelHandle() {
-      
+    cancelHandle () {
+
     }
   },
-  created() {
+  created () {
     this.getDesc()
   },
-  mounted() {
+  mounted () {
     this.addressPicker = this.$createCascadePicker({
       title: '',
       data: addressData,
-      confirmTxt:'完成',
-      zIndex:2002,
+      confirmTxt: '完成',
+      zIndex: 2002,
       onSelect: this.selectHandle,
       onCancel: this.cancelHandle
     })

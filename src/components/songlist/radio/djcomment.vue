@@ -119,7 +119,6 @@
     import radioToast from '../../common/toast'
     import shareDialog from '../../common/sharedialog'
 
-
     export default {
       name: 'djcomment.vue',
       components: {
@@ -141,17 +140,17 @@
           offset: 0,
           hasMore: true,
           moreHot: false,
-          hasReplyArr:[],
-          ReplyArr:[],
-          placeholder:"千头万绪，落笔汇成评论一句",
-          value:'',
-          user:'',
-          commentId:-1,
-          threadId:'',
+          hasReplyArr: [],
+          ReplyArr: [],
+          placeholder: '千头万绪，落笔汇成评论一句',
+          value: '',
+          user: '',
+          commentId: -1,
+          threadId: '',
           information: {},
-          isLoading:true,
-          isLoadingText:false,
-          mytype:'dj'
+          isLoading: true,
+          isLoadingText: false,
+          mytype: 'dj'
         }
       },
       props: {},
@@ -162,13 +161,13 @@
       },
       computed: {
         options () {
-          if(this.comments.length) {
+          if (this.comments.length) {
             return {
               pullUpLoad: true,
               scrollbar: true,
               click: false // 解决触发两次点击事件的bug
             }
-          }else{
+          } else {
             return {
               pullUpLoad: false,
               scrollbar: true,
@@ -187,42 +186,41 @@
               this.offset += 20
               this.comments = this.comments.concat(res.data.comments)
               this.hasReplyArr = this.comments.slice().filter(item => {
-              return item.parentCommentId !== 0
-              })             
+                return item.parentCommentId !== 0
+              })
             } else {
               this.comments = res.data.comments
               this.hasReplyArr = this.comments.filter(item => {
-              return item.parentCommentId !== 0
-              }) 
+                return item.parentCommentId !== 0
+              })
             }
             if (this.moreHot === true) {
               this.hotComments = this.hotComments.concat(res.data.hotComments)
-              
+    
               this.ReplyArr = this.hotComments.filter(item => {
-              return item.parentCommentId !== 0
-              }) 
+                return item.parentCommentId !== 0
+              })
             } else if (this.moreHot === false) {
               this.hotComments = res.data.hotComments !== 'undefined' ? res.data.hotComments : 'undefined'
               if (this.hotComments) {
                 this.ReplyArr = this.hotComments.slice().filter(item => {
-                return item.parentCommentId !== 0
-                }) 
+                  return item.parentCommentId !== 0
+                })
               }
             }
 
-            if(res.data.comments.length >= 1) {
+            if (res.data.comments.length >= 1) {
               setTimeout(() => {
                 this.isLoading = false
                 this.isLoadingText = false
               }, 1000)
-            }else{
+            } else {
               setTimeout(() => {
                 this.isLoading = false
                 this.isLoadingText = true
                 this.Input()
               }, 1000)
             }
-
           })
         },
         toBack () {
@@ -242,7 +240,7 @@
           this.scrollY = -y
         },
         onPullingUp () {
-          if(!this.hasMore) return
+          if (!this.hasMore) return
           setTimeout(() => {
             this.getComment(JSON.parse(this.$route.query.dj).id, this.offset, 20)
             const contentScroll = this.$refs.contentScroll
@@ -254,7 +252,7 @@
         },
         toDj (id) {
           this.$router.push({
-            path:`/radiolist/${id}`
+            path: `/radiolist/${id}`
           })
         },
         Album () {
@@ -263,19 +261,19 @@
         },
         Reply (index) {
           let proup = document.getElementsByClassName('cube-popup-content')[0],
-          liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
-          Hei = this.$refs.liOffset[index].offsetHeight
-          if(liTop < 144){
+            liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
+            Hei = this.$refs.liOffset[index].offsetHeight
+          if (liTop < 144) {
             let _liTop = liTop + Hei
             proup.style.top = -(667 - _liTop - 30) + 'px'
-          }else {
+          } else {
             proup.style.top = -(667 - liTop + 30) + 'px'
           }
 
           this.$refs.showDia.show()
-          if(liTop < 144){
+          if (liTop < 144) {
             this.$refs.showDia.diaTopChange()
-          }else {
+          } else {
             this.$refs.showDia._diaTopChange()
           }
           this.user = this.comments[index].user.nickname
@@ -284,19 +282,19 @@
         },
         _Reply (index) {
           let proup = document.getElementsByClassName('cube-popup-content')[0],
-          liTop = this.$refs._liOffset[index].getBoundingClientRect().top,
-          Hei = this.$refs._liOffset[index].offsetHeight
-          if(liTop < 144){
+            liTop = this.$refs._liOffset[index].getBoundingClientRect().top,
+            Hei = this.$refs._liOffset[index].offsetHeight
+          if (liTop < 144) {
             let _liTop = liTop + Hei
             proup.style.top = -(667 - _liTop - 30) + 'px'
-          }else {
+          } else {
             proup.style.top = -(667 - liTop + 30) + 'px'
           }
 
           this.$refs.showDia.show()
-          if(liTop < 144){
+          if (liTop < 144) {
             this.$refs.showDia.diaTopChange()
-          }else {
+          } else {
             this.$refs.showDia._diaTopChange()
           }
           this.user = this.hotComments[index].user.nickname
@@ -321,7 +319,7 @@
         },
         toShare () {
           this.$refs.shareShow.show()
-        },
+        }
       },
       beforeMount () {
         this.$nextTick(() => {
@@ -339,7 +337,7 @@
           // this.$nextTick(() => {
         //     this.getHeight ()
           // })
-      },
+      }
       // beforeRouteLeave(to,from,next){
       //   if(to.name == 'radiolist'){
       //       to.meta.keepAlive = true

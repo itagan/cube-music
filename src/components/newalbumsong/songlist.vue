@@ -97,15 +97,15 @@
     export default {
       name: 'songList.vue',
       components: {
-        List,
+        List
         // playMore,
         // shareDialog,
         // setRing
       },
-      props:{
+      props: {
         type: {
-          type:Number,
-          default:0
+          type: Number,
+          default: 0
         }
       },
       data () {
@@ -121,7 +121,7 @@
           messTop: 0,
           checked: false,
           allShow: false,
-          complete: false,
+          complete: false
         }
       },
       computed: {
@@ -157,12 +157,12 @@
         },
         scrollHandler ({ y }) {
           this.scrollY = -y
-           this.messTop = this.$refs.messTop.getBoundingClientRect().top
+          this.messTop = this.$refs.messTop.getBoundingClientRect().top
             // console.log(this.messTop)
           if (this.messTop > 204 && this.messTop < 244) {
             let scale = 1 + ((this.messTop - 204) / 200)
             this.$refs.Enlarge.style['transform'] = `scaleX(${scale})`
-          } 
+          }
           this.$refs.bgEnlarge.style.height = '200px'
         },
         onPullingUp () {
@@ -236,7 +236,7 @@
           } else if (val === 0) {
             this.checked = false
           }
-        },
+        }
       },
       watch: {
         isBuild (val) {

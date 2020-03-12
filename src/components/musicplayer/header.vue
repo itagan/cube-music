@@ -34,7 +34,7 @@
         profile: {
           type: Object,
           default: {}
-        },
+        }
       },
       methods: {
         toBack () {
@@ -48,11 +48,11 @@
         },
         Trans (alias) {
           let arr = []
-          for(let i = 0; i < alias.length; i++) {
+          for (let i = 0; i < alias.length; i++) {
             arr.push(alias[i].name)
           }
           return arr.join('/')
-        },
+        }
         // opacityHeader (opac) {
         //   this.$refs.Header.style.opacity = opac
         // }

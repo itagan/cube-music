@@ -318,7 +318,6 @@ import shareComment from '../../../base/share/sharecomment'
 import {mapGetters} from 'vuex'
 import {timestampOther} from '../../../assets/js/timestamp'
 
-
 export default {
   components: {
     shareBase,

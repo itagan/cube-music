@@ -46,20 +46,20 @@ export default {
     return {
       events: [],
       jsons: [],
-      lasttime:-1,
-      hasMore:true,
-       options: {
+      lasttime: -1,
+      hasMore: true,
+      options: {
         pullUpLoad: false,
         scrollbar: false,
         click: false, // 解决点击事件被触发两次的问题
-        stopPropagation:false,
-        scrollX:false,
-        scrollY:true
+        stopPropagation: false,
+        scrollX: false,
+        scrollY: true
       },
       secondStop: 0,
       scrollEvents: ['scroll'],
       scrollY: 0,
-      offset: 0,
+      offset: 0
     }
   },
   watch: {
@@ -78,18 +78,17 @@ export default {
         //   this.hasMore = res.data.more
         //   this.lasttime = res.data.lasttime
         // }
-         this.events = this.events.concat(res.data.events) 
-         this.jsons = this.events.map(item => {
+        this.events = this.events.concat(res.data.events)
+        this.jsons = this.events.map(item => {
           return JSON.parse(item.json)
         })
         this.$emit('dynamicNum', this.events.length)
-        
+
         console.log(this.events)
-      
       })
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       // setTimeout(() => {
       //   this.getAlbums(this.id, 20, this.offset)
       //   const contentScroll = this.$refs.contentScroll
@@ -98,7 +97,7 @@ export default {
     },
     scrollHandler (pos) {
       this.scrollY = -pos.y
-    },
+    }
   },
   created () {},
   mounted () {}

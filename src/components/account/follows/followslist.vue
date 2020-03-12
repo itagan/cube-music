@@ -92,12 +92,12 @@ export default {
     followBase
   },
   props: {},
-  data() {
+  data () {
     return {
-      isUser:false,
-      isFollow:true,
-      follow:[],
-      userId:477726475,
+      isUser: false,
+      isFollow: true,
+      follow: [],
+      userId: 477726475,
       options: {
         pullUpLoad: true,
         scrollbar: true,
@@ -107,7 +107,7 @@ export default {
       scrollEvents: ['scroll'],
       pullDownY: 0,
       offset: 0,
-      hasMore: true,
+      hasMore: true
     }
   },
   watch: {},
@@ -123,16 +123,16 @@ export default {
         if (this.hasMore) {
           this.offset += 30
         }
-         this.follow = this.follow.concat(res.data.follow)  
-         const contentScroll = this.$refs.contentScroll
-          contentScroll.forceUpdate()
+        this.follow = this.follow.concat(res.data.follow)
+        const contentScroll = this.$refs.contentScroll
+        contentScroll.forceUpdate()
       })
     },
     isUserOr () {
       return this.isUser = this.userId === 477726475
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       setTimeout(() => {
         this.getFollows(477726475, this.offset)
         const contentScroll = this.$refs.contentScroll
@@ -143,24 +143,24 @@ export default {
       this.pullDownY = -pos.y
     },
     toUser (userId, userType) {
-      if(userType === 2 || userType === 4) {
+      if (userType === 2 || userType === 4) {
         this.$api.users.userdetail(userId).then(res => {
           let id = res.data.profile.artistId
           this.$router.push({
             path: `/singer/${userId}/${id}`
           })
         })
-      }else {
+      } else {
         this.$router.push({
-        path: `/user/${userId}`
-      })
+          path: `/user/${userId}`
+        })
       }
     },
     toMore () {
     },
     toFollow (userId, index) {
       this.$api.users.toFollow(userId, 1).then(res => {
-        if(res.data.code === 200) {
+        if (res.data.code === 200) {
           this.userprofiles[index].followed = true
         }
       })
@@ -171,11 +171,11 @@ export default {
       })
     }
   },
-  created() {
+  created () {
     this.isUserOr()
     this.getFollows(477726475, 0)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

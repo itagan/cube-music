@@ -31,7 +31,7 @@
           let date = new Date(timestamp)
           let Y = date.getFullYear() + '-'
           let M = (date.getMonth() + 1) + '-'
-          let D = date.getDate() 
+          let D = date.getDate()
           return Y + M + D
         }
       }

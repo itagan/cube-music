@@ -78,22 +78,22 @@ export default {
   },
   props: {
   },
-  data() {
+  data () {
     return {
       options: {
         scrollbar: true
       },
       value: '',
       placeholder: '歌单介绍',
-      surplus:1000,
-      maxlength:1000,
-      playlist:{}
+      surplus: 1000,
+      maxlength: 1000,
+      playlist: {}
     }
   },
   watch: {
     value (val) {
-      if(val.length >= 1000) {
-        this.value = val.substring(0,1000)
+      if (val.length >= 1000) {
+        this.value = val.substring(0, 1000)
         this.surplus = 0
       }
     }
@@ -105,7 +105,7 @@ export default {
       console.log(this.playlist)
       this.value = this.playlist.description
     },
-    toBack () {  
+    toBack () {
       this.$api.songLists.updatedesc(this.playlist.id, this.value).then(res => {
         console.log(res.data)
       })
@@ -113,21 +113,21 @@ export default {
       this.$router.go(-1)
     },
     music () {},
-    descInput() {
+    descInput () {
       let val = this.value.length
       this.surplus = 1000 - val
     },
     toSelectTags () {
       this.$refs.Tag.show()
-    }, 
+    },
     toUpdateTitle () {
       this.$refs.Title.show()
     }
   },
-  created() {
+  created () {
     this.getDesc()
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

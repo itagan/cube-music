@@ -23,7 +23,7 @@
           comments: [],
           item: {},
           total: '',
-          hasReplyArr:[]
+          hasReplyArr: []
         }
       },
       props: {
@@ -56,7 +56,7 @@
             this.total = res.data.total
             this.hasReplyArr = this.comments.filter(item => {
               return item.parentCommentId !== 0
-            }) 
+            })
           })
         },
         Limits () {
@@ -78,20 +78,20 @@
         },
         Reply (index) {
           let proup = document.getElementsByClassName('cube-popup-content')[0],
-          liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
-          Hei = this.$refs.liOffset[index].offsetHeight
-          if(liTop < 350){
+            liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
+            Hei = this.$refs.liOffset[index].offsetHeight
+          if (liTop < 350) {
             let _liTop = liTop + Hei
             proup.style.top = -(667 - _liTop - 30) + 'px'
-          }else {
-            proup.style.top = -(667 - liTop+30) + 'px'
+          } else {
+            proup.style.top = -(667 - liTop + 30) + 'px'
           }
           let user = this.comments[index].user.nickname,
-              commentId = this.comments[index].commentId,
-              threadId = this.threadId
-          this.$emit('showDialog',liTop,user,commentId,threadId)
-        },
-        
+            commentId = this.comments[index].commentId,
+            threadId = this.threadId
+          this.$emit('showDialog', liTop, user, commentId, threadId)
+        }
+    
       }
     }
 </script>

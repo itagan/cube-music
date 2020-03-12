@@ -39,9 +39,9 @@
           }}
       },
       props: {
-        singers:{
-          type:Array,
-          default:[]
+        singers: {
+          type: Array,
+          default: []
         }
       },
       methods: {
@@ -51,19 +51,19 @@
         hide () {
           this.$refs.popup.hide()
         },
-        toSinger(id) {
+        toSinger (id) {
           this.$api.singers.singermusic(id).then(res => {
-            if(res.data.artist.accountId) {
+            if (res.data.artist.accountId) {
               this.accountId = res.data.artist.accountId
               let userId = this.accountId
               this.$router.push({
                 path: `/singer/${userId}/${id}`
-                })
-            }else {
+              })
+            } else {
               let userId = 477726475
               this.$router.push({
                 path: `/singer/${userId}/${id}`
-                })
+              })
             }
           })
         }

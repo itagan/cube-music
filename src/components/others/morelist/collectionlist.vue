@@ -33,12 +33,12 @@
 export default {
   components: {},
   props: {
-    collection:{
-      type:Array,
-      default:[]
+    collection: {
+      type: Array,
+      default: []
     }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: true,
@@ -49,26 +49,26 @@ export default {
       scrollEvents: ['scroll'],
       pullDownY: 0,
       offset: 0,
-      hasMore: true,
+      hasMore: true
     }
   },
   watch: {},
   computed: {},
   methods: {
     onPullingUp () {
-     
+
     },
     scrollHandler (pos) {
       this.pullDownY = -pos.y
     },
     toList (id) {
       this.$router.push({
-        path:`songlist/${id}`
+        path: `songlist/${id}`
       })
     }
   },
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

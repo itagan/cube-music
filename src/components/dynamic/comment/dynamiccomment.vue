@@ -127,16 +127,16 @@
           isLike: false,
           isadd: [],
           likeShow: true,
-          likedCount:0,
-          commentShow:true,
-          commentCount:0,
-          forwardShow:true,
-          forwardCount:0,
-          placeholder:"发表评论",
-          user:"",
-          commentId:-1,
-          threadId:'',
-          value:''
+          likedCount: 0,
+          commentShow: true,
+          commentCount: 0,
+          forwardShow: true,
+          forwardCount: 0,
+          placeholder: '发表评论',
+          user: '',
+          commentId: -1,
+          threadId: '',
+          value: ''
         }
       },
       created () {
@@ -162,16 +162,15 @@
           this.scrollY = -y
           this.messTop = this.$refs.messTop.getTop()
           // console.log(this.scrollY)
-          if(this.messTop >= 25) {
-          this.$refs.myHeader._show()
+          if (this.messTop >= 25) {
+            this.$refs.myHeader._show()
             let opac = 1 - (55 - this.messTop) * 0.034
             this.$refs.myHeader.opacityHeader(opac)
-          }
-          else if(this.messTop >= 0){
+          } else if (this.messTop >= 0) {
             let opac = 1 - this.messTop * 0.04
             this.$refs.myHeader.opacityHeader(opac)
             this.$refs.myHeader.show()
-          }else {
+          } else {
             this.$refs.myHeader.show()
             this.$refs.myHeader.opacityHeader(1)
           }
@@ -196,21 +195,21 @@
           this.likedCount = this.item.info.likedCount
           this.forwardCount = this.item.insiteForwardCount
           this.commentCount = this.item.info.commentCount
-          this.forwardShow = this.forwardCount ? true : false
-          this.commentShow = this.commentCount ? true : false
-          this.likeShow = this.likedCount ? true : false
+          this.forwardShow = !!this.forwardCount
+          this.commentShow = !!this.commentCount
+          this.likeShow = !!this.likedCount
         },
         toLike () {
           if (this.isLike) {
             this.$api.likes.dynamic(0, this.dynamic[0].info.threadId).then(res => {
               if (res.status && res.status === 200) {
                 this.isLike = false
-                this.$set(this.isadd,0,'false')
+                this.$set(this.isadd, 0, 'false')
                   // this.$refs.likeUserChange.checkUser() 速度比较慢
                   // this.$refs.likeNum.innerHTML-- 数据不重新渲染
                 this.likedCount--
                 this.likeShow = true
-                if(this.likedCount === 0) {
+                if (this.likedCount === 0) {
                   this.likeShow = false
                 }
               }
@@ -222,7 +221,7 @@
                 this.isLike = true
               // this.isadd = true 存在bug
               // this.isadd.push('true') 速度慢
-              this.$set(this.isadd,0,'true')
+                this.$set(this.isadd, 0, 'true')
                 this.likedCount++
                 this.likeShow = true
               }
@@ -237,11 +236,11 @@
             path: `/forward/${this.uid}/${this.evId}`
           })
         },
-        showDialog (liTop,user,commentId,threadId) {
+        showDialog (liTop, user, commentId, threadId) {
           this.$refs.showDia.show()
-          if(liTop < 144){
+          if (liTop < 144) {
             this.$refs.showDia.diaTopChange()
-          }else {
+          } else {
             this.$refs.showDia._diaTopChange()
           }
           this.user = user
@@ -276,8 +275,8 @@
         //   }
         // },
         Dynamic: {
-          handler:"getData",
-        	immediate:true  //有变化就监控，初始化时候也执行这个方法
+          handler: 'getData',
+        	immediate: true  // 有变化就监控，初始化时候也执行这个方法
         }
         // $router (val) {
         //   if(val) {

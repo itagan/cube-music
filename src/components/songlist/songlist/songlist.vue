@@ -149,7 +149,6 @@
     import {serializeNumber} from '../../../assets/js/number'
     import {mapGetters} from 'vuex'
 
-
     export default {
       name: 'songList.vue',
       components: {
@@ -191,15 +190,15 @@
           allShow: false,
           complete: false,
           isSubscribed: false,
-          id:'',
-          coverShow:false,
-          isCreater:false,
-          song:{},
-          songs:[],
-          singers:[],
-          checkLists:[],
-          addColor:false,
-          currentInd:-1
+          id: '',
+          coverShow: false,
+          isCreater: false,
+          song: {},
+          songs: [],
+          singers: [],
+          checkLists: [],
+          addColor: false,
+          currentInd: -1
         }
       },
       computed: {
@@ -212,8 +211,8 @@
           }
         },
         ...mapGetters([
-          'currentSong',
-        ]),
+          'currentSong'
+        ])
         // pullUpLoadObj: function () {
         //   return this.pullUpLoad ? {
         //     threshold: parseInt(this.pullUpLoadThreshold),
@@ -234,13 +233,13 @@
             console.log(res.data)
             this.playlist = res.data.playlist
 
-             console.log(this.playlist)
+            console.log(this.playlist)
             this.isSubscribed = this.playlist.subscribed
               // this.tracks = res.data.playlist.tracks
             this.songs = res.data.playlist.tracks.length > 100 ? res.data.playlist.tracks.slice(0, 100) : res.data.playlist.tracks
             this.subs = res.data.playlist.subscribers.length > 5 ? res.data.playlist.subscribers.slice(0, 4) : res.data.playlist.subscribers
             this.Creater()
-            this.getInd (this.currentSong.id) 
+            this.getInd(this.currentSong.id)
           })
         },
         Creater () {
@@ -262,7 +261,7 @@
           }
         },
         toComment () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$router.push({
             path: `/songlistcomment/${this.playlist.id}`,
             query: {
@@ -302,7 +301,6 @@
           // this.isBuild = true
           this.isMore = false
           this.$refs.showBuild.show()
-          
         },
         moreBuildList () {
           this.isMore = false
@@ -338,8 +336,8 @@
             // 全选功能
         toCheck () {
           this.allShow = true
-          if(this.songs.length > 5) {
-            this.stickyTop()  
+          if (this.songs.length > 5) {
+            this.stickyTop()
           }
         },
         stickyTop () {
@@ -385,7 +383,7 @@
         },
         toCollectedFooter () {
           this.$refs.ToCheck.whoChecked()
-          if(this.checkLists.length) {
+          if (this.checkLists.length) {
             this.$refs.collectedShow.show()
           }
         },
@@ -394,59 +392,59 @@
           this.checkLists = checkLists
         },
         changeColor (type) {
-        if(type) {
-          this.addColor = true
-        }else {
-          this.addColor = false
-        }
+          if (type) {
+            this.addColor = true
+          } else {
+            this.addColor = false
+          }
         },
         toAlbum () {
-        this.$router.push({
-          path:`/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
-         })
+          this.$router.push({
+            path: `/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
+          })
         },
         toUser () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.singers = this.messages.artists
-          if(this.messages.artists.length > 1) {
+          if (this.messages.artists.length > 1) {
             this.moreSinger()
             this.isMore = false
             return
           }
 
           this.$api.singers.singermusic(this.messages.artist.id).then(res => {
-            if(res.data.artist.accountId) {
+            if (res.data.artist.accountId) {
               this.accountId = res.data.artist.accountId
               let userId = this.accountId
               this.$router.push({
                 path: `/singer/${userId}/${this.messages.artist.id}`
-                })
-            }else {
+              })
+            } else {
               let userId = 477726475
               this.$router.push({
                 path: `/singer/${userId}/${this.messages.artist.id}`
-                })
+              })
             }
           })
         },
         toSinger () {
-          if(this.singers.length > 1) {
+          if (this.singers.length > 1) {
             this.moreSinger()
             this.isMore = false
             return
           }
           this.$api.singers.singermusic(this.song.ar[0].id).then(res => {
-            if(res.data.artist.accountId) {
+            if (res.data.artist.accountId) {
               this.accountId = res.data.artist.accountId
               let userId = this.accountId
               this.$router.push({
                 path: `/singer/${userId}/${this.song.ar[0].id}`
-                })
-            }else {
+              })
+            } else {
               let userId = 477726475
               this.$router.push({
                 path: `/singer/${userId}/${this.song.ar[0].id}`
-                })
+              })
             }
           })
         },
@@ -455,7 +453,7 @@
             return item.id === id
           })
           // ind >= 0 ? this.currentInd = ind : ''
-          if(ind >= 0) {
+          if (ind >= 0) {
             this.currentInd = ind
             console.log(ind)
           }
@@ -514,7 +512,7 @@
         },
         Num (num) {
           return serializeNumber(num)
-        },
+        }
       },
       watch: {
         isBuild (val) {

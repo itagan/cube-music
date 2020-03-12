@@ -33,17 +33,17 @@ export default {
   data () {
     return {
       newComments: [],
-      hotComments:[],
-      _item:{},
-      arr:[],
-      hasReplyArr:[],
-      hasReplyArrHot:[]
+      hotComments: [],
+      _item: {},
+      arr: [],
+      hasReplyArr: [],
+      hasReplyArrHot: []
     }
   },
   watch: {
     item () {
-        this.getComment()
-      }
+      this.getComment()
+    }
   },
   computed: {},
   methods: {
@@ -55,38 +55,37 @@ export default {
         // this.showReply()
         // console.log(this.newComments)
         this.hasReplyArr = this.newComments.filter(item => {
-        return item.parentCommentId !== 0
-        }) 
-
+          return item.parentCommentId !== 0
+        })
 
         this.hasReplyArrHot = this.hotComments.filter(item => {
-        return item.parentCommentId !== 0
-        }) 
+          return item.parentCommentId !== 0
+        })
         // console.log(this.hasReplyArr)
       })
     },
     Reply (index) {
       let proup = document.getElementsByClassName('cube-popup-content')[0],
-      liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
-      Hei = this.$refs.liOffset[index].offsetHeight
-      if(liTop < 144){
+        liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
+        Hei = this.$refs.liOffset[index].offsetHeight
+      if (liTop < 144) {
         let _liTop = liTop + Hei
         proup.style.top = -(667 - _liTop - 30) + 'px'
-      }else {
-        proup.style.top = -(667 - liTop+30) + 'px'
+      } else {
+        proup.style.top = -(667 - liTop + 30) + 'px'
       }
       let user = this.newComments[index].user.nickname,
-          commentId = this.newComments[index].commentId,
-          threadId = this.threadId
-      this.$emit('showDialog',liTop,user,commentId,threadId)
-    },
+        commentId = this.newComments[index].commentId,
+        threadId = this.threadId
+      this.$emit('showDialog', liTop, user, commentId, threadId)
+    }
     // showReply () {
     //   for(let i =0; i < this.newComments.length;i++) {
     //     if(this.newComments[i].beReplied.length) {
     //       this.arr.push(this.newComments[i].beReplied[0].beRepliedCommentId)
     //     }
     //   }
-    //   this.arr = [...new Set(this.arr)] 
+    //   this.arr = [...new Set(this.arr)]
     //   //  console.log(this.arr)
     // },
   },

@@ -142,31 +142,31 @@ export default {
     checkFooter
   },
   props: {},
-  data() {
+  data () {
     return {
       value: '',
       placeholder: '请输入内容',
       type: 'password',
       maxlength: 20,
       autofocus: true,
-      readonly:false,
+      readonly: false,
       clearable: {
         visible: true,
         blurHidden: true
       },
-      hasTips:true,
-      suggestions:[],
+      hasTips: true,
+      suggestions: [],
       options: {
         scrollbar: false,
         bounce: {
-        top: false,
-        bottom: false,
-        left: false,
-        right: false
-      }
+          top: false,
+          bottom: false,
+          left: false,
+          right: false
+        }
       },
       scrollEvents: ['scroll'],
-      posX:0,
+      posX: 0,
       activeClass: 'nav-item-active',
       errorClass: '',
       currentPage: 0,
@@ -216,10 +216,10 @@ export default {
       isMore: false,
       isBuild: false,
       visible: false,
-      allShow:false,
-      addColor:false,
-      song:{},
-      checkLists:[]
+      allShow: false,
+      addColor: false,
+      song: {},
+      checkLists: []
     }
   },
   watch: {
@@ -238,7 +238,7 @@ export default {
       }
     },
     currentPage (val) {
-      if(val !== 1) {
+      if (val !== 1) {
         this.allShow = false
       }
     }
@@ -258,13 +258,13 @@ export default {
       // this.autofocus = true
       // this.getSuggestion (this.value)
       this.$router.push({
-        path:`/hotsearch/${this.value}`
+        path: `/hotsearch/${this.value}`
       })
     },
     input (val) {
       if (val.length > 0) {
         this.hasTips = false
-        this.getSuggestion (val)
+        this.getSuggestion(val)
       } else {
         this.hasTips = true
       }
@@ -276,7 +276,7 @@ export default {
       //   this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
       // }
       // this.$refs.slideScroll.scroll.getCurrentPage()
-      this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
+      this.$refs.navScroll.scroll.scrollBy(170 - leftDistance, 0, 350)
       this.currentPage = index
     },
     slideChange (index) {
@@ -287,48 +287,47 @@ export default {
     scrollHandler (pos) {
       // console.log(pos.x)
       this.posX = pos.x
-
     },
     changeIndex (i) {
       this.currentPage = i
       // this.$refs.slideScroll.scroll.goToPage(i, 0, 300)
-      this.$refs.slideScroll.refresh()  //刷新一下轮播，避免点击回到全部无效
+      this.$refs.slideScroll.refresh()  // 刷新一下轮播，避免点击回到全部无效
     },
     scroll ({x, y}) {
       console.log(x, y)
     },
     allToShow (type) {
-     if(type === true) {
+      if (type === true) {
         this.allShow = true
-     }else {
+      } else {
         this.allShow = false
-     }
+      }
     },
     changeColor (type) {
-      if(type) {
+      if (type) {
         this.addColor = true
-      }else {
+      } else {
         this.addColor = false
       }
     },
     toSinger () {
       this.$api.singers.singermusic((this.song.artists && this.song.artists[0].id) || (this.song.ar && this.song.ar[0].id)).then(res => {
-        if(res.data.artist.accountId) {
+        if (res.data.artist.accountId) {
           let userId = res.data.artist.accountId
           this.$router.push({
             path: `/singer/${userId}/${(this.song.artists && this.song.artists[0].id) || (this.song.ar && this.song.ar[0].id)}`
-            })
-        }else {
+          })
+        } else {
           let userId = 477726475
           this.$router.push({
             path: `/singer/${userId}/${(this.song.artists && this.song.artists[0].id) || (this.song.ar && this.song.ar[0].id)}`
-            })
+          })
         }
       })
     },
     toAlbum () {
       this.$router.push({
-        path:`/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
+        path: `/albumlist/${(this.song.album && this.song.album.id) || (this.song.al && this.song.al.id)}`
       })
     },
     cancel () {
@@ -378,7 +377,6 @@ export default {
       // this.isBuild = true
       this.isMore = false
       this.$refs.showBuild.show()
-      
     },
     toCollected () {
       this.isMore = false
@@ -386,7 +384,7 @@ export default {
     },
     toCollectedFooter () {
       this.$refs.toCheck.whoChecked()
-      if(this.checkLists.length) {
+      if (this.checkLists.length) {
         this.$refs.collectedShow.show()
       }
     },
@@ -396,10 +394,10 @@ export default {
       console.log(this.checkLists)
     }
   },
-  created() {
+  created () {
     this.Placeholder()
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

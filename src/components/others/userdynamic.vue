@@ -22,8 +22,8 @@ export default {
     return {
       events: [],
       jsons: [],
-      lasttime:-1,
-      hasMore:true
+      lasttime: -1,
+      hasMore: true
     }
   },
   watch: {
@@ -40,10 +40,10 @@ export default {
         if (this.hasMore) {
           this.hasMore = res.data.more
           this.lasttime = res.data.lasttime
-          this.$emit('Lasttime',this.lasttime, this.hasMore)
+          this.$emit('Lasttime', this.lasttime, this.hasMore)
         }
-         this.events = this.events.concat(res.data.events) 
-         this.jsons = this.events.map(item => {
+        this.events = this.events.concat(res.data.events)
+        this.jsons = this.events.map(item => {
           return JSON.parse(item.json)
         })
         // this.jsons = res.data.events.map(item => {
@@ -51,7 +51,7 @@ export default {
         //   return JSON.parse(item.json)
         // })
         // this.events = res.data.events
-        
+
         // console.log(this.jsons)
         // console.log(this.events)
       })

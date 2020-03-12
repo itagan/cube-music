@@ -76,10 +76,10 @@ export default {
     replyDialog
   },
   props: {},
-  data() {
+  data () {
     return {
-      placeholder:"发表评论",
-      value:'',
+      placeholder: '发表评论',
+      value: '',
       scrollY: 0,
       scrollEvents: ['scroll'],
       totals: 0,
@@ -88,11 +88,11 @@ export default {
         scrollbar: true,
         click: false // 解决点击事件被触发两次的问题
       },
-      _item:{},
-      items:[],
-      user:'',
-      commentId:-1,
-      threadId:''
+      _item: {},
+      items: [],
+      user: '',
+      commentId: -1,
+      threadId: ''
     }
   },
   watch: {
@@ -110,19 +110,19 @@ export default {
     },
     getParams () {
       // this.item = this.$route.params.item  //刷新后不能获取参数。该方法需要改造或者采用查询参数形式
-      this.items = JSON.parse(this.$route.query.item).reverse() //传参获取参数都使用json方法转换，避免刷新时候报错
+      this.items = JSON.parse(this.$route.query.item).reverse() // 传参获取参数都使用json方法转换，避免刷新时候报错
       this._item = JSON.parse(this.$route.query._item)
       this.threadId = this.$route.query.threadId || '0'
       console.log(this.threadId)
     },
-    showDialog (liTop,user,commentId,threadId) {
+    showDialog (liTop, user, commentId, threadId) {
       this.$refs.showDia.show()
-      if(liTop === null) {
+      if (liTop === null) {
         this.$refs.showDia.diaTopChange()
       }
-      if(liTop < 144){
+      if (liTop < 144) {
         this.$refs.showDia.diaTopChange()
-      }else {
+      } else {
         this.$refs.showDia._diaTopChange()
       }
       this.user = user
@@ -147,8 +147,8 @@ export default {
     },
     _Reply () {
       let proup = document.getElementsByClassName('cube-popup-content')[0],
-      Top = this.$refs.replyContainer.getBoundingClientRect().top,
-      Hei = this.$refs.replyContainer.offsetHeight
+        Top = this.$refs.replyContainer.getBoundingClientRect().top,
+        Hei = this.$refs.replyContainer.offsetHeight
       this.$refs.showDia.show()
       this.$refs.showDia.diaTopChange()
       proup.style.top = -(667 - Hei - Top - 20) + 'px'
@@ -157,30 +157,30 @@ export default {
     },
     Reply (index) {
       let proup = document.getElementsByClassName('cube-popup-content')[0],
-      liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
-      Hei = this.$refs.liOffset[index].offsetHeight
-      if(liTop < 144){
+        liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
+        Hei = this.$refs.liOffset[index].offsetHeight
+      if (liTop < 144) {
         let _liTop = liTop + Hei
         proup.style.top = -(667 - _liTop - 30) + 'px'
-      }else {
+      } else {
         proup.style.top = -(667 - liTop + 30) + 'px'
       }
 
       this.$refs.showDia.show()
-      if(liTop < 144){
+      if (liTop < 144) {
         this.$refs.showDia.diaTopChange()
-      }else {
+      } else {
         this.$refs.showDia._diaTopChange()
       }
       this.user = this.items[index].user.nickname
       this.commentId = this.items[index].commentId
       console.log(this.threadId, this.commentId)
-    },
+    }
   },
-  created() {
+  created () {
     this.getParams()
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

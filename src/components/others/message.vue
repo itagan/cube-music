@@ -67,11 +67,11 @@
       data () {
         return {
           man: true,
-          isUser:true,
-          isFollowed:true,
-          followed:false,
-          followTime:'',
-          Message:{}
+          isUser: true,
+          isFollowed: true,
+          followed: false,
+          followTime: '',
+          Message: {}
         }
       },
       props: {
@@ -90,35 +90,35 @@
           this.followTime = this.userMessage.profile && this.userMessage.profile.followTime
         },
         toEdit () {
-         this.$router.push({
+          this.$router.push({
             path: `/editinformation`,
             query: {
-              userMessage:JSON.stringify(this.userMessage)
+              userMessage: JSON.stringify(this.userMessage)
             }
           })
         },
         toBigimg () {
           this.$createImagePreview({
             imgs: [this.userMessage.profile.backgroundUrl],
-            zIndex:2002
+            zIndex: 2002
           }).show()
         },
         changeCover () {
-          //头像放大
+          // 头像放大
         },
         toFollow () {
           this.$api.users.toFollow(this.userMessage.profile.userId, 1).then(res => {
             console.log(res.data)
             // this.isFollowed = false
             // this.userMessage.profile.followed = true
-            if(res.data.code === 200) {
+            if (res.data.code === 200) {
               const toast = this.$createToast({
                 txt: res.data.followContent,
                 type: 'text',
-                zIndex:2002,
+                zIndex: 2002,
                 time: 2000
               })
-              toast.show()  
+              toast.show()
               this.userMessage.profile.followed = true
             }
           })

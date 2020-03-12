@@ -56,8 +56,8 @@
           this.hide()
         }
       },
-      mounted() {
-        // this.$nextTick(() =>{ 
+      mounted () {
+        // this.$nextTick(() =>{
         //   this.$refs.scroll.refresh()
         // })
       }

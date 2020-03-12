@@ -34,14 +34,14 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {
       visible: false,
       hackReset: true,
       value: '',
       placeholder: '请输入昵称',
       autofocus: true,
-      maxlength	:6,
+      maxlength: 6,
       clearable: {
         visible: true,
         blurHidden: true
@@ -52,10 +52,10 @@ export default {
   computed: {},
   methods: {
     cancel () {
-      this.hackReset = false //刷新重新传值
+      this.hackReset = false // 刷新重新传值
       this.$nextTick(() => {
-      this.visible = false
-      this.hackReset = true
+        this.visible = false
+        this.hackReset = true
       })
     },
     complete () {
@@ -71,7 +71,7 @@ export default {
     input (val) {
             // 输入中
       if (val.length > 5) {
-        this.value = val.slice(0,5)
+        this.value = val.slice(0, 5)
         const toast = this.$createToast({
           zIndex: 2003,
           txt: '超出字数限制',
@@ -80,13 +80,13 @@ export default {
         toast.show()
       }
     }
- 
+
   },
-  created() {
-    this.value =this.nickname
+  created () {
+    this.value = this.nickname
     this.autofocus = true
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

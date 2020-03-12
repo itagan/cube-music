@@ -69,68 +69,68 @@
 <script>
 import {mapActions} from 'vuex'
 
-    export default {
-      name: 'radiotips.vue',
-      data () {
-        return {
-          options: {
-            scrollbar: true
-          },
-          scrollY: 0,
-          scrollEvents: ['scroll'],
-          playing:false,
-          id:'477726475',
-          playlist:[],
-          codes:[],
-          isVisible: false
-        }
+export default {
+  name: 'radiotips.vue',
+  data () {
+    return {
+      options: {
+        scrollbar: true
       },
-      props: {
-        item: {
-          type:Object,
-          default:{}
-        }
-      },
-      created() {},
-      methods: {
-        show () {
-          // this.$refs.popup.show() //引进动画不需要这个
-          this.isVisible = true
-        },
-        hide () {
-          // this.$refs.popup.hide()
-          this.isVisible = false
-        },
-        toShare () {
-          this.$emit('share')
-          this.hide()
-        },
-        toComment (item) {
-          this.$router.push({
-            path:`/djcomment`,
-            query: {
-              dj: JSON.stringify(item)
-            }
-          })
-          let obj = {userId:''}
-          obj.userId = item.dj.userId
-          this.saveAuthor(obj)
-          this.hide()
-        },
-        toLoad () {
-          this.hide()
-        },
-        scrollHandler ({ y }) {
-          this.scrollY = -y
-          // this.$refs.increaseHeight.style.height = `${this.scrollY}`
-        },
-        ...mapActions([
-          'saveAuthor'
-        ])
-      },
-      mounted () {
-      }
+      scrollY: 0,
+      scrollEvents: ['scroll'],
+      playing: false,
+      id: '477726475',
+      playlist: [],
+      codes: [],
+      isVisible: false
     }
+  },
+  props: {
+    item: {
+      type: Object,
+      default: {}
+    }
+  },
+  created () {},
+  methods: {
+    show () {
+          // this.$refs.popup.show() //引进动画不需要这个
+      this.isVisible = true
+    },
+    hide () {
+          // this.$refs.popup.hide()
+      this.isVisible = false
+    },
+    toShare () {
+      this.$emit('share')
+      this.hide()
+    },
+    toComment (item) {
+      this.$router.push({
+        path: `/djcomment`,
+        query: {
+          dj: JSON.stringify(item)
+        }
+      })
+      let obj = {userId: ''}
+      obj.userId = item.dj.userId
+      this.saveAuthor(obj)
+      this.hide()
+    },
+    toLoad () {
+      this.hide()
+    },
+    scrollHandler ({ y }) {
+      this.scrollY = -y
+          // this.$refs.increaseHeight.style.height = `${this.scrollY}`
+    },
+    ...mapActions([
+      'saveAuthor'
+    ])
+  },
+  mounted () {
+  }
+}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

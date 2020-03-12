@@ -32,8 +32,8 @@
       },
       computed: {
         ...mapGetters([
-        'currentSong',
-        'playing'
+          'currentSong',
+          'playing'
         ]),
         cdCls () {
           return this.playing ? 'play' : 'pause'

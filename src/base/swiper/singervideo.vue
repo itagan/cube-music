@@ -25,7 +25,7 @@
       name: 'subVideo.vue',
       data () {
         return {
-          
+    
         }
       },
       props: {
@@ -34,7 +34,7 @@
           default: {}
         }
       },
-      methods:{
+      methods: {
         SerializeNumber (num) {
           return serializeNumber(num)
         }

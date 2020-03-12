@@ -49,7 +49,7 @@ export default {
     MyHeader
   },
   props: {},
-  data() {
+  data () {
     return {
     }
   },
@@ -63,17 +63,17 @@ export default {
     },
     toSong () {
       this.$router.push({
-        path:'newsong'
+        path: 'newsong'
       })
     },
     toAlbum () {
       this.$router.push({
-        path:'newalbum'
+        path: 'newalbum'
       })
     }
   },
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

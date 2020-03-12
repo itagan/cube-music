@@ -23,36 +23,36 @@
 <script>
 import {mapGetters} from 'vuex'
 import {timestampOther} from '../../assets/js/timestamp'
-  export default {
-    name: 'baseComment.vue',
-    props: {
-      item: {
-        type: Object,
-        default: {}
-      }
-    },
-    data () {
-      return {}
-    },
-    created() {},
-    computed:{
-      ...mapGetters([
-        'author'
-      ])
-    },
-    watch:{},
-    methods: {
-      toUser () {
+export default {
+  name: 'baseComment.vue',
+  props: {
+    item: {
+      type: Object,
+      default: {}
+    }
+  },
+  data () {
+    return {}
+  },
+  created () {},
+  computed: {
+    ...mapGetters([
+      'author'
+    ])
+  },
+  watch: {},
+  methods: {
+    toUser () {
                 // 去用户个人中心页面
-      },
-      liked () {
+    },
+    liked () {
                 // 点赞
-      },
-      timestamp (time) {
-        return timestampOther(time)
-      }
+    },
+    timestamp (time) {
+      return timestampOther(time)
     }
   }
+}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

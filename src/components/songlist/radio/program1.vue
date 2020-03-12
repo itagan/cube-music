@@ -67,36 +67,36 @@ export default {
     songBase
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     },
-    id:{
-      type:String,
-      default:''
+    id: {
+      type: String,
+      default: ''
     }
   },
-  data() {
+  data () {
     return {
       scrollEvents: ['scroll'],
       scrollY: 0,
-      loadData:true,
-      result:true,
-      allShow:false,
-      isPlay:false,
-      programs:[]
+      loadData: true,
+      result: true,
+      allShow: false,
+      isPlay: false,
+      programs: []
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 1 && this.loadData) {
-        this.getAlls(this.id, 30, 0,false)
+    currentPage (val) {
+      if (val === 1 && this.loadData) {
+        this.getAlls(this.id, 30, 0, false)
         this.loadData = false
-      } 
+      }
     }
   },
   computed: {},
@@ -104,17 +104,16 @@ export default {
     getAlls (rid, limit, offset, asc) {
       this.$api.radios.program(rid, limit, offset, asc).then(res => {
         this.programs = res.data.programs
-
       })
     },
-    scrollHandler({ y }) {
+    scrollHandler ({ y }) {
       this.scrollY = -y
     }
   },
-  created() {
+  created () {
     // this.getAlls(this.value, 60, 0, 1018)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

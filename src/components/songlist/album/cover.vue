@@ -62,7 +62,7 @@ export default {
       default: () => {}
     }
   },
-  data() {
+  data () {
     return {
       options: {
         scrollbar: true
@@ -79,12 +79,12 @@ export default {
       const toast = this.$createToast({
         txt: '',
         time: 1000,
-        zIndex:2001,
+        zIndex: 2001,
         onTimeout: () => {
           const toast = this.$createToast({
             txt: '图片已保存到相册',
             type: 'correct',
-            zIndex:2001,
+            zIndex: 2001
           })
           toast.show()
         }
@@ -92,8 +92,8 @@ export default {
       toast.show()
     }
   },
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

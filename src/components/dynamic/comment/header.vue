@@ -32,14 +32,14 @@
       },
       data () {
         return {
-          isShow:false
+          isShow: false
         }
       },
       props: {
         profile: {
           type: Object,
           default: {}
-        },
+        }
         // isShow: {
         //   type: Boolean,
         //   default: false
@@ -66,9 +66,9 @@
           this.isShow = false
         }
       },
-      mounted() {
+      mounted () {
         this.$nextTick(() => {
-          //初始化显示  "动态" 。css则为0
+          // 初始化显示  "动态" 。css则为0
           this.$refs.Header.style.opacity = 1
         })
       }

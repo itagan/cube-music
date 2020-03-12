@@ -40,7 +40,7 @@
           isShow: true,
           show: false,
           result: [],
-          albums:[]
+          albums: []
         }
       },
       created () {
@@ -76,7 +76,7 @@
         toMusic () {},
         toAlbum (id) {
           this.$router.push({
-            path:`/albumlist/${id}`
+            path: `/albumlist/${id}`
           })
         }
       }

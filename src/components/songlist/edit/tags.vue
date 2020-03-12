@@ -140,332 +140,332 @@ export default {
       default: {}
     }
   },
-  data() {
+  data () {
     return {
       visible: false,
       hackReset: true,
       options: {
         scrollbar: true
       },
-      values:[],
-      active:'active',
-      types:[
+      values: [],
+      active: 'active',
+      types: [
         {
-          tags:[
+          tags: [
             {
-              txt:'华语',
-              class:''
+              txt: '华语',
+              class: ''
             },
-             {
-              txt:'欧美',
-              class:''
+            {
+              txt: '欧美',
+              class: ''
             },
-             {
-              txt:'日语',
-              class:''
+            {
+              txt: '日语',
+              class: ''
             },
-             {
-              txt:'韩语',
-              class:''
+            {
+              txt: '韩语',
+              class: ''
             },
-             {
-              txt:'粤语',
-              class:''
+            {
+              txt: '粤语',
+              class: ''
             },
-             {
-              txt:'小语种',
-              class:''
+            {
+              txt: '小语种',
+              class: ''
             }
           ],
-          text:'语种'
+          text: '语种'
         },
         {
-          tags:[
+          tags: [
             {
-              txt:'流行',
-              class:''
-            },
-             {
-              txt:'摇滚',
-              class:''
-            },
-             {
-              txt:'民谣',
-              class:''
-            },
-             {
-              txt:'电子',
-              class:''
-            },
-             {
-              txt:'说唱',
-              class:''
-            },
-             {
-              txt:'轻音乐',
-              class:''
+              txt: '流行',
+              class: ''
             },
             {
-              txt:'爵士',
-              class:''
-            },
-             {
-              txt:'乡村',
-              class:''
-            },
-             {
-              txt:'R&B/Soul',
-              class:''
-            },
-             {
-              txt:'古典',
-              class:''
-            },
-             {
-              txt:'民族',
-              class:''
-            },
-             {
-              txt:'英伦',
-              class:''
+              txt: '摇滚',
+              class: ''
             },
             {
-              txt:'金属',
-              class:''
-            },
-             {
-              txt:'朋克',
-              class:''
-            },
-             {
-              txt:'蓝调',
-              class:''
-            },
-             {
-              txt:'雷鬼',
-              class:''
-            },
-             {
-              txt:'世界音乐',
-              class:''
-            },
-             {
-              txt:'拉丁',
-              class:''
+              txt: '民谣',
+              class: ''
             },
             {
-              txt:'另类/独立',
-              class:''
-            },
-             {
-              txt:'New Age',
-              class:''
-            },
-             {
-              txt:'古风',
-              class:''
-            },
-             {
-              txt:'Bossa Nova',
-              class:''
-            },
-             {
-              txt:'后摇',
-              class:''
-            },
-             {
-              txt:'舞曲',
-              class:''
+              txt: '电子',
+              class: ''
             },
             {
-              txt:'音乐剧',
-              class:''
+              txt: '说唱',
+              class: ''
+            },
+            {
+              txt: '轻音乐',
+              class: ''
+            },
+            {
+              txt: '爵士',
+              class: ''
+            },
+            {
+              txt: '乡村',
+              class: ''
+            },
+            {
+              txt: 'R&B/Soul',
+              class: ''
+            },
+            {
+              txt: '古典',
+              class: ''
+            },
+            {
+              txt: '民族',
+              class: ''
+            },
+            {
+              txt: '英伦',
+              class: ''
+            },
+            {
+              txt: '金属',
+              class: ''
+            },
+            {
+              txt: '朋克',
+              class: ''
+            },
+            {
+              txt: '蓝调',
+              class: ''
+            },
+            {
+              txt: '雷鬼',
+              class: ''
+            },
+            {
+              txt: '世界音乐',
+              class: ''
+            },
+            {
+              txt: '拉丁',
+              class: ''
+            },
+            {
+              txt: '另类/独立',
+              class: ''
+            },
+            {
+              txt: 'New Age',
+              class: ''
+            },
+            {
+              txt: '古风',
+              class: ''
+            },
+            {
+              txt: 'Bossa Nova',
+              class: ''
+            },
+            {
+              txt: '后摇',
+              class: ''
+            },
+            {
+              txt: '舞曲',
+              class: ''
+            },
+            {
+              txt: '音乐剧',
+              class: ''
             }
           ],
-          text:'风格'
+          text: '风格'
         },
         {
-          tags:[
+          tags: [
             {
-              txt:'清晨',
-              class:''
-            },
-             {
-              txt:'夜晚',
-              class:''
-            },
-             {
-              txt:'学习',
-              class:''
-            },
-             {
-              txt:'工作',
-              class:''
-            },
-             {
-              txt:'午休',
-              class:''
-            },
-             {
-              txt:'下午茶',
-              class:''
+              txt: '清晨',
+              class: ''
             },
             {
-              txt:'地铁',
-              class:''
-            },
-             {
-              txt:'驾车',
-              class:''
-            },
-             {
-              txt:'运动',
-              class:''
-            },
-             {
-              txt:'旅行',
-              class:''
-            },
-             {
-              txt:'散步',
-              class:''
-            },
-             {
-              txt:'酒吧',
-              class:''
-            },
-          ],
-          text:'场景'
-        },
-        {
-          tags:[
-            {
-              txt:'怀旧',
-              class:''
-            },
-             {
-              txt:'清新',
-              class:''
-            },
-             {
-              txt:'浪漫',
-              class:''
-            },
-             {
-              txt:'性感',
-              class:''
-            },
-             {
-              txt:'伤感',
-              class:''
-            },
-             {
-              txt:'治愈',
-              class:''
+              txt: '夜晚',
+              class: ''
             },
             {
-              txt:'放松',
-              class:''
-            },
-             {
-              txt:'孤独',
-              class:''
-            },
-             {
-              txt:'感动',
-              class:''
-            },
-             {
-              txt:'兴奋',
-              class:''
-            },
-             {
-              txt:'快乐',
-              class:''
-            },
-             {
-              txt:'安静',
-              class:''
+              txt: '学习',
+              class: ''
             },
             {
-              txt:'思念',
-              class:''
+              txt: '工作',
+              class: ''
+            },
+            {
+              txt: '午休',
+              class: ''
+            },
+            {
+              txt: '下午茶',
+              class: ''
+            },
+            {
+              txt: '地铁',
+              class: ''
+            },
+            {
+              txt: '驾车',
+              class: ''
+            },
+            {
+              txt: '运动',
+              class: ''
+            },
+            {
+              txt: '旅行',
+              class: ''
+            },
+            {
+              txt: '散步',
+              class: ''
+            },
+            {
+              txt: '酒吧',
+              class: ''
             }
           ],
-          text:'情感'
+          text: '场景'
         },
         {
-          tags:[
+          tags: [
             {
-              txt:'校园',
-              class:''
-            },
-             {
-              txt:'影视原声',
-              class:''
-            },
-             {
-              txt:'游戏',
-              class:''
-            },
-             {
-              txt:'70后',
-              class:''
-            },
-             {
-              txt:'80后',
-              class:''
-            },
-             {
-              txt:'90后',
-              class:''
+              txt: '怀旧',
+              class: ''
             },
             {
-              txt:'网络歌曲',
-              class:''
-            },
-             {
-              txt:'KTV',
-              class:''
-            },
-             {
-              txt:'经典',
-              class:''
-            },
-             {
-              txt:'翻唱',
-              class:''
-            },
-             {
-              txt:'吉他',
-              class:''
-            },
-             {
-              txt:'钢琴',
-              class:''
+              txt: '清新',
+              class: ''
             },
             {
-              txt:'器乐',
-              class:''
+              txt: '浪漫',
+              class: ''
             },
             {
-              txt:'儿童',
-              class:''
-            },
-             {
-              txt:'榜单',
-              class:''
-            },
-             {
-              txt:'ACG',
-              class:''
+              txt: '性感',
+              class: ''
             },
             {
-              txt:'00后',
-              class:''
+              txt: '伤感',
+              class: ''
+            },
+            {
+              txt: '治愈',
+              class: ''
+            },
+            {
+              txt: '放松',
+              class: ''
+            },
+            {
+              txt: '孤独',
+              class: ''
+            },
+            {
+              txt: '感动',
+              class: ''
+            },
+            {
+              txt: '兴奋',
+              class: ''
+            },
+            {
+              txt: '快乐',
+              class: ''
+            },
+            {
+              txt: '安静',
+              class: ''
+            },
+            {
+              txt: '思念',
+              class: ''
             }
           ],
-          text:'主题'
+          text: '情感'
+        },
+        {
+          tags: [
+            {
+              txt: '校园',
+              class: ''
+            },
+            {
+              txt: '影视原声',
+              class: ''
+            },
+            {
+              txt: '游戏',
+              class: ''
+            },
+            {
+              txt: '70后',
+              class: ''
+            },
+            {
+              txt: '80后',
+              class: ''
+            },
+            {
+              txt: '90后',
+              class: ''
+            },
+            {
+              txt: '网络歌曲',
+              class: ''
+            },
+            {
+              txt: 'KTV',
+              class: ''
+            },
+            {
+              txt: '经典',
+              class: ''
+            },
+            {
+              txt: '翻唱',
+              class: ''
+            },
+            {
+              txt: '吉他',
+              class: ''
+            },
+            {
+              txt: '钢琴',
+              class: ''
+            },
+            {
+              txt: '器乐',
+              class: ''
+            },
+            {
+              txt: '儿童',
+              class: ''
+            },
+            {
+              txt: '榜单',
+              class: ''
+            },
+            {
+              txt: 'ACG',
+              class: ''
+            },
+            {
+              txt: '00后',
+              class: ''
+            }
+          ],
+          text: '主题'
         }
       ]
     }
@@ -474,21 +474,21 @@ export default {
   computed: {},
   methods: {
     cancel () {
-      this.hackReset = false //刷新重新传值
+      this.hackReset = false // 刷新重新传值
       this.values = this.playlist.tags.slice(0)
       this.$nextTick(() => {
-      this.visible = false
-      this.hackReset = true
+        this.visible = false
+        this.hackReset = true
       })
     },
     complete () {
       this.visible = false
-      if(!this.values.length) return
-      if(this.diffArr(this.values, this.playlist.tags).length === 0) return
+      if (!this.values.length) return
+      if (this.diffArr(this.values, this.playlist.tags).length === 0) return
       let dirrArr = this.diffArr(this.values, this.playlist.tags)
       dirrArr.forEach(item => {
         this.$api.songLists.updatetags(this.playlist.id, item).then(res => {
-        console.log(res.data)
+          console.log(res.data)
         })
       })
       this.playlist.tags = this.values
@@ -509,7 +509,7 @@ export default {
       // }
       // console.log(e.currentTarget.children[0].innerText)
       // console.log(e.currentTarget.className)
-      
+
       // this.Checkes()
       // if(this.values.length > 3) {
       //   const toast = this.$createToast({
@@ -521,34 +521,31 @@ export default {
       //   console.log('超出了')
       // }
 
-      
-      if(e.currentTarget.className !== 'active') {
-      if(this.values.length >= 3) {
-        const toast = this.$createToast({
-          txt: '最多可选择3个标签',
-          type: 'error',
-          zIndex:2003
-        })
-        toast.show()
-      }else {
-        e.currentTarget.classList.add('active')
-        this.values.push(e.currentTarget.children[0].innerText)
-      }
-      }else{
+      if (e.currentTarget.className !== 'active') {
+        if (this.values.length >= 3) {
+          const toast = this.$createToast({
+            txt: '最多可选择3个标签',
+            type: 'error',
+            zIndex: 2003
+          })
+          toast.show()
+        } else {
+          e.currentTarget.classList.add('active')
+          this.values.push(e.currentTarget.children[0].innerText)
+        }
+      } else {
         e.currentTarget.classList.remove('active')
         let ind = this.values.findIndex(ele => {
           return ele === e.currentTarget.children[0].innerText
         })
         this.values.splice(ind, 1)
       }
-      
-
     },
     // Checkes () {
     //   //去重
     //   for(let i=0; i<this.values.length; i++){
     //         for(let j=i+1; j<this.values.length; j++){
-    //             if(this.values[i]==this.values[j]){         
+    //             if(this.values[i]==this.values[j]){
     //                 this.values.splice(j,1);
     //                 j--;
     //             }
@@ -557,7 +554,7 @@ export default {
     //   return this.values
     // },
     diffArr (arr1, arr2) {
-      //数组找不同
+      // 数组找不同
       let arr = arr1.filter(item => {
         return arr2.indexOf(item) === -1
       })
@@ -565,7 +562,7 @@ export default {
     },
     setTag () {
       this.values = this.playlist.tags.slice(0)
-      if(!this.playlist.tags.length) return
+      if (!this.playlist.tags.length) return
       // let indi = [
       //   // {'i': []},
       //   // {'i': []},
@@ -578,25 +575,25 @@ export default {
       // ]
       let ind = -1
       this.playlist.tags.forEach(item => {
-       for(let i =0; i < this.types.length; i++) {
-         ind = this.types[i].tags.findIndex(ele => {
-           return item === ele.txt
-         })
-         if(ind >= 0) {
+        for (let i = 0; i < this.types.length; i++) {
+          ind = this.types[i].tags.findIndex(ele => {
+            return item === ele.txt
+          })
+          if (ind >= 0) {
           //  indi[i].i.push(ind)
           // indi[i].push(ind)
-          this.types[i].tags[ind].class = 'active'
+            this.types[i].tags[ind].class = 'active'
           // console.log(this.types[i].tags[ind])
-         }
-       }  
+          }
+        }
       })
-    },
+    }
 
   },
-  created() {
+  created () {
     this.setTag()
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.$refs.scroll.refresh()
     })

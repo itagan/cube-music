@@ -69,16 +69,16 @@ export default {
     followBase
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: true,
@@ -89,19 +89,19 @@ export default {
       scrollEvents: ['scroll'],
       pullDownY: 0,
       hasMore: true,
-      songCount:'',
-      offset:0,
-      count:0,
-      userprofiles:[],
-      result:true,
-      userprofileCount:0
+      songCount: '',
+      offset: 0,
+      count: 0,
+      userprofiles: [],
+      result: true,
+      userprofileCount: 0
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 9 && !this.userprofiles.length) {
+    currentPage (val) {
+      if (val === 9 && !this.userprofiles.length) {
         this.getUsers(this.value, 30, 0, 1002)
-      } 
+      }
     }
   },
   computed: {},
@@ -110,13 +110,13 @@ export default {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
         this.userprofileCount = res.data.result.userprofileCount
         this.hasMore = this.count < res.data.result.userprofileCount
-        if(this.hasMore) {
-          this.count+=30
-          this.offset+=10
+        if (this.hasMore) {
+          this.count += 30
+          this.offset += 10
         }
-        this.userprofiles =  this.userprofiles.concat(res.data.result.userprofiles)
+        this.userprofiles = this.userprofiles.concat(res.data.result.userprofiles)
         setTimeout(() => {
-          this.result = this.userprofileCount > 0 ? true : false
+          this.result = this.userprofileCount > 0
         }, 3000)
       })
     },
@@ -124,7 +124,7 @@ export default {
       this.scrollY = -y
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       setTimeout(() => {
         this.getUsers(this.value, 30, this.offset, 1002)
         const contentScroll = this.$refs.contentScroll
@@ -133,30 +133,30 @@ export default {
     },
     toFollow (userId, index) {
       this.$api.users.toFollow(userId, 1).then(res => {
-        if(res.data.code === 200) {
+        if (res.data.code === 200) {
           this.userprofiles[index].followed = true
         }
       })
     },
     toUser (userId, userType) {
-      if(userType === 2 || userType === 4) {
+      if (userType === 2 || userType === 4) {
         this.$api.users.userdetail(userId).then(res => {
           let id = res.data.profile.artistId
           this.$router.push({
             path: `/singer/${userId}/${id}`
           })
         })
-      }else {
+      } else {
         this.$router.push({
-        path: `/user/${userId}`
-      })
+          path: `/user/${userId}`
+        })
       }
-    },
+    }
   },
-  created() {
+  created () {
     // this.getUsers(this.value, 30, 0, 1002)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

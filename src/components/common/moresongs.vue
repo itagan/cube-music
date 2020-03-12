@@ -37,7 +37,7 @@
       name: 'moreSongs.vue',
       data () {
         return {
-          visible: false,
+          visible: false
         }
       },
       props: {
@@ -52,14 +52,14 @@
         cancel () {
                 // 触摸到遮罩层就取消本组件
           this.$emit('cancel')
-          this.hide () 
+          this.hide()
         },
         show () {
           this.visible = true
         },
         hide () {
           this.visible = false
-        },
+        }
       }
     }
 </script>

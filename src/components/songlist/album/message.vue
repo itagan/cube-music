@@ -53,36 +53,36 @@
           default: {}
         },
         allShow: {
-          type:Boolean,
-          default:false
+          type: Boolean,
+          default: false
         }
       },
       methods: {
         toComment () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$emit('comment')
         },
         toShare () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$emit('share')
         },
         chcekMore () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$emit('check')
         },
         toUser () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$emit('user')
         },
         toCover () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$emit('cover')
         },
         transTime (timestamp) {
           let date = new Date(timestamp)
           let Y = date.getFullYear() + '-'
           let M = (date.getMonth() + 1) + '-'
-          let D = date.getDate() 
+          let D = date.getDate()
           return Y + M + D
         },
         Artist (artist) {

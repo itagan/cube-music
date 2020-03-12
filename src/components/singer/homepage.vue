@@ -126,13 +126,13 @@ export default {
     songListBase
   },
   props: {
-    id:{
-      type:String,
-      default:''
+    id: {
+      type: String,
+      default: ''
     },
-    begin:{
-      type:Boolean,
-      default:false
+    begin: {
+      type: Boolean,
+      default: false
     },
     profile: {
       type: Object,
@@ -142,20 +142,20 @@ export default {
       type: Object,
       default: {}
     },
-    userId:{
-      type:String,
-      default:''
+    userId: {
+      type: String,
+      default: ''
     },
     currentPage: {
-      type:Number,
-      default:0
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
-      hotSongs:[],
-      artist:{},
-      playing:false,
+      hotSongs: [],
+      artist: {},
+      playing: false,
       // options: {
       //   pullUpLoad: false,
       //   scrollbar: false,
@@ -166,11 +166,11 @@ export default {
       // },
       scrollEvents: ['scroll'],
       scrollY: 0,
-      trackCountLike:0,
-      playCountLike:0,
-      playlists:[],
-      playlist:[],
-      collection:[],
+      trackCountLike: 0,
+      playCountLike: 0,
+      playlists: [],
+      playlist: [],
+      collection: []
       // scrollTrue:false
     }
   },
@@ -188,24 +188,24 @@ export default {
   },
   computed: {
     options () {
-      if(this.begin) {
+      if (this.begin) {
         return {
           pullUpLoad: false,
           scrollbar: true,
           click: false, // 解决点击事件被触发两次的问题
-          stopPropagation:false,
-          scrollX:false,
-          scrollY:true
+          stopPropagation: false,
+          scrollX: false,
+          scrollY: true
         }
-      }else {
+      } else {
         return {
           pullUpLoad: false,
           scrollbar: true,
           click: false, // 解决点击事件被触发两次的问题
-          stopPropagation:false,
-          scrollX:false,
-          scrollY:false
-        } 
+          stopPropagation: false,
+          scrollX: false,
+          scrollY: false
+        }
       }
     }
   },
@@ -224,14 +224,13 @@ export default {
         this.playCountLike = this.playlists[0].playCount
 
         this.playlist = res.data.playlist.filter((item) => {
-            return item.creator.userId === this.userId
-          })
+          return item.creator.userId === this.userId
+        })
         this.collection = res.data.playlist.filter((item) => {
           return item.creator.userId !== this.userId
         })
 
         console.log(this.playlists)
-
       })
     },
     getMsg () {
@@ -259,12 +258,12 @@ export default {
     Enable () {
       this.$refs.contentScroll && this.$refs.contentScroll.enable()
       // this.options.scrollY = true
-       this.$refs.contentScroll.refresh()
+      this.$refs.contentScroll.refresh()
       //  console.log('开始滚动')
     },
-    toListLike() {
+    toListLike () {
       this.$router.push({
-        path:`/songlist/${this.playlists[0].id}`  //注意前面加个'/' 是根路由
+        path: `/songlist/${this.playlists[0].id}`  // 注意前面加个'/' 是根路由
       })
     },
     moreList () {
@@ -280,12 +279,11 @@ export default {
       this.$emit('taggleIndex')
     }
   },
-  created() {
+  created () {
     this.getMusic()
     this.getPlaylist()
-    
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.Disable()
     })

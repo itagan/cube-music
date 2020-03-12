@@ -22,30 +22,30 @@
     export default {
       name: 'songListComment.vue',
       props: {
-        playlist:{
-          type:Object,
-          default:{}
+        playlist: {
+          type: Object,
+          default: {}
         }
       },
       methods: {
         toSonglist (id) {
           this.$router.push({
-            path:`/songlist/${id}`
+            path: `/songlist/${id}`
           })
         },
         toUser (userId) {
-          if(this.playlist.creator.userType === 2 || this.playlist.creator.userType === 4) {
+          if (this.playlist.creator.userType === 2 || this.playlist.creator.userType === 4) {
             this.$api.users.userdetail(userId).then(res => {
               let id = res.data.profile.artistId
               this.$router.push({
                 path: `/singer/${userId}/${id}`
               })
             })
-          }else {
+          } else {
             this.$router.push({
-            path: `/user/${userId}`
-          })
-        }
+              path: `/user/${userId}`
+            })
+          }
         }
       }
     }

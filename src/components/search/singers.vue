@@ -56,16 +56,16 @@ export default {
     followBase
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: true,
@@ -76,19 +76,19 @@ export default {
       scrollEvents: ['scroll'],
       pullDownY: 0,
       hasMore: true,
-      songCount:'',
-      offset:0,
-      count:0,
-      artists:[],
-      result:true,
-      artistCount:0
+      songCount: '',
+      offset: 0,
+      count: 0,
+      artists: [],
+      result: true,
+      artistCount: 0
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 4 && !this.artists.length) {
+    currentPage (val) {
+      if (val === 4 && !this.artists.length) {
         this.getSingers(this.value, 30, 0, 100)
-      } 
+      }
     }
   },
   computed: {},
@@ -97,13 +97,13 @@ export default {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
         this.artistCount = res.data.result.artistCount
         this.hasMore = this.count < res.data.result.artistCount
-        if(this.hasMore) {
-          this.count+=30
-          this.offset+=10
+        if (this.hasMore) {
+          this.count += 30
+          this.offset += 10
         }
-        this.artists =  this.artists.concat(res.data.result.artists)
+        this.artists = this.artists.concat(res.data.result.artists)
         setTimeout(() => {
-          this.result = this.artistCount > 0 ? true : false
+          this.result = this.artistCount > 0
         }, 3000)
       })
     },
@@ -111,7 +111,7 @@ export default {
       this.scrollY = -y
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       setTimeout(() => {
         this.getSingers(this.value, 30, this.offset, 100)
         const contentScroll = this.$refs.contentScroll
@@ -120,31 +120,31 @@ export default {
     },
     TransAlias (alias) {
       let arr = []
-      for(let i = 0; i < alias.length; i++) {
+      for (let i = 0; i < alias.length; i++) {
         arr.push(alias[i])
       }
       return arr.join('/')
     },
     toUser (id) {
       this.$api.singers.singermusic(id).then(res => {
-        if(res.data.artist.accountId) {
+        if (res.data.artist.accountId) {
           let userId = res.data.artist.accountId
           this.$router.push({
             path: `/singer/${userId}/${id}`
-            })
-        }else {
+          })
+        } else {
           let userId = 477726475
           this.$router.push({
             path: `/singer/${userId}/${id}`
-            })
+          })
         }
       })
-    },
+    }
   },
-  created() {
+  created () {
     // this.getSingers(this.value, 30, 0, 100)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

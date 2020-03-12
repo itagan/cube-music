@@ -84,12 +84,12 @@ export default {
     followBase
   },
   props: {},
-  data() {
+  data () {
     return {
-      isUser:false,
-      isFollow:false,
-      followeds:[],
-      userId:477726475,
+      isUser: false,
+      isFollow: false,
+      followeds: [],
+      userId: 477726475,
       options: {
         pullUpLoad: true,
         scrollbar: true,
@@ -99,7 +99,7 @@ export default {
       scrollEvents: ['scroll'],
       pullDownY: 0,
       offset: 0,
-      hasMore: true,
+      hasMore: true
     }
   },
   watch: {},
@@ -115,7 +115,7 @@ export default {
         // if (this.hasMore) {
         //   // this.offset += 30
         // }
-        //  this.followeds = this.followeds.concat(res.data.followeds)  
+        //  this.followeds = this.followeds.concat(res.data.followeds)
         this.followeds = res.data.followeds
       })
     },
@@ -123,16 +123,15 @@ export default {
       return this.isUser = this.userId === 477726475
     },
     onPullingUp () {
-      if(!this.hasMore) {
+      if (!this.hasMore) {
         const contentScroll = this.$refs.contentScroll
         contentScroll.forceUpdate()
-        return
-      }else {
+      } else {
         setTimeout(() => {
           this.getFolloweds(477726475)
           const contentScroll = this.$refs.contentScroll
           contentScroll.forceUpdate()
-      }, 1000)
+        }, 1000)
       }
     },
     scrollHandler (pos) {
@@ -157,11 +156,11 @@ export default {
       })
     }
   },
-  created() {
+  created () {
     this.isUserOr()
     this.getFolloweds(477726475)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

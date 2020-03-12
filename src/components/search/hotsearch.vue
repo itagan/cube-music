@@ -93,11 +93,11 @@ import mySearch from '../../base/search/searchcancel'
 import {saveHistory, loadHistory, deleteAllHistory} from '../../common/js/goodstorage'
 export default {
   components: {
-     MyHeader,
-     mySearch,
+    MyHeader,
+    mySearch
   },
   props: {},
-  data() {
+  data () {
     return {
       options: {
         scrollbar: true
@@ -105,10 +105,10 @@ export default {
       horizontalOptions: {
         scrollbar: true
       },
-      hotsearchs:[],
-      hasTips:true,
-      suggestions:[],
-      historySearchs:[],
+      hotsearchs: [],
+      hasTips: true,
+      suggestions: [],
+      historySearchs: [],
       value: '',
       placeholder: '请输入内容',
       type: 'password',
@@ -118,7 +118,7 @@ export default {
         visible: true,
         blurHidden: true
       },
-      showSearch:true
+      showSearch: true
     }
   },
   watch: {
@@ -133,7 +133,7 @@ export default {
       this.fake = true
       console.log('触发')
       this.hasTips = false
-      this.getSuggestion ('海阔天空')
+      this.getSuggestion('海阔天空')
     },
     cancel () {
       //  this.$refs.search.hide()
@@ -160,26 +160,26 @@ export default {
     input (val) {
       if (val.length > 0) {
         this.hasTips = false
-        this.getSuggestion (val)
+        this.getSuggestion(val)
       } else {
         this.hasTips = true
       }
     },
-    toSearch(keyword) {
+    toSearch (keyword) {
       this.$router.push({
-        path:`/search/${keyword}`
+        path: `/search/${keyword}`
       })
       this.toStore(keyword)
     },
     Placeholder () {
       this.value = this.$route.params.content
       console.log(this.value)
-      if(this.value) {
+      if (this.value) {
         this.hasTips = false
-        this.getSuggestion (this.value)
+        this.getSuggestion(this.value)
       }
     },
-    toStore(keyword) {
+    toStore (keyword) {
       saveHistory(keyword)
       this.getHistorys()
     },
@@ -209,13 +209,13 @@ export default {
       }).show()
     }
   },
-  created() {
+  created () {
     this.getHistorys()
     this.getHotSearch()
     this.getSearchDefault()
     this.Placeholder()
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

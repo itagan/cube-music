@@ -34,14 +34,14 @@ export default {
       default: {}
     }
   },
-  data() {
+  data () {
     return {
       visible: false,
       hackReset: true,
       value: '',
       placeholder: '歌单标题',
       autofocus: true,
-      maxlength	:6,
+      maxlength: 6,
       clearable: {
         visible: true,
         blurHidden: true
@@ -52,11 +52,11 @@ export default {
   computed: {},
   methods: {
     cancel () {
-      this.hackReset = false //刷新重新传值
+      this.hackReset = false // 刷新重新传值
       // this.value = this.playlist.tags.slice(0)
       this.$nextTick(() => {
-      this.visible = false
-      this.hackReset = true
+        this.visible = false
+        this.hackReset = true
       })
     },
     complete () {
@@ -65,7 +65,6 @@ export default {
         console.log(res.data)
       })
       this.playlist.name = this.value
- 
     },
     show () {
       this.visible = true
@@ -73,7 +72,7 @@ export default {
     input (val) {
             // 输入中
       if (val.length > 5) {
-        this.value = val.slice(0,5)
+        this.value = val.slice(0, 5)
         const toast = this.$createToast({
           zIndex: 2003,
           txt: '超出字数限制',
@@ -82,13 +81,13 @@ export default {
         toast.show()
       }
     }
- 
+
   },
-  created() {
+  created () {
     this.value = this.playlist.name
     this.autofocus = true
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

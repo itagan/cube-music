@@ -41,15 +41,15 @@
     data () {
       return {}
     },
-    created() {
+    created () {
       // this.showReply()
     },
-    computed:{
+    computed: {
       ...mapGetters([
         'author'
       ])
     },
-    watch:{},
+    watch: {},
     methods: {
       remind () {
                 // 点击评论提醒该要什么

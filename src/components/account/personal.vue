@@ -134,12 +134,12 @@
         },
         toFollows () {
           this.$router.push({
-            path:`follows`
+            path: `follows`
           })
         },
         toFolloweds () {
           this.$router.push({
-            path:`followeds`
+            path: `followeds`
           })
         },
         toUser () {
@@ -151,10 +151,10 @@
           this.$router.push({
             path: `/editinformation`,
             query: {
-              userMessage:JSON.stringify(this.personals)
+              userMessage: JSON.stringify(this.personals)
             }
           })
-        },
+        }
       }
     }
 </script>

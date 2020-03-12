@@ -46,16 +46,16 @@ export default {
     subVideo
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: true,
@@ -66,39 +66,39 @@ export default {
       scrollEvents: ['scroll'],
       pullDownY: 0,
       hasMore: true,
-      songCount:'',
-      offset:0,
-      count:0,
-      videos:[],
-      result:true,
-      videoCount:0
+      songCount: '',
+      offset: 0,
+      count: 0,
+      videos: [],
+      result: true,
+      videoCount: 0
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 6 && !this.videos.length) {
+    currentPage (val) {
+      if (val === 6 && !this.videos.length) {
         this.getVideos(this.value, 30, 0, 1014)
-      } 
+      }
     }
   },
   computed: {},
   methods: {
     getVideos (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
-        //手动api补全解决不全的bug
-        if(res.data.result.videoCount) {
+        // 手动api补全解决不全的bug
+        if (res.data.result.videoCount) {
           this.videoCount = res.data.result.videoCount
-        }else {
+        } else {
           this.videoCount = 0
         }
         this.hasMore = this.count < res.data.result.videoCount
-        if(this.hasMore) {
-          this.count+=30
-          this.offset+=10
+        if (this.hasMore) {
+          this.count += 30
+          this.offset += 10
         }
-        this.videos =  this.videos.concat(res.data.result.videos)
+        this.videos = this.videos.concat(res.data.result.videos)
         setTimeout(() => {
-          this.result = this.videoCount > 0 ? true : false
+          this.result = this.videoCount > 0
         }, 3000)
       })
     },
@@ -106,7 +106,7 @@ export default {
       this.scrollY = -y
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       setTimeout(() => {
         this.getVideos(this.value, 30, this.offset, 1014)
         const contentScroll = this.$refs.contentScroll
@@ -115,16 +115,16 @@ export default {
     },
     TransAlias (alias) {
       let arr = []
-      for(let i = 0; i < alias.length; i++) {
+      for (let i = 0; i < alias.length; i++) {
         arr.push(alias[i])
       }
       return arr.join('/')
-    },
+    }
   },
-  created() {
+  created () {
     // this.getVideos(this.value, 30, 0, 1014)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

@@ -155,11 +155,11 @@ export default {
           isPraised: false,
           redColor: 'redColor',
           praisedCounts: 0,
-          placeholder:"发表评论",
-          user:"",
-          commentId:-1,
-          threadId:'',
-          value:''
+          placeholder: '发表评论',
+          user: '',
+          commentId: -1,
+          threadId: '',
+          value: ''
         }
       },
       components: {
@@ -469,11 +469,11 @@ export default {
             })
           }
         },
-        showDialog (liTop,user,commentId,threadId) {
+        showDialog (liTop, user, commentId, threadId) {
           this.$refs.showDia.show()
-          if(liTop < 350){
+          if (liTop < 350) {
             this.$refs.showDia.diaTopChange()
-          }else {
+          } else {
             this.$refs.showDia._diaTopChange()
           }
           this.user = user

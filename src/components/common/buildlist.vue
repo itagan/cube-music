@@ -110,7 +110,7 @@
           }
         }
       },
-      mounted() {
+      mounted () {
         this.$nextTick(() => {
           this.value = this.track && this.track.name
           console.log(this.value)

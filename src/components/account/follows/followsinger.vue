@@ -94,12 +94,12 @@ export default {
     MySearch
   },
   props: {},
-  data() {
+  data () {
     return {
-      isUser:false,
-      isFollow:true,
-      follow:[],
-      userId:477726475,
+      isUser: false,
+      isFollow: true,
+      follow: [],
+      userId: 477726475,
       options: {
         pullUpLoad: true,
         scrollbar: true,
@@ -113,7 +113,7 @@ export default {
       placeholder: '搜索歌手',
       fake: false,
       singers: [],
-      accountId:''
+      accountId: ''
     }
   },
   watch: {},
@@ -128,7 +128,7 @@ export default {
         this.singers = res.data.data
 
         console.log(this.singers)
-        
+
         // this.$emit('hasNum', res.data.count)
       })
     },
@@ -136,7 +136,7 @@ export default {
       return this.isUser = this.userId === 477726475
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       setTimeout(() => {
         this.getSingers()
         const contentScroll = this.$refs.contentScroll
@@ -153,7 +153,7 @@ export default {
 
     },
     toFollow () {
-      
+
     },
     getQuery (query) {
       console.log(query)
@@ -163,36 +163,36 @@ export default {
     },
     toUser (id) {
       this.$api.singers.singermusic(id).then(res => {
-        if(res.data.artist.accountId) {
+        if (res.data.artist.accountId) {
           this.accountId = res.data.artist.accountId
           let userId = this.accountId
           this.$router.push({
             path: `/singer/${userId}/${id}`
-            })
-        }else {
+          })
+        } else {
           let userId = 477726475
           this.$router.push({
             path: `/singer/${userId}/${id}`
-            })
+          })
         }
       })
     },
     getAccountId () {
       this.$api.singers.singermusic(this.id).then(res => {
         console.log(res.data)
-        if(res.data.artist.accountId) {
+        if (res.data.artist.accountId) {
           this.accountId = res.data.artist.accountId
-        }else {
+        } else {
           this.accountId = 477726475
         }
       })
-    },
+    }
   },
-  created() {
+  created () {
     this.isUserOr()
     this.getSingers(477726475)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

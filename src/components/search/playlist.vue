@@ -60,16 +60,16 @@ export default {
     listBase
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: true,
@@ -80,44 +80,43 @@ export default {
       scrollEvents: ['scroll'],
       pullDownY: 0,
       hasMore: true,
-      songCount:'',
-      offset:0,
-      count:0,
-      playlists:[],
-      result:true
+      songCount: '',
+      offset: 0,
+      count: 0,
+      playlists: [],
+      result: true
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 3 && !this.playlists.length) {
-       this.getPlaylist(this.value, 30, 0, 1000)
-      } 
+    currentPage (val) {
+      if (val === 3 && !this.playlists.length) {
+        this.getPlaylist(this.value, 30, 0, 1000)
+      }
     }
   },
   computed: {},
   methods: {
     getPlaylist (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
-        if(res.data.result) {
+        if (res.data.result) {
           this.hasMore = this.count < res.data.result.playlistCount
-        if(this.hasMore) {
-          this.count+=30
-          this.offset+=10
-        }
-        this.playlists =  this.playlists.concat(res.data.result.playlists)
-        }else {
+          if (this.hasMore) {
+            this.count += 30
+            this.offset += 10
+          }
+          this.playlists = this.playlists.concat(res.data.result.playlists)
+        } else {
           setTimeout(() => {
-          this.result =  false
-        }, 3000)
+            this.result = false
+          }, 3000)
         }
-        
       })
     },
     scrollHandler ({ y }) {
       this.scrollY = -y
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       setTimeout(() => {
         this.getPlaylist(this.value, 30, this.offset, 1000)
         const contentScroll = this.$refs.contentScroll
@@ -129,14 +128,14 @@ export default {
     },
     toList (id) {
       this.$router.push({
-        path:`/songlist/${id}`
+        path: `/songlist/${id}`
       })
-    },
+    }
   },
-  created() {
+  created () {
     // this.getPlaylist(this.value, 30, 0, 1000)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

@@ -61,7 +61,7 @@ import baseAuto from '../../../base/swiper/baseauto'
 
 export default {
   components: {
-     baseAuto
+    baseAuto
   },
   props: {
     djRadio: {
@@ -69,22 +69,22 @@ export default {
       default: {}
     }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: false,
         scrollbar: false,
         click: false, // 解决点击事件被触发两次的问题
-        stopPropagation:false,
-        scrollX:false,
-        scrollY:true
+        stopPropagation: false,
+        scrollX: false,
+        scrollY: true
       },
       secondStop: 0,
       scrollEvents: ['scroll'],
-      scrollY: 0,
+      scrollY: 0
     }
   },
-  watch: {  
+  watch: {
   },
   computed: {},
   methods: {
@@ -92,10 +92,10 @@ export default {
     },
     scrollHandler (pos) {
       this.scrollY = -pos.y
-    },
+    }
   },
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

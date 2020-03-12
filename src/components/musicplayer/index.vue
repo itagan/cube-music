@@ -168,24 +168,24 @@ export default {
     buildList
   },
   props: {},
-  data() {
+  data () {
     return {
       profile: {},
-      item:{},
-      currentPage:0,
-      ismusic:true,
+      item: {},
+      currentPage: 0,
+      ismusic: true,
       currentLyric: null,
-      url:'',
-      state:true,
+      url: '',
+      state: true,
       songReady: false,
-      canLyricPlay:false,
+      canLyricPlay: false,
       currentLineNum: 0,
-      currentTime:0,
-      checkLists:[],
+      currentTime: 0,
+      checkLists: [],
       isMore: false,
-      firstLyric:true,
+      firstLyric: true,
       isPureMusic: false,
-      nextprev:false,
+      nextprev: false,
       options: {
         scrollbar: true
       },
@@ -195,7 +195,7 @@ export default {
   },
   watch: {
     currentSong (newSong, oldSong) {
-      if (!newSong.id  || newSong.id === oldSong.id) {
+      if (!newSong.id || newSong.id === oldSong.id) {
         return
       }
       this.songReady = false
@@ -204,16 +204,16 @@ export default {
       this.getUrl(newSong.id)
       this.firstLyric = true
     },
-    url(newUrl, oldUrl) {
-      if(!newUrl) {
+    url (newUrl, oldUrl) {
+      if (!newUrl) {
         this.setPlayingState(false)
-        }else {
-          //解决初次地址为空无法播放问题。因获取地址是异步请求，所以监控地址变化获取当前该播放的，而避免是下一首的
-        this.$nextTick(() =>{
-        this.$refs.audio.src = newUrl
-        this.$refs.audio.play()
-      })
-        }
+      } else {
+          // 解决初次地址为空无法播放问题。因获取地址是异步请求，所以监控地址变化获取当前该播放的，而避免是下一首的
+        this.$nextTick(() => {
+          this.$refs.audio.src = newUrl
+          this.$refs.audio.play()
+        })
+      }
     },
     playing (newPlaying) {
       if (!this.songReady) {
@@ -223,16 +223,16 @@ export default {
       this.$nextTick(() => {
         newPlaying ? audio.play() : audio.pause()
       })
-    },
+    }
   },
   computed: {
     ...mapGetters([
-    'currentIndex',
-    'fullScreen',
-    'playing',
-    'playlist',
-    'currentSong',
-    'mode'
+      'currentIndex',
+      'fullScreen',
+      'playing',
+      'playlist',
+      'currentSong',
+      'mode'
     ]),
     // RotateClass () {
     //   return this.playing ? 'play' : 'pause'
@@ -245,7 +245,7 @@ export default {
     },
     percent () {
       return this.currentTime / (this.currentSong.dt / 1000)
-    },
+    }
   },
   methods: {
     getMusic () {
@@ -261,8 +261,8 @@ export default {
       this.currentPage = index
     },
     slideChange (index) {
-      if(!this.nextprev) {
-          this.setCurrentIndex(index)
+      if (!this.nextprev) {
+        this.setCurrentIndex(index)
           // console.log('滑动播放触发')
       }
       this.nextprev = false
@@ -273,33 +273,33 @@ export default {
         this.currentLyric = null
       }
 
-      this.$api.playmusic.lyric(this.currentSong.id).then(res =>{
-        if(res.data.code === 200) {
+      this.$api.playmusic.lyric(this.currentSong.id).then(res => {
+        if (res.data.code === 200) {
           this.currentLyric = new Lyric(res.data.lrc.lyric, this.handleLyric)
           this.isPureMusic = !this.currentLyric.lines.length
           // console.log(this.currentLyric)
           if (this.playing) {
-          this.currentLyric.play()
+            this.currentLyric.play()
           // // 歌词重载以后 高亮行设置为 0
           // this.currentLineNum = 0
           // this.$nextTick(() => {
           //   this.$refs.Scroll.scroll.scrollTo(0, 0, 1000)
           // })
-        }
+          }
         }
       })
     },
     getUrl (id) {
-      this.$api.playmusic.url(id).then(res =>{
-        if(res.data.code === 200) {
+      this.$api.playmusic.url(id).then(res => {
+        if (res.data.code === 200) {
           this.url = res.data.data[0].url
-          if(!this.url) {
-             const toast = this.$createToast({
+          if (!this.url) {
+            const toast = this.$createToast({
               txt: '富则悦耳，否则下一首',
-              type:'error',
+              type: 'error',
               time: 1500,
-              zIndex:2005,
-              mask:true,
+              zIndex: 2005,
+              mask: true,
               onTimeout: () => {
                 this.next()
               }
@@ -311,8 +311,8 @@ export default {
       })
     },
     getCheck () {
-      this.$api.playmusic.check(this.currentSong.id).then(res =>{
-        if(res.data.code === 200) {
+      this.$api.playmusic.check(this.currentSong.id).then(res => {
+        if (res.data.code === 200) {
           this.state = res.data.state
         }
       })
@@ -321,9 +321,9 @@ export default {
       // this.ismusic = false
       this.$refs.MusicChange.classList.add('visibility')
       this.$refs.LyricChange.classList.remove('visibility')
-      //解决一开始不能滚动问题
+      // 解决一开始不能滚动问题
       this.$nextTick(() => {
-        if(this.currentLyric && this.firstLyric) {
+        if (this.currentLyric && this.firstLyric) {
           this.firstLyric = false
           this.$refs.Scroll.refresh()
         }
@@ -336,11 +336,10 @@ export default {
     },
     controlPlay () {
       this.setPlayingState(!this.playing)
-
     },
     prev () {
       this.nextprev = true
-      let index =  this.currentIndex - 1
+      let index = this.currentIndex - 1
       if (this.currentLyric) {
         this.currentLyric.stop()
         // 重置为null
@@ -355,7 +354,7 @@ export default {
     },
     next () {
       this.nextprev = true
-      let index =  this.currentIndex + 1
+      let index = this.currentIndex + 1
       if (this.currentLyric) {
         this.currentLyric.stop()
         // 重置为null
@@ -372,7 +371,7 @@ export default {
       const mode = (this.mode + 1) % 3
       this.setPlayMode(mode)
       let list = null
-      if(mode === playMode.random) {
+      if (mode === playMode.random) {
         list = shuffle(this.playlist)
         console.log(list)
       }
@@ -380,23 +379,22 @@ export default {
       //   list: list,
       //   index:index
       // })
-      switch(mode)
-        {
-          case 0:
-              this.textShow('列表循环')
-              break
-          case 1:
-              this.textShow('单曲循环')
-              break
-          default:
-              this.textShow('随机播放')
-        }
+      switch (mode) {
+        case 0:
+          this.textShow('列表循环')
+          break
+        case 1:
+          this.textShow('单曲循环')
+          break
+        default:
+          this.textShow('随机播放')
+      }
     },
-    textShow(text) {
+    textShow (text) {
       this.toast = this.$createToast({
         txt: text,
         type: 'txt',
-        zIndex:2005
+        zIndex: 2005
       })
       this.toast.show()
     },
@@ -470,7 +468,7 @@ export default {
       }
       // this.playingLyric = txt
     },
-    changeInd (id) {      
+    changeInd (id) {
       // this.currentIndex = index
       if (this.currentLyric) {
         this.currentLyric.stop()
@@ -483,7 +481,7 @@ export default {
       let ind = this.playlist.findIndex(item => {
         return item.id === id
       })
-      if(ind >= 0) {
+      if (ind >= 0) {
         this.setCurrentIndex(ind)
         this.setPlayingState(true)
       }
@@ -494,7 +492,7 @@ export default {
     dtTran (interval) {
       return dtTrans(interval)
     },
-    //弹窗有关
+    // 弹窗有关
     toMoreOpera () {
       this.isMore = true
       this.$nextTick(() => {
@@ -521,35 +519,35 @@ export default {
       this.checkLists.push(this.currentSong)
     },
     toSinger () {
-      if(this.currentSong.ar.length > 1) {
+      if (this.currentSong.ar.length > 1) {
         this.moreSinger()
         this.isMore = false
         return
       }
       this.$api.singers.singermusic(this.currentSong.ar[0].id).then(res => {
-        if(res.data.artist.accountId) {
+        if (res.data.artist.accountId) {
           this.accountId = res.data.artist.accountId
           let userId = this.accountId
-          this.closeFull() 
+          this.closeFull()
           this.$router.push({
             path: `/singer/${userId}/${this.currentSong.ar[0].id}`
-            })
-        }else {
+          })
+        } else {
           let userId = 477726475
-          this.closeFull() 
+          this.closeFull()
           this.$router.push({
             path: `/singer/${userId}/${this.currentSong.ar[0].id}`
-            })
+          })
         }
       })
       this.isMore = false
     },
     toAlbum () {
       this.$router.push({
-        path:`/albumlist/${(this.currentSong.album && this.currentSong.album.id) || (this.currentSong.al && this.currentSong.al.id)}`
-        })
+        path: `/albumlist/${(this.currentSong.album && this.currentSong.album.id) || (this.currentSong.al && this.currentSong.al.id)}`
+      })
       this.isMore = false
-      this.closeFull() 
+      this.closeFull()
     },
     cancelShare () {
       this.$refs.shareShow.hide()
@@ -564,7 +562,6 @@ export default {
       // this.isBuild = true
       // this.isMore = false
       this.$refs.showBuild.show()
-      
     },
     cancel () {
       this.isBuild = false
@@ -572,17 +569,17 @@ export default {
     taggleMode () {},
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
-      setCurrentIndex:'SET_CURRENT_INDEX',
+      setCurrentIndex: 'SET_CURRENT_INDEX',
       setPlayingState: 'SET_PLAYING_STATE',
       setPlayMode: 'SET_PLAY_MODE'
     }),
-     ...mapActions([
-          'selectPlay'
-        ])
+    ...mapActions([
+      'selectPlay'
+    ])
   },
-  created() {},
-  mounted() {
-    this.getMusic ()
+  created () {},
+  mounted () {
+    this.getMusic()
   }
 }
 </script>

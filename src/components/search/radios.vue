@@ -64,65 +64,64 @@ export default {
     listBase
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: true,
         scrollbar: true,
-        click: false 
+        click: false
       },
       scrollY: 0,
       scrollEvents: ['scroll'],
-      multimatch:{},
-      isPlay:false,
+      multimatch: {},
+      isPlay: false,
       hasMore: true,
-      hasresult:true,
-      offset:0,
-      count:0,
-      djRadios:[],
-      result:true,
-      djRadiosCount:0
+      hasresult: true,
+      offset: 0,
+      count: 0,
+      djRadios: [],
+      result: true,
+      djRadiosCount: 0
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 8 && !this.djRadios.length) {
+    currentPage (val) {
+      if (val === 8 && !this.djRadios.length) {
         this.getRadios(this.value, 60, 0, 1009)
-      } 
+      }
     }
   },
   computed: {},
   methods: {
     getRadios (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
-        if(this.hasresult) {
-          //手动api补全解决不全的bug
-        if(res.data.result.djRadiosCount) {
-          this.djRadiosCount = res.data.result.djRadiosCount
-        }else {
-          this.djRadiosCount = 0
-        }
-        setTimeout(() => {
-          this.result = this.djRadiosCount > 0 ? true : false
+        if (this.hasresult) {
+          // 手动api补全解决不全的bug
+          if (res.data.result.djRadiosCount) {
+            this.djRadiosCount = res.data.result.djRadiosCount
+          } else {
+            this.djRadiosCount = 0
+          }
+          setTimeout(() => {
+            this.result = this.djRadiosCount > 0
           }, 3000)
-          this.hasresult = false  //加上标识符判断 避免上拉加载时变成无结果逻辑bug
+          this.hasresult = false  // 加上标识符判断 避免上拉加载时变成无结果逻辑bug
         }
         this.hasMore = this.count < this.djRadiosCount
-        if(this.hasMore) {
-          this.count+=30
-          this.offset+=10
+        if (this.hasMore) {
+          this.count += 30
+          this.offset += 10
         }
-        this.djRadios =  this.djRadios.concat(res.data.result.djRadios)
-
+        this.djRadios = this.djRadios.concat(res.data.result.djRadios)
       })
     },
     toIt () {
@@ -132,7 +131,7 @@ export default {
       this.scrollY = -y
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       setTimeout(() => {
         this.getRadios(this.value, 30, this.offset, 1009)
         const contentScroll = this.$refs.contentScroll
@@ -152,16 +151,16 @@ export default {
     //     next()
     //   })
       this.$router.push({
-        path:`/radiolist/${id}`
+        path: `/radiolist/${id}`
       })
     },
     TransAlias (alias) {
       let arr = []
-      for(let i = 0; i < alias.length; i++) {
+      for (let i = 0; i < alias.length; i++) {
         arr.push(alias[i])
       }
       return arr.join('/')
-    },
+    }
   },
   // beforeRouteLeave (to, from, next) {
   //   if (to.name == 'radiolist') {
@@ -170,7 +169,7 @@ export default {
   //       console.log('是我吧')
   //   }
   //   else {
-      
+
   //   }
   // },
   // beforeRouteLeave(to,from,next){
@@ -181,10 +180,10 @@ export default {
   //   }
   //   next()
   // },
-  created() {
+  created () {
     // this.getRadios(this.value, 60, 0, 1009)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

@@ -40,17 +40,17 @@
 <script>
 import {mapGetters} from 'vuex'
 import {timestampOther} from '../../assets/js/timestamp'
-  export default {
-    name: 'baseComment.vue',
-    props: {
-      item: {
-        type: Object,
-        default: {}
-      },
-      hasReplyArr: {
-        type: Array,
-        default: []
-      },
+export default {
+  name: 'baseComment.vue',
+  props: {
+    item: {
+      type: Object,
+      default: {}
+    },
+    hasReplyArr: {
+      type: Array,
+      default: []
+    },
       // show: {
       //   type:Number,
       //   default:-1
@@ -59,103 +59,102 @@ import {timestampOther} from '../../assets/js/timestamp'
       //   type:Number,
       //   default:0
       // }
-      isdynamic: {
-        type:Boolean,
-        default:false
-      }
-    },
-    data () {
-      return {
-        replyShow: false,
-        showOr:-1,
+    isdynamic: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      replyShow: false,
+      showOr: -1,
         // hasReplyArr:[],
-        ReplyArr:[],
-        isLike: true,
-        active:'activeColor',
-        error:''
-      }
-    },
-    created() {
+      ReplyArr: [],
+      isLike: true,
+      active: 'activeColor',
+      error: ''
+    }
+  },
+  created () {
       // this.showReply()
-    },
-    computed:{
-       ...mapGetters([
-        'author',
-        'dynamic'
-      ])
-    },
-    watch:{},
-    methods: {
-      toUser (userId, userType) {
-        if(userType === 2 || userType === 4) {
-          this.$api.users.userdetail(userId).then(res => {
-            let id = res.data.profile.artistId
-            this.$router.push({
-              path: `/singer/${userId}/${id}`
-            })
-          })
-        }else {
+  },
+  computed: {
+    ...mapGetters([
+      'author',
+      'dynamic'
+    ])
+  },
+  watch: {},
+  methods: {
+    toUser (userId, userType) {
+      if (userType === 2 || userType === 4) {
+        this.$api.users.userdetail(userId).then(res => {
+          let id = res.data.profile.artistId
           this.$router.push({
+            path: `/singer/${userId}/${id}`
+          })
+        })
+      } else {
+        this.$router.push({
           path: `/user/${userId}`
         })
-       }
-      },
-      toLike () {
+      }
+    },
+    toLike () {
         // this.$api.likes.commentDynamic(this.item.commentId, this.dynamic[0].info.threadId, 1).then(res => {
         //   console.log(res)
         //   if(res.status === 200) {
         //     this.$refs.likeCount.innerHTML++
         //   }
         // })
-      },
-      reply () {
-        if(this.isdynamic) {
-           this.$router.push({
-            path: 'commentreply', 
-            name:'commentreply',
-            query: { 
-              item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
-              _item:JSON.stringify(this.item),
-              threadId:this.dynamic[0].info.threadId
-            }
-          })   
-        }else {
-          this.$router.push({
-            path: 'commentreply', 
-            name:'commentreply',
-            query: { 
-              item:JSON.stringify(this.ReplyArr),  //传参获取参数都使用json方法转换，避免刷新时候报错
-              _item:JSON.stringify(this.item),
-            }
-          })   
-        }
-        
+    },
+    reply () {
+      if (this.isdynamic) {
+        this.$router.push({
+          path: 'commentreply',
+          name: 'commentreply',
+          query: {
+            item: JSON.stringify(this.ReplyArr),  // 传参获取参数都使用json方法转换，避免刷新时候报错
+            _item: JSON.stringify(this.item),
+            threadId: this.dynamic[0].info.threadId
+          }
+        })
+      } else {
+        this.$router.push({
+          path: 'commentreply',
+          name: 'commentreply',
+          query: {
+            item: JSON.stringify(this.ReplyArr),  // 传参获取参数都使用json方法转换，避免刷新时候报错
+            _item: JSON.stringify(this.item)
+          }
+        })
+      }
 
-        console.log(this.item)
-      },
+      console.log(this.item)
+    },
       // 方法分开写，v-if去重数组 避免出现可能无限循环报错
-      ReplyNum (item) {
-        return [...new Set(this.hasReplyArr.slice())].findIndex(ele => {
-          return item.commentId === ele.parentCommentId
-        })
-      },
-      _ReplyNum (item) {
-        item =  {...item}
-        if(item.beReplied.length !== 0) return
-        this.ReplyArr = this.hasReplyArr.slice().filter(ele => {
-          return item.commentId === ele.parentCommentId
-        })
+    ReplyNum (item) {
+      return [...new Set(this.hasReplyArr.slice())].findIndex(ele => {
+        return item.commentId === ele.parentCommentId
+      })
+    },
+    _ReplyNum (item) {
+      item = {...item}
+      if (item.beReplied.length !== 0) return
+      this.ReplyArr = this.hasReplyArr.slice().filter(ele => {
+        return item.commentId === ele.parentCommentId
+      })
         // for(let i = 0; i<this.hasReplyArr.length;i++) {
         //   if(item.commentId === this.hasReplyArr[i].parentCommentId) {
         //     this.ReplyArr.push(item)
         //   }
         // }
-        console.log(this.ReplyArr)
-        return this.ReplyArr
-      },
-      timestamp (time) {
-        return timestampOther(time)
-      },
+      console.log(this.ReplyArr)
+      return this.ReplyArr
+    },
+    timestamp (time) {
+      return timestampOther(time)
+    }
       // isShow (id) {
       //   return id === this.author[0].userId
       // }
@@ -166,8 +165,8 @@ import {timestampOther} from '../../assets/js/timestamp'
       //     })
       //   }
       // }
-    }
   }
+}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

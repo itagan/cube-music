@@ -319,7 +319,6 @@ import {timestamp} from '../../assets/js/timestamp'
 import {serializeNumber} from '../../assets/js/number'
 import {saveHistory, loadHistory, deleteAllHistory} from '../../common/js/goodstorage'
 
-
 export default {
   inject: ['reload'],
   components: {
@@ -332,32 +331,32 @@ export default {
     baseAuto
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     }
   },
-  data() {
+  data () {
     return {
       options: {
         scrollbar: true
       },
-      multimatch:{},
-      isPlay:false,
+      multimatch: {},
+      isPlay: false,
       song: {},
-      video:{},
-      playList:{},
-      mlog:{},
-      talk:{},
-      artist:{},
-      sim_query:{},
-      album:{},
-      djRadio:{},
-      user:{},
-      result:true,
-      order:[],
-      currentIndex:-1,
-      allShow:false,
+      video: {},
+      playList: {},
+      mlog: {},
+      talk: {},
+      artist: {},
+      sim_query: {},
+      album: {},
+      djRadio: {},
+      user: {},
+      result: true,
+      order: [],
+      currentIndex: -1,
+      allShow: false
     }
   },
   watch: {},
@@ -370,7 +369,7 @@ export default {
     },
     getAlls (keywords, limit, offset, type) {
       this.$api.searchs.search(keywords, limit, offset, type).then(res => {
-        if(res.data.result.order) {
+        if (res.data.result.order) {
           this.song = res.data.result.song || {}
           this.video = res.data.result.video || {}
           this.playList = res.data.result.playList || {}
@@ -382,9 +381,9 @@ export default {
           this.djRadio = res.data.result.djRadio || {}
           this.user = res.data.result.user || {}
           console.log(res.data)
-        }else {
+        } else {
           setTimeout(() => {
-            this.result =  false
+            this.result = false
           }, 3000)
         }
         this.order = res.data.result.order || []
@@ -395,7 +394,7 @@ export default {
     },
     TransAlias (alias) {
       let arr = []
-      for(let i = 0; i < alias.length; i++) {
+      for (let i = 0; i < alias.length; i++) {
         arr.push(alias[i])
       }
       return arr.join('/')
@@ -406,52 +405,52 @@ export default {
     Num (num) {
       return serializeNumber(num)
     },
-    toCheckMusic(item,index) {
+    toCheckMusic (item, index) {
       this.currentIndex = index
       this.$router.push({
         path: `/musicplayer`,
         query: {
-          item:JSON.stringify(item)
+          item: JSON.stringify(item)
         }
       })
     },
     toFollow (userId, index) {
       this.$api.users.toFollow(userId, 1).then(res => {
-        if(res.data.code === 200) {
+        if (res.data.code === 200) {
           this.user.users[index].followed = true
         }
       })
     },
     toUser (userId, userType) {
-      if(userType === 2 || userType === 4) {
+      if (userType === 2 || userType === 4) {
         this.$api.users.userdetail(userId).then(res => {
           let id = res.data.profile.artistId
           this.$router.push({
             path: `/singer/${userId}/${id}`
           })
         })
-      }else {
+      } else {
         this.$router.push({
-        path: `/user/${userId}`
-      })
+          path: `/user/${userId}`
+        })
       }
     },
     toChanges (i) {
-      this.$emit('changeIndex',i)
+      this.$emit('changeIndex', i)
     },
     toList (id) {
       this.$router.push({
-        path:`/songlist/${id}`
+        path: `/songlist/${id}`
       })
     },
     toSinger (id) {
       this.$api.singers.singermusic(id).then(res => {
-        if(res.data.artist.accountId) {
+        if (res.data.artist.accountId) {
           let userId = res.data.artist.accountId
           this.$router.push({
             path: `/singer/${userId}/${id}`
-            })
-        }else {
+          })
+        } else {
           let userId = 477726475
           this.$router.push({
             path: `/singer/${userId}/${id}`
@@ -461,20 +460,20 @@ export default {
     },
     toAlbum (id) {
       this.$router.push({
-        path:`/albumlist/${id}`
+        path: `/albumlist/${id}`
       })
     },
-    toSearch(keyword) {
+    toSearch (keyword) {
       this.reload()
       this.$router.push({
-        path:`/search/${keyword}`
+        path: `/search/${keyword}`
       }).catch(err => {
-        console.log('输出报错',err)
+        console.log('输出报错', err)
       })
 
       this.toStore(keyword)
     },
-    toStore(keyword) {
+    toStore (keyword) {
       saveHistory(keyword)
     },
     toMoreOpera (item) {
@@ -482,13 +481,13 @@ export default {
       console.log(item)
     }
   },
-  created() {
+  created () {
     // this.getMultimatch (this.value)
     // this.getAlls(this.value, 60, 0, 1018)
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
-      this.getMultimatch (this.value)
+      this.getMultimatch(this.value)
       this.getAlls(this.value, 60, 0, 1018)
     })
   }

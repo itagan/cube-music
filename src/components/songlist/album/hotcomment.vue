@@ -14,19 +14,19 @@ export default {
   },
   props: {
     hotComments: {
-      type:Array,
-      default:[]
+      type: Array,
+      default: []
     }
   },
-  data() {
+  data () {
     return {
     }
   },
   watch: {},
   computed: {},
   methods: {},
-  created() {},
-  mounted() {}
+  created () {},
+  mounted () {}
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>

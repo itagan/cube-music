@@ -25,8 +25,8 @@
       name: 'albumCommentTop.vue',
       props: {
         album: {
-          type:Object,
-          default:{}
+          type: Object,
+          default: {}
         }
       },
       methods: {
@@ -38,22 +38,22 @@
         },
         toAlbum (id) {
           this.$router.push({
-            path:`/albumlist/${id}`
+            path: `/albumlist/${id}`
           })
         },
         toUser (id) {
           this.$api.singers.singermusic(id).then(res => {
-            if(res.data.artist.accountId) {
+            if (res.data.artist.accountId) {
               this.accountId = res.data.artist.accountId
               let userId = this.accountId
               this.$router.push({
                 path: `/singer/${userId}/${id}`
-                })
-            }else {
+              })
+            } else {
               let userId = 477726475
               this.$router.push({
                 path: `/singer/${userId}/${id}`
-                })
+              })
             }
           })
         }

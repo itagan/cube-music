@@ -60,30 +60,30 @@ export default {
     albumBase
   },
   props: {
-    id:{
-      type:String,
-      default:''
-    },
+    id: {
+      type: String,
+      default: ''
+    }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: true,
         scrollbar: true,
         click: false, // 解决点击事件被触发两次的问题
-        stopPropagation:false,
-        scrollX:false,
-        scrollY:true
+        stopPropagation: false,
+        scrollX: false,
+        scrollY: true
       },
       scrollEvents: ['scroll'],
       scrollY: 0,
       offset: 0,
       hasMore: true,
-      albums:[]
+      albums: []
     }
   },
   watch: {
-    
+
   },
   computed: {},
   methods: {
@@ -93,17 +93,17 @@ export default {
         if (this.hasMore) {
           this.offset += 20
         }
-         this.albums = this.albums.concat(res.data.hotAlbums)  
-         this.$emit('albumNum', this.albums.length)
+        this.albums = this.albums.concat(res.data.hotAlbums)
+        this.$emit('albumNum', this.albums.length)
       })
     },
     toAlbum (id) {
       this.$router.push({
-        path:`/albumlist/${id}`
+        path: `/albumlist/${id}`
       })
     },
     onPullingUp () {
-      if(!this.hasMore) return
+      if (!this.hasMore) return
       this.$refs.contentScroll.refresh()
       setTimeout(() => {
         this.getAlbums(this.id, 20, this.offset)
@@ -121,18 +121,17 @@ export default {
     Enable () {
       // this.$refs.contentScroll.enable()
       // this.options.scrollY = true
-       this.$refs.contentScroll.refresh()
+      this.$refs.contentScroll.refresh()
       //  console.log('开始滚动')
     },
-    toListLike() {
+    toListLike () {
 
     }
   },
-  created() {
+  created () {
     this.getAlbums(this.id, 20, 0)
-    
   },
-  mounted() {
+  mounted () {
     // this.$nextTick(() => {
     //   this.Disable()
     // })

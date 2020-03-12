@@ -174,7 +174,7 @@
           visible: false,
           options: {
             scrollbar: true
-          },
+          }
           // noAlbum:true
         }
       },
@@ -204,7 +204,7 @@
         cancel () {
             // 触摸到遮罩层就取消本组件
           this.$emit('cancel')
-          this.hide () 
+          this.hide()
         },
         show () {
           this.visible = true
@@ -215,24 +215,24 @@
         toShare () {
           this.$emit('share')
           // this.$emit('cancel')
-          this.hide () 
+          this.hide()
         },
         ring () {
           this.$emit('ring')
           // this.$emit('cancel')
-           this.hide () 
+          this.hide()
         },
         toSinger () {
           this.$emit('singer')
-           this.hide () 
+          this.hide()
         },
         toCollected () {
           this.$emit('collect')
-           this.hide () 
+          this.hide()
         },
         toAlbum () {
           this.$emit('album')
-           this.hide () 
+          this.hide()
         },
         Artist (artist) {
           let arr = []

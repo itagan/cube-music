@@ -60,7 +60,7 @@
           activeColor: 'activeColor',
           checkList: [],
           val: 1,
-          currentIndex:-1
+          currentIndex: -1
         }
       },
       props: {
@@ -100,16 +100,16 @@
           } else {
             this.$emit('toAll', 0)
           }
-          if(this.checkList.length) {
-            this.$emit('changebg',true)
-          }else {
-            this.$emit('changebg',false)
+          if (this.checkList.length) {
+            this.$emit('changebg', true)
+          } else {
+            this.$emit('changebg', false)
           }
         },
-        toCheckMusic(item,index) {
-          if(this.checkbox) {
-          }else {
-            //播放电台歌曲
+        toCheckMusic (item, index) {
+          if (this.checkbox) {
+          } else {
+            // 播放电台歌曲
             // this.isPlay = true
             this.currentIndex = index
           }
@@ -123,16 +123,16 @@
         },
         allToChecked () {
           this.checkList = [...this.allToCheck()]
-          this.$emit('changebg',true)
+          this.$emit('changebg', true)
         },
         allToCheckNo () {
           this.checkList = []
-          this.$emit('changebg',false)
+          this.$emit('changebg', false)
         },
             // 选中的有哪些
         whoChecked () {
           this.checkLists = []
-          for(let i = 0; i < this.checkList.length; i++) {
+          for (let i = 0; i < this.checkList.length; i++) {
             this.checkLists.push(this.tracks[this.checkList[i] - 1])
           }
           console.log(this.checkList)

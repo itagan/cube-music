@@ -85,10 +85,10 @@
       name: 'newalbum.vue',
       components: {
       },
-      props:{
+      props: {
         type: {
-          type:Number,
-          default:0
+          type: Number,
+          default: 0
         }
       },
       data () {
@@ -97,11 +97,11 @@
           scrollEvents: ['scroll'],
           pullUpLoad: true,
           pullUpLoadThreshold: 0,
-          albums:[],
-          topAlbums:[],
-          total:0,
-          offset:0,
-          hasMore:true
+          albums: [],
+          topAlbums: [],
+          total: 0,
+          offset: 0,
+          hasMore: true
         }
       },
       computed: {
@@ -128,8 +128,8 @@
             // console.log(res.data)
             // this.albums = res.data.albums
             this.total = res.data.total
-            if(this.albums.length <= this.total) {
-            this.offset += 20
+            if (this.albums.length <= this.total) {
+              this.offset += 20
             }
             this.albums = this.albums.concat(res.data.albums)
             this.$refs.scroll.forceUpdate()
@@ -142,23 +142,23 @@
           })
         },
         scrollHandler ({ y }) {
-          this.scrollY = -y          
+          this.scrollY = -y
         },
         onPullingUp () {
-          if(this.albums.length <= this.total) {
+          if (this.albums.length <= this.total) {
             this.hasMore = true
             setTimeout(() => {
               this.getAlbums(this.offset, 20)
               this.$refs.scroll.forceUpdate()
             }, 1000)
-          }else {
+          } else {
             this.hasMore = false
             this.$refs.scroll.forceUpdate()
           }
         },
         toAlbum (id) {
           this.$router.push({
-            path:`/albumlist/${id}`
+            path: `/albumlist/${id}`
           })
         }
       },

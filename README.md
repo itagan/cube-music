@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Music-player 👋</h1>
+<h1 align="center">Welcome to Cube-Music 👋</h1>
 
 <p align="center">
 <img src="https://img.shields.io/badge/webpack-^3.6.0-informational" alt="webpack">

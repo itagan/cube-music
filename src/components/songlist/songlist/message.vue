@@ -60,58 +60,58 @@
           default: {}
         },
         allShow: {
-          type:Boolean,
-          default:false
+          type: Boolean,
+          default: false
         }
       },
       methods: {
         toComment () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$emit('comment')
         },
         toShare () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$emit('share')
         },
         chcekMore () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$emit('check')
         },
         toUser (userId) {
-          if(this.allShow) return
-          if(this.playlist.creator.userType === 2 || this.playlist.creator.userType === 4) {
+          if (this.allShow) return
+          if (this.playlist.creator.userType === 2 || this.playlist.creator.userType === 4) {
             this.$api.users.userdetail(userId).then(res => {
               let id = res.data.profile.artistId
               this.$router.push({
                 path: `/singer/${userId}/${id}`
               })
             })
-            }else {
-              this.$router.push({
+          } else {
+            this.$router.push({
               path: `/user/${userId}`
             })
           }
         },
         toCover () {
-          if(this.allShow) return
+          if (this.allShow) return
           this.$emit('cover')
         },
         toEdit () {
-          if(this.allShow) return
-          if(this.playlist.creator.userId === 477726475) {
+          if (this.allShow) return
+          if (this.playlist.creator.userId === 477726475) {
             this.$router.push({
-            path:'/editlist',
-            query: {
-              playlist: JSON.stringify(this.playlist)
+              path: '/editlist',
+              query: {
+                playlist: JSON.stringify(this.playlist)
               }
             })
-          }else {
+          } else {
             this.toCover()
           }
         },
         Num (num) {
           return serializeNumber(num)
-        },
+        }
       }
     }
 </script>

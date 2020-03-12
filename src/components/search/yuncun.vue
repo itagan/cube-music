@@ -96,33 +96,33 @@ export default {
     logBase
   },
   props: {
-    value:{
-      type:String,
-      default:''
+    value: {
+      type: String,
+      default: ''
     },
-    currentPage:{
-      type:Number,
-      default:0
+    currentPage: {
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
       scrollEvents: ['scroll'],
       scrollY: 0,
-      mlog:{},
-      talk:{},
-      mlogs:[],
-      talks:[],
-      loadData:true,
-      result:true
+      mlog: {},
+      talk: {},
+      mlogs: [],
+      talks: [],
+      loadData: true,
+      result: true
     }
   },
   watch: {
-    currentPage(val) {
-      if(val === 2 && this.loadData) {
+    currentPage (val) {
+      if (val === 2 && this.loadData) {
         this.getAlls(this.value, 60, 0, 1018)
         this.loadData = false
-      } 
+      }
     }
   },
   computed: {},
@@ -136,20 +136,20 @@ export default {
 
         setTimeout(() => {
           // this.result = this.userprofileCount > 0 ? true : false
-          if(!res.data.result.mlog || !res.data.result.talk) {
+          if (!res.data.result.mlog || !res.data.result.talk) {
             this.result = false
           }
         }, 3000)
       })
     },
-    scrollHandler({ y }) {
+    scrollHandler ({ y }) {
       this.scrollY = -y
     }
   },
-  created() {
+  created () {
     // this.getAlls(this.value, 60, 0, 1018)
   },
-  mounted() {}
+  mounted () {}
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">

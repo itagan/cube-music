@@ -83,23 +83,23 @@
 export default {
   components: {},
   props: {
-    id:{
-      type:String,
-      default:''
+    id: {
+      type: String,
+      default: ''
     },
-    begin:{
-      type:Boolean,
-      default:false
+    begin: {
+      type: Boolean,
+      default: false
     },
     currentPage: {
-      type:Number,
-      default:0
+      type: Number,
+      default: 0
     }
   },
-  data() {
+  data () {
     return {
-      hotSongs:[],
-      playing:false,
+      hotSongs: [],
+      playing: false,
       // options: {
       //   pullUpLoad: true,
       //   scrollbar: true,
@@ -119,33 +119,33 @@ export default {
     }
   },
   watch: {
-     currentPage () {
-       if(this.currentPage === 1) {
-         this.getMusic()
-       }
-     }
+    currentPage () {
+      if (this.currentPage === 1) {
+        this.getMusic()
+      }
+    }
   },
   computed: {
     options () {
-      if(this.begin) {
+      if (this.begin) {
         // console.log('让我滚动')
         return {
           pullUpLoad: false,
           scrollbar: false,
           click: false, // 解决点击事件被触发两次的问题
-          stopPropagation:false,
-          scrollX:false,
-          scrollY:true
+          stopPropagation: false,
+          scrollX: false,
+          scrollY: true
         }
-      }else {
+      } else {
         return {
           pullUpLoad: false,
           scrollbar: false,
           click: false, // 解决点击事件被触发两次的问题
-          stopPropagation:false,
-          scrollX:false,
-          scrollY:true 
-        } 
+          stopPropagation: false,
+          scrollX: false,
+          scrollY: true
+        }
       }
     }
   },
@@ -180,11 +180,11 @@ export default {
 
     }
   },
-  created() {
+  created () {
     // this.getMusic()
-   
+
   },
-  mounted() {
+  mounted () {
     //  this.Disable()
   }
 }

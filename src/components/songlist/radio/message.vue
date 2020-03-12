@@ -38,7 +38,7 @@
       name: 'radioMessage.vue',
       data () {
         return {
-          playing:'playing',
+          playing: 'playing'
         }
       },
       props: {
@@ -47,8 +47,8 @@
           default: {}
         },
         isPlay: {
-          type:Boolean,
-          default:false
+          type: Boolean,
+          default: false
         }
       },
       methods: {
@@ -57,7 +57,7 @@
             this.$createDialog({
               type: 'confirm',
               title: '确定不再收藏该电台？',
-              zIndex:2001,
+              zIndex: 2001,
               confirmBtn: {
                 text: '确定',
                 active: true,
@@ -80,7 +80,7 @@
                     }).show()
                     // this.$refs.Sub.innerHTML--
                     // this.isSub = false
-                    this.$emit('issub',false)
+                    this.$emit('issub', false)
                   }
                 })
               }
@@ -96,7 +96,7 @@
                 toast.show()
                 // this.$refs.Sub.innerHTML++
                 // this.isSub = true
-                this.$emit('issub',true)
+                this.$emit('issub', true)
               }
             })
           }
@@ -108,7 +108,7 @@
           let date = new Date(timestamp)
           let Y = date.getFullYear() + '-'
           let M = (date.getMonth() + 1) + '-'
-          let D = date.getDate() 
+          let D = date.getDate()
           return Y + M + D
         },
         Artist (artist) {
@@ -120,7 +120,7 @@
         },
         Num (num) {
           return serializeNumber(num)
-        },
+        }
       }
     }
 </script>

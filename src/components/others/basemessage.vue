@@ -79,7 +79,7 @@
           authentication: false,
           level: 0,
           profile: {},
-          area:''
+          area: ''
         }
       },
       created () {
@@ -106,11 +106,11 @@
         },
         getAge (timestamp) {
           let nowTimestamp = new Date().getTime()
-          return Math.ceil((nowTimestamp-timestamp)/31536000000)
-        },
+          return Math.ceil((nowTimestamp - timestamp) / 31536000000)
+        }
       },
       watch: {
-        'router':'getUser'
+        'router': 'getUser'
       }
     }
 </script>

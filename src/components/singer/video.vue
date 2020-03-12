@@ -45,34 +45,34 @@ import subVideo from '../../base/swiper/singervideo'
 
 export default {
   components: {
-     subVideo
+    subVideo
   },
   props: {
-    id:{
-      type:String,
-      default:''
-    },
+    id: {
+      type: String,
+      default: ''
+    }
   },
-  data() {
+  data () {
     return {
       options: {
         pullUpLoad: false,
         scrollbar: false,
         click: false, // 解决点击事件被触发两次的问题
-        stopPropagation:false,
-        scrollX:false,
-        scrollY:true
+        stopPropagation: false,
+        scrollX: false,
+        scrollY: true
       },
       secondStop: 0,
       scrollEvents: ['scroll'],
       scrollY: 0,
       offset: 0,
       hasMore: true,
-      videos:[]
+      videos: []
     }
   },
   watch: {
-    
+
   },
   computed: {},
   methods: {
@@ -104,18 +104,17 @@ export default {
     Enable () {
       // this.$refs.contentScroll.enable()
       // this.options.scrollY = true
-       this.$refs.contentScroll.refresh()
+      this.$refs.contentScroll.refresh()
       //  console.log('开始滚动')
     },
-    toListLike() {
+    toListLike () {
 
     }
   },
-  created() {
+  created () {
     this.getMvs(this.id)
-    
   },
-  mounted() {
+  mounted () {
     // this.$nextTick(() => {
     //   this.Disable()
     // })

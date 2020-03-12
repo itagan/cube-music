@@ -63,20 +63,20 @@
           },
           scrollY: 0,
           scrollEvents: ['scroll'],
-          playing:false,
-          id:'477726475',
-          playlist:[],
-          codes:[],
+          playing: false,
+          id: '477726475',
+          playlist: [],
+          codes: [],
           isVisible: false
         }
       },
       props: {
         checkLists: {
-          type:Array,
-          default:[]
+          type: Array,
+          default: []
         }
       },
-      created() {},
+      created () {},
       methods: {
         show () {
           this.isVisible = true
@@ -98,39 +98,39 @@
           this.codes = []
           this.checkLists.forEach(item => {
             this.$api.songLists.addDel('add', pid, item.id).then(res => {
-            this.codes.push(res.data.code)
-          })
+              this.codes.push(res.data.code)
+            })
           })
           let arr = []
           arr = this.codes.filter(item => {
             return item === 502
           })
-          if(arr.length === this.checkLists.length) {
-          const toast = this.$createToast({
-            txt: '歌曲已存在',
-            type: 'error',
-            zIndex:2002
-          })
-          toast.show()
-          this.hide() 
-          }else {
-          const toast = this.$createToast({
-            txt: '已收藏到歌单',
-            type: 'correct',
-            zIndex:2002
-          })
-          toast.show()
-          this.hide() 
+          if (arr.length === this.checkLists.length) {
+            const toast = this.$createToast({
+              txt: '歌曲已存在',
+              type: 'error',
+              zIndex: 2002
+            })
+            toast.show()
+            this.hide()
+          } else {
+            const toast = this.$createToast({
+              txt: '已收藏到歌单',
+              type: 'correct',
+              zIndex: 2002
+            })
+            toast.show()
+            this.hide()
           }
         },
         bulidlist () {
-          this.hide() 
+          this.hide()
           this.$emit('bulid')
         },
         scrollHandler ({ y }) {
           this.scrollY = -y
           // this.$refs.increaseHeight.style.height = `${this.scrollY}`
-        },
+        }
       },
       mounted () {
         // this.$nextTick(() => {
