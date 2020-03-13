@@ -20,9 +20,9 @@
       </li>
     </ul>
     <div class="agree" ref="shaky">
-      <i class="iconfont iconvideo" v-if="!checked" @click="check">同意</i>
-      <i class="iconfont iconzan1" v-else @click="check">同意</i>
-      <span><< 霸王条款 >></span>
+      <div class="check" :class="checked === true ? 'checked' : '' " @click.stop="check"></div>
+      <span class="agree-text">同意</span>
+      <span>《 霸王条款 》</span>
     </div>
   </div>
 </template>
@@ -161,9 +161,37 @@
       text-align:center
       left:50%
       margin-left:-150px
+      .agree-text
+        margin:auto 5px
+        color:rgba(255,255,255,.2)
+      .check
+        height:10px
+        width:10px
+        border:1px solid rgba(255,255,255,.4)
+        border-radius:50%
+        position:relative
+      .checked
+        height:10px
+        width:10px
+        border:1px solid rgba(255,255,255,.2)
+        border-radius:50%
+        position:relative
+        background-color:rgba(255,255,255,.2)
+      .checked::after
+        position: absolute
+        top: 2px
+        left: 3px
+        width: 2.5px
+        height: 5px
+        border: 2px solid rgba(0,0,0,.2)
+        border-width: 0 1px 1px 0
+        content: ''
+        transform: rotate(45deg)
       i
         color:#dcdcdc
         padding-right:5px
+
+       
 
   //抖动效果
     .shaky {
