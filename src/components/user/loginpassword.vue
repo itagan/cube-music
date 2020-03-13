@@ -12,10 +12,11 @@
       :maxlength="maxlength"
       :readonly="readonly"
       :disabled="disabled"
-      :autofocus="autofocus"
       :autocomplete="autocomplete"
       :eye="eye"
       :clearable="clearable"
+      @input="input"
+      ref="autoFocus"
       class="my-input"
     ></cube-input>
 
@@ -23,7 +24,7 @@
 
     <div class="reset">
       <span>重设密码</span>
-      <i></i>
+      <i class="iconfont iconiconfontyoujiantou"></i>
     </div>
   </div>
 </template>
@@ -40,7 +41,6 @@
           readonly: false,
           maxlength: 100,
           disabled: false,
-          autofocus: true,
           autocomplete: true,
           eye: {
             open: true,
@@ -63,15 +63,14 @@
                 // 返回上一页
           this.$router.back()
         },
-            // input(val) {
-            //     //输入中
-            //     if (val.length > 0) {
-            //         document.getElementsByClassName('next')[0].style.opacity = 1
-            //     } else {
-            //         document.getElementsByClassName('next')[0].style.opacity = 0.2
-            //     }
-            //
-            // },
+        input (val) {
+                // 输入中
+          if (val.length > 0) {
+            document.getElementsByClassName('login')[0].style.opacity = 1
+          } else {
+            document.getElementsByClassName('login')[0].style.opacity = 0.4
+          }
+        },
             // 获取手机号码
         getPhone () {
                 // return this.code;
@@ -92,7 +91,8 @@
             this.$createToast({
               time: 1000,
               txt: msg,
-              type: 'error'
+              type: 'error',
+              zIndex:2002
             })
           }
 
@@ -151,6 +151,13 @@
         ...mapMutations({
           setUid: 'SET_UID'
         })
+      },
+      mounted () {
+        this.$nextTick(() => {
+          //原生自动对焦替换cube ui自动对焦，避免不自动对焦**
+          //提示如Autofocus processing was blocked because a document's URL has a fragment '#/login/phone'.
+          this.$refs['autoFocus'].$refs.input.focus()
+        })
       }
     }
 </script>
@@ -162,7 +169,7 @@
     width:100%
     height:667px
     background-color:white
-    z-index:200
+    z-index:2001
     position:relative
     .back
       font-size:$font-size-medium-x
@@ -177,27 +184,41 @@
       width:100%
       height:40px
       margin-top:30px
+      border-bottom:1px solid #dcdcdc
 
     .login
-      width:350px
-      height:25px
-      line-height:0
+      width:340px
+      padding:10px
       position:absolute
-      top:125px
+      top:130px
       left:50%
-      margin-left:-175px
+      margin-left:-170px
       border-radius:20px
-      background-color:red
+      background: -webkit-linear-gradient(left, rgba(255,0,0,.8), rgba(255,0,0,1)); /* Safari 5.1 - 6.0 */
+      background: -o-linear-gradient(right, rgba(255,0,0,.8), rgba(255,0,0,1)); /* Opera 11.1 - 12.0 */
+      background: -moz-linear-gradient(right, rgba(255,0,0,.8), rgba(255,0,0,1)); /* Firefox 3.6 - 15 */
+      background: linear-gradient(to right, rgba(255,0,0,.8), rgba(255,0,0,1)); /* 标准的语法（必须放在最后） */
       color:white
-      $font-size-medium
+      opacity:0.4
+      font-size:$font-size-medium
     .reset
       font-size:$font-size-small-s
+      color:rgba(128,128,128,.8)
       position:absolute
-      top:170px
-      width:80px
+      top:175px
+      width:100%
       height:20px
-      line-height:20px
-      text-align:center
-      left:50%
-      margin-left:-40px
+      flex-center()
+      padding-left:5px
+      i 
+       font-size:$font-size-large-x 
+       padding-top:1px
+       margin-left:-4px
+       color:rgba(128,128,128,.3)
+
+      //对cube-ui样式修改
+.cube-input_active::after
+  border:none
+.cube-input::after  
+  border:none
 </style>

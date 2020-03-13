@@ -63,17 +63,16 @@
           const toast = this.$createToast({
             time: 1000,
             txt: '手机号应该是11位数字！',
-            type: 'error'
+            type: 'error',
+            zIndex:2002
           })
             // 判断手机号
           if (this.value.length === 11) {
                     // toast.show();
-
                     // 密码登录
             this.$router.push({
               path: `/login/cellphone/${this.value}`
             })
-
                 // 调用接口验证码登录
                 // this.sendCode(this.value);
                 // if(this.status === 200) {
