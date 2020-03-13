@@ -93,15 +93,15 @@
               txt: msg,
               type: 'error',
               zIndex:2002
-            })
+            }).show()
           }
 
           this.$api.users.cellphone(this.phone, this.value).then(res => {
-            this.code = res.data.code
+            this.code = res.data.code || res.code
             // this.uid = res.data.account.id
             console.log(res)
             if (this.code === 502) {
-              toast.show('密码错误！')
+              toast('密码错误！')
             } else if (this.code === 200) {
                     // 把用户id信息提交到vuex
               this.uid = res.data.account.id
@@ -122,6 +122,8 @@
                   console.log('刷新状态失败')
                 }
               })
+            }else if(this.code === 501) {
+              toast('账号不存在！')
             }
           })
 
