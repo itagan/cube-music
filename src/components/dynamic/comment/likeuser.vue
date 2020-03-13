@@ -40,8 +40,8 @@ export default {
       this.checkUser()
     }
     // isadd: {把属性定义为变数组对象，更方便监控，避免这里初始化执行
-    //   handler:"checkUser",
-		// 	immediate:true
+    // handler:"checkUser",
+		// immediate:true
     // }
   },
   computed: {},

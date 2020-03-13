@@ -317,7 +317,7 @@ import logBase from '../../base/swiper/logbase'
 import albumBase from '../../base/swiper/album'
 import {timestamp} from '../../assets/js/timestamp'
 import {serializeNumber} from '../../assets/js/number'
-import {saveHistory, loadHistory, deleteAllHistory} from '../../common/js/goodstorage'
+import {saveHistory} from '../../common/js/goodstorage'
 
 export default {
   inject: ['reload'],

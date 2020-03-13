@@ -160,8 +160,9 @@
 
 <script>
 import baseAuto from '../../base/swiper/baseauto'
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import {playMode} from '../../common/js/config'
+import {shuffle} from '../../common/js/util'
 
 export default {
   components: {
@@ -210,7 +211,7 @@ export default {
           // this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
           // console.log(this.$refs.Scroll)
             setTimeout(() => {
-              let lineEl = this.$refs.lyricLine[2]
+              // let lineEl = this.$refs.lyricLine[2]
             // this.$refs.Scroll.scroll.scrollToElement(lineEl, 1000)
               this.$refs.Scroll.scrollTo(0, -50 * (this.currentIndex - 5), 200)
             }, 300)
@@ -249,9 +250,10 @@ export default {
     changeMode () {
       const mode = (this.mode + 1) % 3
       this.setPlayMode(mode)
-      let list = null
+      // let list = null
       if (mode === playMode.random) {
-        list = shuffle(this.playlist)
+        // list = shuffle(this.playlist)
+        shuffle(this.playlist)
       }
     },
     getInd (id) {

@@ -184,7 +184,7 @@ export default {
 
       this.$router.go(-1)
     },
-    updateUser () {
+    updateUser (gender, signature, city, nickname, birthday, province) {
       this.$api.users.userUpdate(gender, signature, city, nickname, birthday, province).then(res => {
         console.log(res.data)
       })
@@ -203,7 +203,7 @@ export default {
     },
     CitySure (province, city) {
       let arr = cityList[province].filter(item => {
-        return item.value == city
+        return item.value === city.toString()
       })
       this.area = arr[0].province + arr[0].text
     },

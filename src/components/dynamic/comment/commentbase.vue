@@ -65,18 +65,18 @@ export default {
       })
     },
     Reply (index) {
-      let proup = document.getElementsByClassName('cube-popup-content')[0],
-        liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
-        Hei = this.$refs.liOffset[index].offsetHeight
+      let proup = document.getElementsByClassName('cube-popup-content')[0]
+      let liTop = this.$refs.liOffset[index].getBoundingClientRect().top
+      let Hei = this.$refs.liOffset[index].offsetHeight
       if (liTop < 144) {
         let _liTop = liTop + Hei
         proup.style.top = -(667 - _liTop - 30) + 'px'
       } else {
         proup.style.top = -(667 - liTop + 30) + 'px'
       }
-      let user = this.newComments[index].user.nickname,
-        commentId = this.newComments[index].commentId,
-        threadId = this.threadId
+      let user = this.newComments[index].user.nickname
+      let commentId = this.newComments[index].commentId
+      let threadId = this.threadId
       this.$emit('showDialog', liTop, user, commentId, threadId)
     }
     // showReply () {

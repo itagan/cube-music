@@ -42,7 +42,6 @@
 </template>
 
 <script>
-    import { saveOperation, deleteOperation, loadOperation} from '../../common/js/goodstorage'
     import {mapActions, mapGetters} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
     import {durationsTransformation} from '../../assets/js/timestamp'

@@ -92,7 +92,6 @@
     import myMessage from './message'
     import playList from './music'
     import homePage from './homepage'
-    import userDynamic from './dynamic'
     import myAlbum from './album'
     import myVideo from './video'
     import myDynamic from './dynamic'
@@ -104,7 +103,6 @@
         myMessage,
         playList,
         homePage,
-        userDynamic,
         myAlbum,
         myVideo,
         myDynamic

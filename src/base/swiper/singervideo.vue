@@ -19,7 +19,6 @@
 
 <script>
     import {serializeNumber} from '../../assets/js/number'
-    import {durationsTransformation} from '../../assets/js/timestamp'
 
     export default {
       name: 'subVideo.vue',

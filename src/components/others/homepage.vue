@@ -205,7 +205,7 @@
               res.data.playlist[i].playCount = serializeNumber(res.data.playlist[i].playCount)
             }
             this.playlists = res.data.playlist
-            // console.log(this.playlists)
+            console.log(this.userMessage.profile)
           })
         },
         moreMessage () {
@@ -238,7 +238,7 @@
         },
         CitySure (province, city) {
           let arr = cityList[province].filter(item => {
-            return item.value == city
+            return item.value === city.toString()
           })
           return arr[0].province + arr[0].text
         },

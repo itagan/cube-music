@@ -248,8 +248,6 @@ export default {
     toBack () {
       this.$router.go(-1)
     },
-    input (val) {
-    },
     Placeholder () {
       this.value = this.$route.params.content
     },
@@ -270,17 +268,17 @@ export default {
       }
     },
     toggles (item, index) {
-      let leftDistance = this.$refs.distance[index].getBoundingClientRect().left
+      // let leftDistance = this.$refs.distance[index].getBoundingClientRect().left
       // console.log(leftDistance)
       // if(this.posX ===0 || this.posX === -191) {
       //   this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
       // }
       // this.$refs.slideScroll.scroll.getCurrentPage()
-      this.$refs.navScroll.scroll.scrollBy(170 - leftDistance, 0, 350)
+      // this.$refs.navScroll.scroll.scrollBy(170 - leftDistance, 0, 350)
       this.currentPage = index
     },
     slideChange (index) {
-      let leftDistance = this.$refs.distance[index].getBoundingClientRect().left
+      // let leftDistance = this.$refs.distance[index].getBoundingClientRect().left
       // this.$refs.navScroll.scroll.scrollBy(170 - leftDistance,0,350)
       this.currentPage = index
     },
