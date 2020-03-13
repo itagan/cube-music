@@ -59,6 +59,7 @@
         },
         experience () {
           if (this.checked) {
+            this.checked = false
                     // 下一步
             this.$router.push({
               path: '/login/phone'

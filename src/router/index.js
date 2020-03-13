@@ -70,14 +70,14 @@ export default new Router({
       path: '/login',
       component: Login,
       meta: {
-        keepAlive: true // 需要被缓存
+        keepAlive: false // 不需要被缓存
       }
     },
     {
       path: '/login/phone',
       component: loginPhone,
       meta: {
-        keepAlive: true // 需要被缓存
+        keepAlive: false // 不需要被缓存
       }
       // children:[
       //   {
@@ -99,7 +99,7 @@ export default new Router({
       path: '/login/cellphone/:phone',
       component: PassWord,
       meta: {
-        keepAlive: true // 需要被缓存
+        keepAlive: false // 不需要被缓存
       }
     },
     {
