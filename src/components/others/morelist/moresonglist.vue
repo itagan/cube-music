@@ -73,10 +73,10 @@
         getPlaylist () {
           this.$api.users.playlist(this.$route.params.userId).then(res => {
             this.playlist = res.data.playlist.filter((item) => {
-              item.creator.userId === this.userId
+              return item.creator.userId === this.userId
             })
             this.collection = res.data.playlist.filter((item) => {
-              item.creator.userId !== this.userId
+              return item.creator.userId !== this.userId
             })
             this.playlists = res.data.playlist
             console.log(this.playlist)

@@ -337,7 +337,7 @@
 import shareBase from '../../base/share/sharebase'
 import shareVideo from '../../base/video/sharevideo'
 import shareComment from '../../base/share/sharecomment'
-import forWard from './forward'
+// import forWard from './forward'
 import {mapActions} from 'vuex'
 import {timestampOther} from '../../assets/js/timestamp'
 

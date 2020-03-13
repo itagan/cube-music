@@ -12,9 +12,9 @@ import {debounce} from './assets/js/debounce'
 import VueLazyload from 'vue-lazyload'
 import fastclick from 'fastclick'
 
-import SubscribeDialog from './components/common/subscribe-dialog'
-import { createAPI } from 'cube-ui'
-createAPI(Vue, SubscribeDialog, [], true)
+// import SubscribeDialog from './components/common/subscribe-dialog'
+// import { createAPI } from 'cube-ui'
+// createAPI(Vue, SubscribeDialog, [], true)
 
 fastclick.attach(document.body)
 Vue.use(VueLazyload)

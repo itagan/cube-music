@@ -31,10 +31,10 @@
       },
       methods: {
         Artists (artists) {
-          let arr = []
-          artists.forEach(ele => {
-            ele
-          })
+          // let arr = []
+          // artists.forEach(ele => {
+          //   console.log(ele)
+          // })
         },
         toAlbum (id) {
           this.$router.push({

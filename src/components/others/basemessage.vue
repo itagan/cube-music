@@ -100,7 +100,7 @@
         },
         CitySure (province, city) {
           let arr = cityList[province].filter(item => {
-            return item.value == city
+            return item.value === city
           })
           this.area = arr[0].province + arr[0].text
         },

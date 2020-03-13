@@ -116,7 +116,6 @@
 
 
 <script type="text/ecmascript-6">
-    import { deleteCollectVideo, saveOperation, deleteOperation, loadOperation } from '../../common/js/goodstorage'
     import {mapGetters, mapMutations, mapActions} from 'vuex'
     import {serializeNumber} from '../../assets/js/number'
     import {timestamp, durationsTransformation} from '../../assets/js/timestamp'
@@ -488,7 +487,7 @@ export default {
         Input () {
           this.$refs.Input.focus()
         },
-        replyUser () {
+        replyUser (threadId, commentId, content) {
           this.$api.commentFeature.dynamicReply(threadId, commentId, content).then(res => {
             console.log(res)
           })

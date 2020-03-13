@@ -111,7 +111,6 @@ export default {
       secondStop: 0,
       scrollEvents: ['scroll'],
       scrollY: 0,
-      playing: false,
       checkbox: false,
       activeColor: 'activeColor',
       checkList: [],

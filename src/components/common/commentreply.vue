@@ -63,7 +63,6 @@
 
 <script>
 import MyHeader from '../../base/navbar/navbar'
-import baseComment from '../../base/basecomment/basecomment'
 import replyContent from '../../base/basecomment/replycontent'
 import replyAll from '../../base/basecomment/replyallcomment'
 import replyDialog from './replydialog'
@@ -137,8 +136,8 @@ export default {
     Input () {
       this.$refs.Input.focus()
     },
-    replyUser () {
-      this.$api.commentFeature.dynamicReply(this.threadId, this.commentId, content).then(res => {
+    replyUser (threadId, commentId, content) {
+      this.$api.commentFeature.dynamicReply(threadId, commentId, content).then(res => {
         console.log(res)
       })
     },
@@ -146,9 +145,9 @@ export default {
       console.log(this.value.length)
     },
     _Reply () {
-      let proup = document.getElementsByClassName('cube-popup-content')[0],
-        Top = this.$refs.replyContainer.getBoundingClientRect().top,
-        Hei = this.$refs.replyContainer.offsetHeight
+      let proup = document.getElementsByClassName('cube-popup-content')[0]
+      let Top = this.$refs.replyContainer.getBoundingClientRect().top
+      let Hei = this.$refs.replyContainer.offsetHeight
       this.$refs.showDia.show()
       this.$refs.showDia.diaTopChange()
       proup.style.top = -(667 - Hei - Top - 20) + 'px'
@@ -156,9 +155,9 @@ export default {
       this.commentId = this._item.commentId
     },
     Reply (index) {
-      let proup = document.getElementsByClassName('cube-popup-content')[0],
-        liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
-        Hei = this.$refs.liOffset[index].offsetHeight
+      let proup = document.getElementsByClassName('cube-popup-content')[0]
+      let liTop = this.$refs.liOffset[index].getBoundingClientRect().top
+      let Hei = this.$refs.liOffset[index].offsetHeight
       if (liTop < 144) {
         let _liTop = liTop + Hei
         proup.style.top = -(667 - _liTop - 30) + 'px'

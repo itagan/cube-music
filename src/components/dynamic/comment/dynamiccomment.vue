@@ -255,7 +255,7 @@
         Input () {
           this.$refs.Input.focus()
         },
-        replyUser () {
+        replyUser (threadId, commentId, content) {
           this.$api.commentFeature.dynamicReply(threadId, commentId, content).then(res => {
             console.log(res)
           })

@@ -88,7 +88,7 @@ export default {
       })
     },
     onPullingUp () {
-      if (!this.hasMore) return
+      if (!this.hasMore) return false
       // setTimeout(() => {
       //   this.getAlbums(this.id, 20, this.offset)
       //   const contentScroll = this.$refs.contentScroll

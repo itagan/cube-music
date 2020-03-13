@@ -247,7 +247,7 @@
         }
       },
       beforeRouteEnter (to, from, next) {
-        if (from.name == 'djcomment') {
+        if (from.name === 'djcomment') {
             // to.meta.keepAlive = true
             // console.log('缓存本组件')
           to.meta.isBack = true

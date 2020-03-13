@@ -234,9 +234,9 @@
           console.log(this.playlist)
         },
         Reply (index) {
-          let proup = document.getElementsByClassName('cube-popup-content')[0],
-            liTop = this.$refs.liOffset[index].getBoundingClientRect().top,
-            Hei = this.$refs.liOffset[index].offsetHeight
+          let proup = document.getElementsByClassName('cube-popup-content')[0]
+          let liTop = this.$refs.liOffset[index].getBoundingClientRect().top
+          let Hei = this.$refs.liOffset[index].offsetHeight
           if (liTop < 144) {
             let _liTop = liTop + Hei
             proup.style.top = -(667 - _liTop - 30) + 'px'
@@ -255,9 +255,9 @@
           console.log(this.threadId, this.commentId)
         },
         _Reply (index) {
-          let proup = document.getElementsByClassName('cube-popup-content')[0],
-            liTop = this.$refs._liOffset[index].getBoundingClientRect().top,
-            Hei = this.$refs._liOffset[index].offsetHeight
+          let proup = document.getElementsByClassName('cube-popup-content')[0]
+          let liTop = this.$refs._liOffset[index].getBoundingClientRect().top
+          let Hei = this.$refs._liOffset[index].offsetHeight
           if (liTop < 144) {
             let _liTop = liTop + Hei
             proup.style.top = -(667 - _liTop - 30) + 'px'
@@ -283,8 +283,8 @@
         Input () {
           this.$refs.Input.focus()
         },
-        replyUser () {
-          this.$api.commentFeature.dynamicReply(this.threadId, this.commentId, content).then(res => {
+        replyUser (threadId, commentId, content) {
+          this.$api.commentFeature.dynamicReply(threadId, commentId, content).then(res => {
             console.log(res)
           })
         },

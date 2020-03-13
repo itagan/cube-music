@@ -16,22 +16,13 @@
 </template>
 
 <script>
-    import {serializeNumber} from '../../assets/js/number'
-    import {durationsTransformation} from '../../assets/js/timestamp'
-
     export default {
       name: 'subColumn.vue',
       data () {
         return {
-                // playTime:serializeNumber(this.item.playTime ),
-                // durations:durationsTransformation(this.item.durationms)
         }
       },
       props: {
-            // item: {
-            //     type:Object,
-            //     default:{}
-            // }
       }
     }
 </script>

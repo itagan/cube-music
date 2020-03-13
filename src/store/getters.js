@@ -27,7 +27,6 @@ export const currentSong = (state) => {
 
 export const videoCollectionsList = (state) => {
   return state.videoCollectionsList.map((video) => {
-    return new Video(video)
   })
 }
 // export const currentVideo = state => state.currentVideo

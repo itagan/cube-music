@@ -133,7 +133,7 @@ export default {
       })
     },
     isUserOr () {
-      return this.isUser = this.userId === 477726475
+      return this.isUser === this.userId
     },
     onPullingUp () {
       if (!this.hasMore) return
