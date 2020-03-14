@@ -18,21 +18,10 @@ const toast = msg => {
     txt: msg,
     type: 'txt',
     time: 1000,
+    mask: true,
     zIndex: 2002
   }).show()
-  // Toast.$createToast({
-  //   txt: msg,
-  //   type: 'txt',
-  //   time:1000
-  // }).show()
 }
-
-// const toast =  this.$createToast({
-//   time: 1000,
-//   txt: this.msg,
-//   type: 'txt',
-// });
-// toast.show()
 
 /**
  * 跳转登录页
@@ -80,7 +69,6 @@ const errorHandle = (status, other) => {
       toLogin()
       break
     case 501:
-      // toast('账号不存在！')
       toast('账号不存在！')
       break
     case 502:
@@ -90,7 +78,6 @@ const errorHandle = (status, other) => {
       toast('密码错误超过限制')
       break
     default:
-      // console.log(other)
       toast(other)
   }
 }
@@ -127,11 +114,10 @@ instance.interceptors.response.use(
   error => {
     const { response } = error
     if (response) {
-      console.log(response)
       // 请求已发出，但是不在2xx的范围
       errorHandle(response.status, response.data.message)
       return Promise.reject(response).catch(e => {
-        //  输出看什么错误
+        //  输出看什么错误 这里 e === response
         console.log(e)
       })
     } else {
@@ -143,6 +129,10 @@ instance.interceptors.response.use(
         store.commit('changeNetwork', false)
       } else {
         // return Promise.reject(error)
+        return Promise.reject(response).catch(e => {
+          //  输出看什么错误 这里 e === response
+          console.log(e)
+        })
       }
     }
   })
