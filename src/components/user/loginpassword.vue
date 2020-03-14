@@ -92,14 +92,14 @@
               time: 1000,
               txt: msg,
               type: 'error',
-              zIndex:2002
+              zIndex: 2002
             }).show()
           }
 
           this.$api.users.cellphone(this.phone, this.value).then(res => {
-            this.code = res.data.code || res.code
+            if(!res) return false
+            this.code = res.data && res.data.code
             // this.uid = res.data.account.id
-            console.log(res)
             if (this.code === 502) {
               toast('密码错误！')
             } else if (this.code === 200) {
@@ -122,8 +122,6 @@
                   console.log('刷新状态失败')
                 }
               })
-            }else if(this.code === 501) {
-              toast('账号不存在！')
             }
           })
 

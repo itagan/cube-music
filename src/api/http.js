@@ -17,7 +17,8 @@ const toast = msg => {
   Toast.$create({
     txt: msg,
     type: 'txt',
-    time: 1000
+    time: 1000,
+    zIndex: 2002
   }).show()
   // Toast.$createToast({
   //   txt: msg,
@@ -79,10 +80,14 @@ const errorHandle = (status, other) => {
       toLogin()
       break
     case 501:
+      // toast('账号不存在！')
       toast('账号不存在！')
       break
     case 502:
       toast('没网络！')
+      break
+    case 509:
+      toast('密码错误超过限制')
       break
     default:
       // console.log(other)
@@ -122,9 +127,10 @@ instance.interceptors.response.use(
   error => {
     const { response } = error
     if (response) {
+      console.log(response.status, response.data.message)
       // 请求已发出，但是不在2xx的范围
       errorHandle(response.status, response.data.message)
-      // return Promise.reject(response)
+      return Promise.reject(response)
     } else {
       // 处理断网的情况
       // eg:请求超时或断网时，更新state的network状态
