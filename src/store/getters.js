@@ -1,6 +1,5 @@
-import { loadCurrentVideo, loadOperation, loadCurrentDynamic, loadCurrentAuthor } from '../common/js/goodstorage'
+import { loadCurrentVideo, loadOperation, loadCurrentDynamic, loadCurrentAuthor, loadToken } from '../common/js/goodstorage'
 
-export const token = state => state.token
 export const loginState = state => state.loginState
 export const currentVid = state => state.currentVid
 export const limit = state => state.limit
@@ -58,4 +57,11 @@ export const author = (state) => {
     return loadCurrentAuthor()
   }
   return state.author
+}
+
+export const token = (state) => {
+  if (!state.token.length) {
+    return loadToken()
+  }
+  return state.token
 }

@@ -30,7 +30,7 @@
 </template>
 
 <script>
-    import {mapMutations} from 'vuex'
+    import {mapMutations, mapActions} from 'vuex'
 
     export default {
       data () {
@@ -73,19 +73,9 @@
         },
             // 获取手机号码
         getPhone () {
-                // return this.code;
           this.phone = this.$route.params.phone
         },
-        getRes () {
-          this.$api.users.cellphone(this.phone, this.value).then(res => {
-            this.code = res.data.code
-            this.uid = res.data.account.id
-            console.log(res)
-          })
-        },
-        login () {
-          // this.getRes()
-    
+        login () {    
             // 提示方法
           const toast = msg => {
             this.$createToast({
@@ -99,14 +89,14 @@
           this.$api.users.cellphone(this.phone, this.value).then(res => {
             if(!res) return false
             this.code = res.data && res.data.code
-            // this.uid = res.data.account.id
             if (this.code === 502) {
               toast('密码错误！')
             } else if (this.code === 200) {
                     // 把用户id信息提交到vuex
               this.uid = res.data.account.id
+              this.token = res.data.token
               this.setUid(this.uid)
-
+              this.saveMyToken(this.token)
                 // 登录成功，刷新登录状态
               this.$api.users.refresh().then(res => {
                 console.log(res)
@@ -150,7 +140,10 @@
         },
         ...mapMutations({
           setUid: 'SET_UID'
-        })
+        }),
+        ...mapActions([
+          'saveMyToken'
+        ])
       },
       mounted () {
         this.$nextTick(() => {

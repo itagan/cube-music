@@ -2,7 +2,7 @@
 import { playMode } from '../common/js/config'
 
 const state = {
-  token: '', // 网站token
+  token: [], // 网站token
   loginState: false,
   currentVid: '',
   limit: 20,
