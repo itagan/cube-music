@@ -127,10 +127,13 @@ instance.interceptors.response.use(
   error => {
     const { response } = error
     if (response) {
-      console.log(response.status, response.data.message)
+      console.log(response)
       // 请求已发出，但是不在2xx的范围
       errorHandle(response.status, response.data.message)
-      return Promise.reject(response)
+      return Promise.reject(response).catch(e => {
+        //  输出看什么错误
+        console.log(e)
+      })
     } else {
       // 处理断网的情况
       // eg:请求超时或断网时，更新state的network状态
