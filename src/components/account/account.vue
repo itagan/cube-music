@@ -11,7 +11,7 @@
       >
         <personal></personal>
         <feature></feature>
-        <cube-button class="login-out" type="button" @click="loginOut">退出登录</cube-button>
+        <cube-button class="login-out" type="button" @click.stop="loginOut">退出登录</cube-button>
       </cube-scroll>
     </div>
 
@@ -78,7 +78,9 @@
                 {
                   path: '/login'
                 }
-                        )
+                  )
+              // 退出清空缓存
+              localStorage.clear()    
             }
           }).show()
         }

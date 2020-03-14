@@ -1,5 +1,5 @@
 import * as types from './mutations-types'
-import { saveCollectVideo, deleteCollectVideo, saveCurrentVideo, deleteCurrentVideo, saveOperation, deleteOperation, saveCurrentDynamic, saveCurrentAuthor } from '../common/js/goodstorage'
+import { saveCollectVideo, deleteCollectVideo, saveCurrentVideo, deleteCurrentVideo, saveOperation, deleteOperation, saveCurrentDynamic, saveCurrentAuthor, saveToken, saveUid } from '../common/js/goodstorage'
 import { playMode } from '../common/js/config'
 import { shuffle } from '../common/js/util'
 
@@ -9,9 +9,6 @@ function findIndex (list, song) {
   })
 }
 
-export const token = function ({commit, state}, {token}) {
-  commit(types.SET_TOKEN, token)
-}
 export const loginState = function ({commit, state}, {loginState}) {
   commit(types.SET_LOGIN, loginState)
 }
@@ -34,10 +31,6 @@ export const commentBack = function ({commit, state}, {back}) {
 }
 export const setCurrentTimes = function ({commit, state}, {videoCurrentTime}) {
   commit(types.SET_VIDEO_CURRENT_TIME, videoCurrentTime)
-}
-// 用户相关
-export const User = function ({commit, state}, {uid}) {
-  commit(types.SET_UID, uid)
 }
 // 视频操作情况
 export const videoOperation = function ({commit, state}, {videoState}) {
@@ -75,6 +68,14 @@ export const saveDynamic = function ({commit}, dynamic) {
 // 判断评论是否作者
 export const saveAuthor = function ({commit}, author) {
   commit(types.SET_AUTHOR, saveCurrentAuthor(author))
+}
+// 提交token
+export const saveMyToken = function ({commit}, token) {
+  commit(types.SET_TOKEN, saveToken(token))
+}
+// 提交用户id
+export const saveMyUid = function ({commit}, uid) {
+  commit(types.SET_UID, saveUid(uid))
 }
 // 歌曲电台播放有关
 export const selectPlay = function ({ commit, state }, { list, index }) {

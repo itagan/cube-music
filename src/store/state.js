@@ -2,7 +2,7 @@
 import { playMode } from '../common/js/config'
 
 const state = {
-  token: '', // 网站token
+  token: [], // 网站token
   loginState: false,
   currentVid: '',
   limit: 20,
@@ -12,7 +12,7 @@ const state = {
   currentIndex: -1,
   videoCurrentTime: [], // 保存前后两个视频的播放时间
   currentUrl: '', // 当前的播放地址
-  uid: 477726475, // 用户Id信息
+  uid: [], // 用户Id信息
   videoGroupId: 0,
   videoState: [{vid: '', praise: false, collection: false, share: false}], // 视频资源是否操作了
   videoCollectionsList: [],

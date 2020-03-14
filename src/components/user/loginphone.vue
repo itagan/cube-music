@@ -11,10 +11,10 @@
         v-model="value"
         :clearable="clearable"
         type="number"
-        :autofocus="autofocus"
         :placeholder="placeholder"
         @input="input"
         class="my-input"
+        ref="autoFocus"
       ></cube-input>
     </div>
     <cube-button class="next" :light="true" @click="next" ref="btn" >下一步</cube-button>
@@ -28,7 +28,6 @@
         return {
           value: '',
           placeholder: '输入手机号',
-          autofocus: true,
           clearable: {
             visible: true,
             blurHidden: true
@@ -64,17 +63,16 @@
           const toast = this.$createToast({
             time: 1000,
             txt: '手机号应该是11位数字！',
-            type: 'error'
+            type: 'error',
+            zIndex:2002
           })
             // 判断手机号
           if (this.value.length === 11) {
                     // toast.show();
-
                     // 密码登录
             this.$router.push({
               path: `/login/cellphone/${this.value}`
             })
-
                 // 调用接口验证码登录
                 // this.sendCode(this.value);
                 // if(this.status === 200) {
@@ -97,6 +95,14 @@
                 // 返回上一页
           this.$router.back()
         }
+      },
+      mounted () {
+        this.$nextTick(() => {
+          //原生自动对焦替换cube ui自动对焦，避免不自动对焦**
+          //提示如Autofocus processing was blocked because a document's URL has a fragment '#/login/phone'.
+          this.$refs['autoFocus'].$refs.input.focus()
+          console.log(this.$refs['autoFocus'])
+        })
       }
     }
 </script>
@@ -109,7 +115,7 @@
     width:100%
     height:667px
     background-color:white
-    z-index:200
+    z-index:2001
     position:relative
     .top
       height:50px
@@ -147,18 +153,27 @@
         -moz-appearance: none
         -o-appearance: none
         appearance: none
+        border:none
 
     .next
       margin-top:20px
-      width:330px
-      height:35px
+      width:340px
+      padding:10px
       position:absolute
       top:200px
       left:50%
-      margin-left:-165px
+      margin-left:-170px
       border-radius:20px
-      background-color:red
       color:white
       opacity:0.2
+      background: -webkit-linear-gradient(left, rgba(255,0,0,.8), rgba(255,0,0,1)); /* Safari 5.1 - 6.0 */
+      background: -o-linear-gradient(right, rgba(255,0,0,.8), rgba(255,0,0,1)); /* Opera 11.1 - 12.0 */
+      background: -moz-linear-gradient(right, rgba(255,0,0,.8), rgba(255,0,0,1)); /* Firefox 3.6 - 15 */
+      background: linear-gradient(to right, rgba(255,0,0,.8), rgba(255,0,0,1)); /* 标准的语法（必须放在最后） */
 
+//对cube-ui样式修改
+.cube-input_active::after
+  border:none
+.cube-input::after  
+  border:none
 </style>

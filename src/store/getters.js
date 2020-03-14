@@ -1,6 +1,5 @@
-import { loadCurrentVideo, loadOperation, loadCurrentDynamic, loadCurrentAuthor } from '../common/js/goodstorage'
+import { loadCurrentVideo, loadOperation, loadCurrentDynamic, loadCurrentAuthor, loadToken, loadUid } from '../common/js/goodstorage'
 
-export const token = state => state.token
 export const loginState = state => state.loginState
 export const currentVid = state => state.currentVid
 export const limit = state => state.limit
@@ -10,7 +9,6 @@ export const videoList = state => state.videoList
 export const videoCurrentTime = state => state.videoCurrentTime
 export const currentIndex = state => state.currentIndex
 export const currentUrl = state => state.currentUrl
-export const uid = state => state.uid
 export const videoGroupId = state => state.videoGroupId
 
 export const playing = state => state.playing
@@ -58,4 +56,17 @@ export const author = (state) => {
     return loadCurrentAuthor()
   }
   return state.author
+}
+
+export const token = (state) => {
+  if (!state.token.length) {
+    return loadToken()
+  }
+  return state.token
+}
+export const uid = (state) => {
+  if (!state.uid.length) {
+    return loadUid()
+  }
+  return state.uid
 }
