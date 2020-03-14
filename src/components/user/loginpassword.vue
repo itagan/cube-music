@@ -95,9 +95,9 @@
                     // 把用户id信息提交到vuex
               this.uid = res.data.account.id
               this.token = res.data.token
-              this.setUid(this.uid)
+              // this.setUid(this.uid)
+              this.saveMyUid(this.uid)
               this.saveMyToken(this.token)
-                // 登录成功，刷新登录状态
               this.$api.users.refresh().then(res => {
                 console.log(res)
                 if (res.status === 200) {
@@ -142,7 +142,8 @@
           setUid: 'SET_UID'
         }),
         ...mapActions([
-          'saveMyToken'
+          'saveMyToken',
+          'saveMyUid'
         ])
       },
       mounted () {

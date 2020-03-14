@@ -5,7 +5,7 @@
       <div class="base-comment-time">
         <div class="base-comment-name">
           <div class="user-name">{{item.user.nickname}}</div>
-          <div class="user-author" v-if="this.author[0].userId === item.user.userId"><span class="user-author-name">作者</span></div>
+          <div class="user-author" v-if="this.author[0] && this.author[0].userId === item.user.userId"><span class="user-author-name">作者</span></div>
         </div>
         <span class="user-time">{{timestamp(item.time)}}</span>
       </div>

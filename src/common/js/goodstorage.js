@@ -20,6 +20,8 @@ const HISTORY_KEY = '__history__'
 const HISTORY_LEN = 30
 const TOKEN_KEY = '__token__'
 const TOKEN_LEN = 1
+const UID_KEY = '__uid__'
+const UID_LEN = 1
 // 公共方法设置
 function insertArray (arr, val, compare, maxLen) {
   const index = arr.findIndex(compare)
@@ -187,4 +189,24 @@ export function deleteToken (token) {
 }
 export function loadToken () {
   return storage.get(TOKEN_KEY, [])
+}
+// Uid 登录用户id
+export function saveUid (uid) {
+  let _uid = storage.get(UID_KEY, [])
+  insertArray(_uid, uid, (item) => {
+    return item === uid
+  }, UID_LEN)
+  storage.set(UID_KEY, _uid)
+  return _uid
+}
+export function deleteUid (uid) {
+  let _uid = storage.get(UID_KEY, [])
+  deleteFromArray(_uid, (item) => {
+    return item === uid
+  })
+  storage.set(UID_KEY, _uid)
+  return _uid
+}
+export function loadUid () {
+  return storage.get(UID_KEY, [])
 }

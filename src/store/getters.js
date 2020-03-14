@@ -1,4 +1,4 @@
-import { loadCurrentVideo, loadOperation, loadCurrentDynamic, loadCurrentAuthor, loadToken } from '../common/js/goodstorage'
+import { loadCurrentVideo, loadOperation, loadCurrentDynamic, loadCurrentAuthor, loadToken, loadUid } from '../common/js/goodstorage'
 
 export const loginState = state => state.loginState
 export const currentVid = state => state.currentVid
@@ -9,7 +9,6 @@ export const videoList = state => state.videoList
 export const videoCurrentTime = state => state.videoCurrentTime
 export const currentIndex = state => state.currentIndex
 export const currentUrl = state => state.currentUrl
-export const uid = state => state.uid
 export const videoGroupId = state => state.videoGroupId
 
 export const playing = state => state.playing
@@ -64,4 +63,10 @@ export const token = (state) => {
     return loadToken()
   }
   return state.token
+}
+export const uid = (state) => {
+  if (!state.uid.length) {
+    return loadUid()
+  }
+  return state.uid
 }
